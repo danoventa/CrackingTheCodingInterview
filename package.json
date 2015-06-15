@@ -1,0 +1,24 @@
+{
+  "name": "composition",
+  "version": "0.0.1",
+  "description": ":notebook: Electron app of the Jupyter Notebook",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nteract/composition.git"
+  },
+  "keywords": [
+    "jupyter",
+    "electron",
+    "data"
+  ],
+  "author": "nteract",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/nteract/composition/issues"
+  },
+  "homepage": "https://github.com/nteract/composition"
+}
