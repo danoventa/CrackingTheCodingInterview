@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/nteract/composition/issues"
   },
-  "homepage": "https://github.com/nteract/composition"
+  "homepage": "https://github.com/nteract/composition",
+  "dependencies": {
+    "jmp": "0.0.7"
+  }
 }

@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hello World!</title>
+    <title>Compositional</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.2.0/katex.min.css">
   </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using io.js <script>document.write(process.version)</script>
-    and Electron <script>document.write(process.versions['electron'])</script>.
+  <body style="-webkit-app-region: drag">
+  <script>
+    if (typeof require !== 'function') {
+      // If we're not in the electron env
+      var script = document.createElement('script')
+      script.src = 'app.js'
+      script.onload = function() {
+        new window.App(document.body)
+      }
+      document.currentScript.parentNode.insertBefore(script, document.currentScript)
+    } else {
+      // If we are in the electron env
+      require('./app.js')(document.body)
+    }
+  </script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.2.0/katex.min.js"></script>-->
   </body>
 </html>
