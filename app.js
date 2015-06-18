@@ -1,39 +1,13 @@
-module.exports = window.App = App;
+module.exports = window.start = start
 
-var ipc = require('ipc');
-var fs = require('fs');
+var ipc = require('ipc')
+var fs = require('fs')
+var jp = require('jupyter-paths')
+var Handlebars = require('handlebars')
+var path = require('path')
+var KernelWatch = require('jupyter-kernel-watch')
+var RuntimeWatch = require('jupyter-runtimes')
 
-var jp = require('jupyter-paths');
-
-// TODO: Jupyter path is so not nodey
-// TODO: It should totes accept a callback or give a promise
-kernels = jp.jupyterPath('kernels');
-
-// SPECS/ISSUES for jupyter-paths
-
-// jp.kernelSpecs()
-// Array of kernel spec JSONs (contents)
-
-// Event based handling of new kernelspecs?
-// Register it
-//   jp.on('kernel', function(newKernel){}) // New kernel
-// What do you do if one is deleted?
-//
-
-// jp.on('data', function(allKernels) {  });
-
-// jp.push('kernel')
-
-// jp.on('kernelspecs', ...)
-// jp.on('runtimes', ...)
-
-// FORESHADOWING
-
-// New runtimes will come in
-
-// Know runtimeDir, know kernelSpecs
-
-// Launch kernelSpec process
 /* Example kernelSpec
 {
  "display_name": "Python 2",
@@ -63,8 +37,6 @@ kernels = jp.jupyterPath('kernels');
 }
 */
 
-
-
 // Create the individual zmq/jmp sockets for
 // hb - heartbeat
 // iopub - display outputs (stdout, pngs, etc.)
@@ -75,28 +47,46 @@ kernels = jp.jupyterPath('kernels');
 // On reception of iopub messages
 // we display the mimetype they give us 'image/png', 'text/html'
 
+function start (content) {
+  var kernels = jp.jupyterPath('kernels')
+  console.log('kernels', kernels)
 
+  var kernelwatch = KernelWatch(kernels)
+  kernelwatch.on('data', function (kernelSpecs) {
+    console.log('kernelspecs', kernelSpecs)
+    updateKernelView({kernels: kernelSpecs})
+  })
 
+  // var runtimeDir = jp.jupyterRuntimeDir()
+  var runtimeDir = '/Users/karissa/.ipython/profile_default/security/'
+  console.log('runtimeDir', runtimeDir)
 
+  var runtimewatch = RuntimeWatch([runtimeDir])
+  runtimewatch.on('data', function (runtimes) {
+    console.log('runtimes', runtimes)
+    updateRuntimeView({runtimes: runtimes})
+  })
+}
 
+function render (source, data) {
+  var template = Handlebars.compile(source)
+  return template(data)
+}
 
+function updateKernelView (data) {
+  // render kernels
+  var template = fs.readFileSync(path.join(__dirname, 'templates/kernels.html')).toString()
+  document.getElementById('kernels').innerHTML = render(template, data)
+}
 
+function updateRuntimeView (data) {
+  // render kernels
+  var template = fs.readFileSync(path.join(__dirname, 'templates/runtimes.html')).toString()
+  document.getElementById('runtimes').innerHTML = render(template, data)
+}
 
-function App (el) {
-  kernels.forEach(function(k){
-    fs.readdir(k, function(err, kernelSpecDirectories) {
-      if(err) {
-        console.error(err);
-        return;
-      }
-
-      // We expect files to be directories of kernelspec directories
-
-      console.log(kernelSpecDirectories);
-
-    });
-
-  });
-
-  el.innerHTML = kernels;
+function main (data) {
+  // render main
+  var template = fs.readFileSync(path.join(__dirname, 'templates/main.html')).toString()
+  document.getElementById('content').innerHTML = render(template, data)
 }

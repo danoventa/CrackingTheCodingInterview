@@ -5,6 +5,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.2.0/katex.min.css">
   </head>
   <body style="-webkit-app-region: drag">
+  <div id="header">
+    <div class="title">Jupyter</div>
+    <div id="kernels">
+    </div>
+    <div id="runtimes">
+    </div>
+  </div>
+    <div id="content">
+    </div>
   <script>
     if (typeof require !== 'function') {
       // If we're not in the electron env
@@ -16,7 +25,7 @@
       document.currentScript.parentNode.insertBefore(script, document.currentScript)
     } else {
       // If we are in the electron env
-      require('./app.js')(document.body)
+      require('./app.js')(document.getElementById('content'))
     }
   </script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.2.0/katex.min.js"></script>-->

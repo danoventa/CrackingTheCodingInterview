@@ -22,7 +22,12 @@
   },
   "homepage": "https://github.com/nteract/composition",
   "dependencies": {
+    "collect-stream": "^1.0.0",
+    "from2": "^2.0.3",
+    "handlebars": "^3.0.3",
     "jmp": "0.0.7",
-    "jupyter-paths": "^0.1.0"
+    "jupyter-paths": "^0.1.0",
+    "through2": "^2.0.0",
+    "virtual-dom": "^2.0.1"
   }
 }
