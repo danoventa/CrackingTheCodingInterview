@@ -26,7 +26,9 @@
     "from2": "^2.0.3",
     "handlebars": "^3.0.3",
     "jmp": "0.0.7",
+    "jupyter-kernel-watch": "^2.0.2",
     "jupyter-paths": "^0.1.0",
+    "jupyter-runtimes": "^1.1.0",
     "through2": "^2.0.0",
     "virtual-dom": "^2.0.1"
   }
