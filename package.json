@@ -2,9 +2,15 @@
   "name": "composition",
   "version": "0.0.1",
   "description": ":notebook: Electron app of the Jupyter Notebook",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "test": "npm test"
+    "lint": "eslint .",
+    "test": "echo \"Tests are cool, we should do those.\"",
+    "start": "electron main.js",
+    "build": "npm run build:osx && npm run build:win32 && npm run build:linux",
+    "build:osx": "electron-packager ./ PipBoy --platform=darwin --arch=x64 --version=0.35.1",
+    "build:win32": "electron-packager ./ PipBoy --platform=win32 --arch=x64 --version=0.35.1",
+    "build:linux": "electron-packager ./ PipBoy --platform=linux --arch=x64 --version=0.35.1"
   },
   "repository": {
     "type": "git",
@@ -13,23 +19,39 @@
   "keywords": [
     "jupyter",
     "electron",
+    "notebook",
+    "nteract",
     "data"
   ],
   "author": "rgbkrk",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/nteract/composition/issues"
   },
   "homepage": "https://github.com/nteract/composition",
   "dependencies": {
-    "collect-stream": "^1.0.0",
-    "from2": "^2.0.3",
-    "handlebars": "^3.0.3",
+    "color": "^0.10.1",
+    "history": "^1.17.0",
     "jmp": "0.0.7",
     "jupyter-kernel-watch": "^2.0.2",
     "jupyter-paths": "^0.1.0",
-    "jupyter-runtimes": "^1.1.0",
-    "through2": "^2.0.0",
-    "virtual-dom": "^2.0.1"
+    "normalize.css": "^3.0.3",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-router": "^1.0.3",
+    "rx": "^4.0.7"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.3.17",
+    "babel-core": "^6.3.17",
+    "babel-eslint": "^4.1.6",
+    "babel-preset-es2015": "^6.1.18",
+    "electron-compile": "^1.0.1",
+    "electron-compilers": "^1.0.1",
+    "electron-packager": "^5.1.1",
+    "electron-prebuilt": "^0.35.1",
+    "eslint": "^1.10.3",
+    "eslint-plugin-babel": "^3.0.0",
+    "eslint-plugin-react": "^3.11.3"
   }
 }

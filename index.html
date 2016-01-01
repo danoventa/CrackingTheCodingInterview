@@ -1,33 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Compositional</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.2.0/katex.min.css">
+    <meta charset="UTF-8">
+    <title>nteract notebook</title>
+    <link rel="stylesheet" href="./node_modules/normalize.css/normalize.css"/>
   </head>
-  <body style="-webkit-app-region: drag">
-  <div id="header">
-    <div class="title">Jupyter</div>
-    <div id="kernels">
+  <body>
+    <div id="app">
     </div>
-    <div id="runtimes">
-    </div>
-  </div>
-    <div id="content">
-    </div>
-  <script>
-    if (typeof require !== 'function') {
-      // If we're not in the electron env
-      var script = document.createElement('script')
-      script.src = 'app.js'
-      script.onload = function() {
-        new window.App(document.body)
-      }
-      document.currentScript.parentNode.insertBefore(script, document.currentScript)
-    } else {
-      // If we are in the electron env
-      require('./app.js')(document.getElementById('content'))
-    }
-  </script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.2.0/katex.min.js"></script>-->
+    <script>
+      require('./src/app.js');
+    </script>
   </body>
 </html>
