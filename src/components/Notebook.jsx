@@ -15,9 +15,9 @@ export default class Notebook extends React.Component {
       <div ref='cells'>
       {
         this.props.cells.map((cell, index) => {
-          return <Cell input={cell.source}
+          return <Cell input={cell.get('source')}
                        language={this.props.language}
-                       outputs={cell.outputs}
+                       outputs={cell.get('outputs')}
                        key={index}
                        />;
         })

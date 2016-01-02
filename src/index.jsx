@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Immutable from 'immutable';
 
 import Notebook from './components/Notebook';
 
-const fakeNotebook = {
+const fakeNotebook = Immutable.fromJS({
   'cells': [
     {
       'cell_type': 'code',
@@ -97,9 +98,9 @@ const fakeNotebook = {
   },
   'nbformat': 4,
   'nbformat_minor': 0,
-};
+});
 
 ReactDOM.render(
-  <Notebook cells={fakeNotebook.cells}
-            language={fakeNotebook.metadata.language_info.name} />
+  <Notebook cells={fakeNotebook.get('cells')}
+            language={fakeNotebook.getIn(['metadata', 'language_info', 'name'])} />
 , document.querySelector('#app'));

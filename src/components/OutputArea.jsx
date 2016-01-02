@@ -12,7 +12,9 @@ export default class OutputArea extends React.Component {
       <div>
       {
         this.props.outputs
-                  .map((output) => <pre>{JSON.stringify(output)}</pre>)
+                  .map((output, index) =>
+                    <pre key={index}> {JSON.stringify(output)}</pre>
+                  )
       }
       </div>
     );
