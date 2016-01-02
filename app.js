@@ -20,7 +20,7 @@ app.on('ready', () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 1000,
-    frame: false,
+    // frame: false,
     darkTheme: true,
     title: 'Composition',
   });

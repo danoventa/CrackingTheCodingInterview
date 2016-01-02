@@ -32,6 +32,7 @@
   "dependencies": {
     "color": "^0.10.1",
     "history": "^1.17.0",
+    "immutable": "^3.7.6",
     "jmp": "0.0.7",
     "jupyter-kernel-watch": "^2.0.2",
     "jupyter-paths": "^0.1.0",
