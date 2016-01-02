@@ -22,7 +22,7 @@ export default class Editor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      source: this.props.text.join('\n'),
+      source: this.props.text.join(''),
     };
   }
 

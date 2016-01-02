@@ -42,7 +42,9 @@
     "react-code-mirror": "^3.0.6",
     "react-dom": "^0.14.3",
     "react-router": "^1.0.3",
-    "rx": "^4.0.7"
+    "rx": "^4.0.7",
+    "transformime": "^2.1.1",
+    "transformime-jupyter-transformers": "^0.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
