@@ -1,0 +1,36 @@
+pre {
+  word-wrap: break-word;
+  line-height: 1.21429em;
+  font-size: 14px;
+}
+
+.CodeMirror {
+    line-height: 1.21429em;
+    font-size: 14px;
+    height: auto;
+    background: none;
+}
+
+.CodeMirror-scroll {
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.CodeMirror-lines {
+    padding: 0.4em;
+}
+
+.CodeMirror-linenumber {
+    padding: 0 8px 0 4px;
+}
+
+.CodeMirror-gutters {
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+}
+
+.CodeMirror pre {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+}
