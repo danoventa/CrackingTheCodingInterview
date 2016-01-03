@@ -1,5 +1,10 @@
 import React from 'react';
 
+import {
+  richestMimetype,
+  transforms,
+} from 'transformime-react';
+
 export default class OutputArea extends React.Component {
   static displayName = 'OutputArea';
 
@@ -7,11 +12,15 @@ export default class OutputArea extends React.Component {
     outputs: React.PropTypes.any,
   };
 
-  // Temporary until I bring in all the transformime and JDA handling
-  cleanOutput(output, index) {
+  transform(output, index) {
     const outputType = output.get('output_type');
     if(outputType === 'execute_result') {
-      return <pre key={index}>{ output.getIn(['data', 'text/plain']) }</pre>;
+      const bundle = output.get('data');
+
+      const mimetype = richestMimetype(bundle);
+      const Transform = transforms.get(mimetype);
+
+      return Transform ? <Transform key={index} data={bundle.get(mimetype)} /> : null;
     }
     else if (outputType === 'stream') {
       return <pre key={index}>{ output.get('text').join('') }</pre>;
@@ -22,7 +31,7 @@ export default class OutputArea extends React.Component {
     return (
       <div>
       {
-        this.props.outputs.map(this.cleanOutput)
+        this.props.outputs ? this.props.outputs.map(this.transform.bind(this)) : null
       }
       </div>
     );
