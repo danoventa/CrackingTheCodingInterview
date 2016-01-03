@@ -18,6 +18,8 @@ export default class Notebook extends React.Component {
     // We'll want to check for this existing later
     // and any other validation
     require('codemirror/mode/' + lang + '/' + lang);
+    // Assume markdown should be required
+    require('codemirror/mode/markdown/markdown');
   }
 
   render() {
@@ -28,6 +30,7 @@ export default class Notebook extends React.Component {
           return <Cell input={cell.get('source')}
                        language={this.props.language}
                        outputs={cell.get('outputs')}
+                       type={cell.get('cell_type')}
                        key={index}
                        />;
         })

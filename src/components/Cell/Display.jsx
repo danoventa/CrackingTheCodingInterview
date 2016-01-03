@@ -5,8 +5,8 @@ import {
   transforms,
 } from 'transformime-react';
 
-export default class OutputArea extends React.Component {
-  static displayName = 'OutputArea';
+export default class Display extends React.Component {
+  static displayName = 'Display';
 
   static propTypes = {
     outputs: React.PropTypes.any,
