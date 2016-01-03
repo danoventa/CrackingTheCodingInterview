@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Editor from './Editor';
-import OutputArea from './OutputArea';
+import CodeCell from './CodeCell';
+import MarkdownCell from './MarkdownCell';
 
 export default class Cell extends React.Component {
   static displayName = 'Cell';
@@ -10,6 +10,7 @@ export default class Cell extends React.Component {
     input: React.PropTypes.any,
     language: React.PropTypes.string,
     outputs: React.PropTypes.any,
+    type: React.PropTypes.string,
   };
 
   render() {
@@ -19,8 +20,11 @@ export default class Cell extends React.Component {
         paddingRight: '10px',
         paddingBottom: '10px',
       }}>
-        <Editor text={this.props.input} language={this.props.language} ref='editor' />
-        <OutputArea ref='output-area' outputs={this.props.outputs} />
+        {
+          this.props.type === 'markdown' ?
+            <MarkdownCell {...this.props} /> :
+            <CodeCell {...this.props} />
+        }
       </div>
     );
   }
