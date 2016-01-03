@@ -1,7 +1,8 @@
 import React from 'react';
 
+import ReactMarkdown from 'react-markdown';
+
 import Editor from './Editor';
-import Display from './Display';
 
 export default class MarkdownCell extends React.Component {
   static displayName = 'MarkdownCell';
@@ -13,13 +14,29 @@ export default class MarkdownCell extends React.Component {
     outputs: React.PropTypes.any,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = { view: true };
+  }
+
+  keyDown(e) {
+    if (!e.shiftKey || e.key !== 'Enter') {
+      return;
+    }
+    this.setState({ view: true });
+  }
+
   render() {
     return (
-      <div>
-        <Editor language='markdown'
-                text={this.props.input}
-                />
-      </div>
+        (this.state && this.state.view) ?
+          <div onDoubleClick={() => this.setState({ view: false }) }>
+            <ReactMarkdown source={this.props.input.join('')} />
+          </div> :
+          <div onKeyDown={this.keyDown.bind(this)}>
+            <Editor language='markdown'
+                    text={this.props.input}
+                    />
+          </div>
     );
   }
 }
