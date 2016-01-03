@@ -16,7 +16,11 @@ export default class MarkdownCell extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { view: true };
+    this.state = {
+      view: true,
+      // HACK: We'll need to handle props and state change better here
+      source: this.props.input.join(''),
+    };
   }
 
   keyDown(e) {
@@ -30,11 +34,14 @@ export default class MarkdownCell extends React.Component {
     return (
         (this.state && this.state.view) ?
           <div onDoubleClick={() => this.setState({ view: false }) }>
-            <ReactMarkdown source={this.props.input.join('')} />
+            <ReactMarkdown source={this.state.source} />
           </div> :
           <div onKeyDown={this.keyDown.bind(this)}>
             <Editor language='markdown'
-                    text={this.props.input}
+                    text={this.state.source}
+                    onChange={(text) => this.setState({
+                      source: text,
+                    }) }
                     />
           </div>
     );
