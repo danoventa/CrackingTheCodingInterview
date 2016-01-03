@@ -17,7 +17,7 @@ export default class CodeCell extends React.Component {
     return (
       <div>
         <Editor language={this.props.language}
-                text={this.props.input} />
+                text={this.props.input.join('')} />
         <Display outputs={this.props.outputs} />
       </div>
     );
