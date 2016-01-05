@@ -6,6 +6,7 @@ pre {
 
 body {
   font-family: 'Source Sans Pro';
+  font-size: 14px;
 }
 
 .CodeMirror {
@@ -13,6 +14,7 @@ body {
     font-size: 14px;
     height: auto;
     background: none;
+    font-family: 'Source Code Pro';
 }
 
 .CodeMirror-scroll {
