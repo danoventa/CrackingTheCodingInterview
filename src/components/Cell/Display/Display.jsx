@@ -2,11 +2,7 @@ import React from 'react';
 
 import RichestMime from './RichestMime';
 
-const streamStyle = {
-  unicodeBidi: 'embed',
-  fontFamily: 'monospace',
-  whiteSpace: 'pre',
-};
+import ConsoleText from './ConsoleText';
 
 export default class Display extends React.Component {
   static displayName = 'Display';
@@ -34,16 +30,17 @@ export default class Display extends React.Component {
       }
       switch(output.get('name')) {
       case 'stdout':
-        return <span key={index} style={streamStyle}>{text}</span>;
+        return <ConsoleText key={index} text={text} />;
       case 'stderr':
-        return <span key={index} style={streamStyle}>{text}</span>;
+        return <ConsoleText key={index} text={text} />;
       }
-      // switch(output.get('name'))
-      // Should differentiate between streams here
-      // return <pre key={index}>{ output.get('text').join('') }</pre>;
-    // These need implemented still
-    case 'clear_output':
     case 'error':
+      const traceback = output.get('traceback');
+      if (!traceback) {
+        return <ConsoleText key={index} text={`${output.get('ename')}: ${output.get('evalue')}`} />;
+      }
+      return <ConsoleText key={index} text={traceback.join('\n')} />;
+    case 'clear_output':
       return (
         <div key={index}>
           <p style={{ color: 'red' }}>Output type '{outputType}' not implemented yet</p>
@@ -51,7 +48,6 @@ export default class Display extends React.Component {
         </div>
       );
     }
-
   }
 
   render() {
