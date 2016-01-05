@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/nteract/composition",
   "dependencies": {
+    "ansi-to-html": "^0.3.0",
     "codemirror": "^5.10.0",
     "color": "^0.10.1",
     "history": "^1.17.0",
