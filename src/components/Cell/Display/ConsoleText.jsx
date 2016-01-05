@@ -1,6 +1,15 @@
 import React from 'react';
 
-const console = require('./console');
+import Convert from 'ansi-to-html';
+
+const convert = new Convert({
+  escapeXML: true,
+  newLine: true,
+});
+
+function console(text) {
+  return convert.toHtml(text);
+}
 
 const streamStyle = {
   unicodeBidi: 'embed',
