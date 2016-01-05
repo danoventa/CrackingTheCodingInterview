@@ -36,7 +36,6 @@
     "history": "^1.17.0",
     "immutable": "^3.7.6",
     "normalize.css": "^3.0.3",
-    "npm-font-source-sans-pro": "0.0.3",
     "react": "^0.14.5",
     "react-code-mirror": "^3.0.6",
     "react-dom": "^0.14.5",
@@ -44,6 +43,7 @@
     "react-router": "^1.0.3",
     "rx": "^4.0.7",
     "source-code-pro": "git://github.com/adobe-fonts/source-code-pro.git#release",
+    "source-sans-pro": "git://github.com/adobe-fonts/source-sans-pro.git#release",
     "transformime-react": "0.2.0"
   },
   "devDependencies": {
