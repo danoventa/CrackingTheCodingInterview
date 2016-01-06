@@ -17,7 +17,7 @@ export default class Editor extends React.Component {
     language: 'python',
     lineNumbers: false,
     text: '',
-    theme: 'neat',
+    theme: 'composition',
   }
 
   constructor(props) {
