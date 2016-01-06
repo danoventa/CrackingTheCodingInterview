@@ -6,11 +6,12 @@ pre {
 
 body {
   font-family: 'Source Sans Pro';
-  font-size: 14px;
+  font-size: 16px;
+  line-height: 22px;
 }
 
 .CodeMirror {
-    line-height: 1.21429em;
+    line-height: 20px;
     font-size: 14px;
     height: auto;
     background: none;
