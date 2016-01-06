@@ -2,7 +2,7 @@ import React from 'react';
 
 import { expect } from 'chai';
 
-import immutableNotebook from '../dummyNotebook';
+import immutableNotebook from '../dummyNotebook_helper';
 
 import {
   renderIntoDocument,
