@@ -56,8 +56,8 @@
     "babel-preset-react": "^6.3.13",
     "chai": "^3.4.1",
     "chai-immutable": "^1.5.3",
-    "electron-compile": "^1.0.1",
-    "electron-compilers": "^1.0.1",
+    "electron-compile": "^2.0.4",
+    "electron-compilers": "^2.0.4",
     "electron-mocha": "^0.7.0",
     "electron-packager": "^5.1.1",
     "electron-prebuilt": "^0.35.1",
@@ -65,15 +65,5 @@
     "eslint-plugin-babel": "^3.0.0",
     "eslint-plugin-react": "^3.11.3",
     "react-addons-test-utils": "^0.14.5"
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "react"
-    ],
-    "plugins": [
-      "transform-class-properties",
-      "transform-export-extensions"
-    ]
   }
 }
