@@ -18,7 +18,7 @@ export default class Editor extends React.Component {
     lineNumbers: false,
     text: '',
     theme: 'composition',
-  }
+  };
 
   constructor(props) {
     super(props);
