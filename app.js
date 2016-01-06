@@ -25,7 +25,10 @@ app.on('ready', () => {
     title: 'Composition',
   });
 
-  mainWindow.loadURL('file://' + path.join(__dirname, '/index.html'));
+  const index = path.join(__dirname, '/index.html');
+  console.log(index);
+
+  mainWindow.loadURL(`file://${index}`);
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
     mainWindow = null;
