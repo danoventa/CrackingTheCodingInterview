@@ -13,8 +13,10 @@ function console(text) {
 
 const streamStyle = {
   unicodeBidi: 'embed',
-  fontFamily: 'monospace',
+  fontFamily: 'Source Code Pro',
   whiteSpace: 'pre',
+  wordWrap: 'break-word',
+  fontSize: '14px',
 };
 
 export default class ConsoleText extends React.Component {

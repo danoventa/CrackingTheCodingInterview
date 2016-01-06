@@ -4,11 +4,18 @@ pre {
   font-size: 14px;
 }
 
+body {
+  font-family: 'Source Sans Pro';
+  font-size: 16px;
+  line-height: 22px;
+}
+
 .CodeMirror {
-    line-height: 1.21429em;
+    line-height: 20px;
     font-size: 14px;
     height: auto;
     background: none;
+    font-family: 'Source Code Pro';
 }
 
 .CodeMirror-scroll {
@@ -33,4 +40,11 @@ pre {
     padding: 0;
     border: 0;
     border-radius: 0;
+}
+
+/* By default the notebook centers all images. */
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }

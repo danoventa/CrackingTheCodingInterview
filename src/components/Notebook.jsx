@@ -24,7 +24,11 @@ export default class Notebook extends React.Component {
 
   render() {
     return (
-      <div style={{ paddingTop: '10px' }} ref='cells'>
+      <div style={{
+        paddingTop: '10px',
+        paddingLeft: '10px',
+        paddingRight: '10px',
+      }} ref='cells'>
       {
         this.props.cells.map((cell, index) => {
           return <Cell input={cell.get('source')}

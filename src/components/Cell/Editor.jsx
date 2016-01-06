@@ -37,7 +37,9 @@ export default class Editor extends React.Component {
                     background: '#f7f7f7',
                   }}
                   textAreaClassName={['editor']}
-                  textAreaStyle={{ minHeight: '10em' }}
+                  textAreaStyle={{
+                    minHeight: '10em',
+                  }}
                   lineNumbers={this.props.lineNumbers}
                   theme={this.props.theme}
                   onChange={(e) => {
