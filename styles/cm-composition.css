@@ -1,10 +1,10 @@
-.cm-s-composition {
-	font-size: 1em;
-	line-height: 1.5em;
+.cm-s-composition.CodeMirror {
 	font-family: 'Source Code Pro', monospace;
 	letter-spacing: 0.3px;
 	word-spacing: 1px;
-	background: #FFFFFF;
+	background: #FCFCFC;
+	border: 1px solid #cfcfcf;
+	border-radius: 2px;
 	color: #000000;
 }
 .cm-s-composition .CodeMirror-lines {
@@ -18,39 +18,16 @@
 	z-index: 3;
 	border: none;
 }
-.cm-s-composition div.CodeMirror-cursor {
-	border-left: 3px solid #000000;
-}
-.cm-s-composition .CodeMirror-activeline-background {
-	background: #FFFBD1;
-}
-.cm-s-composition .CodeMirror-selected {
-	background: #BDD5FC;
-}
-.cm-s-composition .cm-comment {
-	color: #BCC8BA;
-}
-.cm-s-composition .cm-string {
-	color: #5D90CD;
-}
-.cm-s-composition .cm-number {
-	color: #C52727;
-}
-.cm-s-composition .cm-atom {
-	color: #C52727;
-}
-.cm-s-composition .cm-variable-2 {
-	color: #606060;
-}
-.cm-s-composition .cm-property {
-	color: #C52727;
-}
-.cm-s-composition .cm-keyword {
-	color: null;
-}
-.cm-s-composition .cm-operator {
-	color: null;
-}
-.cm-s-composition .CodeMirror-linenumber {
-	color: #BCC8BA;
-}
+
+.cm-s-composition span.cm-comment { color: #a86; }
+.cm-s-composition span.cm-keyword { line-height: 1em; font-weight: bold; color: blue; }
+.cm-s-composition span.cm-string { color: #a22; }
+.cm-s-composition span.cm-builtin { line-height: 1em; font-weight: bold; color: #077; }
+.cm-s-composition span.cm-special { line-height: 1em; font-weight: bold; color: #0aa; }
+.cm-s-composition span.cm-variable { color: black; }
+.cm-s-composition span.cm-number, .cm-s-composition span.cm-atom { color: #3a3; }
+.cm-s-composition span.cm-meta { color: #555; }
+.cm-s-composition span.cm-link { color: #3a3; }
+
+.cm-s-composition .CodeMirror-activeline-background { background: #e8f2ff; }
+.cm-s-composition .CodeMirror-matchingbracket { outline:1px solid grey; color:black !important; }

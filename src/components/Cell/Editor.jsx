@@ -31,11 +31,6 @@ export default class Editor extends React.Component {
     return (
       <CodeMirror value={this.state.source}
                   mode={this.props.language}
-                  style={{
-                    border: '1px solid #cfcfcf',
-                    borderRadius: '2px',
-                    background: '#f7f7f7',
-                  }}
                   textAreaClassName={['editor']}
                   textAreaStyle={{
                     minHeight: '10em',
