@@ -20,11 +20,11 @@ const streamStyle = {
 };
 
 export default class ConsoleText extends React.Component {
-  static displayName = 'ConsoleText'
+  static displayName = 'ConsoleText';
 
   static propTypes = {
     text: React.PropTypes.string.isRequired,
-  }
+  };
 
   render() {
     return <span style={streamStyle}

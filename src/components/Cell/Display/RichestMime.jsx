@@ -4,18 +4,18 @@ import Immutable from 'immutable';
 import { richestMimetype, transforms, displayOrder } from 'transformime-react';
 
 export default class RichestMime extends React.Component {
-  static displayName = 'RichestMime'
+  static displayName = 'RichestMime';
 
   static propTypes = {
     bundle: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
     transforms: React.PropTypes.instanceOf(Immutable.Map),
-  }
+  };
 
   static defaultProps = {
     transforms,
     displayOrder,
-  }
+  };
 
   render() {
     const mimetype = richestMimetype(
