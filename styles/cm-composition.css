@@ -1,0 +1,33 @@
+.cm-s-composition.CodeMirror {
+	font-family: 'Source Code Pro', monospace;
+	letter-spacing: 0.3px;
+	word-spacing: 1px;
+	background: #FCFCFC;
+	border: 1px solid #cfcfcf;
+	border-radius: 2px;
+	color: #000000;
+}
+.cm-s-composition .CodeMirror-lines {
+  padding: 10px;
+}
+.cm-s-composition .CodeMirror-gutters {
+	box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.5);
+	background-color: #FFFFFF;
+	padding-right: 10px;
+	z-index: 3;
+	border: none;
+}
+
+.cm-s-composition span.cm-comment { color: #a86; }
+.cm-s-composition span.cm-keyword { line-height: 1em; font-weight: bold; color: blue; }
+.cm-s-composition span.cm-string { color: #a22; }
+.cm-s-composition span.cm-builtin { line-height: 1em; font-weight: bold; color: #077; }
+.cm-s-composition span.cm-special { line-height: 1em; font-weight: bold; color: #0aa; }
+.cm-s-composition span.cm-variable { color: black; }
+.cm-s-composition span.cm-number, .cm-s-composition span.cm-atom { color: #3a3; }
+.cm-s-composition span.cm-meta { color: #555; }
+.cm-s-composition span.cm-link { color: #3a3; }
+
+.cm-s-composition .CodeMirror-activeline-background { background: #e8f2ff; }
+.cm-s-composition .CodeMirror-matchingbracket { outline:1px solid grey; color:black !important; }
