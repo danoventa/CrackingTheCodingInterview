@@ -1,5 +1,7 @@
 # composition
 
+[![Build Status](https://travis-ci.org/nteract/composition.svg)](https://travis-ci.org/nteract/composition)
+
 :notebook: Electron app of the Jupyter Notebook
 
 This is a work in progress. Check out the issues for more detail.
