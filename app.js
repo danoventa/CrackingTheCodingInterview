@@ -26,7 +26,6 @@ app.on('ready', () => {
   });
 
   const index = path.join(__dirname, '/index.html');
-  console.log(index);
 
   mainWindow.loadURL(`file://${index}`);
   // Emitted when the window is closed.
