@@ -8,6 +8,8 @@ This is a work in progress. Check out the issues for more detail.
 
 ### Development
 
+Requires node 5.x and npm 3.
+
 1. Fork this repo
 2. Clone it `git clone https://github.com/nteract/composition`
 3. `cd` to where you `clone`d it
