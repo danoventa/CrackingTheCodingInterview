@@ -19,7 +19,7 @@ export default class MarkdownCell extends React.Component {
     this.state = {
       view: true,
       // HACK: We'll need to handle props and state change better here
-      source: this.props.input.join(''),
+      source: this.props.input,
     };
   }
 
