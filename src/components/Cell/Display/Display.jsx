@@ -23,11 +23,7 @@ export default class Display extends React.Component {
       const bundle = output.get('data');
       return <RichestMime key={index} bundle={bundle} />;
     case 'stream':
-      // TODO: Multi-line string cleanup earlier on
-      let text = output.get('text');
-      if (typeof text !== 'string') {
-        text = text.join('');
-      }
+      const text = output.get('text');
       switch(output.get('name')) {
       case 'stdout':
         return <ConsoleText key={index} text={text} />;
