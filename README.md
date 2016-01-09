@@ -1,6 +1,6 @@
 # composition
 
-[![Build Status](https://travis-ci.org/nteract/composition.svg)](https://travis-ci.org/nteract/composition) [![slack in](https://slack.nteract.in/badge.svg)](https://slack.nteract.in)
+[![Build Status](https://travis-ci.org/nteract/composition.svg)](https://travis-ci.org/nteract/composition) [![slack in](https://slack.nteract.in/badge.svg)](http://slack.nteract.in)
 
 :notebook: Electron app of the Jupyter Notebook
 
