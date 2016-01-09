@@ -28,6 +28,8 @@ export default class ConsoleText extends React.Component {
 
   render() {
     return <span style={streamStyle}
+      // This needs to become a pure React component, see
+      // https://github.com/nteract/composition/issues/34
       dangerouslySetInnerHTML={{ //eslint-disable-line
         __html: console(this.props.text),
       }}/>;
