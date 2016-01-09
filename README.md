@@ -21,16 +21,15 @@ Assets are compiled via electron-compile directly, no worry about build steps un
 
 ### ROADMAP
 
-The primary goal of composition is to create a fully standalone desktop application, written with Electron that has a one-click installer for
-OS X and Windows.
+The primary goal of composition is to create a fully standalone desktop application, written with Electron.
 
 * [ ] Bundled kernel with scientific Python packages (Anaconda FTW!)
 * [ ] Observes kernelspecs available
-* [ ] One click installer
+* [ ] One click installer for OS X and Windows.
 
 #### Sub-pieces
 
 There are going to be node packages that should get maintained and worked on independent of composition itself.
 
 * [ ] Prebuilt versions of `zmq` for use in node/Electron/Atom (for everyone :tada:!)
-* [X] Port Transformime (Jupyter Mimetype bundles -> HTML Elements) over to pure react elements
+* [X] Port Transformime (Jupyter Mimetype bundles -> HTML Elements) over to pure `React` elements
