@@ -1,15 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import fs from 'fs';
+
 import * as commutable from 'commutable';
 
 import Notebook from './components/Notebook';
 
-require.extensions['.ipynb'] = require.extensions['.json'];
-const notebook = require('../test-notebooks/multiples.ipynb');
-const immutableNotebook = commutable.fromJS(notebook);
+function readJSON(filepath) {
+  return new Promise((resolve, reject) => {
+    return fs.readFile(filepath, {}, (err, data) => {
+      if(err) {
+        reject(err);
+        return;
+      }
+      try {
+        const nb = JSON.parse(data);
+        resolve(nb);
+        return;
+      }
+      catch (e) {
+        reject(e);
+      }
+    });
+  });
+}
 
-ReactDOM.render(
-  <Notebook cells={immutableNotebook.get('cells')}
-            language={immutableNotebook.getIn(['metadata', 'language_info', 'name'])} />
-, document.querySelector('#app'));
+readJSON('./test-notebooks/multiples.ipynb')
+  .then((notebook) => {
+    const immutableNotebook = commutable.fromJS(notebook);
+    ReactDOM.render(
+      <Notebook cells={immutableNotebook.get('cells')}
+                language={immutableNotebook.getIn(['metadata', 'language_info', 'name'])} />
+    , document.querySelector('#app'));
+  }).catch(err => {
+    ReactDOM.render(
+      <pre>{err.toString()}</pre>
+      , document.querySelector('#app'));
+  });
