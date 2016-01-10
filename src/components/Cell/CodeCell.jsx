@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Editor from './Editor';
-import Display from './Display';
+import Display from 'react-jupyter-display-area';
 
 export default class CodeCell extends React.Component {
   static displayName = 'CodeCell';
