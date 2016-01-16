@@ -4,6 +4,8 @@
 
 :notebook: Electron app of the Jupyter Notebook
 
+Compose yo self!
+
 This is a work in progress. Check out the issues for more detail.
 
 ### Development
