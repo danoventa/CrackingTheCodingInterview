@@ -26,7 +26,7 @@ function readJSON(filepath) {
   });
 }
 
-readJSON('./test-notebooks/multiples.ipynb')
+readJSON('./intro.ipynb')
   .then((notebook) => {
     const immutableNotebook = commutable.fromJS(notebook);
     ReactDOM.render(
