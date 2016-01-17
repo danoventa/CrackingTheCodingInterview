@@ -2,6 +2,8 @@ import React from 'react';
 
 import CodeMirror from 'react-code-mirror';
 
+import { updateCell } from '../../actions';
+
 export default class Editor extends React.Component {
   static displayName = 'Editor';
 
@@ -37,13 +39,14 @@ export default class Editor extends React.Component {
                   }}
                   lineNumbers={this.props.lineNumbers}
                   theme={this.props.theme}
-                  onChange={(e) => {
-                    this.setState({ source: e.target.value });
-                    if(this.props.onChange) {
-                      this.props.onChange(e.target.value);
+                  onChange={
+                    (e) => {
+                      this.setState({
+                        source: e.target.value,
+                      });
+                      updateCell(e.target.value);
                     }
-                  }}
-                  />
+                  }/>
     );
   }
 }

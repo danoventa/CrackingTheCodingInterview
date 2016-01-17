@@ -1,49 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import fs from 'fs';
-
-import * as commutable from 'commutable';
+import createStore from './store';
+import { readJSON } from './actions';
 
 import Notebook from './components/Notebook';
 
-function readJSON(filepath) {
-  return new Promise((resolve, reject) => {
-    return fs.readFile(filepath, {}, (err, data) => {
-      if(err) {
-        reject(err);
-        return;
-      }
-      try {
-        const nb = JSON.parse(data);
-        resolve(nb);
-        return;
-      }
-      catch (e) {
-        reject(e);
-      }
-    });
-  });
+const store = createStore({ notebook: null });
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  componentDidMount() {
+    store.subscribe(state => this.setState(state));
+    readJSON('./intro.ipynb');
+  }
+  render() {
+    return (
+      <div>
+        {
+          this.state.err &&
+          <pre>{this.state.err.toString()}</pre>
+        }
+        {
+          this.state.notebook &&
+          <Notebook
+            notebook={this.state.notebook} />
+        }
+      </div>
+    );
+  }
 }
 
-function updateCell(notebook, index, cell) {
-  const newNotebook = notebook.setIn(['cells', index], cell);
-  renderNotebook(newNotebook);
-}
+App.displayName = 'App';
 
-function renderNotebook(notebook) {
-  ReactDOM.render(
-    <Notebook notebook={notebook}
-      onCellChange={(index, cell) => updateCell(notebook, index, cell)} />
-    , document.querySelector('#app'));
-}
-
-readJSON('./intro.ipynb')
-  .then((notebook) => {
-    const immutableNotebook = commutable.fromJS(notebook);
-    renderNotebook(immutableNotebook);
-  }).catch(err => {
-    ReactDOM.render(
-      <pre>{err.toString()}</pre>
-      , document.querySelector('#app'));
-  });
+ReactDOM.render(
+  <App/>,
+  document.querySelector('#app')
+);

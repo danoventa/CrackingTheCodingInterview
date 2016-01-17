@@ -9,7 +9,6 @@ export default class Cell extends React.Component {
   static propTypes = {
     input: React.PropTypes.any,
     language: React.PropTypes.string,
-    onTextChange: React.PropTypes.func,
     outputs: React.PropTypes.any,
     type: React.PropTypes.string,
   };
@@ -25,11 +24,9 @@ export default class Cell extends React.Component {
       this.props.type === 'markdown' ?
         <MarkdownCell
           input={this.props.input}
-          onTextChange={this.props.onTextChange}
         /> :
         <CodeCell
           input={this.props.input}
-          onTextChange={this.props.onTextChange}
           language={this.props.language}
           outputs={this.props.outputs}
           />

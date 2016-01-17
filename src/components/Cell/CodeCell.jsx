@@ -9,7 +9,6 @@ export default class CodeCell extends React.Component {
   static propTypes = {
     input: React.PropTypes.any,
     language: React.PropTypes.string,
-    onTextChange: React.PropTypes.func,
     outputs: React.PropTypes.any,
     theme: React.PropTypes.string,
   };
@@ -19,7 +18,6 @@ export default class CodeCell extends React.Component {
       <div>
         <Editor language={this.props.language}
                 text={this.props.input}
-                onChange={this.props.onTextChange}
           />
         <Display outputs={this.props.outputs} />
       </div>

@@ -3,6 +3,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import Editor from './Editor';
+import { updateCell } from '../../actions';
 
 export default class MarkdownCell extends React.Component {
   static displayName = 'MarkdownCell';
@@ -39,14 +40,14 @@ export default class MarkdownCell extends React.Component {
           <div onKeyDown={this.keyDown.bind(this)}>
             <Editor language='markdown'
                     text={this.state.source}
-                    onChange={(text) => {
-                      this.setState({
-                        source: text,
-                      });
-                      this.props.onTextChange(text);
-                    }
-                    }
-                    />
+                    onChange={
+                      (text) => {
+                        this.setState({
+                          source: text,
+                        });
+                        updateCell(text);
+                      }
+                    }/>
           </div>
     );
   }
