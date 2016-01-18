@@ -8,10 +8,12 @@ export default class Editor extends React.Component {
   static displayName = 'Editor';
 
   static propTypes = {
+    index: React.PropTypes.number,
+    input: React.PropTypes.any,
     language: React.PropTypes.string,
     lineNumbers: React.PropTypes.bool,
+    notebook: React.PropTypes.object,
     onChange: React.PropTypes.func,
-    text: React.PropTypes.any,
     theme: React.PropTypes.string,
   };
 
@@ -25,8 +27,14 @@ export default class Editor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      source: this.props.text,
+      source: this.props.input,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      source: nextProps.input,
+    });
   }
 
   render() {
@@ -41,10 +49,14 @@ export default class Editor extends React.Component {
                   theme={this.props.theme}
                   onChange={
                     (e) => {
-                      this.setState({
-                        source: e.target.value,
-                      });
-                      updateCell(e.target.value);
+                      if (this.props.onChange) {
+                        this.props.onChange(e.target.value);
+                      } else {
+                        this.setState({
+                          source: e.target.value,
+                        });
+                        updateCell(this.props.notebook, this.props.index, e.target.value);
+                      }
                     }
                   }/>
     );

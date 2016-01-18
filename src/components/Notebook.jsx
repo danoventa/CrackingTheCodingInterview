@@ -41,6 +41,8 @@ export default class Notebook extends React.Component {
           return <Cell input={cell.get('source')}
                        language={this.props.language}
                        outputs={cell.get('outputs')}
+                       notebook={this.props.notebook}
+                       index={index}
                        type={cell.get('cell_type')}
                        key={index}
                        onTextChange={text => {

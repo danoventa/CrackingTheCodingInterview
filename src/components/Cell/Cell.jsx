@@ -22,14 +22,8 @@ export default class Cell extends React.Component {
       }}>
       {
       this.props.type === 'markdown' ?
-        <MarkdownCell
-          input={this.props.input}
-        /> :
-        <CodeCell
-          input={this.props.input}
-          language={this.props.language}
-          outputs={this.props.outputs}
-          />
+        <MarkdownCell {...this.props}/> :
+        <CodeCell {...this.props}/>
       }
       </div>
     );

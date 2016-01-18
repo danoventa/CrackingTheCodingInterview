@@ -1,40 +1,29 @@
-import Rx from 'rx';
 import * as commutable from 'commutable';
 
-import { subjects } from '../actions';
+import { actions } from '../actions';
 
 export default function createStore(initialState) {
 
-  let state = initialState || {};
-
-  const stateSubject = new Rx.Subject();
-
-  subjects.readJSONSubject.subscribe(
-    data => {
-      const fetchedNotebook = commutable.fromJS(data);
-      state = Object.assign({}, state, {
-        notebook: fetchedNotebook,
-      });
-      stateSubject.onNext(state);
+  const store = actions.scan(
+    (state, action) => {
+      switch (action.type) {
+      case 'READ_JSON':
+        const { data } = action;
+        const fetchedNotebook = commutable.fromJS(data);
+        return Object.assign({}, state, {
+          notebook: fetchedNotebook,
+        });
+        return state;
+      case 'UPDATE_CELL':
+        const { notebook, index, cell } = action;
+        const updatedNotebook = notebook.setIn(['cells', index, 'source'], cell);
+        return Object.assign({}, state, {
+          notebook: updatedNotebook,
+        });
+      }
     },
-    err => {
-      state = Object.assign({}, state, {
-        err,
-      });
-      stateSubject.onNext(state);
-    }
+    initialState || {}
   );
 
-  subjects.updateCellSubject.subscribe(
-    (notebook, index, cell) => {
-      const updatedNotebook = state.notebook ?
-        state.notebook.setIn(['cells', index], cell) : null;
-      state = Object.assign({}, state, {
-        notebook: updatedNotebook,
-      });
-      stateSubject.onNext(state);
-    }
-  );
-
-  return stateSubject;
+  return store;
 }

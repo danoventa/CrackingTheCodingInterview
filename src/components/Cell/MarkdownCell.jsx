@@ -11,8 +11,9 @@ export default class MarkdownCell extends React.Component {
   static propTypes = {
     // Unlike the code cell, we default to language of markdown
     // and don't have outputs
+    index: React.PropTypes.number,
     input: React.PropTypes.any,
-    onTextChange: React.PropTypes.func,
+    notebook: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -22,6 +23,12 @@ export default class MarkdownCell extends React.Component {
       // HACK: We'll need to handle props and state change better here
       source: this.props.input,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      source: nextProps.input,
+    });
   }
 
   keyDown(e) {
@@ -39,13 +46,15 @@ export default class MarkdownCell extends React.Component {
           </div> :
           <div onKeyDown={this.keyDown.bind(this)}>
             <Editor language='markdown'
-                    text={this.state.source}
+                    index={this.props.index}
+                    input={this.state.source}
+                    notebook={this.props.notebook}
                     onChange={
                       (text) => {
                         this.setState({
                           source: text,
                         });
-                        updateCell(text);
+                        updateCell(this.props.notebook, this.props.index, text);
                       }
                     }/>
           </div>

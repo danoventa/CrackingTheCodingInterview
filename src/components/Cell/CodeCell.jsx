@@ -16,10 +16,8 @@ export default class CodeCell extends React.Component {
   render() {
     return (
       <div>
-        <Editor language={this.props.language}
-                text={this.props.input}
-          />
-        <Display outputs={this.props.outputs} />
+        <Editor {...this.props} />
+        <Display {...this.props} />
       </div>
     );
   }

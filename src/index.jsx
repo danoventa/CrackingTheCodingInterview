@@ -12,9 +12,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    store.subscribe(state => this.setState(state));
   }
   componentDidMount() {
-    store.subscribe(state => this.setState(state));
     readJSON('./intro.ipynb');
   }
   render() {
