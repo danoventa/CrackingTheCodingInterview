@@ -15,11 +15,9 @@ describe('Notebook', () => {
   it('accepts an Immutable.List of cells', () => {
 
     const component = renderIntoDocument(
-      <Notebook cells={immutableNotebook.get('cells')}
-                language={immutableNotebook.getIn(['metadata', 'language_info', 'name'])} />
+      <Notebook notebook={immutableNotebook} />
     );
 
     expect(component).to.not.be.null;
-    // TODO: Significant test
   });
 });
