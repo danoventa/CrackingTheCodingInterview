@@ -10,6 +10,10 @@ This is a work in progress. Check out the issues for more detail.
 
 ### Development
 
+This project adheres to the [Open Code of Conduct][code-of-conduct]. By participating, you are expected to honor this code.
+
+[code-of-conduct]: http://todogroup.org/opencodeofconduct/#nteract/rgbkrk@gmail.com
+
 Requires node 5.x and npm 3.
 
 1. Fork this repo
@@ -19,7 +23,6 @@ Requires node 5.x and npm 3.
 5. `npm run start`
 
 Assets are compiled via electron-compile directly, no worry about build steps until we make a release. As you hack on components, you can reload directly or pop open the dev console and run `location.reload()`. No hot reloading at the moment.
-
 
 ### ROADMAP
 
