@@ -8,11 +8,10 @@ Compose yo self!
 
 This is a work in progress. Check out the issues for more detail.
 
+This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDUCT.md).
+By participating, you are expected to uphold this code. Please report unacceptable behavior to rgbkrk@gmail.com.
+
 ### Development
-
-This project adheres to the [Open Code of Conduct][code-of-conduct]. By participating, you are expected to honor this code.
-
-[code-of-conduct]: http://todogroup.org/opencodeofconduct/#nteract/rgbkrk@gmail.com
 
 Requires node 5.x and npm 3.
 
