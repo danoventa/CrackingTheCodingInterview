@@ -1,7 +1,7 @@
 import fs from 'fs';
 
-export const getJSON = filepath =>
-  new Promise((resolve, reject) => {
+export function getJSON(filepath) {
+  return new Promise((resolve, reject) => {
     return fs.readFile(filepath, {}, (err, data) => {
       if(err) {
         reject(err);
@@ -17,3 +17,4 @@ export const getJSON = filepath =>
       }
     });
   });
+}
