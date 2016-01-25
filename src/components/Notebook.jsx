@@ -6,7 +6,6 @@ export default class Notebook extends React.Component {
   static displayName = 'Notebook';
 
   static propTypes = {
-    language: React.PropTypes.string,
     notebook: React.PropTypes.any,
     onCellChange: React.PropTypes.func,
   };
@@ -39,7 +38,7 @@ export default class Notebook extends React.Component {
       {
         cells.map((cell, index) => {
           return <Cell input={cell.get('source')}
-                       language={this.props.language}
+                       language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
                        outputs={cell.get('outputs')}
                        notebook={this.props.notebook}
                        index={index}
