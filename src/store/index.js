@@ -13,7 +13,6 @@ export default function createStore(initialState) {
         return Object.assign({}, state, {
           notebook: fetchedNotebook,
         });
-        return state;
       case 'UPDATE_CELL':
         const { notebook, index, cell } = action;
         const updatedNotebook = notebook.setIn(['cells', index, 'source'], cell);
