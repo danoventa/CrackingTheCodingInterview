@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import createStore from './store';
 import { reducers } from './reducers';
 import { readJSON } from './actions';
+import Provider from './components/Util/Provider';
 
 import Notebook from './components/Notebook';
 
@@ -20,17 +21,19 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div>
-        {
-          this.state.err &&
-          <pre>{this.state.err.toString()}</pre>
-        }
-        {
-          this.state.notebook &&
-          <Notebook
-            notebook={this.state.notebook} />
-        }
-      </div>
+      <Provider rx={{ dispatch, store }}>
+        <div>
+          {
+            this.state.err &&
+            <pre>{this.state.err.toString()}</pre>
+          }
+          {
+            this.state.notebook &&
+            <Notebook
+              notebook={this.state.notebook} />
+          }
+        </div>
+      </Provider>
     );
   }
 }
