@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import createStore from './store';
+import { reducers } from './reducers';
 import { readJSON } from './actions';
 
 import Notebook from './components/Notebook';
 
-const store = createStore({ notebook: null });
+const { store, dispatch } = createStore({ notebook: null }, reducers);
 
 class App extends React.Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class App extends React.Component {
     store.subscribe(state => this.setState(state));
   }
   componentDidMount() {
-    readJSON('./intro.ipynb');
+    dispatch(readJSON('./intro.ipynb'));
   }
   render() {
     return (

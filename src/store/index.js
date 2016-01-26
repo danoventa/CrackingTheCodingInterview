@@ -1,28 +1,21 @@
-import * as commutable from 'commutable';
+import * as Rx from '@reactivex/rxjs';
 
-import { actions } from '../actions';
+export default function createStore(initialState, reducers) {
 
-export default function createStore(initialState) {
+  const subject = new Rx.Subject();
 
-  const store = actions.scan(
-    (state, action) => {
-      switch (action.type) {
-      case 'READ_JSON':
-        const { data } = action;
-        const fetchedNotebook = commutable.fromJS(data);
-        return Object.assign({}, state, {
-          notebook: fetchedNotebook,
-        });
-      case 'UPDATE_CELL':
-        const { notebook, index, cell } = action;
-        const updatedNotebook = notebook.setIn(['cells', index, 'source'], cell);
-        return Object.assign({}, state, {
-          notebook: updatedNotebook,
-        });
-      }
-    },
+  const store = subject.scan(
+    (state, action) => reducers[action.type].call(null, state, action),
     initialState || {}
   );
 
-  return store;
+  const dispatch = (action) => typeof action === 'function'
+    ? action.call(null, subject)
+    : subject.next(action);
+
+  return {
+    store,
+    dispatch,
+  };
+
 }
