@@ -17,6 +17,10 @@ export default class Editor extends React.Component {
     theme: React.PropTypes.string,
   };
 
+  static contextTypes = {
+    dispatch: React.PropTypes.func,
+  };
+
   static defaultProps = {
     language: 'python',
     lineNumbers: false,
@@ -55,7 +59,7 @@ export default class Editor extends React.Component {
                         this.setState({
                           source: e.target.value,
                         });
-                        updateCell(this.props.notebook, this.props.index, e.target.value);
+                        this.context.dispatch(updateCell(this.props.notebook, this.props.index, e.target.value));
                       }
                     }
                   }/>
