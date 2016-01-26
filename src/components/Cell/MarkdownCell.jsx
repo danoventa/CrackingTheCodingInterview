@@ -16,6 +16,10 @@ export default class MarkdownCell extends React.Component {
     notebook: React.PropTypes.object,
   };
 
+  static contextTypes = {
+    dispatch: React.PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -54,7 +58,7 @@ export default class MarkdownCell extends React.Component {
                         this.setState({
                           source: text,
                         });
-                        updateCell(this.props.notebook, this.props.index, text);
+                        this.context.dispatch(updateCell(this.props.notebook, this.props.index, text));
                       }
                     }/>
           </div>
