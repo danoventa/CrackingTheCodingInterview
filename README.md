@@ -70,4 +70,4 @@ without working with React, check out [ick](https://github.com/nteract/ick),
 an interactive console.
 
 Post in [Slack](http://slack.nteract.in/) if you need help with these or have questions. Several people
-are working through tutorials right now and would love a study group!
+are working through tutorials right now and would love a study group! If you have trouble creating an account, either email rgbkrk@gmail.com or post an issue on GitHub.
