@@ -69,5 +69,5 @@ If you'd like to experiment with the core Jupyter messaging and Observables
 without working with React, check out [ick](https://github.com/nteract/ick),
 an interactive console.
 
-Post in Slack if you need help with these or have questions. Several people
+Post in [Slack](http://slack.nteract.in/) if you need help with these or have questions. Several people
 are working through tutorials right now and would love a study group!
