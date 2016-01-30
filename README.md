@@ -74,3 +74,14 @@ an interactive console.
 
 Post in [Slack](http://slack.nteract.in/) if you need help with these or have questions. Several people
 are working through tutorials right now and would love a study group! If you have trouble creating an account, either email rgbkrk@gmail.com or post an issue on GitHub.
+
+
+#### Troubleshooting
+
+> I did: "$ npm install", and I got: "Authorization service failure : @reactivex/rxjs"
+
+- Try `$ npm login` then `$ npm install`
+- Try `$ npm install @reactivex/rxjs; npm install;`
+- Try `$ npm install @reactivex/rxjs@5.0.0-beta.1; npm install;`
+
+
