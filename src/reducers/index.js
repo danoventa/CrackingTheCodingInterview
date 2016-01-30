@@ -15,4 +15,12 @@ export const reducers = {
       notebook: updatedNotebook,
     });
   },
+  NEW_KERNEL: (state, action) => {
+    const { channels, connectionFile, spawn } = action;
+    // TODO: Close old channels, close old spawn, delete old connectionFile
+    state.channels = channels;
+    state.connectionFile = connectionFile;
+    state.spawn = spawn;
+    return state;
+  },
 };
