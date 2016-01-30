@@ -6,6 +6,9 @@
 
 :notebook: It's an Electron-based Notebook! :notebook:
 
+Note: this isn't feature complete yet. There will be :bug:s and we're currently
+lacking a lot of core features like saving, loading, and executing code.
+
 ### Scope and goals
 
 * Notebook environment to explore and get things done
