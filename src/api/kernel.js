@@ -8,7 +8,7 @@ import {
 import * as uuid from 'uuid';
 import { launch } from 'spawnteract';
 
-export function launchKernel(kernelSpecName) {
+export default function launchKernel(kernelSpecName) {
   return launch(kernelSpecName)
       .then(c => {
         const kernel = c.config;
