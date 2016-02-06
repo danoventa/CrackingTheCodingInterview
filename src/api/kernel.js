@@ -11,15 +11,15 @@ import { launch } from 'spawnteract';
 export default function launchKernel(kernelSpecName) {
   return launch(kernelSpecName)
       .then(c => {
-        const kernel = c.config;
+        const kernelConfig = c.config;
         const spawn = c.spawn;
-        const connectionFile = c.connFile;
+        const connectionFile = c.connectionFile;
         const identity = uuid.v4();
         const channels = {
-          shell: createShellSubject(identity, kernel),
-          iopub: createIOPubSubject(identity, kernel),
-          control: createControlSubject(identity, kernel),
-          stdin: createStdinSubject(identity, kernel),
+          shell: createShellSubject(identity, kernelConfig),
+          iopub: createIOPubSubject(identity, kernelConfig),
+          control: createControlSubject(identity, kernelConfig),
+          stdin: createStdinSubject(identity, kernelConfig),
         };
         return {
           channels,
