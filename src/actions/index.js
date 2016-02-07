@@ -14,7 +14,7 @@ export function newKernel(kernelSpecName) {
           spawn,
         });
       })
-      .catch((err) => console.log("err"));
+      .catch((err) => console.error(err));
   };
 }
 
