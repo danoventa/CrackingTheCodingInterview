@@ -10,7 +10,7 @@ export default class Inputs extends React.Component {
   render() {
     return (
       <div className='cell_inputs'>
-        [{this.props.executionCount ? this.props.executionCount : ' '}]
+        [{ !this.props.executionCount ? ' ' : this.props.executionCount }]
       </div>
     );
   }
