@@ -9,10 +9,8 @@ export default class MarkdownCell extends React.Component {
   static displayName = 'MarkdownCell';
 
   static propTypes = {
-    // Unlike the code cell, we default to language of markdown
-    // and don't have outputs
+    cell: React.PropTypes.any,
     index: React.PropTypes.number,
-    input: React.PropTypes.any,
     notebook: React.PropTypes.object,
   };
 
@@ -25,7 +23,7 @@ export default class MarkdownCell extends React.Component {
     this.state = {
       view: true,
       // HACK: We'll need to handle props and state change better here
-      source: this.props.input,
+      source: this.props.cell.get('source'),
     };
   }
 
@@ -46,7 +44,7 @@ export default class MarkdownCell extends React.Component {
     return (
         (this.state && this.state.view) ?
           <div
-            className="cell_markdown"
+            className='cell_markdown'
             onDoubleClick={() => this.setState({ view: false }) }>
             <ReactMarkdown source={this.state.source} />
           </div> :

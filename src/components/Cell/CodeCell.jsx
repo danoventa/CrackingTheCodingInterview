@@ -7,17 +7,23 @@ export default class CodeCell extends React.Component {
   static displayName = 'CodeCell';
 
   static propTypes = {
-    input: React.PropTypes.any,
+    cell: React.PropTypes.any,
     language: React.PropTypes.string,
-    outputs: React.PropTypes.any,
     theme: React.PropTypes.string,
   };
 
   render() {
     return (
       <div>
-        <Editor {...this.props} />
-        <Display className="cell_display" {...this.props} />
+        <Editor
+          index={this.props.index}
+          input={this.props.cell.get('source')}
+          language={this.props.language}
+          notebook={this.props.notebook}
+        />
+        <Display className='cell_display'
+                 outputs={this.props.cell.get('outputs')}
+        />
       </div>
     );
   }

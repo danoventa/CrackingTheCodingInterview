@@ -38,6 +38,7 @@ export default class Notebook extends React.Component {
       {
         cells.map((cell, index) => {
           return <Cell input={cell.get('source')}
+                       cell={cell}
                        language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
                        outputs={cell.get('outputs')}
                        notebook={this.props.notebook}

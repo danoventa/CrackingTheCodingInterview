@@ -45,15 +45,15 @@ export default class Editor extends React.Component {
 
   render() {
     return (
-      <div className="cell_editor">
+      <div className='cell_editor'>
         <Inputs {...this.props}/>
         <CodeMirror value={this.state.source}
-                    className="cell_cm"
+                    className='cell_cm'
                     mode={this.props.language}
                     textAreaClassName={['editor']}
                     textAreaStyle={{
                       minHeight: '10em',
-                      backgroundColor: 'red'
+                      backgroundColor: 'red',
                     }}
                     lineNumbers={this.props.lineNumbers}
                     theme={this.props.theme}
