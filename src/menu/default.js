@@ -7,6 +7,15 @@ export default fromJS([
       {
         label: '&Open',
         action: 'readJSON',
+        accelerator: 'CmdOrCtrl+O',
+      },
+      {
+        type: 'separator',
+      },
+      {
+        label: '&Quit',
+        action: 'exit',
+        accelerator: 'CmdOrCtrl+Q',
       },
     ],
   },

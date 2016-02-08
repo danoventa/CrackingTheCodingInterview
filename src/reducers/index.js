@@ -1,4 +1,5 @@
 import * as commutable from 'commutable';
+import * as fs from 'fs';
 
 export const reducers = {
   READ_JSON: (state, action) => {
@@ -22,6 +23,24 @@ export const reducers = {
     state.channels = channels;
     state.connectionFile = connectionFile;
     state.spawn = spawn;
+    return state;
+  },
+  EXIT: state => {
+    if (state.channels) {
+      state.channels.shell.complete();
+      state.channels.iopub.complete();
+      state.channels.stdin.complete();
+      state.channels = null;
+    }
+    if (state.spawn) {
+      state.spawn.kill();
+      state.spawn = null;
+    }
+    if (state.connectionFile) {
+      fs.unlink(state.connectionFile);
+      state.connectionFile = null;
+    }
+    close();
     return state;
   },
 };
