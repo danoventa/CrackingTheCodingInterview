@@ -8,7 +8,6 @@ export default class Cell extends React.Component {
 
   static propTypes = {
     cell: React.PropTypes.any,
-    notebook: React.PropTypes.any,
   };
 
   render() {

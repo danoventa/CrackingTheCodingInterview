@@ -11,7 +11,6 @@ export default class MarkdownCell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     index: React.PropTypes.number,
-    notebook: React.PropTypes.object,
   };
 
   static contextTypes = {
@@ -52,13 +51,12 @@ export default class MarkdownCell extends React.Component {
             <Editor language='markdown'
                     index={this.props.index}
                     input={this.state.source}
-                    notebook={this.props.notebook}
                     onChange={
                       (text) => {
                         this.setState({
                           source: text,
                         });
-                        this.context.dispatch(updateCell(this.props.notebook, this.props.index, text));
+                        this.context.dispatch(updateCell(this.props.index, text));
                       }
                     }/>
           </div>

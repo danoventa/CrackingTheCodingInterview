@@ -14,7 +14,6 @@ export default class Editor extends React.Component {
     input: React.PropTypes.any,
     language: React.PropTypes.string,
     lineNumbers: React.PropTypes.bool,
-    notebook: React.PropTypes.object,
     onChange: React.PropTypes.func,
     theme: React.PropTypes.string,
   };
@@ -65,7 +64,7 @@ export default class Editor extends React.Component {
                           this.setState({
                             source: e.target.value,
                           });
-                          this.context.dispatch(updateCell(this.props.notebook, this.props.index, e.target.value));
+                          this.context.dispatch(updateCell(this.props.index, e.target.value));
                         }
                       }
                     }/>
