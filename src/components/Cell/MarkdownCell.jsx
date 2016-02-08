@@ -29,7 +29,7 @@ export default class MarkdownCell extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      source: nextProps.input,
+      source: nextProps.cell.get('source'),
     });
   }
 

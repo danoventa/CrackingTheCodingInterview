@@ -9,14 +9,15 @@ export default class Cell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     notebook: React.PropTypes.any,
-    type: React.PropTypes.string,
   };
 
   render() {
+    const cell = this.props.cell;
+    const type = cell.get('cell_type');
     return (
       <div className='cell'>
         {
-        this.props.type === 'markdown' ?
+        type === 'markdown' ?
           <MarkdownCell {...this.props}/> :
           <CodeCell {...this.props}/>
         }
