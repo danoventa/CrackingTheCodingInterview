@@ -45,7 +45,9 @@ export default class MarkdownCell extends React.Component {
   render() {
     return (
         (this.state && this.state.view) ?
-          <div onDoubleClick={() => this.setState({ view: false }) }>
+          <div
+            className="cell_markdown"
+            onDoubleClick={() => this.setState({ view: false }) }>
             <ReactMarkdown source={this.state.source} />
           </div> :
           <div onKeyDown={this.keyDown.bind(this)}>

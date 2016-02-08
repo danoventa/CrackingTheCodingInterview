@@ -17,7 +17,7 @@ export default class CodeCell extends React.Component {
     return (
       <div>
         <Editor {...this.props} />
-        <Display {...this.props} />
+        <Display className="cell_display" {...this.props} />
       </div>
     );
   }
