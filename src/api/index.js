@@ -11,8 +11,7 @@ export const getJSON = filepath =>
         const nb = JSON.parse(data);
         resolve(nb);
         return;
-      }
-      catch (e) {
+      } catch (e) {
         reject(e);
       }
     });
