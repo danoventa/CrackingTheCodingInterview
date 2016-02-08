@@ -1,51 +1,126 @@
-pre {
-  word-wrap: break-word;
-  line-height: 1.21429em;
-  font-size: 14px;
-}
-
-body {
-  color: rgb(51,51,51);
-  font-family: 'Source Sans Pro';
-  font-size: 16px;
-  line-height: 22px;
-}
-
-.CodeMirror {
-    line-height: 20px;
+/*
+  Globals
+ */
+pre
+{
     font-size: 14px;
-    height: auto;
-    background: none;
+    line-height: 1.21429em;
+
+    word-wrap: break-word;
+}
+
+body
+{
+    font-family: 'Source Sans Pro';
+    font-size: 16px;
+    line-height: 22px;
+
+    color: rgb(51,51,51);
+}
+
+/* By default the notebook centers all images. */
+img
+{
+    display: block;
+
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/*
+    Codemirror
+ */
+
+.CodeMirror
+{
     font-family: 'Source Code Pro';
+    font-size: 14px;
+    line-height: 20px;
+
+    height: auto;
+
+    background: none;
 }
 
-.CodeMirror-scroll {
-    overflow-y: hidden;
+.CodeMirror-scroll
+{
     overflow-x: auto;
+    overflow-y: hidden;
 }
 
-.CodeMirror-lines {
-    padding: 0.4em;
+.CodeMirror-lines
+{
+    padding: .4em;
 }
 
-.CodeMirror-linenumber {
+.CodeMirror-linenumber
+{
     padding: 0 8px 0 4px;
 }
 
-.CodeMirror-gutters {
-    border-bottom-left-radius: 2px;
+.CodeMirror-gutters
+{
     border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
 }
 
-.CodeMirror pre {
+.CodeMirror pre
+{
     padding: 0;
+
     border: 0;
     border-radius: 0;
 }
 
-/* By default the notebook centers all images. */
-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+/*
+  Cell
+ */
+
+.cell
+{
+    margin: 10px;
+
+    transition: all .2s ease-in-out;
+}
+
+.cell:hover
+{
+    box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+}
+
+.cell_markdown
+{
+    padding: 10px;
+}
+
+.cell_display
+{
+    padding: 10px 10px 10px 60px;
+}
+
+.cell_editor
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.cell_editor .cell_inputs
+{
+    font-family: monospace;
+    font-size: 12px;
+
+    width: 50px;
+    padding: 10px 0;
+
+    text-align: center;
+
+    color: #8c8a8e;
+    background-color: #e2dfe3;
+
+    flex: 0 0 auto;
+}
+
+.cell_editor .cell_cm
+{
+    flex: 1 1 auto;
 }

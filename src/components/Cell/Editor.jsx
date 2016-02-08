@@ -2,6 +2,8 @@ import React from 'react';
 
 import CodeMirror from 'react-code-mirror';
 
+import Inputs from './Inputs';
+
 import { updateCell } from '../../actions';
 
 export default class Editor extends React.Component {
@@ -43,26 +45,31 @@ export default class Editor extends React.Component {
 
   render() {
     return (
-      <CodeMirror value={this.state.source}
-                  mode={this.props.language}
-                  textAreaClassName={['editor']}
-                  textAreaStyle={{
-                    minHeight: '10em',
-                  }}
-                  lineNumbers={this.props.lineNumbers}
-                  theme={this.props.theme}
-                  onChange={
-                    (e) => {
-                      if (this.props.onChange) {
-                        this.props.onChange(e.target.value);
-                      } else {
-                        this.setState({
-                          source: e.target.value,
-                        });
-                        this.context.dispatch(updateCell(this.props.notebook, this.props.index, e.target.value));
+      <div className="cell_editor">
+        <Inputs {...this.props}/>
+        <CodeMirror value={this.state.source}
+                    className="cell_cm"
+                    mode={this.props.language}
+                    textAreaClassName={['editor']}
+                    textAreaStyle={{
+                      minHeight: '10em',
+                      backgroundColor: 'red'
+                    }}
+                    lineNumbers={this.props.lineNumbers}
+                    theme={this.props.theme}
+                    onChange={
+                      (e) => {
+                        if (this.props.onChange) {
+                          this.props.onChange(e.target.value);
+                        } else {
+                          this.setState({
+                            source: e.target.value,
+                          });
+                          this.context.dispatch(updateCell(this.props.notebook, this.props.index, e.target.value));
+                        }
                       }
-                    }
-                  }/>
+                    }/>
+      </div>
     );
   }
 }

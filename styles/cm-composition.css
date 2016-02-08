@@ -2,9 +2,7 @@
 	font-family: 'Source Code Pro', monospace;
 	letter-spacing: 0.3px;
 	word-spacing: 1px;
-	background: #FCFCFC;
-	border: 1px solid #cfcfcf;
-	border-radius: 2px;
+	background: #fafafa;
 	color: #000000;
 }
 .cm-s-composition .CodeMirror-lines {

@@ -15,16 +15,12 @@ export default class Cell extends React.Component {
 
   render() {
     return (
-      <div style={{
-        paddingLeft: '10px',
-        paddingRight: '10px',
-        paddingBottom: '10px',
-      }}>
-      {
-      this.props.type === 'markdown' ?
-        <MarkdownCell {...this.props}/> :
-        <CodeCell {...this.props}/>
-      }
+      <div className="cell">
+        {
+        this.props.type === 'markdown' ?
+          <MarkdownCell {...this.props}/> :
+          <CodeCell {...this.props}/>
+        }
       </div>
     );
   }
