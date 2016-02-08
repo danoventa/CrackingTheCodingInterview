@@ -31,6 +31,11 @@ export function readJSON(filePath) {
   };
 }
 
+export function openFile() {
+  /* eslint no-alert: 0 */
+  return readJSON(prompt('File path:'));
+}
+
 export function updateCell(notebook, index, cell) {
   return {
     type: 'UPDATE_CELL',
