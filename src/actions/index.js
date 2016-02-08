@@ -2,6 +2,12 @@ import { getJSON } from '../api';
 
 import launchKernel from '../api/kernel';
 
+export function exit() {
+  return {
+    type: 'EXIT',
+  };
+}
+
 export function newKernel(kernelSpecName) {
   return (subject) => {
     launchKernel(kernelSpecName)
