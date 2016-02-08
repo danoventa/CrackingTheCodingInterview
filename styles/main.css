@@ -98,13 +98,13 @@ img
     padding: 10px 10px 10px 60px;
 }
 
-.cell_editor
+.code_cell .input_area
 {
     display: flex;
     flex-direction: row;
 }
 
-.cell_editor .cell_inputs
+.code_cell .input_area .cell_inputs
 {
     font-family: monospace;
     font-size: 12px;
@@ -120,7 +120,7 @@ img
     flex: 0 0 auto;
 }
 
-.cell_editor .cell_cm
+.code_cell .input_area .cell_editor
 {
     flex: 1 1 auto;
 }
