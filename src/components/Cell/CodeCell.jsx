@@ -8,6 +8,7 @@ export default class CodeCell extends React.Component {
 
   static propTypes = {
     cell: React.PropTypes.any,
+    index: React.PropTypes.number,
     language: React.PropTypes.string,
     theme: React.PropTypes.string,
   };
@@ -19,7 +20,6 @@ export default class CodeCell extends React.Component {
           index={this.props.index}
           input={this.props.cell.get('source')}
           language={this.props.language}
-          notebook={this.props.notebook}
         />
         <Display className='cell_display'
                  outputs={this.props.cell.get('outputs')}

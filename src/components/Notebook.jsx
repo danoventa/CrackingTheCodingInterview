@@ -39,7 +39,6 @@ export default class Notebook extends React.Component {
         cells.map((cell, index) => {
           return <Cell cell={cell}
                        language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
-                       notebook={this.props.notebook}
                        index={index}
                        key={index}
                        onTextChange={text => {
