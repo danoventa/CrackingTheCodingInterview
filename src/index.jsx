@@ -5,10 +5,11 @@ import createStore from './store';
 import { reducers } from './reducers';
 import { readJSON } from './actions';
 import Provider from './components/Util/Provider';
-
+import { setApplicationMenu, DEFAULT_MENU } from './menu';
 import Notebook from './components/Notebook';
 
 const { store, dispatch } = createStore({ notebook: null }, reducers);
+setApplicationMenu(DEFAULT_MENU, dispatch);
 
 class App extends React.Component {
   constructor(props) {
