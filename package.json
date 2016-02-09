@@ -38,6 +38,7 @@
     "enchannel-zmq-backend": "^1.0.0",
     "history": "^1.17.0",
     "immutable": "^3.7.6",
+    "kernelspecs": "^1.0.1",
     "normalize.css": "^3.0.3",
     "react": "^0.14.5",
     "react-code-mirror": "^3.0.6",

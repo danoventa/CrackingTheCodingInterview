@@ -40,11 +40,13 @@ export function createMenuTemplate(immutableMenu, dispatch) {
 
 /**
  * Sets the application menu
- * @param  {Immutable.Map} immutableMenu   menu definition
- * @param  {function}      dispatch        Redux store action dispater function
+ * @param  {Map|Promise<Map>} asyncMenu  menu definition
+ * @param  {function}         dispatch   Redux store action dispater function
  * @return {undefined}
  */
-export function setApplicationMenu(immutableMenu, dispatch) {
-  const menu = Menu.buildFromTemplate(createMenuTemplate(immutableMenu, dispatch));
-  Menu.setApplicationMenu(menu);
+export function setApplicationMenu(asyncMenu, dispatch) {
+  Promise.resolve(asyncMenu).then(menu => {
+    const builtMenu = Menu.buildFromTemplate(createMenuTemplate(menu, dispatch));
+    Menu.setApplicationMenu(builtMenu);
+  });
 }
