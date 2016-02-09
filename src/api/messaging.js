@@ -39,11 +39,11 @@ export function createExecuteRequest(code) {
 }
 
 /**
- * isChildOf filters out messages that don't have the parent header matching parentMessage
+ * childOf filters out messages that don't have the parent header matching parentMessage
  * @param  {Object}  parentMessage Jupyter message protocol message
  * @return {Observable}               the resulting observable
  */
-export function isChildOf(parentMessage) {
+export function childOf(parentMessage) {
   const parentMessageID = parentMessage.header.msg_id;
   return Observable.create(subscriber => {
     // since we're in an arrow function `this` is from the outer scope.
@@ -68,7 +68,13 @@ export function isChildOf(parentMessage) {
   });
 }
 
-export function isMessageType(messageTypes) {
+/**
+ * ofMessageType is an Rx Operator that filters on msg.header.msg_type
+ * being one of messageTypes
+ * @param  {Array[string]} messageTypes e.g. ['stream', 'error']
+ * @return {Observable}                 the resulting observable
+ */
+export function ofMessageType(messageTypes) {
   return Observable.create(subscriber => {
     // since we're in an arrow function `this` is from the outer scope.
     // save our inner subscription
@@ -92,5 +98,5 @@ export function isMessageType(messageTypes) {
   });
 }
 
-Observable.prototype.isChildOf = isChildOf;
-Observable.prototype.isMessageType = isMessageType;
+Observable.prototype.childOf = childOf;
+Observable.prototype.ofMessageType = ofMessageType;
