@@ -71,7 +71,7 @@ export function childOf(parentMessage) {
 /**
  * ofMessageType is an Rx Operator that filters on msg.header.msg_type
  * being one of messageTypes
- * @param  {Array[string]} messageTypes e.g. ['stream', 'error']
+ * @param  {Array} messageTypes e.g. ['stream', 'error']
  * @return {Observable}                 the resulting observable
  */
 export function ofMessageType(messageTypes) {
