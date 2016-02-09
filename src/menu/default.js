@@ -14,7 +14,7 @@ export default fromJS([
       },
       {
         label: '&Quit',
-        action: 'exit',
+        action: ['killKernel', 'exit'],
         accelerator: 'CmdOrCtrl+Q',
       },
     ],

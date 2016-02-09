@@ -28,7 +28,9 @@ export function createMenuTemplate(immutableMenu, dispatch) {
   return immutableMenu
     .update('click', cb => cb ? cb : () => {
       const action = immutableMenu.get('action');
-      if (action) {
+      if (List.isList(action)) {
+        action.map(x => dispatch(actions[x]()));
+      } else if (action) {
         dispatch(actions[action]());
       }
     })
