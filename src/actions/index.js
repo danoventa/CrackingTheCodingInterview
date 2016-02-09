@@ -8,6 +8,12 @@ export function exit() {
   };
 }
 
+export function killKernel() {
+  return {
+    type: 'KILL_KERNEL',
+  };
+}
+
 export function newKernel(kernelSpecName) {
   return (subject) => {
     launchKernel(kernelSpecName)

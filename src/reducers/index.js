@@ -26,6 +26,10 @@ export const reducers = {
     return state;
   },
   EXIT: state => {
+    close();
+    return state;
+  },
+  KILL_KERNEL: state => {
     if (state.channels) {
       state.channels.shell.complete();
       state.channels.iopub.complete();
@@ -40,7 +44,6 @@ export const reducers = {
       fs.unlink(state.connectionFile);
       state.connectionFile = null;
     }
-    close();
     return state;
   },
 };
