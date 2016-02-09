@@ -88,6 +88,12 @@ img
     box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
 }
 
+.cell:hover .input_area .cell_inputs,
+.cell:active .input_area .cell_inputs,
+.cell:focus .input_area .cell_inputs {
+  background-color: #e2dfe3;
+}
+
 .cell_markdown
 {
     padding: 10px;
@@ -115,7 +121,7 @@ img
     text-align: center;
 
     color: #8c8a8e;
-    background-color: #e2dfe3;
+    background-color: #fafafa;
 
     flex: 0 0 auto;
 }
