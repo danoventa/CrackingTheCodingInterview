@@ -2,8 +2,6 @@ import React from 'react';
 
 import CodeMirror from 'react-code-mirror';
 
-import Inputs from './Inputs';
-
 import { updateCell } from '../../actions';
 
 export default class Editor extends React.Component {
@@ -45,7 +43,6 @@ export default class Editor extends React.Component {
   render() {
     return (
       <div className='cell_editor'>
-        <Inputs {...this.props}/>
         <CodeMirror value={this.state.source}
                     className='cell_cm'
                     mode={this.props.language}
