@@ -19,8 +19,8 @@
     "nteract",
     "data"
   ],
-  "author": "rgbkrk",
-  "license": "BSD-3-Clause",
+  "author": "nteract contributors",
+  "license": "MPLv2",
   "bugs": {
     "url": "https://github.com/nteract/nteract/issues"
   },
