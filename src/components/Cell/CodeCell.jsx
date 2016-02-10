@@ -42,6 +42,8 @@ export default class CodeCell extends React.Component {
 
     const executeRequest = createExecuteRequest(this.props.cell.get('source'));
 
+    // Limitation of the Subject implementation in enchannel
+    // we must subscribe to next
     shell.subscribe(() => {});
 
     iopub.childOf(executeRequest)
