@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import CodeMirror from 'react-code-mirror';
 
@@ -34,6 +35,15 @@ export default class Editor extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const editor = ReactDOM.findDOMNode(this.refs.codemirror);
+    editor.addEventListener('keypress', (e) => {
+      if (e.keyCode === 13 && e.shiftKey) {
+        e.preventDefault();
+      }
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       source: nextProps.input,
@@ -44,6 +54,7 @@ export default class Editor extends React.Component {
     return (
       <div className='cell_editor'>
         <CodeMirror value={this.state.source}
+                    ref='codemirror'
                     className='cell_cm'
                     mode={this.props.language}
                     textAreaClassName={['editor']}
