@@ -3,7 +3,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import Editor from './Editor';
-import { updateCell } from '../../actions';
+import { updateCellSource } from '../../actions';
 
 export default class MarkdownCell extends React.Component {
   static displayName = 'MarkdownCell';
@@ -56,7 +56,7 @@ export default class MarkdownCell extends React.Component {
                         this.setState({
                           source: text,
                         });
-                        this.context.dispatch(updateCell(this.props.index, text));
+                        this.context.dispatch(updateCellSource(this.props.index, text));
                       }
                     }/>
           </div>

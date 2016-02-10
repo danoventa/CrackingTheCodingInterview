@@ -2,7 +2,7 @@ import React from 'react';
 
 import CodeMirror from 'react-code-mirror';
 
-import { updateCell } from '../../actions';
+import { updateCellSource } from '../../actions';
 
 export default class Editor extends React.Component {
   static displayName = 'Editor';
@@ -61,7 +61,7 @@ export default class Editor extends React.Component {
                           this.setState({
                             source: e.target.value,
                           });
-                          this.context.dispatch(updateCell(this.props.index, e.target.value));
+                          this.context.dispatch(updateCellSource(this.props.index, e.target.value));
                         }
                       }
                     }/>
