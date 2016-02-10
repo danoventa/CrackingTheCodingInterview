@@ -23,7 +23,7 @@ app.on('ready', () => {
     height: 1000,
     // frame: false,
     darkTheme: true,
-    title: 'Composition',
+    title: 'nteract',
   });
 
   const index = path.join(__dirname, '/index.html');
