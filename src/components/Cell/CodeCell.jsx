@@ -39,13 +39,8 @@ export default class CodeCell extends React.Component {
     }
 
     const executeRequest = createExecuteRequest(this.props.cell.get('source'));
-    console.log(executeRequest);
 
-    shell.subscribe(msg => {
-      console.log(msg);
-    });
-
-    console.log(msgSpecToNotebookFormat);
+    shell.subscribe(() => {});
 
     iopub.childOf(executeRequest)
          .ofMessageType(['execute_result', 'display_data', 'stream', 'error'])
@@ -57,13 +52,9 @@ export default class CodeCell extends React.Component {
            this.context.dispatch(updateCellOutputs(this.props.index, outputs));
          });
 
-    /* scanOutputs(iopub.childOf(executeRequest), this.props.cell.get('outputs'))
-      .subscribe((outputs) => {
-        console.log('outputs', outputs);
-        this.context.dispatch(updateCellOutputs(this.props.index, outputs));
-      });*/
-
     shell.next(executeRequest);
+
+    // TODO: Manage subscriptions, trigger executionCount changes, more...
   }
 
   render() {
