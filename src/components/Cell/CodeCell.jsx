@@ -46,6 +46,7 @@ export default class CodeCell extends React.Component {
     // we must subscribe to next
     shell.subscribe(() => {});
 
+    this.context.dispatch(updateCellOutputs(this.props.index, new Immutable.List()));
     iopub.childOf(executeRequest)
          .ofMessageType(['execute_result', 'display_data', 'stream', 'error'])
          .map(msgSpecToNotebookFormat)
