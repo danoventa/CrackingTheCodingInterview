@@ -9,6 +9,7 @@ export default class Notebook extends React.Component {
     channels: React.PropTypes.any,
     notebook: React.PropTypes.any,
     onCellChange: React.PropTypes.func,
+    selected: React.PropTypes.array,
   };
 
   static childContextTypes = {
@@ -48,10 +49,12 @@ export default class Notebook extends React.Component {
 
       {
         cells.map((cell, index) => {
+          const selected = this.props.selected.indexOf(index) !== -1;
           return <Cell cell={cell}
                        language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
                        index={index}
                        key={index}
+                       isSelected={selected}
                        onTextChange={text => {
                          const newCell = cell.set('source', text);
                          this.props.onCellChange(index, newCell);
