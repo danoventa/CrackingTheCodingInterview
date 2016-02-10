@@ -9,8 +9,10 @@ import Display from 'react-jupyter-display-area';
 
 import { updateCellOutputs } from '../../actions';
 
-import { createExecuteRequest } from '../../api/messaging';
-import { msgSpecToNotebookFormat } from '../../api/prototype/output-reduction';
+import {
+  createExecuteRequest,
+  msgSpecToNotebookFormat,
+} from '../../api/messaging';
 
 export default class CodeCell extends React.Component {
   static displayName = 'CodeCell';
