@@ -8,7 +8,7 @@ import Provider from './components/Util/Provider';
 import { setApplicationMenu, DEFAULT_MENU } from './menu';
 import Notebook from './components/Notebook';
 
-const { store, dispatch } = createStore({ notebook: null }, reducers);
+const { store, dispatch } = createStore({ notebook: null, selected: [] }, reducers);
 setApplicationMenu(DEFAULT_MENU, dispatch);
 
 class App extends React.Component {
@@ -31,6 +31,7 @@ class App extends React.Component {
           {
             this.state.notebook &&
             <Notebook
+              selected={this.state.selected}
               notebook={this.state.notebook}
               channels={this.state.channels} />
           }
