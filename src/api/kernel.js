@@ -7,8 +7,9 @@ import {
 
 import * as uuid from 'uuid';
 import { launch } from 'spawnteract';
+import { findAll } from 'kernelspecs';
 
-export default function launchKernel(kernelSpecName) {
+export function launchKernel(kernelSpecName) {
   return launch(kernelSpecName)
       .then(c => {
         const kernelConfig = c.config;
@@ -27,4 +28,8 @@ export default function launchKernel(kernelSpecName) {
           spawn,
         };
       });
+}
+
+export function listKernelSpecs() {
+  return findAll();
 }
