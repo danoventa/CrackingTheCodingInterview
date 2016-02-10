@@ -50,3 +50,11 @@ export function updateCellSource(index, source) {
     source,
   };
 }
+
+export function updateCellOutputs(index, outputs) {
+  return {
+    type: 'UPDATE_CELL_OUTPUTS',
+    index,
+    outputs,
+  };
+}

@@ -17,6 +17,14 @@ export const reducers = {
       notebook: updatedNotebook,
     });
   },
+  UPDATE_CELL_OUTPUTS: (state, action) => {
+    const { index, outputs } = action;
+    const { notebook } = state;
+    const updatedNotebook = notebook.setIn(['cells', index, 'outputs'], outputs);
+    return Object.assign({}, state, {
+      notebook: updatedNotebook,
+    });
+  },
   NEW_KERNEL: (state, action) => {
     const { channels, connectionFile, spawn } = action;
     state.channels = channels;
