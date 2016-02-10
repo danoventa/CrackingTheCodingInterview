@@ -25,6 +25,14 @@ export const reducers = {
       notebook: updatedNotebook,
     });
   },
+  SET_SELECTED: (state, action) => {
+    const selected = action.additive ?
+        state.selected.concat(action.indexes) :
+        action.indexes;
+    return Object.assign({}, state, {
+      selected,
+    });
+  },
   NEW_KERNEL: (state, action) => {
     const { channels, connectionFile, spawn } = action;
     state.channels = channels;

@@ -43,6 +43,14 @@ export function readJSON(filePath) {
   };
 }
 
+export function setSelected(indexes, additive) {
+  return {
+    type: 'SET_SELECTED',
+    indexes,
+    additive,
+  };
+}
+
 export function updateCellSource(index, source) {
   return {
     type: 'UPDATE_CELL_SOURCE',
