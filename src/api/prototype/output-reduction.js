@@ -1,6 +1,6 @@
 /* eslint camelcase: 0 */ // <-- Per Jupyter message spec
 
-function msgSpecToNotebookFormat(msg) {
+export function msgSpecToNotebookFormat(msg) {
   // This could all be done with an Object.assign too. For the moment I'm being
   // explicit here.
 

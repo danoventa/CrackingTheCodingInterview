@@ -6,9 +6,20 @@ export default class Notebook extends React.Component {
   static displayName = 'Notebook';
 
   static propTypes = {
+    channels: React.PropTypes.any,
     notebook: React.PropTypes.any,
     onCellChange: React.PropTypes.func,
   };
+
+  static childContextTypes = {
+    channels: React.PropTypes.object,
+  };
+
+  getChildContext() {
+    return {
+      channels: this.props.channels,
+    };
+  }
 
   componentWillMount() {
     require('codemirror/mode/markdown/markdown');
