@@ -1,13 +1,13 @@
-# composition
+# nteract
 
-[![Build Status](https://travis-ci.org/nteract/composition.svg)](https://travis-ci.org/nteract/composition) [![slack in](http://slack.nteract.in/badge.svg)](http://slack.nteract.in)
+[![Build Status](https://travis-ci.org/nteract/nteract.svg)](https://travis-ci.org/nteract/nteract) [![slack in](http://slack.nteract.in/badge.svg)](http://slack.nteract.in)
 
 ## Overview
 
 :notebook: It's an Electron-based Notebook! :notebook:
 
 Note: this isn't feature complete yet. There will be :bug:s and we're currently
-lacking a lot of core features like [saving, loading,](https://github.com/nteract/composition/issues/3) and [executing code](https://github.com/nteract/composition/issues/5).
+lacking a lot of core features like [saving, loading,](https://github.com/nteract/nteract/issues/3) and [executing code](https://github.com/nteract/nteract/issues/5).
 
 ### Scope and goals
 
@@ -18,7 +18,7 @@ lacking a lot of core features like [saving, loading,](https://github.com/nterac
 
 ### Contributing
 
-The contributors are listed in [contributors](https://github.com/nteract/composition/graphs/contributors)
+The contributors are listed in [contributors](https://github.com/nteract/nteract/graphs/contributors)
 
 nteract uses the [C4.1 (Collective Code Construction Contract)](http://rfc.zeromq.org/spec:22) process for contributions.
 
@@ -40,7 +40,7 @@ By participating, you are expected to uphold this code. Please report unacceptab
 Requires node 5.x and npm 3. Join us in the future.
 
 1. Fork this repo
-2. Clone it `git clone https://github.com/nteract/composition`
+2. Clone it `git clone https://github.com/nteract/nteract`
 3. `cd` to where you `clone`d it
 4. `npm install`
 5. `npm run start`
