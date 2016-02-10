@@ -43,16 +43,21 @@ export default class CodeCell extends React.Component {
     const executeRequest = createExecuteRequest(this.props.cell.get('source'));
 
     // Limitation of the Subject implementation in enchannel
-    // we must subscribe to next
+    // we must shell.subscribe in order to shell.next
     shell.subscribe(() => {});
 
+    // Set the current outputs to an empty list
     this.context.dispatch(updateCellOutputs(this.props.index, new Immutable.List()));
+
+    // Handle all the nbformattable messages
     iopub.childOf(executeRequest)
          .ofMessageType(['execute_result', 'display_data', 'stream', 'error'])
          .map(msgSpecToNotebookFormat)
+         // Iteratively reduce on the outputs
          .scan((outputs, output) => {
            return outputs.push(Immutable.fromJS(output));
          }, new Immutable.List())
+         // Update the outputs with each change
          .subscribe(outputs => {
            this.context.dispatch(updateCellOutputs(this.props.index, outputs));
          });
