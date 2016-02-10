@@ -66,3 +66,11 @@ export function updateCellOutputs(index, outputs) {
     outputs,
   };
 }
+
+export function updateCellExecutionCount(index, count) {
+  return {
+    type: 'UPDATE_CELL_EXECUTION_COUNT',
+    index,
+    count,
+  };
+}

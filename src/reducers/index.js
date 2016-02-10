@@ -9,6 +9,14 @@ export const reducers = {
       notebook: fetchedNotebook,
     });
   },
+  UPDATE_CELL_EXECUTION_COUNT: (state, action) => {
+    const { index, count } = action;
+    const { notebook } = state;
+    const updatedNotebook = notebook.setIn(['cells', index, 'execution_count'], count);
+    return Object.assign({}, state, {
+      notebook: updatedNotebook,
+    });
+  },
   UPDATE_CELL_SOURCE: (state, action) => {
     const { index, source } = action;
     const { notebook } = state;
