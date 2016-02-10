@@ -9,17 +9,16 @@ export const reducers = {
       notebook: fetchedNotebook,
     });
   },
-  UPDATE_CELL: (state, action) => {
-    const { index, cell } = action;
+  UPDATE_CELL_SOURCE: (state, action) => {
+    const { index, source } = action;
     const { notebook } = state;
-    const updatedNotebook = notebook.setIn(['cells', index, 'source'], cell);
+    const updatedNotebook = notebook.setIn(['cells', index, 'source'], source);
     return Object.assign({}, state, {
       notebook: updatedNotebook,
     });
   },
   NEW_KERNEL: (state, action) => {
     const { channels, connectionFile, spawn } = action;
-    // TODO: Close old channels, close old spawn, delete old connectionFile
     state.channels = channels;
     state.connectionFile = connectionFile;
     state.spawn = spawn;

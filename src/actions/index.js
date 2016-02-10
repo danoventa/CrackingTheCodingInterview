@@ -43,10 +43,10 @@ export function readJSON(filePath) {
   };
 }
 
-export function updateCell(index, cell) {
+export function updateCellSource(index, source) {
   return {
-    type: 'UPDATE_CELL',
+    type: 'UPDATE_CELL_SOURCE',
     index,
-    cell,
+    source,
   };
 }
