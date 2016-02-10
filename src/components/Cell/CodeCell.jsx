@@ -7,7 +7,10 @@ import Immutable from 'immutable';
 import Editor from './Editor';
 import Display from 'react-jupyter-display-area';
 
-import { updateCellOutputs } from '../../actions';
+import {
+  updateCellOutputs,
+  updateCellExecutionCount,
+} from '../../actions';
 
 import {
   createExecuteRequest,
@@ -49,8 +52,18 @@ export default class CodeCell extends React.Component {
     // Set the current outputs to an empty list
     this.context.dispatch(updateCellOutputs(this.props.index, new Immutable.List()));
 
+    const childMessages = iopub.childOf(executeRequest)
+                               .publish()
+                               .refCount();
+
+    childMessages.ofMessageType(['execute_input'])
+                 .pluck('content', 'execution_count')
+                 .subscribe((ct) => {
+                   this.context.dispatch(updateCellExecutionCount(this.props.index, ct));
+                 });
+
     // Handle all the nbformattable messages
-    iopub.childOf(executeRequest)
+    childMessages
          .ofMessageType(['execute_result', 'display_data', 'stream', 'error'])
          .map(msgSpecToNotebookFormat)
          // Iteratively reduce on the outputs
