@@ -1,17 +1,16 @@
 import { fromJS } from 'immutable';
 import { listKernelSpecs } from '../api/kernel';
 
-export default listKernelSpecs().then(kernelNames => {
-  return fromJS(kernelNames.map(name => {
+export default listKernelSpecs().then(kernelSpecs => {
+  return fromJS(Object.keys(kernelSpecs).map(name => {
     return {
-      label: name,
-      action: 'readJSON',
+      label: kernelSpecs[name].spec.display_name,
+      action: ['killKernel', { name: 'newKernel', args: [name] }],
     };
   }));
 })
 .catch(err => console.error('Could not enumerate kernels', err))
 .then(kernelMenuItems => {
-  console.log('going!');
   return fromJS([
     {
       label: '&File',

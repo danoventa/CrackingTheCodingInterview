@@ -31,5 +31,5 @@ export function launchKernel(kernelSpecName) {
 }
 
 export function listKernelSpecs() {
-  return findAll().then(kernelResources => Object.keys(kernelResources));
+  return findAll();
 }

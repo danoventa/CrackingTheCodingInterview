@@ -10,6 +10,20 @@ import defaultMenu from './default';
 export const DEFAULT_MENU = defaultMenu;
 
 /**
+ * Dispatch a menu action
+ * @param  {Object|string} action   Action that should be dispatched
+ * @param  {function} dispatch      Redux store dispatcher function
+ * @return {undefined}
+ */
+function dispatchAction(action, dispatch) {
+  const isString = (typeof action === 'string');
+  const actionName = isString ? action : action.get('name');
+  const actionArgs = isString ? [] : action.get('args', new List()).toJS();
+  console.log(actionName, actionArgs);
+  dispatch(actions[actionName].apply(null, actionArgs));
+}
+
+/**
  * Creates a menu template object from an immutable menu.
  * @param  {Immutable.Map} immutableMenu   menu definition
  * @param  {function}      dispatch        Redux store action dispater function
@@ -29,9 +43,9 @@ export function createMenuTemplate(immutableMenu, dispatch) {
     .update('click', cb => cb ? cb : () => {
       const action = immutableMenu.get('action');
       if (List.isList(action)) {
-        action.map(x => dispatch(actions[x]()));
+        action.map(x => dispatchAction(x, dispatch));
       } else if (action) {
-        dispatch(actions[action]());
+        dispatchAction(action, dispatch);
       }
     })
     .update('submenu', submenu => createMenuTemplate(submenu, dispatch))
