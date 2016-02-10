@@ -1,20 +1,16 @@
 {
-  "name": "composition",
+  "name": "nteract",
   "version": "0.0.1",
-  "description": ":notebook: Electron app of the Jupyter Notebook",
+  "description": ":notebook: the nteract notebook",
   "main": "main.js",
   "scripts": {
     "lint": "eslint .",
     "test": "electron-mocha --renderer --compilers js:babel-core/register 'test/**/*.@(js|jsx)'",
-    "start": "electron main.js",
-    "build": "npm run build:osx && npm run build:win32 && npm run build:linux",
-    "build:osx": "electron-packager ./ Composition --platform=darwin --arch=x64 --version=0.36.2",
-    "build:win32": "electron-packager ./ Composition --platform=win32 --arch=x64 --version=0.36.2",
-    "build:linux": "electron-packager ./ Composition --platform=linux --arch=x64 --version=0.36.2"
+    "start": "electron main.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nteract/composition.git"
+    "url": "https://github.com/nteract/nteract.git"
   },
   "keywords": [
     "jupyter",
@@ -26,9 +22,9 @@
   "author": "rgbkrk",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/nteract/composition/issues"
+    "url": "https://github.com/nteract/nteract/issues"
   },
-  "homepage": "https://github.com/nteract/composition",
+  "homepage": "https://github.com/nteract/nteract",
   "dependencies": {
     "@reactivex/rxjs": "^5.0.0-beta.1",
     "ansi-to-html": "^0.3.0",
@@ -65,7 +61,6 @@
     "electron-compile": "^2.0.4",
     "electron-compilers": "^2.0.4",
     "electron-mocha": "^0.7.0",
-    "electron-packager": "^5.1.1",
     "electron-prebuilt": "^0.36.2",
     "eslint": "^1.10.3",
     "eslint-plugin-babel": "^3.0.0",
