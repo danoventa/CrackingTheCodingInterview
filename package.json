@@ -44,7 +44,7 @@
     "react-router": "^1.0.3",
     "source-code-pro": "git://github.com/adobe-fonts/source-code-pro.git#release",
     "source-sans-pro": "git://github.com/adobe-fonts/source-sans-pro.git#release",
-    "spawnteract": "^1.0.0",
+    "spawnteract": "^1.0.2",
     "transformime-react": "0.3.0",
     "uuid": "^2.0.1"
   },
