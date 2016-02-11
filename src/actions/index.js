@@ -43,34 +43,34 @@ export function readJSON(filePath) {
   };
 }
 
-export function setSelected(indexes, additive) {
+export function setSelected(ids, additive) {
   return {
     type: 'SET_SELECTED',
-    indexes,
+    ids,
     additive,
   };
 }
 
-export function updateCellSource(index, source) {
+export function updateCellSource(id, source) {
   return {
     type: 'UPDATE_CELL_SOURCE',
-    index,
+    id,
     source,
   };
 }
 
-export function updateCellOutputs(index, outputs) {
+export function updateCellOutputs(id, outputs) {
   return {
     type: 'UPDATE_CELL_OUTPUTS',
-    index,
+    id,
     outputs,
   };
 }
 
-export function updateCellExecutionCount(index, count) {
+export function updateCellExecutionCount(id, count) {
   return {
     type: 'UPDATE_CELL_EXECUTION_COUNT',
-    index,
+    id,
     count,
   };
 }

@@ -39,7 +39,8 @@ export default class Notebook extends React.Component {
   }
 
   render() {
-    const cells = this.props.notebook.get('cells');
+    const cellMap = this.props.notebook.get('cellMap');
+    const cellOrder = this.props.notebook.get('cellOrder');
     return (
       <div style={{
         paddingTop: '10px',
@@ -48,16 +49,16 @@ export default class Notebook extends React.Component {
       }} ref='cells'>
 
       {
-        cells.map((cell, index) => {
-          const selected = this.props.selected.indexOf(index) !== -1;
-          return <Cell cell={cell}
+        cellOrder.map(id => {
+          const selected = this.props.selected.indexOf(id) !== -1;
+          return <Cell cell={cellMap.get(id)}
                        language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
-                       index={index}
-                       key={index}
+                       id={id}
+                       key={id}
                        isSelected={selected}
                        onTextChange={text => {
-                         const newCell = cell.set('source', text);
-                         this.props.onCellChange(index, newCell);
+                         const newCell = cellMap.get(id).set('source', text);
+                         this.props.onCellChange(id, newCell);
                        }
                        }
                        />;

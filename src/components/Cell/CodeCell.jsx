@@ -22,7 +22,7 @@ export default class CodeCell extends React.Component {
 
   static propTypes = {
     cell: React.PropTypes.any,
-    index: React.PropTypes.number,
+    id: React.PropTypes.string,
     language: React.PropTypes.string,
     theme: React.PropTypes.string,
   };
@@ -50,7 +50,7 @@ export default class CodeCell extends React.Component {
     shell.subscribe(() => {});
 
     // Set the current outputs to an empty list
-    this.context.dispatch(updateCellOutputs(this.props.index, new Immutable.List()));
+    this.context.dispatch(updateCellOutputs(this.props.id, new Immutable.List()));
 
     const childMessages = iopub.childOf(executeRequest)
                                .publish()
@@ -59,7 +59,7 @@ export default class CodeCell extends React.Component {
     childMessages.ofMessageType(['execute_input'])
                  .pluck('content', 'execution_count')
                  .subscribe((ct) => {
-                   this.context.dispatch(updateCellExecutionCount(this.props.index, ct));
+                   this.context.dispatch(updateCellExecutionCount(this.props.id, ct));
                  });
 
     // Handle all the nbformattable messages
@@ -72,7 +72,7 @@ export default class CodeCell extends React.Component {
          }, new Immutable.List())
          // Update the outputs with each change
          .subscribe(outputs => {
-           this.context.dispatch(updateCellOutputs(this.props.index, outputs));
+           this.context.dispatch(updateCellOutputs(this.props.id, outputs));
          });
 
     shell.next(executeRequest);
@@ -86,7 +86,7 @@ export default class CodeCell extends React.Component {
         <div className='input_area' onKeyDown={this.keyDown.bind(this)}>
           <Inputs executionCount={this.props.cell.get('execution_count')}/>
           <Editor
-            index={this.props.index}
+            id={this.props.id}
             input={this.props.cell.get('source')}
             language={this.props.language}
           />
