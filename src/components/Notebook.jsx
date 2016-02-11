@@ -51,13 +51,13 @@ export default class Notebook extends React.Component {
       {
         cellOrder.map(id => {
           const selected = this.props.selected.indexOf(id) !== -1;
-          return <Cell cell={cellMap[id]}
+          return <Cell cell={cellMap.get(id)}
                        language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
                        id={id}
                        key={id}
                        isSelected={selected}
                        onTextChange={text => {
-                         const newCell = cellMap[id].set('source', text);
+                         const newCell = cellMap.get(id).set('source', text);
                          this.props.onCellChange(id, newCell);
                        }
                        }

@@ -9,7 +9,7 @@ export default class Editor extends React.Component {
   static displayName = 'Editor';
 
   static propTypes = {
-    id: React.PropTypes.number,
+    id: React.PropTypes.string,
     input: React.PropTypes.any,
     language: React.PropTypes.string,
     lineNumbers: React.PropTypes.bool,

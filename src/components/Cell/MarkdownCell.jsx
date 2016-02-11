@@ -10,7 +10,7 @@ export default class MarkdownCell extends React.Component {
 
   static propTypes = {
     cell: React.PropTypes.any,
-    id: React.PropTypes.number,
+    id: React.PropTypes.string,
   };
 
   static contextTypes = {

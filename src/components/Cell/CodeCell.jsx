@@ -22,7 +22,7 @@ export default class CodeCell extends React.Component {
 
   static propTypes = {
     cell: React.PropTypes.any,
-    id: React.PropTypes.number,
+    id: React.PropTypes.string,
     language: React.PropTypes.string,
     theme: React.PropTypes.string,
   };
