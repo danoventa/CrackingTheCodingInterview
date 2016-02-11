@@ -10,33 +10,33 @@ export const reducers = {
     });
   },
   UPDATE_CELL_EXECUTION_COUNT: (state, action) => {
-    const { index, count } = action;
+    const { id, count } = action;
     const { notebook } = state;
-    const updatedNotebook = notebook.setIn(['cells', index, 'execution_count'], count);
+    const updatedNotebook = notebook.setIn(['cellMap', id, 'execution_count'], count);
     return Object.assign({}, state, {
       notebook: updatedNotebook,
     });
   },
   UPDATE_CELL_SOURCE: (state, action) => {
-    const { index, source } = action;
+    const { id, source } = action;
     const { notebook } = state;
-    const updatedNotebook = notebook.setIn(['cells', index, 'source'], source);
+    const updatedNotebook = notebook.setIn(['cellMap', id, 'source'], source);
     return Object.assign({}, state, {
       notebook: updatedNotebook,
     });
   },
   UPDATE_CELL_OUTPUTS: (state, action) => {
-    const { index, outputs } = action;
+    const { id, outputs } = action;
     const { notebook } = state;
-    const updatedNotebook = notebook.setIn(['cells', index, 'outputs'], outputs);
+    const updatedNotebook = notebook.setIn(['cellMap', id, 'outputs'], outputs);
     return Object.assign({}, state, {
       notebook: updatedNotebook,
     });
   },
   SET_SELECTED: (state, action) => {
     const selected = action.additive ?
-        state.selected.concat(action.indexes) :
-        action.indexes;
+        state.selected.concat(action.ids) :
+        action.ids;
     return Object.assign({}, state, {
       selected,
     });

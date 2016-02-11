@@ -10,7 +10,7 @@ export default class Cell extends React.Component {
 
   static propTypes = {
     cell: React.PropTypes.any,
-    index: React.PropTypes.number,
+    id: React.PropTypes.number,
     isSelected: React.PropTypes.bool,
   };
 
@@ -25,7 +25,7 @@ export default class Cell extends React.Component {
 
   setSelected(e) {
     const additive = e.shiftKey;
-    this.context.dispatch(setSelected([this.props.index], additive));
+    this.context.dispatch(setSelected([this.props.id], additive));
   }
 
   render() {

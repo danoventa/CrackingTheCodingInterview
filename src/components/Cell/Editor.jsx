@@ -9,7 +9,7 @@ export default class Editor extends React.Component {
   static displayName = 'Editor';
 
   static propTypes = {
-    index: React.PropTypes.number,
+    id: React.PropTypes.number,
     input: React.PropTypes.any,
     language: React.PropTypes.string,
     lineNumbers: React.PropTypes.bool,
@@ -72,7 +72,7 @@ export default class Editor extends React.Component {
                           this.setState({
                             source: e.target.value,
                           });
-                          this.context.dispatch(updateCellSource(this.props.index, e.target.value));
+                          this.context.dispatch(updateCellSource(this.props.id, e.target.value));
                         }
                       }
                     }/>
