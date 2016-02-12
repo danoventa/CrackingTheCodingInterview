@@ -19,7 +19,6 @@ function dispatchAction(action, dispatch) {
   const isString = (typeof action === 'string');
   const actionName = isString ? action : action.get('name');
   const actionArgs = isString ? [] : action.get('args', new List()).toJS();
-  console.log(actionName, actionArgs);
   dispatch(actions[actionName].apply(null, actionArgs));
 }
 
