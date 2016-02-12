@@ -20,18 +20,18 @@
     "data"
   ],
   "author": "nteract contributors",
-  "license": "MPLv2",
+  "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/nteract/nteract/issues"
   },
   "homepage": "https://github.com/nteract/nteract",
   "dependencies": {
-    "@reactivex/rxjs": "^5.0.0-beta.1",
+    "@reactivex/rxjs": "5.0.0-beta.2",
     "ansi-to-html": "^0.3.0",
     "codemirror": "^5.10.0",
     "color": "^0.10.1",
     "commutable": "^0.2.0",
-    "enchannel-zmq-backend": "^1.0.0",
+    "enchannel-zmq-backend": "^1.0.1",
     "history": "^1.17.0",
     "immutable": "^3.7.6",
     "kernelspecs": "^1.0.1",
