@@ -58,6 +58,7 @@ export default class CodeCell extends React.Component {
 
     childMessages.ofMessageType(['execute_input'])
                  .pluck('content', 'execution_count')
+                 .first()
                  .subscribe((ct) => {
                    this.context.dispatch(updateCellExecutionCount(this.props.id, ct));
                  });
@@ -77,7 +78,7 @@ export default class CodeCell extends React.Component {
 
     shell.next(executeRequest);
 
-    // TODO: Manage subscriptions, trigger executionCount changes, more...
+    // TODO: Manage subscriptions
   }
 
   render() {
