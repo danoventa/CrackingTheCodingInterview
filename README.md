@@ -7,7 +7,7 @@
 :notebook: It's an Electron-based Notebook! :notebook:
 
 Note: this isn't feature complete yet. There will be :bug:s and we're currently
-lacking a lot of core features like [saving, loading,](https://github.com/nteract/nteract/issues/3) and [executing code](https://github.com/nteract/nteract/issues/5).
+lacking a lot of core features like [saving, loading,](https://github.com/nteract/nteract/issues/3) and [creating new cells](https://github.com/nteract/nteract/issues/85).
 
 ### Scope and goals
 
