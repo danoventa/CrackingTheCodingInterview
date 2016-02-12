@@ -9,9 +9,11 @@ export default function createStore(initialState, reducers) {
     initialState || {}
   );
 
-  const dispatch = (action) => typeof action === 'function'
-    ? action.call(null, subject)
-    : subject.next(action);
+  function dispatch(action) {
+    return typeof action === 'function'
+      ? action.call(null, subject, dispatch)
+      : subject.next(action);
+  }
 
   return {
     store,

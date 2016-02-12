@@ -82,8 +82,8 @@ export function updateCellExecutionCount(id, count) {
   };
 }
 
-export function executeCell(id, source, dispatch, channels) {
-  return () => {
+export function executeCell(id, source, channels) {
+  return (subject, dispatch) => {
     // TODO: figure out where channels come from
     const { iopub, shell } = channels;
 
