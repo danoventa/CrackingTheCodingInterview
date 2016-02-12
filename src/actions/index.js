@@ -2,6 +2,13 @@ import { getJSON } from '../api';
 
 import { launchKernel } from '../api/kernel';
 
+import {
+  createExecuteRequest,
+  msgSpecToNotebookFormat,
+} from '../api/messaging';
+
+import Immutable from 'immutable';
+
 export function exit() {
   return {
     type: 'EXIT',
@@ -72,5 +79,54 @@ export function updateCellExecutionCount(id, count) {
     type: 'UPDATE_CELL_EXECUTION_COUNT',
     id,
     count,
+  };
+}
+
+export function executeCell(id, source, dispatch, channels) {
+  return () => {
+    // TODO: figure out where channels come from
+    const { iopub, shell } = channels;
+
+    if(!iopub || !shell) {
+      // TODO: propagate error about execution when kernel not connected
+      return;
+    }
+
+    const executeRequest = createExecuteRequest(source);
+
+    // Limitation of the Subject implementation in enchannel
+    // we must shell.subscribe in order to shell.next
+    shell.subscribe(() => {});
+
+    // Set the current outputs to an empty list
+    dispatch(updateCellOutputs(id, new Immutable.List()));
+
+    const childMessages = iopub.childOf(executeRequest)
+                               .publish()
+                               .refCount();
+
+    childMessages.ofMessageType(['execute_input'])
+                 .pluck('content', 'execution_count')
+                 .first()
+                 .subscribe((ct) => {
+                   dispatch(updateCellExecutionCount(id, ct));
+                 });
+
+    // Handle all the nbformattable messages
+    childMessages
+         .ofMessageType(['execute_result', 'display_data', 'stream', 'error'])
+         .map(msgSpecToNotebookFormat)
+         // Iteratively reduce on the outputs
+         .scan((outputs, output) => {
+           return outputs.push(Immutable.fromJS(output));
+         }, new Immutable.List())
+         // Update the outputs with each change
+         .subscribe(outputs => {
+           dispatch(updateCellOutputs(id, outputs));
+         });
+
+    shell.next(executeRequest);
+
+    // TODO: Manage subscriptions
   };
 }
