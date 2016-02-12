@@ -9,9 +9,18 @@ export default function createStore(initialState, reducers) {
     initialState || {}
   );
 
+  const channelStream = subject.filter(action => action.channels)
+                               .pluck('channels');
+  // wrap channels in a closure, track the latest
+  let channels = {};
+  channelStream.subscribe(ch => {
+    channels = ch;
+  });
+
   function dispatch(action) {
+    // We need the current state at this time
     return typeof action === 'function'
-      ? action.call(null, subject, dispatch)
+      ? action.call(null, subject, dispatch, channels)
       : subject.next(action);
   }
 

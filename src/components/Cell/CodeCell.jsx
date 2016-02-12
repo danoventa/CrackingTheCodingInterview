@@ -30,8 +30,7 @@ export default class CodeCell extends React.Component {
     }
 
     this.context.dispatch(executeCell(this.props.id,
-                                      this.props.cell.get('source'),
-                                      this.context.channels));
+                                      this.props.cell.get('source')));
   }
 
   render() {
