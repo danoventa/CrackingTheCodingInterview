@@ -2,21 +2,12 @@ import React from 'react';
 
 import Inputs from './Inputs';
 
-import Immutable from 'immutable';
-
 import Editor from './Editor';
 import Display from 'react-jupyter-display-area';
 
 import {
-  updateCellOutputs,
-  updateCellExecutionCount,
   executeCell,
 } from '../../actions';
-
-import {
-  createExecuteRequest,
-  msgSpecToNotebookFormat,
-} from '../../api/messaging';
 
 export default class CodeCell extends React.Component {
   static displayName = 'CodeCell';
