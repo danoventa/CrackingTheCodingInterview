@@ -2,7 +2,7 @@ import React from 'react';
 
 import ReactMarkdown from 'react-markdown';
 
-import Editor from './Editor';
+import Editor from './editor';
 import { updateCellSource } from '../../actions';
 
 export default class MarkdownCell extends React.Component {

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import CodeCell from './CodeCell';
-import MarkdownCell from './MarkdownCell';
+import CodeCell from './code-cell';
+import MarkdownCell from './markdown-cell';
 
 import { setSelected } from '../../actions';
 
