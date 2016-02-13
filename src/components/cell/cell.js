@@ -91,9 +91,9 @@ class Cell extends React.Component {
         style={{
           opacity: this.props.isDragging ? 0.25 : 1,
           borderTop: (this.props.isOver && this.state.hoverUpperHalf) ?
-            '5px limegreen solid' : '0px transparent solid',
+            '5px gray solid' : '0px transparent solid',
           borderBottom: (this.props.isOver && !this.state.hoverUpperHalf) ?
-            '5px limegreen solid' : '0px transparent solid',
+            '5px gray solid' : '0px transparent solid',
         }}
         onClick={this.setSelected}
         className={'cell ' + selected}>
