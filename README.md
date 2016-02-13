@@ -37,6 +37,46 @@ By participating, you are expected to uphold this code. Please report unacceptab
 
 ### Development
 
+#### Python runtime
+
+At least for now, we need the python 3 kernel installed when hacking on nteract:
+
+```
+python3 -m pip install ipykernel
+python3 -m ipykernel install --user
+```
+
+#### Dependencies
+
+For all systems, you'll need
+
+- [`npm`](https://docs.npmjs.com/getting-started/installing-node)
+- [ZeroMQ](http://zeromq.org/intro:get-the-software)
+- Python 2 (for builds - you can still run Python 3 code)
+
+Each operating system has their own instruction set. Please read on down to save yourself time.
+
+##### OS X
+
+###### homebrew on OS X
+
+- [`pkg-config`](http://www.freedesktop.org/wiki/Software/pkg-config/): `brew install pkg-config`
+- [ZeroMQ](http://zeromq.org/intro:get-the-software): `brew install zeromq`
+
+##### Windows
+
+- You'll need a compiler! [Visual Studio 2013 Community Edition](https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx) is required to build zmq.node.
+- Python (tread on your own or install [Anaconda](http://continuum.io/downloads))
+
+After these are installed, you'll likely need to restart your machine (especially after Visual Studio).
+
+##### Linux
+
+For Debian/Ubuntu based variants, you'll need `libzmq3-dev` (preferred) or alternatively `libzmq-dev`.   
+For RedHat/CentOS/Fedora based variants, you'll need `zeromq` and `zeromq-devel`.
+
+#### Install
+
 Requires node 5.x and npm 3. Join us in the future.
 
 1. Fork this repo
