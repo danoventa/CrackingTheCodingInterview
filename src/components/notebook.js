@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Cell from './Cell';
+import Cell from './cell';
 
 export default class Notebook extends React.Component {
   static displayName = 'Notebook';

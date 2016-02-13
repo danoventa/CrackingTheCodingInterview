@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Inputs from './Inputs';
+import Inputs from './inputs';
 
-import Editor from './Editor';
+import Editor from './editor';
 import Display from 'react-jupyter-display-area';
 
 import {
