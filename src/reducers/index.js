@@ -41,6 +41,21 @@ export const reducers = {
       selected,
     });
   },
+  MOVE_CELL: (state, action) => {
+    const { notebook } = state;
+    return Object.assign({}, state, {
+      notebook: notebook.update('cellOrder', cellOrder => {
+        const oldIndex = cellOrder.findIndex(id => id === action.id);
+        const newIndex = cellOrder.findIndex(id => id === action.destinationId) + (action.above ? 0 : 1);
+        if (oldIndex === newIndex) {
+          return cellOrder;
+        }
+        return cellOrder
+          .splice(oldIndex, 1)
+          .splice(newIndex - (oldIndex < newIndex ? 1 : 0), 0, action.id);
+      }),
+    });
+  },
   NEW_KERNEL: (state, action) => {
     const { channels, connectionFile, spawn } = action;
     state.channels = channels;

@@ -74,6 +74,15 @@ export function updateCellOutputs(id, outputs) {
   };
 }
 
+export function moveCell(id, destinationId, above) {
+  return {
+    type: 'MOVE_CELL',
+    id,
+    destinationId,
+    above,
+  };
+}
+
 export function updateCellExecutionCount(id, count) {
   return {
     type: 'UPDATE_CELL_EXECUTION_COUNT',
