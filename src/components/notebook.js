@@ -1,8 +1,11 @@
 import React from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 import Cell from './cell';
+import { moveCell } from '../actions';
 
-export default class Notebook extends React.Component {
+class Notebook extends React.Component {
   static displayName = 'Notebook';
 
   static propTypes = {
@@ -10,6 +13,10 @@ export default class Notebook extends React.Component {
     notebook: React.PropTypes.any,
     onCellChange: React.PropTypes.func,
     selected: React.PropTypes.array,
+  };
+
+  static contextTypes = {
+    dispatch: React.PropTypes.func,
   };
 
   static childContextTypes = {
@@ -61,6 +68,9 @@ export default class Notebook extends React.Component {
                          this.props.onCellChange(id, newCell);
                        }
                        }
+                       moveCell={(sourceId, destinationId, above) => {
+                         return this.context.dispatch(moveCell(sourceId, destinationId, above));
+                       }}
                        />;
         })
       }
@@ -68,3 +78,5 @@ export default class Notebook extends React.Component {
     );
   }
 }
+
+export default DragDropContext(HTML5Backend)(Notebook);
