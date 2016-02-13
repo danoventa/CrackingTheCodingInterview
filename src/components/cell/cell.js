@@ -28,9 +28,6 @@ function isDragUpper(props, monitor, component) {
 const cellTarget = {
   drop(props, monitor, component) {
     const hoverUpperHalf = isDragUpper(props, monitor, component);
-    console.log('source:', monitor.getItem().id);
-    console.log('target:', props.id);
-    console.log('upper:', hoverUpperHalf);
     props.moveCell(monitor.getItem().id, props.id, hoverUpperHalf);
   },
 
