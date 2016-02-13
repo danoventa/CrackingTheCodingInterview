@@ -124,4 +124,6 @@ are working through tutorials right now and would love a study group! If you hav
 - Try `$ npm install @reactivex/rxjs; npm install;`
 - Try `$ npm install @reactivex/rxjs@5.0.0-beta.1; npm install;`
 
+> I did: "$ npm install" then "$ npm start", and I got: "no such file or directory, open '.../node_modules/electron-prebuilt/path.txt'"
 
+- Try `$ npm install electron-prebuilt`
