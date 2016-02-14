@@ -18,7 +18,7 @@ class App extends React.Component {
     store.subscribe(state => this.setState(state));
   }
   componentDidMount() {
-    dispatch(readJSON('./intro.ipynb'));
+    dispatch(readJSON(decodeURIComponent(window.location.hash.slice(1))));
   }
   render() {
     return (
