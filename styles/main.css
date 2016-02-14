@@ -76,11 +76,14 @@ img
   Cell
  */
 
+.draggable-cell
+{
+    padding: 10px;
+}
+
 .cell
 {
-    margin: 10px;
-
-    transition: all .1s ease-in-out;
+   transition: all .1s ease-in-out;
 }
 
 .cell:hover
