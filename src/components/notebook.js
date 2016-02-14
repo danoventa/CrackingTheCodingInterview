@@ -46,6 +46,11 @@ class Notebook extends React.Component {
   }
 
   render() {
+    if(!this.props.notebook) {
+      return (
+        <div></div>
+      );
+    }
     const cellMap = this.props.notebook.get('cellMap');
     const cellOrder = this.props.notebook.get('cellOrder');
     return (
@@ -57,7 +62,7 @@ class Notebook extends React.Component {
 
       {
         cellOrder.map(id => {
-          const selected = this.props.selected.indexOf(id) !== -1;
+          const selected = this.props.selected && this.props.selected.indexOf(id) !== -1;
           return <Cell cell={cellMap.get(id)}
                        language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
                        id={id}
