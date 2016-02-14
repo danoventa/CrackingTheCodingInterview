@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "electron-mocha --renderer --compilers js:babel-core/register 'test/**/*.@(js|jsx)'",
+    "test": "electron-mocha --renderer --compilers js:babel-core/register 'test/**/*.js'",
     "start": "electron main.js"
   },
   "repository": {

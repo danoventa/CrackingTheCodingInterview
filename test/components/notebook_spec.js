@@ -23,7 +23,6 @@ describe('Notebook', () => {
       const component = renderIntoDocument(
         <Notebook notebook={immutableNotebook} />
       );
-
       expect(component).to.not.be.null;
     });
   });
