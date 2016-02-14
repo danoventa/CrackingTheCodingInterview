@@ -18,9 +18,7 @@ import Notebook from '../../src/components/notebook';
 describe('Notebook', () => {
   it('accepts an Immutable.List of cells', () => {
     return getJSON(join(__dirname, '..', '..', 'intro.ipynb')).then(nb => {
-      const immy = commutable.fromJS(nb);
-      console.log(immy);
-      return immy;
+      return commutable.fromJS(nb);
     }).then(immutableNotebook => {
       const component = renderIntoDocument(
         <Notebook notebook={immutableNotebook} />
