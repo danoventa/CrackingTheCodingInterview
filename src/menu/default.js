@@ -122,7 +122,7 @@ export default listKernelSpecs().then(kernelSpecs => {
         },
       ],
     },
-  ]).updateIn([2, 'submenu'], menuItems => {
+  ]).updateIn([3, 'submenu'], menuItems => {
     if (kernelMenuItems) {
       return menuItems.concat(kernelMenuItems);
     }

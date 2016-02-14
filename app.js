@@ -13,8 +13,9 @@ app.on('window-all-closed', () => {
   }
 });
 
+// First two arguments are Electron and main.js
+// We'll assume the rest are the notebooks to be opened
 const notebooks = process.argv.slice(2);
-
 if(notebooks <= 0) {
   // default to the intro notebook for now
   notebooks.push('intro.ipynb');
