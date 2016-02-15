@@ -1,4 +1,4 @@
-import { dialog, app } from 'electron';
+import { dialog, app, Menu } from 'electron';
 
 import launch from './launch';
 
@@ -189,17 +189,23 @@ export const named = {
   ],
 };
 
-/*
-  // Window menu.
-  template[3].submenu.push(
+const template = [];
+
+if(process.platform === 'darwin') {
+  template.push(named);
+  window.submenu.push(
     {
-      type: 'separator'
+      type: 'separator',
     },
     {
       label: 'Bring All to Front',
-      role: 'front'
+      role: 'front',
     }
   );
 }
 
-*/
+template.push(file);
+template.push(edit);
+template.push(view);
+
+export const defaultMenu = Menu.buildFromTemplate(template);
