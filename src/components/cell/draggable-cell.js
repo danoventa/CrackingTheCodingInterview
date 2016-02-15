@@ -123,4 +123,6 @@ class DraggableCell extends React.Component {
   }
 }
 
-export default DragSource('CELL', cellSource, collectSource)(DropTarget('CELL', cellTarget, collectTarget)(DraggableCell));
+const source = new DragSource('CELL', cellSource, collectSource);
+const target = new DropTarget('CELL', cellTarget, collectTarget);
+export default source(target(DraggableCell));
