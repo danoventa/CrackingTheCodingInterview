@@ -4,7 +4,7 @@ import app from 'app';
 import launch from './main/launch';
 
 import { Menu } from 'electron';
-import { defaultMenu } from './main/menu';
+import { defaultMenu, invokeFullMenu } from './main/menu';
 
 app.on('window-all-closed', () => {
   // On OS X, we want to keep the app and menu bar active
@@ -23,5 +23,6 @@ if(notebooks <= 0) {
 
 app.on('ready', () => {
   Menu.setApplicationMenu(defaultMenu);
+  invokeFullMenu();
   notebooks.forEach(launch);
 });

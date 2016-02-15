@@ -1,5 +1,7 @@
 import { dialog, app, Menu } from 'electron';
 
+import { listKernelSpecs } from '../src/api/kernel';
+
 import launch from './launch';
 
 export const file = {
@@ -109,7 +111,7 @@ export const view = {
   ],
 };
 
-export const window = {
+const windowDraft = {
   label: 'Window',
   role: 'window',
   submenu: [
@@ -125,6 +127,20 @@ export const window = {
     },
   ],
 };
+
+if(process.platform === 'darwin') {
+  windowDraft.submenu.push(
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Bring All to Front',
+      role: 'front',
+    }
+  );
+}
+
+export const window = windowDraft;
 
 export const help = {
   label: 'Help',
@@ -181,23 +197,62 @@ export const named = {
   ],
 };
 
-const template = [];
+export function generateDefaultTemplate() {
+  const template = [];
 
-if(process.platform === 'darwin') {
-  template.push(named);
-  window.submenu.push(
-    {
-      type: 'separator',
-    },
-    {
-      label: 'Bring All to Front',
-      role: 'front',
-    }
-  );
+  if(process.platform === 'darwin') {
+    template.push(named);
+  }
+
+  template.push(file);
+  template.push(edit);
+  template.push(view);
+  template.push(window);
+  template.push(help);
+
+  return template;
 }
 
-template.push(file);
-template.push(edit);
-template.push(view);
+export const defaultMenu = Menu.buildFromTemplate(generateDefaultTemplate());
 
-export const defaultMenu = Menu.buildFromTemplate(template);
+export function invokeFullMenu() {
+  const kernelMenuPromise = listKernelSpecs().then(kernelSpecs => {
+    return Object.keys(kernelSpecs).map(kernelName => {
+      return {
+        label: kernelSpecs[kernelName].spec.display_name,
+        action: ['killKernel', { name: 'newKernel', args: [kernelName] }],
+      };
+    });
+  });
+
+  kernelMenuPromise.then(kernelMenuItems => {
+    const languageMenu = {
+      label: '&Language',
+      submenu: [
+        {
+          label: '&Kill Running Kernel',
+          action: 'killKernel',
+        },
+        {
+          type: 'separator',
+        },
+        ...kernelMenuItems,
+      ],
+    };
+    const template = [];
+
+    if(process.platform === 'darwin') {
+      template.push(named);
+    }
+
+    template.push(file);
+    template.push(edit);
+    template.push(view);
+    template.push(languageMenu);
+    template.push(window);
+    template.push(help);
+
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+  });
+}
