@@ -261,6 +261,5 @@ export function loadFullMenu() {
 
     const menu = Menu.buildFromTemplate(template);
     return menu;
-    Menu.setApplicationMenu(menu);
   });
 }
