@@ -1,6 +1,18 @@
-import { dialog, app } from 'electron';
+import { dialog, app, Menu } from 'electron';
+
+import { listKernelSpecs } from '../src/api/kernel';
 
 import launch from './launch';
+
+function createMessenger(eventName, obj) {
+  return (item, focusedWindow) => {
+    if(!focusedWindow) {
+      console.error('renderer window not in focus (are your devtools open?)');
+      return;
+    }
+    focusedWindow.webContents.send(eventName, obj);
+  };
+}
 
 export const file = {
   label: '&File',
@@ -25,12 +37,9 @@ export const file = {
       accelerator: 'CmdOrCtrl+O',
     },
     {
-      type: 'separator',
-    },
-    {
-      label: '&Quit',
-      action: ['killKernel', 'exit'],
-      accelerator: 'CmdOrCtrl+Q',
+      label: '&Save',
+      click: createMessenger('menu:save'),
+      accelerator: 'CmdOrCtrl+S',
     },
   ],
 };
@@ -117,7 +126,7 @@ export const view = {
   ],
 };
 
-export const window = {
+const windowDraft = {
   label: 'Window',
   role: 'window',
   submenu: [
@@ -133,6 +142,20 @@ export const window = {
     },
   ],
 };
+
+if(process.platform === 'darwin') {
+  windowDraft.submenu.push(
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Bring All to Front',
+      role: 'front',
+    }
+  );
+}
+
+export const window = windowDraft;
 
 export const help = {
   label: 'Help',
@@ -189,17 +212,65 @@ export const named = {
   ],
 };
 
-/*
-  // Window menu.
-  template[3].submenu.push(
-    {
-      type: 'separator'
-    },
-    {
-      label: 'Bring All to Front',
-      role: 'front'
-    }
-  );
+export function generateDefaultTemplate() {
+  const template = [];
+
+  if(process.platform === 'darwin') {
+    template.push(named);
+  }
+
+  template.push(file);
+  template.push(edit);
+  template.push(view);
+  template.push(window);
+  template.push(help);
+
+  return template;
 }
 
-*/
+export const defaultMenu = Menu.buildFromTemplate(generateDefaultTemplate());
+
+export function loadFullMenu() {
+  const kernelMenuPromise = listKernelSpecs().then(kernelSpecs => {
+    return Object.keys(kernelSpecs).map(kernelName => {
+      return {
+        label: kernelSpecs[kernelName].spec.display_name,
+        click: createMessenger('menu:new-kernel', kernelName),
+      };
+    });
+  });
+
+  return kernelMenuPromise.then(kernelMenuItems => {
+    const languageMenu = {
+      label: '&Language',
+      submenu: [
+        {
+          label: '&Kill Running Kernel',
+          click: createMessenger('menu:kill-kernel'),
+        },
+        {
+          type: 'separator',
+        },
+        // All the available kernels
+        ...kernelMenuItems,
+      ],
+    };
+    const template = [];
+
+    if(process.platform === 'darwin') {
+      template.push(named);
+    }
+
+    template.push(file);
+    template.push(edit);
+    template.push(view);
+
+    // Application specific functionality should go before window and help
+    template.push(languageMenu);
+    template.push(window);
+    template.push(help);
+
+    const menu = Menu.buildFromTemplate(template);
+    return menu;
+  });
+}
