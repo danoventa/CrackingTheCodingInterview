@@ -31,7 +31,9 @@ export const file = {
           defaultPath: process.cwd(),
         };
         dialog.showOpenDialog(opts, (fname) => {
-          launch(fname);
+          if(fname) {
+            launch(fname);
+	  }
         });
       },
       accelerator: 'CmdOrCtrl+O',
