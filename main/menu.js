@@ -7,6 +7,7 @@ import launch from './launch';
 function createMessenger(eventName, obj) {
   return (item, focusedWindow) => {
     if(!focusedWindow) {
+      console.error('renderer window not in focus (are your devtools open?)');
       return;
     }
     focusedWindow.webContents.send(eventName, obj);
