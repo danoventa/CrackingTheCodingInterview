@@ -32,8 +32,8 @@ export const file = {
         };
         dialog.showOpenDialog(opts, (fname) => {
           if(fname) {
-            launch(fname);
-	  }
+            launch(fname[0]);
+          }
         });
       },
       accelerator: 'CmdOrCtrl+O',
