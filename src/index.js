@@ -10,11 +10,7 @@ import Notebook from './components/notebook';
 const { store, dispatch } = createStore({ notebook: null, selected: [] }, reducers);
 
 import { ipcRenderer as ipc } from 'electron';
-
-ipc.on('menu:new-kernel', (evt, message) => {
-  const name = message;
-  dispatch(newKernel(name));
-});
+ipc.on('menu:new-kernel', (e, name) => dispatch(newKernel(name)));
 
 class App extends React.Component {
   constructor(props) {
