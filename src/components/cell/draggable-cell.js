@@ -110,9 +110,9 @@ class DraggableCell extends React.Component {
         style={{
           opacity: this.props.isDragging ? 0.25 : 1,
           borderTop: (this.props.isOver && this.state.hoverUpperHalf) ?
-            '5px gray solid' : '0px transparent solid',
+            '3px lightgray solid' : '0px transparent solid',
           borderBottom: (this.props.isOver && !this.state.hoverUpperHalf) ?
-            '5px gray solid' : '0px transparent solid',
+            '3px lightgray solid' : '0px transparent solid',
         }}
         className={'draggable-cell'}>
         {
@@ -123,4 +123,6 @@ class DraggableCell extends React.Component {
   }
 }
 
-export default DragSource('CELL', cellSource, collectSource)(DropTarget('CELL', cellTarget, collectTarget)(DraggableCell));
+const source = new DragSource('CELL', cellSource, collectSource);
+const target = new DropTarget('CELL', cellTarget, collectTarget);
+export default source(target(DraggableCell));
