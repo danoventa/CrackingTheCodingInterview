@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import createStore from './store';
 import { reducers } from './reducers';
-import { readJSON, newKernel } from './actions';
+import { readJSON, newKernel, save } from './actions';
 import Provider from './components/util/provider';
 import Notebook from './components/notebook';
 
@@ -11,6 +11,7 @@ const { store, dispatch } = createStore({ notebook: null, selected: [] }, reduce
 
 import { ipcRenderer as ipc } from 'electron';
 ipc.on('menu:new-kernel', (e, name) => dispatch(newKernel(name)));
+ipc.on('menu:save', () => dispatch(save()));
 
 class App extends React.Component {
   constructor(props) {

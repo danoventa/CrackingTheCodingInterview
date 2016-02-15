@@ -37,6 +37,22 @@ export function newKernel(kernelSpecName) {
   };
 }
 
+export function save() {
+  return (subject) => {
+    subject.next({
+      type: 'START_SAVING',
+    });
+
+    alert('can\'t actually save yet');
+    console.error('we can\'t save yet and don\'t even have the state to do so');
+
+    // when done saving
+    subject.next({
+      type: 'DONE_SAVING',
+    });
+  };
+}
+
 export function readJSON(filePath) {
   return (subject) => {
     getJSON(filePath)
@@ -93,11 +109,11 @@ export function updateCellExecutionCount(id, count) {
 
 export function executeCell(id, source) {
   return (subject, dispatch, channels) => {
-    // TODO: figure out where channels come from
     const { iopub, shell } = channels;
 
     if(!iopub || !shell) {
       // TODO: propagate error about execution when kernel not connected
+      // IDEA: Propagage error via subject!
       return;
     }
 
