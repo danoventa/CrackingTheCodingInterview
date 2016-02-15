@@ -215,7 +215,7 @@ export function generateDefaultTemplate() {
 
 export const defaultMenu = Menu.buildFromTemplate(generateDefaultTemplate());
 
-export function invokeFullMenu() {
+export function loadFullMenu() {
   const kernelMenuPromise = listKernelSpecs().then(kernelSpecs => {
     return Object.keys(kernelSpecs).map(kernelName => {
       return {
@@ -227,7 +227,7 @@ export function invokeFullMenu() {
     });
   });
 
-  kernelMenuPromise.then(kernelMenuItems => {
+  return kernelMenuPromise.then(kernelMenuItems => {
     const languageMenu = {
       label: '&Language',
       submenu: [
@@ -260,6 +260,7 @@ export function invokeFullMenu() {
     template.push(help);
 
     const menu = Menu.buildFromTemplate(template);
+    return menu;
     Menu.setApplicationMenu(menu);
   });
 }
