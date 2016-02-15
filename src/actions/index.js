@@ -127,8 +127,7 @@ export function executeCell(id, source) {
     dispatch(updateCellOutputs(id, new Immutable.List()));
 
     const childMessages = iopub.childOf(executeRequest)
-                               .publish()
-                               .refCount();
+                               .share();
 
     childMessages.ofMessageType(['execute_input'])
                  .pluck('content', 'execution_count')
