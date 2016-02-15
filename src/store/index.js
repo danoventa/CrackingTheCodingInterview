@@ -15,7 +15,7 @@ export default function createStore(initialState, reducers) {
       return reducers[action.type].call(null, state, action);
     },
     initialState || {}
-  );
+  ).publish().refCount();
 
   // Debugging time
   store.subscribe(null, (err) => {
