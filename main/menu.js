@@ -14,7 +14,6 @@ function createMessenger(eventName, obj) {
   };
 }
 
-
 export const file = {
   label: '&File',
   submenu: [
