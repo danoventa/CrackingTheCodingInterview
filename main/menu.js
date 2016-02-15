@@ -4,6 +4,16 @@ import { listKernelSpecs } from '../src/api/kernel';
 
 import launch from './launch';
 
+function createMessenger(eventName, obj) {
+  return (item, focusedWindow) => {
+    if(!focusedWindow) {
+      return;
+    }
+    focusedWindow.webContents.send(eventName, obj);
+  };
+}
+
+
 export const file = {
   label: '&File',
   submenu: [
@@ -25,6 +35,11 @@ export const file = {
         });
       },
       accelerator: 'CmdOrCtrl+O',
+    },
+    {
+      label: '&Save',
+      click: createMessenger('menu:save'),
+      accelerator: 'CmdOrCtrl+S',
     },
   ],
 };
@@ -220,9 +235,7 @@ export function loadFullMenu() {
     return Object.keys(kernelSpecs).map(kernelName => {
       return {
         label: kernelSpecs[kernelName].spec.display_name,
-        click: (item, focusedWindow) => {
-          focusedWindow.webContents.send('menu:new-kernel', kernelName);
-        },
+        click: createMessenger('menu:new-kernel', kernelName),
       };
     });
   });
@@ -233,9 +246,7 @@ export function loadFullMenu() {
       submenu: [
         {
           label: '&Kill Running Kernel',
-          click: (item, focusedWindow) => {
-            focusedWindow.webContents.send('menu:kill-kernel');
-          },
+          click: createMessenger('menu:kill-kernel'),
         },
         {
           type: 'separator',
