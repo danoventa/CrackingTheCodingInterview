@@ -3,9 +3,15 @@ import ReactDOM from 'react-dom';
 
 import createStore from './store';
 import { reducers } from './reducers';
-import { readJSON, newKernel, save, killKernel } from './actions';
 import Provider from './components/util/provider';
 import Notebook from './components/notebook';
+
+import {
+  readJSON,
+  newKernel,
+  save,
+  killKernel,
+} from './actions';
 
 const { store, dispatch } = createStore({ notebook: null, selected: [] }, reducers);
 
