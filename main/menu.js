@@ -24,14 +24,6 @@ export const file = {
       },
       accelerator: 'CmdOrCtrl+O',
     },
-    {
-      type: 'separator',
-    },
-    {
-      label: '&Quit',
-      action: ['killKernel', 'exit'],
-      accelerator: 'CmdOrCtrl+Q',
-    },
   ],
 };
 
