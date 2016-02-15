@@ -220,7 +220,9 @@ export function invokeFullMenu() {
     return Object.keys(kernelSpecs).map(kernelName => {
       return {
         label: kernelSpecs[kernelName].spec.display_name,
-        action: ['killKernel', { name: 'newKernel', args: [kernelName] }],
+        click: (item, focusedWindow) => {
+          focusedWindow.webContents.send('menu:new-kernel', kernelName);
+        },
       };
     });
   });
@@ -231,7 +233,9 @@ export function invokeFullMenu() {
       submenu: [
         {
           label: '&Kill Running Kernel',
-          action: 'killKernel',
+          click: (item, focusedWindow) => {
+            focusedWindow.webContents.send('menu:kill-kernel');
+          },
         },
         {
           type: 'separator',
