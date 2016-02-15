@@ -5,9 +5,22 @@ export default function createStore(initialState, reducers) {
   const subject = new Rx.Subject();
 
   const store = subject.scan(
-    (state, action) => reducers[action.type].call(null, state, action),
+    (state, action) => {
+      if(!action || !action.type || ! (action.type in reducers)) {
+        console.error('Action not registered');
+        console.error(action);
+        return state; // no reduction
+      }
+
+      return reducers[action.type].call(null, state, action);
+    },
     initialState || {}
   );
+
+  // Debugging time
+  store.subscribe(null, (err) => {
+    console.error('Error in the store', err);
+  });
 
   const channelStream = subject.filter(action => action.channels)
                                .pluck('channels');
