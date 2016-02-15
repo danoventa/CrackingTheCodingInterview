@@ -3,6 +3,9 @@ import app from 'app';
 
 import launch from './main/launch';
 
+import { Menu } from 'electron';
+import { file, edit, view } from './main/menu';
+
 app.on('window-all-closed', () => {
   // On OS X, we want to keep the app and menu bar active
   if (process.platform !== 'darwin') {
@@ -18,6 +21,9 @@ if(notebooks <= 0) {
   notebooks.push('intro.ipynb');
 }
 
+const menu = Menu.buildFromTemplate([file, edit, view]);
+
 app.on('ready', () => {
+  Menu.setApplicationMenu(menu);
   notebooks.forEach(launch);
 });

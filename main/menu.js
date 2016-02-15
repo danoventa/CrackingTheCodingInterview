@@ -1,9 +1,27 @@
+import { dialog } from 'electron';
+
+import launch from './launch';
+
 export const file = {
   label: '&File',
   submenu: [
     {
       label: '&Open',
-      click: () => { console.error('TODO: open a new BrowserWindow'); },
+      click: () => {
+        const opts = {
+          title: 'Open a notebook',
+          filters: [
+            { name: 'Notebooks', extensions: ['ipynb'] },
+          ],
+          properties: [
+            'openFile',
+          ],
+          defaultPath: process.cwd(),
+        };
+        dialog.showOpenDialog(opts, (fname) => {
+          launch(fname);
+        });
+      },
       accelerator: 'CmdOrCtrl+O',
     },
     {
@@ -13,20 +31,6 @@ export const file = {
       label: '&Quit',
       action: ['killKernel', 'exit'],
       accelerator: 'CmdOrCtrl+Q',
-    },
-    {
-      label: 'goop',
-      click: (item, focusedWindow) => {
-        console.log(item);
-        if(focusedWindow) {
-          console.log(focusedWindow);
-          focusedWindow.webContents.send('ping', 'whooooh');
-        } else {
-          console.error('WATTTTTT', item, focusedWindow);
-        }
-      },
-      metadata: 'wat',
-      action: ['new cell'],
     },
   ],
 };
