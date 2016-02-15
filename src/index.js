@@ -18,7 +18,7 @@ const { store, dispatch } = createStore({ notebook: null, selected: [] }, reduce
 import { ipcRenderer as ipc } from 'electron';
 ipc.on('menu:new-kernel', (e, name) => dispatch(newKernel(name)));
 ipc.on('menu:save', () => dispatch(save()));
-ipc.on('menu:kill-kernel', () => dispatch(killKernel));
+ipc.on('menu:kill-kernel', () => dispatch(killKernel()));
 
 class App extends React.Component {
   constructor(props) {
