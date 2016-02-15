@@ -240,6 +240,7 @@ export function invokeFullMenu() {
         {
           type: 'separator',
         },
+        // All the available kernels
         ...kernelMenuItems,
       ],
     };
@@ -252,6 +253,8 @@ export function invokeFullMenu() {
     template.push(file);
     template.push(edit);
     template.push(view);
+
+    // Application specific functionality should go before window and help
     template.push(languageMenu);
     template.push(window);
     template.push(help);
