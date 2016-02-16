@@ -43,6 +43,11 @@ export const file = {
       click: createMessenger('menu:save'),
       accelerator: 'CmdOrCtrl+S',
     },
+    {
+      label: 'Save &As',
+      click: createMessenger('menu:save-as'),
+      accelerator: 'CmdOrCtrl+Shift+S',
+    },
   ],
 };
 
