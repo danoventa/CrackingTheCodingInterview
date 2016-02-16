@@ -10,6 +10,7 @@ import {
   readJSON,
   newKernel,
   save,
+  saveAs,
   killKernel,
 } from './actions';
 
@@ -18,6 +19,7 @@ const { store, dispatch } = createStore({ notebook: null, selected: [] }, reduce
 import { ipcRenderer as ipc } from 'electron';
 ipc.on('menu:new-kernel', (e, name) => dispatch(newKernel(name)));
 ipc.on('menu:save', () => dispatch(save()));
+ipc.on('menu:save-as', () => dispatch(saveAs()));
 ipc.on('menu:kill-kernel', () => dispatch(killKernel()));
 
 class App extends React.Component {

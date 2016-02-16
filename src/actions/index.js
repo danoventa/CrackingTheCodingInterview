@@ -40,13 +40,25 @@ export function newKernel(kernelSpecName) {
 export function save() {
   return (subject) => {
     subject.next({
-      type: 'START_SAVING',
+      type: 'CHECK_FILENAME',
     });
+    subject.next({
+      type: 'START_SAVE',
+    });
+    subject.next({
+      type: 'DONE_SAVING',
+    });
+  };
+}
 
-    alert('can\'t actually save yet');
-    console.error('we can\'t save yet and don\'t even have the state to do so');
-
-    // when done saving
+export function saveAs() {
+  return (subject) => {
+    subject.next({
+      type: 'CHANGE_FILENAME',
+    });
+    subject.next({
+      type: 'START_SAVE',
+    });
     subject.next({
       type: 'DONE_SAVING',
     });
