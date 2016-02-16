@@ -120,8 +120,8 @@ export function updateCellExecutionCount(id, count) {
 }
 
 export function executeCell(id, source) {
-  return (subject, dispatch, channels) => {
-    const { iopub, shell } = channels;
+  return (subject, dispatch, state) => {
+    const { iopub, shell } = state.channels;
 
     if(!iopub || !shell) {
       // TODO: propagate error about execution when kernel not connected
