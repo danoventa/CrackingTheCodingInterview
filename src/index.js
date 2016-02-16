@@ -14,12 +14,13 @@ import {
   killKernel,
 } from './actions';
 
-const { store, dispatch } = createStore({ notebook: null, selected: [] }, reducers);
+const filename = decodeURIComponent(window.location.hash.slice(1));
+const { store, dispatch } = createStore({ notebook: null, selected: [], filename }, reducers);
 
 import { ipcRenderer as ipc } from 'electron';
 ipc.on('menu:new-kernel', (e, name) => dispatch(newKernel(name)));
 ipc.on('menu:save', () => dispatch(save()));
-ipc.on('menu:save-as', () => dispatch(saveAs()));
+ipc.on('menu:save-as', (e, fn) => dispatch(saveAs(fn)));
 ipc.on('menu:kill-kernel', () => dispatch(killKernel()));
 
 class App extends React.Component {
@@ -29,7 +30,7 @@ class App extends React.Component {
     store.subscribe(state => this.setState(state));
   }
   componentDidMount() {
-    dispatch(readJSON(decodeURIComponent(window.location.hash.slice(1))));
+    dispatch(readJSON(filename));
   }
   render() {
     return (

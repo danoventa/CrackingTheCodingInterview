@@ -4,13 +4,19 @@ import { listKernelSpecs } from '../src/api/kernel';
 
 import launch from './launch';
 
-function createMessenger(eventName, obj) {
+import * as path from 'path';
+
+function send(focusedWindow, eventName, obj) {
+  if(!focusedWindow) {
+    console.error('renderer window not in focus (are your devtools open?)');
+    return;
+  }
+  focusedWindow.webContents.send(eventName, obj);
+}
+
+function createSender(eventName, obj) {
   return (item, focusedWindow) => {
-    if(!focusedWindow) {
-      console.error('renderer window not in focus (are your devtools open?)');
-      return;
-    }
-    focusedWindow.webContents.send(eventName, obj);
+    send(focusedWindow, eventName, obj);
   };
 }
 
@@ -40,12 +46,27 @@ export const file = {
     },
     {
       label: '&Save',
-      click: createMessenger('menu:save'),
+      click: createSender('menu:save'),
       accelerator: 'CmdOrCtrl+S',
     },
     {
       label: 'Save &As',
-      click: createMessenger('menu:save-as'),
+      click: (item, focusedWindow) => {
+        const opts = {
+          title: 'Save Notebook As',
+          filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
+        };
+        dialog.showSaveDialog(opts, (filename) => {
+          if(!filename) {
+            return;
+          }
+
+          if (path.extname(filename) === '') {
+            filename = filename + '.ipynb';
+          }
+          send(focusedWindow, 'menu:save-as', filename);
+        });
+      },
       accelerator: 'CmdOrCtrl+Shift+S',
     },
   ],
@@ -242,7 +263,7 @@ export function loadFullMenu() {
     return Object.keys(kernelSpecs).map(kernelName => {
       return {
         label: kernelSpecs[kernelName].spec.display_name,
-        click: createMessenger('menu:new-kernel', kernelName),
+        click: createSender('menu:new-kernel', kernelName),
       };
     });
   });
@@ -253,7 +274,7 @@ export function loadFullMenu() {
       submenu: [
         {
           label: '&Kill Running Kernel',
-          click: createMessenger('menu:kill-kernel'),
+          click: createSender('menu:kill-kernel'),
         },
         {
           type: 'separator',
