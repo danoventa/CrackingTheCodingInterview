@@ -1,6 +1,10 @@
 import { getJSON } from '../api';
 
+import * as commutable from 'commutable';
+
 import { launchKernel } from '../api/kernel';
+
+import { writeFile } from 'fs';
 
 import {
   createExecuteRequest,
@@ -38,30 +42,32 @@ export function newKernel(kernelSpecName) {
 }
 
 export function save() {
-  return (subject) => {
+  return (subject, dispatch, state) => {
     subject.next({
-      type: 'CHECK_FILENAME',
+      type: 'START_SAVING',
     });
-    subject.next({
-      type: 'START_SAVE',
+    // TODO: Pop up save as dialog if filename not set
+    writeFile(state.filename, JSON.stringify(commutable.toJS(state.notebook), null, 2), (err) => {
+      if(err) {
+        // TODO: subject.next({ type: 'SAVING_ERROR'}) ?
+        console.error(err);
+        throw err;
+      }
+      subject.next({
+        type: 'DONE_SAVING',
+      });
     });
-    subject.next({
-      type: 'DONE_SAVING',
-    });
+
   };
 }
 
-export function saveAs() {
-  return (subject) => {
+export function saveAs(filename) {
+  return (subject, dispatch) => {
     subject.next({
       type: 'CHANGE_FILENAME',
+      filename,
     });
-    subject.next({
-      type: 'START_SAVE',
-    });
-    subject.next({
-      type: 'DONE_SAVING',
-    });
+    dispatch(save());
   };
 }
 
@@ -120,8 +126,8 @@ export function updateCellExecutionCount(id, count) {
 }
 
 export function executeCell(id, source) {
-  return (subject, dispatch, channels) => {
-    const { iopub, shell } = channels;
+  return (subject, dispatch, state) => {
+    const { iopub, shell } = state.channels;
 
     if(!iopub || !shell) {
       // TODO: propagate error about execution when kernel not connected

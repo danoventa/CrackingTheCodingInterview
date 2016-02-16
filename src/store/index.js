@@ -22,18 +22,15 @@ export default function createStore(initialState, reducers) {
     console.error('Error in the store', err);
   });
 
-  const channelStream = subject.filter(action => action.channels)
-                               .pluck('channels');
-  // wrap channels in a closure, track the latest
-  let channels = {};
-  channelStream.subscribe(ch => {
-    channels = ch;
+  let lastState = {};
+  store.subscribe(st => {
+    lastState = st;
   });
 
   function dispatch(action) {
     // We need the current state at this time
     return typeof action === 'function'
-      ? action.call(null, subject, dispatch, channels)
+      ? action.call(null, subject, dispatch, lastState)
       : subject.next(action);
   }
 

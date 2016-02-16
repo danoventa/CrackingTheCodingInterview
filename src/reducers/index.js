@@ -1,8 +1,6 @@
 import * as commutable from 'commutable';
 import * as fs from 'fs';
 
-import { showDialog, save } from '../api/save';
-
 export const reducers = {
   READ_JSON: (state, action) => {
     const { data } = action;
@@ -86,32 +84,17 @@ export const reducers = {
     }
     return state;
   },
-  CHANGE_FILENAME: state => {
-    const newName = showDialog(state.filename);
-    if (!newName) {
-      return state;
-    }
-
-    state.filename = newName;
-    return state;
+  START_SAVING: state => {
+    return Object.assign({}, state, { isSaving: true });
   },
-  CHECK_FILENAME: state => {
-    if (state.filename) {
-      return state;
-    }
-
-    const newName = showDialog();
-    if (!newName) {
-      return state;
-    }
-
-    state.filename = newName;
-    return state;
+  DONE_SAVING: state => {
+    return Object.assign({}, state, { isSaving: false });
   },
-  START_SAVE: state => {
-    if (state.filename) {
-      save(state.filename, state.notebook);
+  CHANGE_FILENAME: (state, action) => {
+    const { filename } = action;
+    if(!filename) {
+      return state;
     }
-    return state;
+    return Object.assign({}, state, { filename });
   },
 };
