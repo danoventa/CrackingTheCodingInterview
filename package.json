@@ -30,7 +30,7 @@
     "ansi-to-html": "^0.3.0",
     "codemirror": "^5.10.0",
     "color": "^0.10.1",
-    "commutable": "^0.3.0",
+    "commutable": "^0.4.0",
     "enchannel-zmq-backend": "^1.0.1",
     "history": "^1.17.0",
     "immutable": "^3.7.6",
