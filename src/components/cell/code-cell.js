@@ -7,6 +7,7 @@ import Display from 'react-jupyter-display-area';
 
 import {
   executeCell,
+  createCellAfter,
 } from '../../actions';
 
 export default class CodeCell extends React.Component {
@@ -25,8 +26,21 @@ export default class CodeCell extends React.Component {
   };
 
   keyDown(e) {
-    if (!e.shiftKey || e.key !== 'Enter') {
+    if(e.key !== 'Enter') {
       return;
+    }
+
+    const shiftXORctrl = (e.shiftKey || e.ctrlKey) && !(e.shiftKey && e.ctrlKey);
+    if(!shiftXORctrl) {
+      return;
+    }
+
+    if (e.shiftKey) {
+      // TODO: Remove this, as it should be created if at the end of document only
+      // this.context.dispatch(createCellAfter('code', this.props.id));
+
+      // should instead be
+      // this.context.dispatch(nextCell(this.props.id));
     }
 
     this.context.dispatch(executeCell(this.props.id,

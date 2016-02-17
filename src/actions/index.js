@@ -117,6 +117,14 @@ export function moveCell(id, destinationId, above) {
   };
 }
 
+export function createCellAfter(cellType, id) {
+  return {
+    type: 'NEW_CELL_AFTER',
+    cellType,
+    id,
+  };
+}
+
 export function updateCellExecutionCount(id, count) {
   return {
     type: 'UPDATE_CELL_EXECUTION_COUNT',
