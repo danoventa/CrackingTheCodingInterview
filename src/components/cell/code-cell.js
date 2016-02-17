@@ -37,7 +37,10 @@ export default class CodeCell extends React.Component {
 
     if (e.shiftKey) {
       // TODO: Remove this, as it should be created if at the end of document only
-      this.context.dispatch(createCellAfter('code', this.props.id));
+      // this.context.dispatch(createCellAfter('code', this.props.id));
+
+      // should instead be
+      // this.context.dispatch(nextCell(this.props.id));
     }
 
     this.context.dispatch(executeCell(this.props.id,
