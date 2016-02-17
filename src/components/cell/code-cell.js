@@ -7,6 +7,7 @@ import Display from 'react-jupyter-display-area';
 
 import {
   executeCell,
+  createCellAfterActive,
 } from '../../actions';
 
 export default class CodeCell extends React.Component {
@@ -25,8 +26,12 @@ export default class CodeCell extends React.Component {
   };
 
   keyDown(e) {
-    if (!e.shiftKey || e.key !== 'Enter') {
+    if (!e.shiftKey || !e.ctrlKey || e.key !== 'Enter') {
       return;
+    }
+
+    if (e.shiftKey) {
+      this.context.dispatch(createCellAfterActive('code'));
     }
 
     this.context.dispatch(executeCell(this.props.id,
