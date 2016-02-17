@@ -41,7 +41,7 @@
     "react-dom": "^0.14.5",
     "react-dnd": "^2.0.2",
     "react-dnd-html5-backend": "^2.0.2",
-    "react-jupyter-display-area": "0.0.2",
+    "react-jupyter-display-area": "0.1.0",
     "react-markdown": "^1.2.1",
     "react-router": "^1.0.3",
     "source-code-pro": "git://github.com/adobe-fonts/source-code-pro.git#release",
