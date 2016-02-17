@@ -117,10 +117,11 @@ export function moveCell(id, destinationId, above) {
   };
 }
 
-export function createCellAfterActive(cellType) {
+export function createCellAfter(cellType, id) {
   return {
-    type: 'NEW_CELL_AFTER_ACTIVE',
+    type: 'NEW_CELL_AFTER',
     cellType,
+    id,
   };
 }
 

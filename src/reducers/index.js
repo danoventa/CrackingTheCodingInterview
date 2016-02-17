@@ -17,14 +17,15 @@ export const reducers = {
       notebook: updatedNotebook,
     });
   },
-  NEW_CELL_AFTER_ACTIVE: (state, action) => {
+  NEW_CELL_AFTER: (state, action) => {
     // Draft API
-    const { cellType } = action;
-    const { notebook, active } = state;
+    const { cellType, id } = action;
+    const { notebook } = state;
     const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
                                            commutable.emptyCodeCell;
+    const index = notebook.get('cellOrder').indexOf(id) + 1;
     return Object.assign({}, state, {
-      notebook: commutable.insertCellAt(notebook, cell, active),
+      notebook: commutable.insertCellAt(notebook, cell, index),
     });
   },
   UPDATE_CELL_SOURCE: (state, action) => {
