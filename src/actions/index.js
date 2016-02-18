@@ -164,10 +164,13 @@ export function executeCell(id, source) {
 
     // Handle all the nbformattable messages
     childMessages
-         .ofMessageType(['execute_result', 'display_data', 'stream', 'error'])
+         .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
          .map(msgSpecToNotebookFormat)
          // Iteratively reduce on the outputs
          .scan((outputs, output) => {
+           if(output.output_type === 'clear_output') {
+             return new Immutable.List();
+           }
            return outputs.push(Immutable.fromJS(output));
          }, new Immutable.List())
          // Update the outputs with each change
