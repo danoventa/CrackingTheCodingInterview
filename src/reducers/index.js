@@ -19,13 +19,15 @@ import {
 
 export const reducers = {};
 
-reducers[READ_NOTEBOOK] = (state, action) => {
+function readNotebookReducer(state, action) {
   const { data } = action;
   const fetchedNotebook = commutable.fromJS(data);
   return Object.assign({}, state, {
     notebook: fetchedNotebook,
   });
-};
+}
+
+reducers[READ_NOTEBOOK] = readNotebookReducer;
 
 reducers[UPDATE_CELL_EXECUTION_COUNT] = (state, action) => {
   const { id, count } = action;
