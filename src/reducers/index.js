@@ -27,7 +27,7 @@ export const reducers = {};
 reducers[READ_NOTEBOOK] = loadNotebook;
 reducers[UPDATE_CELL_EXECUTION_COUNT] = updateExecutionCount;
 
-reducers[NEW_CELL_AFTER] = (state, action) => {
+reducers[NEW_CELL_AFTER] = function newCell(state, action) {
   // Draft API
   const { cellType, id } = action;
   const { notebook } = state;
@@ -39,7 +39,7 @@ reducers[NEW_CELL_AFTER] = (state, action) => {
   });
 };
 
-reducers[UPDATE_CELL_SOURCE] = (state, action) => {
+reducers[UPDATE_CELL_SOURCE] = function updateSource(state, action) {
   const { id, source } = action;
   const { notebook } = state;
   const updatedNotebook = notebook.setIn(['cellMap', id, 'source'], source);
@@ -48,7 +48,7 @@ reducers[UPDATE_CELL_SOURCE] = (state, action) => {
   });
 };
 
-reducers[UPDATE_CELL_OUTPUTS] = (state, action) => {
+reducers[UPDATE_CELL_OUTPUTS] = function updateOutputs(state, action) {
   const { id, outputs } = action;
   const { notebook } = state;
   const updatedNotebook = notebook.setIn(['cellMap', id, 'outputs'], outputs);
@@ -57,7 +57,7 @@ reducers[UPDATE_CELL_OUTPUTS] = (state, action) => {
   });
 };
 
-reducers[SET_SELECTED] = (state, action) => {
+reducers[SET_SELECTED] = function setSelected(state, action) {
   const selected = action.additive ?
       state.selected.concat(action.ids) :
       action.ids;
@@ -66,7 +66,7 @@ reducers[SET_SELECTED] = (state, action) => {
   });
 };
 
-reducers[MOVE_CELL] = (state, action) => {
+reducers[MOVE_CELL] = function moveCell(state, action) {
   const { notebook } = state;
   return Object.assign({}, state, {
     notebook: notebook.update('cellOrder', cellOrder => {
@@ -82,7 +82,7 @@ reducers[MOVE_CELL] = (state, action) => {
   });
 };
 
-reducers[NEW_KERNEL] = (state, action) => {
+reducers[NEW_KERNEL] = function newKernel(state, action) {
   const { channels, connectionFile, spawn } = action;
   state.channels = channels;
   state.connectionFile = connectionFile;
@@ -90,12 +90,7 @@ reducers[NEW_KERNEL] = (state, action) => {
   return state;
 };
 
-reducers[EXIT] = state => {
-  close();
-  return state;
-};
-
-reducers[KILL_KERNEL] = state => {
+function cleanupKernel(state) {
   if (state.channels) {
     state.channels.shell.complete();
     state.channels.iopub.complete();
@@ -110,18 +105,28 @@ reducers[KILL_KERNEL] = state => {
     fs.unlink(state.connectionFile);
     state.connectionFile = null;
   }
+
+  delete state.channels;
+  delete state.spawn;
+  delete state.connectionFile;
   return state;
+}
+
+reducers[EXIT] = function exit(state) {
+  return cleanupKernel(state);
 };
 
-reducers[START_SAVING] = state => {
+reducers[KILL_KERNEL] = cleanupKernel;
+
+reducers[START_SAVING] = function startSaving(state) {
   return Object.assign({}, state, { isSaving: true });
 };
 
-reducers[DONE_SAVING] = state => {
+reducers[DONE_SAVING] = function doneSaving(state) {
   return Object.assign({}, state, { isSaving: false });
 };
 
-reducers[CHANGE_FILENAME] = (state, action) => {
+reducers[CHANGE_FILENAME] = function changeFilename(state, action) {
   const { filename } = action;
   if(!filename) {
     return state;
