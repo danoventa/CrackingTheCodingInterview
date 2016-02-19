@@ -7,6 +7,22 @@ import { launchKernel } from '../api/kernel';
 import { writeFile } from 'fs';
 
 import {
+  EXIT,
+  KILL_KERNEL,
+  NEW_KERNEL,
+  START_SAVING,
+  DONE_SAVING,
+  CHANGE_FILENAME,
+  SET_SELECTED,
+  UPDATE_CELL_SOURCE,
+  UPDATE_CELL_OUTPUTS,
+  MOVE_CELL,
+  NEW_CELL_AFTER,
+  UPDATE_CELL_EXECUTION_COUNT,
+  READ_JSON,
+} from './constants';
+
+import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
 } from '../api/messaging';
@@ -15,13 +31,13 @@ import Immutable from 'immutable';
 
 export function exit() {
   return {
-    type: 'EXIT',
+    type: EXIT,
   };
 }
 
 export function killKernel() {
   return {
-    type: 'KILL_KERNEL',
+    type: KILL_KERNEL,
   };
 }
 
@@ -31,7 +47,7 @@ export function newKernel(kernelSpecName) {
       .then(kc => {
         const { channels, connectionFile, spawn } = kc;
         subject.next({
-          type: 'NEW_KERNEL',
+          type: NEW_KERNEL,
           channels,
           connectionFile,
           spawn,
@@ -44,7 +60,7 @@ export function newKernel(kernelSpecName) {
 export function save() {
   return (subject, dispatch, state) => {
     subject.next({
-      type: 'START_SAVING',
+      type: START_SAVING,
     });
     // TODO: Pop up save as dialog if filename not set
     writeFile(state.filename, JSON.stringify(commutable.toJS(state.notebook), null, 2), (err) => {
@@ -54,7 +70,7 @@ export function save() {
         throw err;
       }
       subject.next({
-        type: 'DONE_SAVING',
+        type: DONE_SAVING,
       });
     });
 
@@ -64,7 +80,7 @@ export function save() {
 export function saveAs(filename) {
   return (subject, dispatch) => {
     subject.next({
-      type: 'CHANGE_FILENAME',
+      type: CHANGE_FILENAME,
       filename,
     });
     dispatch(save());
@@ -76,7 +92,7 @@ export function readJSON(filePath) {
     getJSON(filePath)
       .then((data) => {
         subject.next({
-          type: 'READ_JSON',
+          type: READ_JSON,
           data,
         });
         newKernel(data.metadata.kernelspec.name)(subject);
@@ -86,7 +102,7 @@ export function readJSON(filePath) {
 
 export function setSelected(ids, additive) {
   return {
-    type: 'SET_SELECTED',
+    type: SET_SELECTED,
     ids,
     additive,
   };
@@ -94,7 +110,7 @@ export function setSelected(ids, additive) {
 
 export function updateCellSource(id, source) {
   return {
-    type: 'UPDATE_CELL_SOURCE',
+    type: UPDATE_CELL_SOURCE,
     id,
     source,
   };
@@ -102,7 +118,7 @@ export function updateCellSource(id, source) {
 
 export function updateCellOutputs(id, outputs) {
   return {
-    type: 'UPDATE_CELL_OUTPUTS',
+    type: UPDATE_CELL_OUTPUTS,
     id,
     outputs,
   };
@@ -110,7 +126,7 @@ export function updateCellOutputs(id, outputs) {
 
 export function moveCell(id, destinationId, above) {
   return {
-    type: 'MOVE_CELL',
+    type: MOVE_CELL,
     id,
     destinationId,
     above,
@@ -119,7 +135,7 @@ export function moveCell(id, destinationId, above) {
 
 export function createCellAfter(cellType, id) {
   return {
-    type: 'NEW_CELL_AFTER',
+    type: NEW_CELL_AFTER,
     cellType,
     id,
   };
@@ -127,7 +143,7 @@ export function createCellAfter(cellType, id) {
 
 export function updateCellExecutionCount(id, count) {
   return {
-    type: 'UPDATE_CELL_EXECUTION_COUNT',
+    type: UPDATE_CELL_EXECUTION_COUNT,
     id,
     count,
   };
