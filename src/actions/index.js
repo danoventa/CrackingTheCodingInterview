@@ -19,7 +19,7 @@ import {
   MOVE_CELL,
   NEW_CELL_AFTER,
   UPDATE_CELL_EXECUTION_COUNT,
-  READ_JSON,
+  READ_NOTEBOOK,
 } from './constants';
 
 import {
@@ -92,7 +92,7 @@ export function readJSON(filePath) {
     getJSON(filePath)
       .then((data) => {
         subject.next({
-          type: READ_JSON,
+          type: READ_NOTEBOOK,
           data,
         });
         newKernel(data.metadata.kernelspec.name)(subject);
