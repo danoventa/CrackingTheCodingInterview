@@ -9,7 +9,7 @@ import {
   MOVE_CELL,
   NEW_CELL_AFTER,
   NEW_KERNEL,
-  READ_JSON,
+  READ_NOTEBOOK,
   SET_SELECTED,
   START_SAVING,
   UPDATE_CELL_EXECUTION_COUNT,
@@ -19,7 +19,7 @@ import {
 
 export const reducers = {};
 
-reducers[READ_JSON] = (state, action) => {
+reducers[READ_NOTEBOOK] = (state, action) => {
   const { data } = action;
   const fetchedNotebook = commutable.fromJS(data);
   return Object.assign({}, state, {

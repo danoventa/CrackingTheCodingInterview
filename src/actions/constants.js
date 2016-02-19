@@ -1,4 +1,4 @@
-export const READ_JSON = Symbol('READ_JSON');
+export const READ_NOTEBOOK = Symbol('READ_NOTEBOOK');
 export const UPDATE_CELL_EXECUTION_COUNT = Symbol('UPDATE_CELL_EXECUTION_COUNT');
 export const NEW_CELL_AFTER = Symbol('NEW_CELL_AFTER');
 export const UPDATE_CELL_SOURCE = Symbol('UPDATE_CELL_SOURCE');
