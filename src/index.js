@@ -7,7 +7,7 @@ import Provider from './components/util/provider';
 import Notebook from './components/notebook';
 
 import {
-  readJSON,
+  readNotebook,
   newKernel,
   save,
   saveAs,
@@ -30,7 +30,7 @@ class App extends React.Component {
     store.subscribe(state => this.setState(state));
   }
   componentDidMount() {
-    dispatch(readJSON(filename));
+    dispatch(readNotebook(filename));
   }
   render() {
     return (

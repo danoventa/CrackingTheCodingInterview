@@ -87,7 +87,7 @@ export function saveAs(filename) {
   };
 }
 
-export function readJSON(filePath) {
+export function readNotebook(filePath) {
   return (subject) => {
     getJSON(filePath)
       .then((data) => {
