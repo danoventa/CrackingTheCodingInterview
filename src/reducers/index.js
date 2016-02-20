@@ -1,4 +1,3 @@
-import * as commutable from 'commutable';
 import * as fs from 'fs';
 
 import {
@@ -20,42 +19,20 @@ import {
 import {
   loadNotebook,
   updateExecutionCount,
+  moveCell,
+  newCellAfter,
+  updateSource,
+  updateOutputs,
 } from './document';
 
 export const reducers = {};
 
 reducers[READ_NOTEBOOK] = loadNotebook;
 reducers[UPDATE_CELL_EXECUTION_COUNT] = updateExecutionCount;
-
-reducers[NEW_CELL_AFTER] = function newCell(state, action) {
-  // Draft API
-  const { cellType, id } = action;
-  const { notebook } = state;
-  const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
-                                         commutable.emptyCodeCell;
-  const index = notebook.get('cellOrder').indexOf(id) + 1;
-  return Object.assign({}, state, {
-    notebook: commutable.insertCellAt(notebook, cell, index),
-  });
-};
-
-reducers[UPDATE_CELL_SOURCE] = function updateSource(state, action) {
-  const { id, source } = action;
-  const { notebook } = state;
-  const updatedNotebook = notebook.setIn(['cellMap', id, 'source'], source);
-  return Object.assign({}, state, {
-    notebook: updatedNotebook,
-  });
-};
-
-reducers[UPDATE_CELL_OUTPUTS] = function updateOutputs(state, action) {
-  const { id, outputs } = action;
-  const { notebook } = state;
-  const updatedNotebook = notebook.setIn(['cellMap', id, 'outputs'], outputs);
-  return Object.assign({}, state, {
-    notebook: updatedNotebook,
-  });
-};
+reducers[NEW_CELL_AFTER] = newCellAfter;
+reducers[UPDATE_CELL_SOURCE] = updateSource;
+reducers[UPDATE_CELL_OUTPUTS] = updateOutputs;
+reducers[MOVE_CELL] = moveCell;
 
 reducers[SET_SELECTED] = function setSelected(state, action) {
   const selected = action.additive ?
@@ -63,22 +40,6 @@ reducers[SET_SELECTED] = function setSelected(state, action) {
       action.ids;
   return Object.assign({}, state, {
     selected,
-  });
-};
-
-reducers[MOVE_CELL] = function moveCell(state, action) {
-  const { notebook } = state;
-  return Object.assign({}, state, {
-    notebook: notebook.update('cellOrder', cellOrder => {
-      const oldIndex = cellOrder.findIndex(id => id === action.id);
-      const newIndex = cellOrder.findIndex(id => id === action.destinationId) + (action.above ? 0 : 1);
-      if (oldIndex === newIndex) {
-        return cellOrder;
-      }
-      return cellOrder
-        .splice(oldIndex, 1)
-        .splice(newIndex - (oldIndex < newIndex ? 1 : 0), 0, action.id);
-    }),
   });
 };
 
