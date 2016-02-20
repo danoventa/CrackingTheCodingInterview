@@ -88,8 +88,8 @@ reducers[START_SAVING] = function startSaving(state) {
   return Object.assign({}, state, { isSaving: true });
 };
 
-reducers[ERROR_KERNEL_NOT_CONNECTED] = function alertKernelNotConnected() {
-  alert('Error: We\'re not connected to a runtime!'); // eslint-disable-line no-alert
+reducers[ERROR_KERNEL_NOT_CONNECTED] = function alertKernelNotConnected(state) {
+  return Object.assign({}, state, { error: 'Error: We\'re not connected to a runtime!' });
 };
 
 reducers[DONE_SAVING] = function doneSaving(state) {
