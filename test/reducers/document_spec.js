@@ -52,7 +52,8 @@ describe('newCellAfter', () => {
 
     const state = newCellAfter(originalState, action);
     expect(state.notebook.get('cellOrder').size).to.equal(4);
-    const cell = state.notebook.get('cellOrder').last();
-    expect(state.notebook.getIn(['cellMap', id, 'execution_count'])).to.equal(42);
+    const cellID = state.notebook.get('cellOrder').last();
+    const cell = state.notebook.getIn(['cellMap', cellID]);
+    expect(cell.get('cell_type')).to.equal('markdown');
   });
 });
