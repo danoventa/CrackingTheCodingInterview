@@ -43,14 +43,6 @@ reducers[SET_SELECTED] = function setSelected(state, action) {
   });
 };
 
-reducers[NEW_KERNEL] = function newKernel(state, action) {
-  const { channels, connectionFile, spawn } = action;
-  state.channels = channels;
-  state.connectionFile = connectionFile;
-  state.spawn = spawn;
-  return state;
-};
-
 function cleanupKernel(state) {
   if (state.channels) {
     state.channels.shell.complete();
@@ -72,6 +64,18 @@ function cleanupKernel(state) {
   delete state.connectionFile;
   return state;
 }
+
+reducers[NEW_KERNEL] = function newKernel(state, action) {
+  const { channels, connectionFile, spawn } = action;
+
+  // cleanup old kernels first
+  cleanupKernel();
+
+  state.channels = channels;
+  state.connectionFile = connectionFile;
+  state.spawn = spawn;
+  return state;
+};
 
 reducers[EXIT] = function exit(state) {
   return cleanupKernel(state);
