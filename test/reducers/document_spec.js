@@ -51,7 +51,7 @@ describe('newCellAfter', () => {
     };
 
     const state = newCellAfter(originalState, action);
-    expect(state.notebook.get('cellOrder').size).to.equal(3);
+    expect(state.notebook.get('cellOrder').size).to.equal(4);
     const cell = state.notebook.get('cellOrder').last();
     expect(state.notebook.getIn(['cellMap', id, 'execution_count'])).to.equal(42);
   });
