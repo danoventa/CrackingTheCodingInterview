@@ -5,10 +5,11 @@ export default function createStore(initialState, reducers) {
   const subject = new Rx.Subject();
 
   const store = subject.scan(
-    (state, action) => {
+    function inreduction(state, action) {
       if(!action || !action.type || ! (action.type in reducers)) {
         console.error('Action not registered');
         console.error(action);
+        console.error(action.type);
         return state; // no reduction
       }
 

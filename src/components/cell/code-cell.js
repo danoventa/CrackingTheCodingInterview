@@ -7,7 +7,6 @@ import Display from 'react-jupyter-display-area';
 
 import {
   executeCell,
-  createCellAfter,
 } from '../../actions';
 
 export default class CodeCell extends React.Component {
