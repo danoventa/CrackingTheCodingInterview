@@ -70,7 +70,7 @@ reducers[NEW_KERNEL] = function newKernel(state, action) {
   const { channels, connectionFile, spawn } = action;
 
   // cleanup old kernels first
-  cleanupKernel();
+  state = cleanupKernel(state);
 
   state.channels = channels;
   state.connectionFile = connectionFile;
