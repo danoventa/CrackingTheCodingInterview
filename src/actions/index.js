@@ -20,6 +20,7 @@ import {
   NEW_CELL_AFTER,
   UPDATE_CELL_EXECUTION_COUNT,
   READ_NOTEBOOK,
+  ERROR_KERNEL_NOT_CONNECTED,
 } from './constants';
 
 import {
@@ -62,10 +63,9 @@ export function save() {
     subject.next({
       type: START_SAVING,
     });
-    // TODO: Pop up save as dialog if filename not set
+
     writeFile(state.filename, JSON.stringify(commutable.toJS(state.notebook), null, 2), (err) => {
       if(err) {
-        // TODO: subject.next({ type: 'SAVING_ERROR'}) ?
         console.error(err);
         throw err;
       }
@@ -154,8 +154,7 @@ export function executeCell(id, source) {
     const { iopub, shell } = state.channels;
 
     if(!iopub || !shell) {
-      // TODO: propagate error about execution when kernel not connected
-      // IDEA: Propagage error via subject!
+      subject.next({ type: ERROR_KERNEL_NOT_CONNECTED });
       return;
     }
 
@@ -195,7 +194,5 @@ export function executeCell(id, source) {
          });
 
     shell.next(executeRequest);
-
-    // TODO: Manage subscriptions
   };
 }

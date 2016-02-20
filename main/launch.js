@@ -8,7 +8,7 @@ export default function launch(notebook) {
     height: 1000,
     // frame: false,
     darkTheme: true,
-    title: path.relative('.', notebook.replace(/.ipynb$/,''))
+    title: path.relative('.', notebook.replace(/.ipynb$/, '')),
   });
 
   const index = path.join(__dirname, '..', 'index.html');

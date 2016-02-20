@@ -14,6 +14,7 @@ import {
   UPDATE_CELL_EXECUTION_COUNT,
   UPDATE_CELL_OUTPUTS,
   UPDATE_CELL_SOURCE,
+  ERROR_KERNEL_NOT_CONNECTED,
 } from '../actions/constants';
 
 import {
@@ -85,6 +86,10 @@ reducers[KILL_KERNEL] = cleanupKernel;
 
 reducers[START_SAVING] = function startSaving(state) {
   return Object.assign({}, state, { isSaving: true });
+};
+
+reducers[ERROR_KERNEL_NOT_CONNECTED] = function alertKernelNotConnected() {
+  alert('Error: We\'re not connected to a runtime!'); // eslint-disable-line no-alert
 };
 
 reducers[DONE_SAVING] = function doneSaving(state) {
