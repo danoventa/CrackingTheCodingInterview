@@ -13,9 +13,11 @@ import {
   saveAs,
   killKernel,
 } from './actions';
+import { initKeymap } from './actions/keymap';
 
 const filename = decodeURIComponent(window.location.hash.slice(1));
 const { store, dispatch } = createStore({ notebook: null, selected: [], filename }, reducers);
+initKeymap(window, dispatch);
 
 import { ipcRenderer as ipc } from 'electron';
 ipc.on('menu:new-kernel', (e, name) => dispatch(newKernel(name)));
