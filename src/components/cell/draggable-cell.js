@@ -110,9 +110,9 @@ class DraggableCell extends React.Component {
         style={{
           opacity: this.props.isDragging ? 0.25 : 1,
           borderTop: (this.props.isOver && this.state.hoverUpperHalf) ?
-            '3px lightgray solid' : '0px transparent solid',
+            '3px lightgray solid' : '3px transparent solid',
           borderBottom: (this.props.isOver && !this.state.hoverUpperHalf) ?
-            '3px lightgray solid' : '0px transparent solid',
+            '3px lightgray solid' : '3px transparent solid',
         }}
         className={'draggable-cell'}>
         {
