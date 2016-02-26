@@ -9,6 +9,7 @@ import {
   NEW_CELL_AFTER,
   NEW_KERNEL,
   READ_NOTEBOOK,
+  REMOVE_CELL,
   SET_SELECTED,
   START_SAVING,
   UPDATE_CELL_EXECUTION_COUNT,
@@ -22,6 +23,7 @@ import {
   updateExecutionCount,
   moveCell,
   newCellAfter,
+  removeCell,
   updateSource,
   updateOutputs,
 } from './document';
@@ -34,6 +36,7 @@ reducers[NEW_CELL_AFTER] = newCellAfter;
 reducers[UPDATE_CELL_SOURCE] = updateSource;
 reducers[UPDATE_CELL_OUTPUTS] = updateOutputs;
 reducers[MOVE_CELL] = moveCell;
+reducers[REMOVE_CELL] = removeCell;
 
 reducers[SET_SELECTED] = function setSelected(state, action) {
   const selected = action.additive ?

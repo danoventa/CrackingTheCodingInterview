@@ -33,6 +33,17 @@ export function moveCell(state, action) {
   });
 }
 
+export function removeCell(state, action) {
+  const { notebook } = state;
+  const { id: cellId } = action;
+  const updatedNotebook = notebook
+    .removeIn(['cellMap', cellId])
+    .update('cellOrder', cellOrder => cellOrder.filterNot(id => id === cellId));
+  return Object.assign({}, state, {
+    notebook: updatedNotebook,
+  });
+}
+
 export function newCellAfter(state, action) {
   // Draft API
   const { cellType, id } = action;

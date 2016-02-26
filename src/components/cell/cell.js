@@ -2,6 +2,7 @@ import React from 'react';
 
 import CodeCell from './code-cell';
 import MarkdownCell from './markdown-cell';
+import Toolbar from './toolbar';
 
 import { setSelected } from '../../actions';
 
@@ -36,6 +37,9 @@ class Cell extends React.Component {
       <div
         onClick={this.setSelected}
         className={'cell ' + selected}>
+        {
+          this.props.isSelected && <Toolbar {...this.props}/>
+        }
         {
         type === 'markdown' ?
           <MarkdownCell {...this.props}/> :

@@ -18,6 +18,7 @@ import {
   UPDATE_CELL_OUTPUTS,
   MOVE_CELL,
   NEW_CELL_AFTER,
+  REMOVE_CELL,
   UPDATE_CELL_EXECUTION_COUNT,
   READ_NOTEBOOK,
   ERROR_KERNEL_NOT_CONNECTED,
@@ -130,6 +131,13 @@ export function moveCell(id, destinationId, above) {
     id,
     destinationId,
     above,
+  };
+}
+
+export function removeCell(id) {
+  return {
+    type: REMOVE_CELL,
+    id,
   };
 }
 

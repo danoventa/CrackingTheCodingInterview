@@ -15,6 +15,8 @@ export const SET_SELECTED = Symbol('SET_SELECTED');
 export const READ_NOTEBOOK = Symbol('READ_NOTEBOOK');
 
 export const MOVE_CELL = Symbol('MOVE_CELL');
+export const REMOVE_CELL = Symbol('REMOVE_CELL');
+
 export const NEW_CELL_AFTER = Symbol('NEW_CELL_AFTER');
 export const UPDATE_CELL_EXECUTION_COUNT = Symbol('UPDATE_CELL_EXECUTION_COUNT');
 export const UPDATE_CELL_OUTPUTS = Symbol('UPDATE_CELL_OUTPUTS');
