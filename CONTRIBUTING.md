@@ -1,4 +1,9 @@
-# How do I make a contribution?
+## What do I need to know to help?
+
+You'll need knowledge of JavaScript (ES6), React, RxJS, and CSS to help out
+with this project.
+
+## How do I make a contribution?
 
 Never made an open source contribution before? Wondering how contributions work
 in the nteract world? Here's a quick rundown!
@@ -19,6 +24,8 @@ branch-name-here`.
 10. Set the description of the pull request with "Solution: fix provided or
 feature added".
 11. Wait for the pull request to be reviewed by a maintainer.
+12. Make changes to the pull request if the reviewing maintainer recommends them.
+13. Celebrate your success after your pull request is merged! :tada:
 
 ## What does C4.1 mean for me?
 
@@ -29,4 +36,4 @@ Have no fear! Here's a quick rundown of what C4.1 means for you as a contributor
 a maintainer.
 * Maintainers have the ability to review and merge pull requests.
 
-That's it!
+That's it! You're good to go!
