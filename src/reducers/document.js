@@ -1,4 +1,5 @@
 import * as commutable from 'commutable';
+import * as uuid from 'uuid';
 
 export function loadNotebook(state, action) {
   const { data } = action;
@@ -11,9 +12,8 @@ export function loadNotebook(state, action) {
 export function updateExecutionCount(state, action) {
   const { id, count } = action;
   const { notebook } = state;
-  const updatedNotebook = notebook.setIn(['cellMap', id, 'execution_count'], count);
   return Object.assign({}, state, {
-    notebook: updatedNotebook,
+    notebook: commutable.updateExecutionCount(notebook, id, count),
   });
 }
 
@@ -35,12 +35,9 @@ export function moveCell(state, action) {
 
 export function removeCell(state, action) {
   const { notebook } = state;
-  const { id: cellId } = action;
-  const updatedNotebook = notebook
-    .removeIn(['cellMap', cellId])
-    .update('cellOrder', cellOrder => cellOrder.filterNot(id => id === cellId));
+  const { id } = action;
   return Object.assign({}, state, {
-    notebook: updatedNotebook,
+    notebook: commutable.removeCell(notebook, id),
   });
 }
 
@@ -51,25 +48,24 @@ export function newCellAfter(state, action) {
   const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
                                          commutable.emptyCodeCell;
   const index = notebook.get('cellOrder').indexOf(id) + 1;
+  const cellID = uuid.v4();
   return Object.assign({}, state, {
-    notebook: commutable.insertCellAt(notebook, cell, index),
+    notebook: commutable.insertCellAt(notebook, cell, cellID, index),
   });
 }
 
 export function updateSource(state, action) {
   const { id, source } = action;
   const { notebook } = state;
-  const updatedNotebook = notebook.setIn(['cellMap', id, 'source'], source);
   return Object.assign({}, state, {
-    notebook: updatedNotebook,
+    notebook: commutable.updateSource(notebook, id, source),
   });
 }
 
 export function updateOutputs(state, action) {
   const { id, outputs } = action;
   const { notebook } = state;
-  const updatedNotebook = notebook.setIn(['cellMap', id, 'outputs'], outputs);
   return Object.assign({}, state, {
-    notebook: updatedNotebook,
+    notebook: commutable.updateOutputs(notebook, id, outputs),
   });
 }
