@@ -12,6 +12,7 @@ export const EXIT = Symbol('EXIT');
 
 export const SET_SELECTED = Symbol('SET_SELECTED');
 
+export const NEW_NOTEBOOK = Symbol('NEW_NOTEBOOK');
 export const READ_NOTEBOOK = Symbol('READ_NOTEBOOK');
 
 export const MOVE_CELL = Symbol('MOVE_CELL');

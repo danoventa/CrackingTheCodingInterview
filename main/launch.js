@@ -8,12 +8,14 @@ export default function launch(notebook) {
     height: 1000,
     // frame: false,
     darkTheme: true,
-    title: path.relative('.', notebook.replace(/.ipynb$/, '')),
+    title: !notebook ? 'Untitled' : path.relative('.', notebook.replace(/.ipynb$/, '')),
   });
 
   const index = path.join(__dirname, '..', 'index.html');
 
+  notebook = notebook || '';
   win.loadURL(`file://${index}#${encodeURIComponent(notebook)}`);
+
   // Emitted when the window is closed.
   win.on('closed', () => {
     win = null;

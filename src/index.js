@@ -8,6 +8,7 @@ import Notebook from './components/notebook';
 
 import {
   readNotebook,
+  newNotebook,
   newKernel,
   save,
   saveAs,
@@ -16,7 +17,11 @@ import {
 import { initKeymap } from './actions/keymap';
 
 const filename = decodeURIComponent(window.location.hash.slice(1));
-const { store, dispatch } = createStore({ notebook: null, selected: [], filename }, reducers);
+const { store, dispatch } = createStore({
+  notebook: null,
+  selected: [],
+  filename: filename === '' ? null : filename,
+}, reducers);
 initKeymap(window, dispatch);
 
 import { ipcRenderer as ipc } from 'electron';
@@ -32,7 +37,11 @@ class App extends React.Component {
     store.subscribe(state => this.setState(state));
   }
   componentDidMount() {
-    dispatch(readNotebook(filename));
+    if (filename !== '') {
+      dispatch(readNotebook(filename));
+    } else {
+      dispatch(newNotebook());
+    }
   }
   render() {
     return (
