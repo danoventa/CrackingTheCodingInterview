@@ -1,8 +1,8 @@
 import { dialog, app, Menu } from 'electron';
 
-import { listKernelSpecs } from '../src/api/kernel';
+const kernelspecs = require('kernelspecs');
 
-import launch from './launch';
+import { launch, launchNewNotebook } from './launch';
 
 import * as path from 'path';
 
@@ -20,60 +20,67 @@ function createSender(eventName, obj) {
   };
 }
 
+export const fileSubMenus = {
+  'new': {
+    label: '&New',
+    click: () => launch(),
+    accelerator: 'CmdOrCtrl+N',
+  },
+  'open': {
+    label: '&Open',
+    click: () => {
+      const opts = {
+        title: 'Open a notebook',
+        filters: [
+          { name: 'Notebooks', extensions: ['ipynb'] },
+        ],
+        properties: [
+          'openFile',
+        ],
+        defaultPath: process.cwd(),
+      };
+      dialog.showOpenDialog(opts, (fname) => {
+        if(fname) {
+          launch(fname[0]);
+        }
+      });
+    },
+    accelerator: 'CmdOrCtrl+O',
+  },
+  'save': {
+    label: '&Save',
+    click: createSender('menu:save'),
+    accelerator: 'CmdOrCtrl+S',
+  },
+  'saveAs': {
+    label: 'Save &As',
+    click: (item, focusedWindow) => {
+      const opts = {
+        title: 'Save Notebook As',
+        filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
+      };
+      dialog.showSaveDialog(opts, (filename) => {
+        if(!filename) {
+          return;
+        }
+
+        if (path.extname(filename) === '') {
+          filename = filename + '.ipynb';
+        }
+        send(focusedWindow, 'menu:save-as', filename);
+      });
+    },
+    accelerator: 'CmdOrCtrl+Shift+S',
+  },
+};
+
 export const file = {
   label: '&File',
   submenu: [
-    {
-      label: '&New',
-      click: () => launch(),
-      accelerator: 'CmdOrCtrl+N',
-    },
-    {
-      label: '&Open',
-      click: () => {
-        const opts = {
-          title: 'Open a notebook',
-          filters: [
-            { name: 'Notebooks', extensions: ['ipynb'] },
-          ],
-          properties: [
-            'openFile',
-          ],
-          defaultPath: process.cwd(),
-        };
-        dialog.showOpenDialog(opts, (fname) => {
-          if(fname) {
-            launch(fname[0]);
-          }
-        });
-      },
-      accelerator: 'CmdOrCtrl+O',
-    },
-    {
-      label: '&Save',
-      click: createSender('menu:save'),
-      accelerator: 'CmdOrCtrl+S',
-    },
-    {
-      label: 'Save &As',
-      click: (item, focusedWindow) => {
-        const opts = {
-          title: 'Save Notebook As',
-          filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
-        };
-        dialog.showSaveDialog(opts, (filename) => {
-          if(!filename) {
-            return;
-          }
-
-          if (path.extname(filename) === '') {
-            filename = filename + '.ipynb';
-          }
-          send(focusedWindow, 'menu:save-as', filename);
-        });
-      },
-      accelerator: 'CmdOrCtrl+Shift+S',
-    },
+    fileSubMenus.new,
+    fileSubMenus.open,
+    fileSubMenus.save,
+    fileSubMenus.saveAs,
   ],
 };
 
@@ -264,16 +271,22 @@ export function generateDefaultTemplate() {
 export const defaultMenu = Menu.buildFromTemplate(generateDefaultTemplate());
 
 export function loadFullMenu() {
-  const kernelMenuPromise = listKernelSpecs().then(kernelSpecs => {
-    return Object.keys(kernelSpecs).map(kernelName => {
+  return kernelspecs.findAll().then(kernelSpecs => {
+    const kernelMenuItems = Object.keys(kernelSpecs).map(kernelName => {
       return {
         label: kernelSpecs[kernelName].spec.display_name,
         click: createSender('menu:new-kernel', kernelName),
       };
     });
-  });
 
-  return kernelMenuPromise.then(kernelMenuItems => {
+    const newNotebookItems = Object.keys(kernelSpecs).map(kernelName => {
+      const kernelSpec = kernelSpecs[kernelName];
+      return {
+        label: kernelSpecs[kernelName].spec.display_name,
+        click: () => launchNewNotebook(kernelSpec),
+      };
+    });
+
     const languageMenu = {
       label: '&Language',
       submenu: [
@@ -294,7 +307,22 @@ export function loadFullMenu() {
       template.push(named);
     }
 
-    template.push(file);
+    const fileWithNew = {
+      label: '&File',
+      submenu: [
+        {
+          label: '&New',
+          submenu: [
+            ...newNotebookItems,
+          ],
+        },
+        fileSubMenus.open,
+        fileSubMenus.save,
+        fileSubMenus.saveAs,
+      ],
+    };
+
+    template.push(fileWithNew);
     template.push(edit);
     template.push(view);
 

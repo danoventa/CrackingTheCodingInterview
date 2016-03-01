@@ -1,7 +1,7 @@
 // This gets bootstrapped by main.js
 import app from 'app';
 
-import launch from './main/launch';
+import { launch } from './main/launch';
 
 import { Menu } from 'electron';
 import { defaultMenu, loadFullMenu } from './main/menu';
@@ -17,7 +17,6 @@ app.on('window-all-closed', () => {
 // We'll assume the rest are the notebooks to be opened
 const notebooks = process.argv.slice(2);
 if(notebooks <= 0) {
-  // default to the intro notebook for now
   notebooks.push(null);
 }
 
