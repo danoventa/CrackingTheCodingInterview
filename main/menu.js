@@ -2,7 +2,7 @@ import { dialog, app, Menu } from 'electron';
 
 const kernelspecs = require('kernelspecs');
 
-import launch from './launch';
+import { launch, launchNewNotebook } from './launch';
 
 import * as path from 'path';
 
@@ -279,6 +279,14 @@ export function loadFullMenu() {
       };
     });
 
+    const newNotebookItems = Object.keys(kernelSpecs).map(kernelName => {
+      const kernelSpec = kernelSpecs[kernelName];
+      return {
+        label: kernelSpecs[kernelName].spec.display_name,
+        click: () => launchNewNotebook(kernelSpec),
+      };
+    });
+
     const languageMenu = {
       label: '&Language',
       submenu: [
@@ -302,7 +310,12 @@ export function loadFullMenu() {
     const fileWithNew = {
       label: '&File',
       submenu: [
-        fileSubMenus.new, // TODO: Inject kernelspecs here
+        {
+          label: '&New',
+          submenu: [
+            ...newNotebookItems,
+          ],
+        },
         fileSubMenus.open,
         fileSubMenus.save,
         fileSubMenus.saveAs,

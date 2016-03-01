@@ -1,7 +1,7 @@
 // This gets bootstrapped by main.js
 import app from 'app';
 
-import launch from './main/launch';
+import { launch } from './main/launch';
 
 import { Menu } from 'electron';
 import { defaultMenu, loadFullMenu } from './main/menu';

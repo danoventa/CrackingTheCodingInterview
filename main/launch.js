@@ -2,7 +2,7 @@ import BrowserWindow from 'browser-window';
 
 import path from 'path';
 
-export default function launch(notebook) {
+export function launch(notebook) {
   let win = new BrowserWindow({
     width: 800,
     height: 1000,
@@ -21,4 +21,10 @@ export default function launch(notebook) {
     win = null;
   });
   return win;
+}
+
+export function launchNewNotebook(kernelspec) {
+  // TODO: This needs to create a new notebook using the kernelspec that
+  // was specified
+  launch();
 }
