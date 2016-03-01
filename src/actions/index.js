@@ -20,6 +20,7 @@ import {
   NEW_CELL_AFTER,
   REMOVE_CELL,
   UPDATE_CELL_EXECUTION_COUNT,
+  NEW_NOTEBOOK,
   READ_NOTEBOOK,
   ERROR_KERNEL_NOT_CONNECTED,
 } from './constants';
@@ -30,6 +31,10 @@ import {
 } from '../api/messaging';
 
 import Immutable from 'immutable';
+import * as path from 'path';
+
+const remote = require('remote');
+const dialog = remote.require('dialog');
 
 export function exit() {
   return {
@@ -59,12 +64,41 @@ export function newKernel(kernelSpecName) {
   };
 }
 
+export function newNotebook() {
+  return (subject) => {
+    subject.next({ type: NEW_NOTEBOOK });
+
+    // TODO: Allow the user to be explicit about what kernel to create, either
+    // via defaults or prompt.  For now pick something random...
+    newKernel('python2')(subject);
+  };
+}
+
 export function save() {
   return (subject, dispatch, state) => {
+
+    // If there isn't a filename, save-as it instead
+    if (!state.filename) {
+      const opts = {
+        title: 'Save Notebook As',
+        filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
+      };
+      dialog.showSaveDialog(opts, (filename) => {
+        if(!filename) {
+          return;
+        }
+
+        if (path.extname(filename) === '') {
+          filename = filename + '.ipynb';
+        }
+        dispatch(saveAs(filename));
+      });
+      return;
+    }
+
     subject.next({
       type: START_SAVING,
     });
-
     writeFile(state.filename, JSON.stringify(commutable.toJS(state.notebook), null, 2), (err) => {
       if(err) {
         console.error(err);

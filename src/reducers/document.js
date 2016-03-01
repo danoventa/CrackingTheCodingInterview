@@ -1,6 +1,11 @@
 import * as commutable from 'commutable';
 import * as uuid from 'uuid';
 
+export function newNotebook(state) {
+  const notebook = commutable.appendCell(commutable.Notebook(), commutable.emptyCodeCell);
+  return Object.assign({}, state, { notebook });
+}
+
 export function loadNotebook(state, action) {
   const { data } = action;
   const fetchedNotebook = commutable.fromJS(data);

@@ -24,6 +24,11 @@ export const file = {
   label: '&File',
   submenu: [
     {
+      label: '&New',
+      click: () => launch(),
+      accelerator: 'CmdOrCtrl+N',
+    },
+    {
       label: '&Open',
       click: () => {
         const opts = {

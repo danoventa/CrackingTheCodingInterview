@@ -18,7 +18,7 @@ app.on('window-all-closed', () => {
 const notebooks = process.argv.slice(2);
 if(notebooks <= 0) {
   // default to the intro notebook for now
-  notebooks.push('intro.ipynb');
+  notebooks.push(null);
 }
 
 app.on('ready', () => {
