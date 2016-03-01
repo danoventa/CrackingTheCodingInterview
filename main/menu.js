@@ -1,6 +1,6 @@
 import { dialog, app, Menu } from 'electron';
 
-import { listKernelSpecs } from '../src/api/kernel';
+const kernelspecs = require('kernelspecs');
 
 import launch from './launch';
 
@@ -271,16 +271,14 @@ export function generateDefaultTemplate() {
 export const defaultMenu = Menu.buildFromTemplate(generateDefaultTemplate());
 
 export function loadFullMenu() {
-  const kernelMenuPromise = listKernelSpecs().then(kernelSpecs => {
-    return Object.keys(kernelSpecs).map(kernelName => {
+  return kernelspecs.findAll().then(kernelSpecs => {
+    const kernelMenuItems = Object.keys(kernelSpecs).map(kernelName => {
       return {
         label: kernelSpecs[kernelName].spec.display_name,
         click: createSender('menu:new-kernel', kernelName),
       };
     });
-  });
 
-  return kernelMenuPromise.then(kernelMenuItems => {
     const languageMenu = {
       label: '&Language',
       submenu: [
