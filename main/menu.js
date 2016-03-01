@@ -20,60 +20,67 @@ function createSender(eventName, obj) {
   };
 }
 
+export const fileSubMenus = {
+  'new': {
+    label: '&New',
+    click: () => launch(),
+    accelerator: 'CmdOrCtrl+N',
+  },
+  'open': {
+    label: '&Open',
+    click: () => {
+      const opts = {
+        title: 'Open a notebook',
+        filters: [
+          { name: 'Notebooks', extensions: ['ipynb'] },
+        ],
+        properties: [
+          'openFile',
+        ],
+        defaultPath: process.cwd(),
+      };
+      dialog.showOpenDialog(opts, (fname) => {
+        if(fname) {
+          launch(fname[0]);
+        }
+      });
+    },
+    accelerator: 'CmdOrCtrl+O',
+  },
+  'save': {
+    label: '&Save',
+    click: createSender('menu:save'),
+    accelerator: 'CmdOrCtrl+S',
+  },
+  'saveAs': {
+    label: 'Save &As',
+    click: (item, focusedWindow) => {
+      const opts = {
+        title: 'Save Notebook As',
+        filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
+      };
+      dialog.showSaveDialog(opts, (filename) => {
+        if(!filename) {
+          return;
+        }
+
+        if (path.extname(filename) === '') {
+          filename = filename + '.ipynb';
+        }
+        send(focusedWindow, 'menu:save-as', filename);
+      });
+    },
+    accelerator: 'CmdOrCtrl+Shift+S',
+  },
+};
+
 export const file = {
   label: '&File',
   submenu: [
-    {
-      label: '&New',
-      click: () => launch(),
-      accelerator: 'CmdOrCtrl+N',
-    },
-    {
-      label: '&Open',
-      click: () => {
-        const opts = {
-          title: 'Open a notebook',
-          filters: [
-            { name: 'Notebooks', extensions: ['ipynb'] },
-          ],
-          properties: [
-            'openFile',
-          ],
-          defaultPath: process.cwd(),
-        };
-        dialog.showOpenDialog(opts, (fname) => {
-          if(fname) {
-            launch(fname[0]);
-          }
-        });
-      },
-      accelerator: 'CmdOrCtrl+O',
-    },
-    {
-      label: '&Save',
-      click: createSender('menu:save'),
-      accelerator: 'CmdOrCtrl+S',
-    },
-    {
-      label: 'Save &As',
-      click: (item, focusedWindow) => {
-        const opts = {
-          title: 'Save Notebook As',
-          filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
-        };
-        dialog.showSaveDialog(opts, (filename) => {
-          if(!filename) {
-            return;
-          }
-
-          if (path.extname(filename) === '') {
-            filename = filename + '.ipynb';
-          }
-          send(focusedWindow, 'menu:save-as', filename);
-        });
-      },
-      accelerator: 'CmdOrCtrl+Shift+S',
-    },
+    fileSubMenus.new,
+    fileSubMenus.open,
+    fileSubMenus.save,
+    fileSubMenus.saveAs,
   ],
 };
 
@@ -294,7 +301,17 @@ export function loadFullMenu() {
       template.push(named);
     }
 
-    template.push(file);
+    const fileWithNew = {
+      label: '&File',
+      submenu: [
+        fileSubMenus.new, // TODO: Inject kernelspecs here
+        fileSubMenus.open,
+        fileSubMenus.save,
+        fileSubMenus.saveAs,
+      ],
+    };
+
+    template.push(fileWithNew);
     template.push(edit);
     template.push(view);
 

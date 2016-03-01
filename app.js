@@ -17,7 +17,6 @@ app.on('window-all-closed', () => {
 // We'll assume the rest are the notebooks to be opened
 const notebooks = process.argv.slice(2);
 if(notebooks <= 0) {
-  // default to the intro notebook for now
   notebooks.push(null);
 }
 
