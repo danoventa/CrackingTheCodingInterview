@@ -1,16 +1,24 @@
-import createConstants from './createConstants';
+export const CHANGE_FILENAME = Symbol('CHANGE_FILENAME');
 
-export default createConstants(
-  'CHANGE_FILENAME',
-  'START_SAVING', 'DONE_SAVING',
-  'ERROR_KERNEL_NOT_CONNECTED',
-  'NEW_KERNEL', 'KILL_KERNEL',
-  'EXIT',
-  'SET_SELECTED',
-  'NEW_NOTEBOOK', 'READ_NOTEBOOK',
-  'MOVE_CELL', 'REMOVE_CELL',
-  'NEW_CELL_AFTER',
-  'UPDATE_CELL_EXECUTION_COUNT',
-  'UPDATE_CELL_OUTPUTS',
-  'UPDATE_CELL_SOURCE'
-);
+export const START_SAVING = Symbol('START_SAVING');
+export const DONE_SAVING = Symbol('DONE_SAVING');
+
+export const ERROR_KERNEL_NOT_CONNECTED = Symbol('ERROR_KERNEL_NOT_CONNECTED');
+
+export const NEW_KERNEL = Symbol('NEW_KERNEL');
+export const KILL_KERNEL = Symbol('KILL_KERNEL');
+
+export const EXIT = Symbol('EXIT');
+
+export const SET_SELECTED = Symbol('SET_SELECTED');
+
+export const NEW_NOTEBOOK = Symbol('NEW_NOTEBOOK');
+export const READ_NOTEBOOK = Symbol('READ_NOTEBOOK');
+
+export const MOVE_CELL = Symbol('MOVE_CELL');
+export const REMOVE_CELL = Symbol('REMOVE_CELL');
+
+export const NEW_CELL_AFTER = Symbol('NEW_CELL_AFTER');
+export const UPDATE_CELL_EXECUTION_COUNT = Symbol('UPDATE_CELL_EXECUTION_COUNT');
+export const UPDATE_CELL_OUTPUTS = Symbol('UPDATE_CELL_OUTPUTS');
+export const UPDATE_CELL_SOURCE = Symbol('UPDATE_CELL_SOURCE');

@@ -6,7 +6,6 @@
   "scripts": {
     "lint": "eslint .",
     "test": "electron-mocha --renderer --compilers js:babel-core/register 'test/**/*.js'",
-    "test:watch": "watch 'npm run test' test/",
     "start": "electron main.js"
   },
   "repository": {
@@ -71,7 +70,6 @@
     "eslint-plugin-babel": "^3.0.0",
     "eslint-plugin-react": "^3.11.3",
     "react-addons-test-utils": "^0.14.5",
-    "sinon": "^1.17.3",
-    "watch": "^0.17.1"
+    "sinon": "^1.17.3"
   }
 }
