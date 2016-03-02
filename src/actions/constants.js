@@ -1,6 +1,6 @@
 import createConstants from './createConstants';
 
-export default createConstants(
+module.exports = createConstants(
   'CHANGE_FILENAME',
   'START_SAVING', 'DONE_SAVING',
   'ERROR_KERNEL_NOT_CONNECTED',
