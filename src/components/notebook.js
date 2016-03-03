@@ -5,14 +5,18 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import DraggableCell from './cell';
 import { moveCell } from '../actions';
 
+import Immutable from 'immutable';
+
 class Notebook extends React.Component {
   static displayName = 'Notebook';
 
   static propTypes = {
     channels: React.PropTypes.any,
+    displayOrder: React.PropTypes.instanceOf(Immutable.List),
     notebook: React.PropTypes.any,
     onCellChange: React.PropTypes.func,
     selected: React.PropTypes.array,
+    transforms: React.PropTypes.instanceOf(Immutable.Map),
   };
 
   static contextTypes = {
@@ -68,6 +72,8 @@ class Notebook extends React.Component {
                        id={id}
                        key={id}
                        isSelected={selected}
+                       displayOrder={this.props.displayOrder}
+                       transforms={this.props.transforms}
                        onTextChange={text => {
                          const newCell = cellMap.get(id).set('source', text);
                          this.props.onCellChange(id, newCell);

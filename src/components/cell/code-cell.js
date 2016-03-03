@@ -5,6 +5,8 @@ import Inputs from './inputs';
 import Editor from './editor';
 import Display from 'react-jupyter-display-area';
 
+import Immutable from 'immutable';
+
 import {
   executeCell,
 } from '../../actions';
@@ -14,9 +16,11 @@ export default class CodeCell extends React.Component {
 
   static propTypes = {
     cell: React.PropTypes.any,
+    displayOrder: React.PropTypes.instanceOf(Immutable.List),
     id: React.PropTypes.string,
     language: React.PropTypes.string,
     theme: React.PropTypes.string,
+    transforms: React.PropTypes.instanceOf(Immutable.Map),
   };
 
   static contextTypes = {
@@ -59,6 +63,8 @@ export default class CodeCell extends React.Component {
         </div>
         <Display className='cell_display'
                  outputs={this.props.cell.get('outputs')}
+                 displayOrder={this.props.displayOrder}
+                 transforms={this.props.transforms}
         />
       </div>
     );
