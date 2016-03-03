@@ -1,20 +1,26 @@
 import BrowserWindow from 'browser-window';
-
 import path from 'path';
 
-export function launch(notebook) {
+import { emptyNotebook, emptyCodeCell, appendCell } from 'commutable';
+import { fromJS } from 'immutable';
+import fs from 'fs';
+
+export function launch(notebook, filename) {
   let win = new BrowserWindow({
     width: 800,
     height: 1000,
     // frame: false,
     darkTheme: true,
-    title: !notebook ? 'Untitled' : path.relative('.', notebook.replace(/.ipynb$/, '')),
+    title: !filename ? 'Untitled' : path.relative('.', filename.replace(/.ipynb$/, '')),
   });
 
   const index = path.join(__dirname, '..', 'index.html');
+  win.loadURL(`file://${index}`);
 
-  notebook = notebook || '';
-  win.loadURL(`file://${index}#${encodeURIComponent(notebook)}`);
+  // When the page finishes loading, send the notebook data via IPC
+  win.webContents.on('did-finish-load', function() {
+    win.webContents.send('main:load', { notebook: notebook.toJS(), filename });
+  });
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -26,5 +32,24 @@ export function launch(notebook) {
 export function launchNewNotebook(kernelspec) {
   // TODO: This needs to create a new notebook using the kernelspec that
   // was specified
-  launch();
+  return Promise.resolve(launch(
+    appendCell(emptyNotebook, emptyCodeCell)
+      .set('kernelspec', fromJS(kernelspec))));
+}
+
+export function launchFilename(filename) {
+  if (!filename) {
+    return Promise.resolve(launchNewNotebook());
+  }
+
+  return new Promise((resolve, reject) => {
+    fs.readFile(filename, {}, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        launch(fromJS(JSON.parse(data)), filename);
+      }
+    });
+  });
+
 }

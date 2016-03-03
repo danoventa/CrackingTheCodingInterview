@@ -1,5 +1,3 @@
-import { getJSON } from '../api';
-
 import * as commutable from 'commutable';
 
 import { launchKernel } from '../api/kernel';
@@ -19,9 +17,8 @@ import {
   MOVE_CELL,
   NEW_CELL_AFTER,
   REMOVE_CELL,
+  SET_NOTEBOOK,
   UPDATE_CELL_EXECUTION_COUNT,
-  NEW_NOTEBOOK,
-  READ_NOTEBOOK,
   ERROR_KERNEL_NOT_CONNECTED,
 } from './constants';
 
@@ -61,16 +58,6 @@ export function newKernel(kernelSpecName) {
         });
       })
       .catch((err) => console.error(err));
-  };
-}
-
-export function newNotebook() {
-  return (subject) => {
-    subject.next({ type: NEW_NOTEBOOK });
-
-    // TODO: Allow the user to be explicit about what kernel to create, either
-    // via defaults or prompt.  For now pick something random...
-    newKernel('python2')(subject);
   };
 }
 
@@ -122,16 +109,22 @@ export function saveAs(filename) {
   };
 }
 
-export function readNotebook(filePath) {
-  return (subject) => {
-    getJSON(filePath)
-      .then((data) => {
-        subject.next({
-          type: READ_NOTEBOOK,
-          data,
-        });
-        newKernel(data.metadata.kernelspec.name)(subject);
-      });
+export function setNotebook(nbData) {
+  return (subject, dispatch) => {
+    const data = Immutable.fromJS(nbData);
+    subject.next({
+      type: SET_NOTEBOOK,
+      data,
+    });
+
+    // Get the kernel name from the kernelspec, fallback on language_info, and
+    // in the worse case scenario spawn a Python 3 kernel.
+    const kernelName = data.getIn([
+      'metadata', 'kernelspec', 'name'
+    ], data.getIn([
+      'metadata', 'language_info', 'name'
+    ], 'python3'));
+    dispatch(newKernel(kernelName));
   };
 }
 

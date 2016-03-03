@@ -8,8 +8,7 @@ import {
   MOVE_CELL,
   NEW_CELL_AFTER,
   NEW_KERNEL,
-  NEW_NOTEBOOK,
-  READ_NOTEBOOK,
+  SET_NOTEBOOK,
   REMOVE_CELL,
   SET_SELECTED,
   START_SAVING,
@@ -20,9 +19,8 @@ import {
 } from '../actions/constants';
 
 import {
-  newNotebook,
-  loadNotebook,
   updateExecutionCount,
+  setNotebook,
   moveCell,
   newCellAfter,
   removeCell,
@@ -32,8 +30,7 @@ import {
 
 export const reducers = {};
 
-reducers[NEW_NOTEBOOK] = newNotebook;
-reducers[READ_NOTEBOOK] = loadNotebook;
+reducers[SET_NOTEBOOK] = setNotebook;
 reducers[UPDATE_CELL_EXECUTION_COUNT] = updateExecutionCount;
 reducers[NEW_CELL_AFTER] = newCellAfter;
 reducers[UPDATE_CELL_SOURCE] = updateSource;

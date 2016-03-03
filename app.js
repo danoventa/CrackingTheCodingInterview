@@ -1,7 +1,7 @@
 // This gets bootstrapped by main.js
 import app from 'app';
 
-import { launch } from './main/launch';
+import { launchFilename } from './main/launch';
 
 import { Menu } from 'electron';
 import { defaultMenu, loadFullMenu } from './main/menu';
@@ -25,5 +25,5 @@ app.on('ready', () => {
   Menu.setApplicationMenu(defaultMenu);
   // Let the kernels/languages come in after
   loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
-  notebooks.forEach(launch);
+  notebooks.forEach(launchFilename);
 });

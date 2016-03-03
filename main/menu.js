@@ -2,7 +2,7 @@ import { dialog, app, Menu } from 'electron';
 
 const kernelspecs = require('kernelspecs');
 
-import { launch, launchNewNotebook } from './launch';
+import { launchFilename, launchNewNotebook } from './launch';
 
 import * as path from 'path';
 
@@ -23,7 +23,6 @@ function createSender(eventName, obj) {
 export const fileSubMenus = {
   'new': {
     label: '&New',
-    click: () => launch(),
     accelerator: 'CmdOrCtrl+N',
   },
   'open': {
@@ -40,8 +39,8 @@ export const fileSubMenus = {
         defaultPath: process.cwd(),
       };
       dialog.showOpenDialog(opts, (fname) => {
-        if(fname) {
-          launch(fname[0]);
+        if (fname) {
+          launchFilename(fname[0]);
         }
       });
     },
