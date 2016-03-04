@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import createConstants from '../src/actions/createConstants';
+import createConstants from '../../src/actions/createConstants';
 
 describe('createConstants', () => {
   it('creates an object', () => {

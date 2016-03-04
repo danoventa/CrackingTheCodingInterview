@@ -5,7 +5,9 @@
   "main": "main.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "electron-mocha --renderer --compilers js:babel-core/register 'test/**/*.js'",
+    "test": "npm run test:main && npm run test:renderer",
+    "test:renderer": "electron-mocha --renderer --compilers js:babel-core/register 'test/renderer/**/*.js'",
+    "test:main": "electron-mocha --compilers js:babel-core/register 'test/main/**/*.js'",
     "test:watch": "watch 'npm run test' test/",
     "start": "electron main.js"
   },
