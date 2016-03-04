@@ -1,8 +1,8 @@
 import BrowserWindow from 'browser-window';
 import path from 'path';
 
-import { emptyNotebook, emptyCodeCell, appendCell } from 'commutable';
-import { fromJS } from 'immutable';
+import { emptyNotebook, emptyCodeCell, appendCell, fromJS } from 'commutable';
+import * as immutable from 'immutable';
 import fs from 'fs';
 
 export function launch(notebook, filename) {
@@ -34,7 +34,7 @@ export function launchNewNotebook(kernelspec) {
   // was specified
   return Promise.resolve(launch(
     appendCell(emptyNotebook, emptyCodeCell)
-      .set('kernelspec', fromJS(kernelspec))));
+      .set('kernelspec', immutable.fromJS(kernelspec))));
 }
 
 export function launchFilename(filename) {
@@ -47,7 +47,7 @@ export function launchFilename(filename) {
       if (err) {
         reject(err);
       } else {
-        launch(fromJS(JSON.parse(data)), filename);
+        resolve(launch(fromJS(JSON.parse(data)), filename));
       }
     });
   });
