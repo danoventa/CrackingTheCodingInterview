@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import * as commutable from 'commutable';
 
 import {
-  loadNotebook,
+  setNotebook,
   updateExecutionCount,
   newCellAfter,
 } from '../../src/reducers/document';
@@ -13,9 +13,13 @@ import {
   dummyCommutable,
 } from '../dummy-nb';
 
-describe('loadNotebook', () => {
+import {
+  fromJS,
+} from 'commutable';
+
+describe('setNotebook', () => {
   it('converts a JSON notebook to our commutable notebook and puts in state', () => {
-    const state = loadNotebook({}, { data: dummyJSON });
+    const state = setNotebook({}, { data: fromJS(dummyJSON) });
     expect(state.notebook.get('nbformat')).to.equal(4);
   });
 });
