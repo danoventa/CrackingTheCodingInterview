@@ -18,7 +18,7 @@ export function launch(notebook, filename) {
   win.loadURL(`file://${index}`);
 
   // When the page finishes loading, send the notebook data via IPC
-  win.webContents.on('did-finish-load', function() {
+  win.webContents.on('did-finish-load', () => {
     win.webContents.send('main:load', { notebook: notebook.toJS(), filename });
   });
 
@@ -30,8 +30,6 @@ export function launch(notebook, filename) {
 }
 
 export function launchNewNotebook(kernelspec) {
-  // TODO: This needs to create a new notebook using the kernelspec that
-  // was specified
   return Promise.resolve(launch(
     appendCell(emptyNotebook, emptyCodeCell)
       .set('kernelspec', immutable.fromJS(kernelspec))));

@@ -6,7 +6,7 @@ import {
   setNotebook,
   updateExecutionCount,
   newCellAfter,
-} from '../../src/reducers/document';
+} from '../../../src/reducers/document';
 
 import {
   dummyJSON,
