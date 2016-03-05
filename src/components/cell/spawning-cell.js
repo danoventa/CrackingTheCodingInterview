@@ -45,7 +45,7 @@ export default class SpawningCell extends React.Component {
 
   _handleMouseMove(mouseEvent) {
     const mouseOffset = this._getMouseOffset(mouseEvent);
-    this.setState({ mouseOffset, showTool: true });
+    this.setState({ mouseOffset, showTool: mouseOffset < 0.3 || mouseOffset > 0.7 });
   }
 
   _getMouseOffset(mouseEvent) {

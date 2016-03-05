@@ -16,9 +16,16 @@ export default class SpawnTool extends React.Component {
 
   render() {
     return (
-      <div className={'spawn-tool ' + (this.props.spawnBefore ? 'above' : 'below')}>
-        <span className='spawn-text' onClick={() => this._spawnTextCell()}>+text</span>
-        <span className='spawn-code' onClick={() => this._spawnCodeCell()}>+code</span>
+      <div className={'spawn-positioner ' + (this.props.spawnBefore ? 'above' : 'below')}>
+        <div className='spawn-tool'>
+          <span className='spawn-label'>Add cell</span>
+          <button onClick={this._spawnTextCell.bind(this)}>
+            <i className='material-icons'>art_track</i>
+          </button>
+          <button onClick={this._spawnCodeCell.bind(this)}>
+            <i className='material-icons'>code</i>
+          </button>
+        </div>
       </div>
     );
   }
