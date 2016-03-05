@@ -16,6 +16,7 @@ import {
   UPDATE_CELL_OUTPUTS,
   MOVE_CELL,
   NEW_CELL_AFTER,
+  NEW_CELL_BEFORE,
   REMOVE_CELL,
   SET_NOTEBOOK,
   UPDATE_CELL_EXECUTION_COUNT,
@@ -171,6 +172,14 @@ export function removeCell(id) {
 export function createCellAfter(cellType, id) {
   return {
     type: NEW_CELL_AFTER,
+    cellType,
+    id,
+  };
+}
+
+export function createCellBefore(cellType, id) {
+  return {
+    type: NEW_CELL_BEFORE,
     cellType,
     id,
   };
