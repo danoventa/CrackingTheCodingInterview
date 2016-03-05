@@ -2,7 +2,8 @@ import React from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import SpawningCell from './cell';
+import DraggableCell from './cell/draggable-cell';
+import CellCreator from './cell/cell-creator';
 import { moveCell } from '../actions';
 
 import Immutable from 'immutable';
@@ -63,26 +64,28 @@ class Notebook extends React.Component {
         paddingLeft: '10px',
         paddingRight: '10px',
       }} ref='cells'>
-
+        <CellCreator id={cellOrder.get(0, null)} above={true}/>
       {
         cellOrder.map(id => {
           const selected = this.props.selected && this.props.selected.indexOf(id) !== -1;
-          return <SpawningCell cell={cellMap.get(id)}
-                       language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
-                       id={id}
-                       key={id}
-                       isSelected={selected}
-                       displayOrder={this.props.displayOrder}
-                       transforms={this.props.transforms}
-                       onTextChange={text => {
-                         const newCell = cellMap.get(id).set('source', text);
-                         this.props.onCellChange(id, newCell);
-                       }
-                       }
-                       moveCell={(sourceId, destinationId, above) => {
-                         return this.context.dispatch(moveCell(sourceId, destinationId, above));
-                       }}
-                       />;
+          return (<div key={'cell-container-' + id}><DraggableCell cell={cellMap.get(id)}
+                    language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
+                    id={id}
+                    key={id}
+                    isSelected={selected}
+                    displayOrder={this.props.displayOrder}
+                    transforms={this.props.transforms}
+                    onTextChange={text => {
+                     const newCell = cellMap.get(id).set('source', text);
+                     this.props.onCellChange(id, newCell);
+                    }
+                    }
+                    moveCell={(sourceId, destinationId, above) => {
+                     return this.context.dispatch(moveCell(sourceId, destinationId, above));
+                    }}
+                    />
+                    <CellCreator key={'creator-' + id} id={id} above={false}/>
+                  </div>);
         })
       }
       </div>

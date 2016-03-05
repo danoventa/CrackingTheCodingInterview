@@ -16,6 +16,7 @@ import {
   UPDATE_CELL_OUTPUTS,
   MOVE_CELL,
   NEW_CELL_AFTER,
+  NEW_CELL_APPEND,
   NEW_CELL_BEFORE,
   REMOVE_CELL,
   SET_NOTEBOOK,
@@ -182,6 +183,13 @@ export function createCellBefore(cellType, id) {
     type: NEW_CELL_BEFORE,
     cellType,
     id,
+  };
+}
+
+export function createCellAppend(cellType) {
+  return {
+    type: NEW_CELL_APPEND,
+    cellType,
   };
 }
 
