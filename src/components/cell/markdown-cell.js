@@ -22,18 +22,15 @@ export default class MarkdownCell extends React.Component {
     this.state = {
       view: true,
       // HACK: We'll need to handle props and state change better here
-      source: 'Edit me by double clicking',
+      source: this.props.cell.get('source'),
     };
   }
 
 
   componentWillReceiveProps(nextProps) {
-    var source = nextProps.cell.get('source');
-    if (source) {
-      this.setState({
-        source: source,
-      });
-    }
+    this.setState({
+      source: nextProps.cell.get('source'),
+    });
   }
 
   keyDown(e) {
@@ -49,7 +46,10 @@ export default class MarkdownCell extends React.Component {
           <div
             className='cell_markdown'
             onDoubleClick={() => this.setState({ view: false }) }>
-            <ReactMarkdown source={this.state.source} />
+            <ReactMarkdown source={
+              this.state.source !== '' ?
+                this.state.source :
+                `*Empty markdown cell, double click me to add content.*`} />
           </div> :
           <div onKeyDown={this.keyDown.bind(this)}>
             <Editor language='markdown'
