@@ -49,7 +49,10 @@ export default class MarkdownCell extends React.Component {
           <div
             className='cell_markdown'
             onDoubleClick={() => this.setState({ view: false }) }>
-            <ReactMarkdown source={this.state.source} />
+            <ReactMarkdown source={
+              this.state.source !== '' ?
+                this.state.source :
+                `*Empty markdown cell, double click to add content.*`} />
           </div> :
           <div onKeyDown={this.keyDown.bind(this)}>
             <Editor language='markdown'
