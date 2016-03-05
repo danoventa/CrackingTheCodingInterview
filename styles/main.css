@@ -1,4 +1,11 @@
 /*
+  App
+ */
+#app {
+  padding-top: 20px;
+}
+
+/*
   Globals
  */
 
@@ -109,7 +116,7 @@ img
 .cell_toolbar-mask
 {
     position: absolute;
-    top: -5px;
+    top: -37px;
     right: -5px;
     z-index: 99;
 
