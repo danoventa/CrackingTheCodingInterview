@@ -65,6 +65,19 @@ export function newCellBefore(state, action) {
   });
 }
 
+export function newCellAppend(state, action) {
+  // Draft API
+  const { cellType } = action;
+  const { notebook } = state;
+  const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
+                                         commutable.emptyCodeCell;
+  const index = notebook.get('cellOrder').count();
+  const cellID = uuid.v4();
+  return Object.assign({}, state, {
+    notebook: commutable.insertCellAt(notebook, cell, cellID, index),
+  });
+}
+
 export function updateSource(state, action) {
   const { id, source } = action;
   const { notebook } = state;

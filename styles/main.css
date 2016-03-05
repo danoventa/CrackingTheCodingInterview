@@ -194,29 +194,32 @@ img
     flex: 1 1 auto;
 }
 
-.spawn-positioner {
-  text-align: center;
-  height: 0px;
-  overflow: visible;
+.creator-hover-mask {
+  display: block;
   position: relative;
-  z-index: 99;
-  width: 100%;
+  overflow: visible;
+  height: 0px;
 }
 
-.spawn-positioner.above {
-  top: -19px;
-}
-.spawn-positioner.below {
-  top: -6px;
+.creator-hover-region {
+  display: flex;
+  position: relative;
+  overflow: visible;
+  top: -50px;
+  height: 100px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.spawn-tool {
+.creator-tool {
   display: inline-block;
   background: white;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.50);
+  margin-top: -15px;
 }
 
-.spawn-tool button
+.creator-tool button
 {
   display: inline-block;
 
@@ -231,7 +234,7 @@ img
   background: none;
 }
 
-.spawn-tool button i
+.creator-tool button i
 {
   /* These icons are thin, use a larger font than the cell toolbar */
   font-size: 17px;
@@ -240,12 +243,12 @@ img
   color: #aaa;
 }
 
-.spawn-tool button i:hover
+.creator-tool button i:hover
 {
   color: #555;
 }
 
-.spawn-tool .spawn-label {
+.creator-tool .creator-label {
   color: #aaa;
   font-size: 12px;
   text-transform: uppercase;

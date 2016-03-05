@@ -8,6 +8,7 @@ import {
   MOVE_CELL,
   NEW_CELL_AFTER,
   NEW_CELL_BEFORE,
+  NEW_CELL_APPEND,
   NEW_KERNEL,
   SET_NOTEBOOK,
   REMOVE_CELL,
@@ -25,6 +26,7 @@ import {
   moveCell,
   newCellAfter,
   newCellBefore,
+  newCellAppend,
   removeCell,
   updateSource,
   updateOutputs,
@@ -36,6 +38,7 @@ reducers[SET_NOTEBOOK] = setNotebook;
 reducers[UPDATE_CELL_EXECUTION_COUNT] = updateExecutionCount;
 reducers[NEW_CELL_AFTER] = newCellAfter;
 reducers[NEW_CELL_BEFORE] = newCellBefore;
+reducers[NEW_CELL_APPEND] = newCellAppend;
 reducers[UPDATE_CELL_SOURCE] = updateSource;
 reducers[UPDATE_CELL_OUTPUTS] = updateOutputs;
 reducers[MOVE_CELL] = moveCell;
