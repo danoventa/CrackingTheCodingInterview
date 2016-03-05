@@ -187,3 +187,36 @@ img
 {
     flex: 1 1 auto;
 }
+
+.spawn-tool {
+  text-align: center;
+  height: 0px;
+  overflow: visible;
+  position: relative;
+  z-index: 99;
+  width: 100%;
+  cursor: pointer;
+}
+
+.spawn-tool.above {
+  top: -5px;
+}
+.spawn-tool.below {
+  top: -30px;
+}
+
+.spawn-text, .spawn-code {
+  background-color: #f6f6f6;
+  height: 20px;
+  margin: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  color: #aaa;
+  width: 50px;
+  display: inline-block;
+}
+
+.spawn-text:hover, .spawn-code:hover {
+  border: 1px solid #aaa;
+  color: #777;
+}

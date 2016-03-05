@@ -2,7 +2,7 @@ import React from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import DraggableCell from './cell';
+import SpawningCell from './cell';
 import { moveCell } from '../actions';
 
 import Immutable from 'immutable';
@@ -67,7 +67,7 @@ class Notebook extends React.Component {
       {
         cellOrder.map(id => {
           const selected = this.props.selected && this.props.selected.indexOf(id) !== -1;
-          return <DraggableCell cell={cellMap.get(id)}
+          return <SpawningCell cell={cellMap.get(id)}
                        language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
                        id={id}
                        key={id}

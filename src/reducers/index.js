@@ -7,6 +7,7 @@ import {
   KILL_KERNEL,
   MOVE_CELL,
   NEW_CELL_AFTER,
+  NEW_CELL_BEFORE,
   NEW_KERNEL,
   SET_NOTEBOOK,
   REMOVE_CELL,
@@ -23,6 +24,7 @@ import {
   setNotebook,
   moveCell,
   newCellAfter,
+  newCellBefore,
   removeCell,
   updateSource,
   updateOutputs,
@@ -33,6 +35,7 @@ export const reducers = {};
 reducers[SET_NOTEBOOK] = setNotebook;
 reducers[UPDATE_CELL_EXECUTION_COUNT] = updateExecutionCount;
 reducers[NEW_CELL_AFTER] = newCellAfter;
+reducers[NEW_CELL_BEFORE] = newCellBefore;
 reducers[UPDATE_CELL_SOURCE] = updateSource;
 reducers[UPDATE_CELL_OUTPUTS] = updateOutputs;
 reducers[MOVE_CELL] = moveCell;

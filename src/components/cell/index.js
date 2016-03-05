@@ -1,2 +1,2 @@
-import DraggableCell from './draggable-cell';
-export default DraggableCell;
+import SpawningCell from './spawning-cell';
+export default SpawningCell;
