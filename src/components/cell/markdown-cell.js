@@ -22,14 +22,18 @@ export default class MarkdownCell extends React.Component {
     this.state = {
       view: true,
       // HACK: We'll need to handle props and state change better here
-      source: this.props.cell.get('source'),
+      source: 'Edit me by double clicking',
     };
   }
 
+
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      source: nextProps.cell.get('source'),
-    });
+    var source = nextProps.cell.get('source');
+    if (source) {
+      this.setState({
+        source: source,
+      });
+    }
   }
 
   keyDown(e) {
