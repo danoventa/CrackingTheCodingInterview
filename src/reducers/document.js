@@ -20,7 +20,8 @@ export function moveCell(state, action) {
   return Object.assign({}, state, {
     notebook: notebook.update('cellOrder', cellOrder => {
       const oldIndex = cellOrder.findIndex(id => id === action.id);
-      const newIndex = cellOrder.findIndex(id => id === action.destinationId) + (action.above ? 0 : 1);
+      const newIndex = cellOrder.findIndex(id => id === action.destinationId)
+                        + (action.above ? 0 : 1);
       if (oldIndex === newIndex) {
         return cellOrder;
       }
