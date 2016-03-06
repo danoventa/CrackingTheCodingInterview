@@ -68,13 +68,11 @@ function cleanupKernel(state) {
 reducers[NEW_KERNEL] = function newKernel(state, action) {
   const { channels, connectionFile, spawn } = action;
 
-  // cleanup old kernels first
-  state = cleanupKernel(state);
-
-  state.channels = channels;
-  state.connectionFile = connectionFile;
-  state.spawn = spawn;
-  return state;
+  return Object.assign({}, cleanupKernel(state), {
+    channels,
+    connectionFile,
+    spawn,
+  });
 };
 
 reducers[EXIT] = function exit(state) {

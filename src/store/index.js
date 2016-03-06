@@ -1,12 +1,11 @@
 import * as Rx from '@reactivex/rxjs';
 
 export default function createStore(initialState, reducers) {
-
   const subject = new Rx.Subject();
 
   const store = subject.scan(
-    function inreduction(state, action) {
-      if(!action || !action.type || ! (action.type in reducers)) {
+    (state, action) => {
+      if (!action || !action.type || ! (action.type in reducers)) {
         console.error('Action not registered');
         console.error(action);
         console.error(action.type);
@@ -39,5 +38,4 @@ export default function createStore(initialState, reducers) {
     store,
     dispatch,
   };
-
 }
