@@ -18,19 +18,19 @@ export default function createStore(initialState, reducers) {
   ).share();
 
   // Debugging time
-  store.subscribe(null, (err) => {
+
+  const stateSymbol = Symbol('state');
+  store.subscribe(state => {
+    store[stateSymbol] = state;
+  }, (err) => {
     console.error('Error in the store', err);
   });
-
-  let lastState = {};
-  store.subscribe(st => {
-    lastState = st;
-  });
+  store.getState = () => store[stateSymbol];
 
   function dispatch(action) {
     // We need the current state at this time
     return typeof action === 'function'
-      ? action.call(null, subject, dispatch, lastState)
+      ? action.call(null, subject, dispatch, store.getState())
       : subject.next(action);
   }
 
