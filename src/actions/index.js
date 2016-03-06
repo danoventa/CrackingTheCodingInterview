@@ -11,7 +11,6 @@ import {
   START_SAVING,
   DONE_SAVING,
   CHANGE_FILENAME,
-  SET_SELECTED,
   UPDATE_CELL_SOURCE,
   UPDATE_CELL_OUTPUTS,
   MOVE_CELL,
@@ -127,14 +126,6 @@ export function setNotebook(nbData) {
       'metadata', 'language_info', 'name'
     ], 'python3'));
     dispatch(newKernel(kernelName));
-  };
-}
-
-export function setSelected(ids, additive) {
-  return {
-    type: SET_SELECTED,
-    ids,
-    additive,
   };
 }
 

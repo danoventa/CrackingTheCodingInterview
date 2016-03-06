@@ -8,7 +8,6 @@ class Toolbar extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     id: React.PropTypes.string,
-    isSelected: React.PropTypes.bool,
   };
 
   static contextTypes = {

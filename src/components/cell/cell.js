@@ -4,41 +4,28 @@ import CodeCell from './code-cell';
 import MarkdownCell from './markdown-cell';
 import Toolbar from './toolbar';
 
-import { setSelected } from '../../actions';
-
 class Cell extends React.Component {
   static displayName = 'Cell';
 
   static propTypes = {
     cell: React.PropTypes.any,
     id: React.PropTypes.string,
-    isSelected: React.PropTypes.bool,
   };
 
-  static contextTypes = {
-    dispatch: React.PropTypes.func,
+  state = {
+    showToolbar: false,
   };
-
-  constructor(props) {
-    super(props);
-    this.setSelected = this.setSelected.bind(this);
-  }
-
-  setSelected(e) {
-    const additive = e.shiftKey;
-    this.context.dispatch(setSelected([this.props.id], additive));
-  }
 
   render() {
     const cell = this.props.cell;
     const type = cell.get('cell_type');
-    const selected = this.props.isSelected ? 'selected' : '';
     return (
       <div
-        onClick={this.setSelected}
-        className={'cell ' + selected}>
+        className='cell'
+        onMouseEnter={() => this.setState({ showToolbar: true })}
+        onMouseLeave={() => this.setState({ showToolbar: false })}>
         {
-          this.props.isSelected && <Toolbar {...this.props}/>
+          this.state.showToolbar && <Toolbar {...this.props}/>
         }
         {
         type === 'markdown' ?

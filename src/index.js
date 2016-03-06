@@ -19,7 +19,6 @@ import { ipcRenderer as ipc } from 'electron';
 ipc.on('main:load', (e, launchData) => {
   const { store, dispatch } = createStore({
     notebook: null,
-    selected: [],
     filename: launchData.filename
   }, reducers);
   initKeymap(window, dispatch);
@@ -49,7 +48,6 @@ ipc.on('main:load', (e, launchData) => {
             {
               this.state.notebook &&
               <Notebook
-                selected={this.state.selected}
                 notebook={this.state.notebook}
                 channels={this.state.channels} />
             }
