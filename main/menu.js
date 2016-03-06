@@ -7,7 +7,7 @@ import { launchFilename, launchNewNotebook } from './launch';
 import * as path from 'path';
 
 function send(focusedWindow, eventName, obj) {
-  if(!focusedWindow) {
+  if (!focusedWindow) {
     console.error('renderer window not in focus (are your devtools open?)');
     return;
   }
@@ -21,11 +21,11 @@ function createSender(eventName, obj) {
 }
 
 export const fileSubMenus = {
-  'new': {
+  new: {
     label: '&New',
     accelerator: 'CmdOrCtrl+N',
   },
-  'open': {
+  open: {
     label: '&Open',
     click: () => {
       const opts = {
@@ -46,12 +46,12 @@ export const fileSubMenus = {
     },
     accelerator: 'CmdOrCtrl+O',
   },
-  'save': {
+  save: {
     label: '&Save',
     click: createSender('menu:save'),
     accelerator: 'CmdOrCtrl+S',
   },
-  'saveAs': {
+  saveAs: {
     label: 'Save &As',
     click: (item, focusedWindow) => {
       const opts = {
@@ -59,7 +59,7 @@ export const fileSubMenus = {
         filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
       };
       dialog.showSaveDialog(opts, (filename) => {
-        if(!filename) {
+        if (!filename) {
           return;
         }
 
@@ -182,7 +182,7 @@ const windowDraft = {
   ],
 };
 
-if(process.platform === 'darwin') {
+if (process.platform === 'darwin') {
   windowDraft.submenu.push(
     {
       type: 'separator',
@@ -212,7 +212,7 @@ export const named = {
   label: name,
   submenu: [
     {
-      label: 'About ' + name,
+      label: `About ${name}`,
       role: 'about',
     },
     {
@@ -254,7 +254,7 @@ export const named = {
 export function generateDefaultTemplate() {
   const template = [];
 
-  if(process.platform === 'darwin') {
+  if (process.platform === 'darwin') {
     template.push(named);
   }
 

@@ -3,8 +3,6 @@ import React from 'react';
 import CellCreatorButtons from './cell-creator-buttons';
 
 export default class CellCreator extends React.Component {
-  static displayName = 'CellCreator';
-
   static propTypes = {
     above: React.PropTypes.bool,
     id: React.PropTypes.string,

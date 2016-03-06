@@ -6,8 +6,6 @@ import Editor from './editor';
 import { updateCellSource } from '../../actions';
 
 export default class MarkdownCell extends React.Component {
-  static displayName = 'MarkdownCell';
-
   static propTypes = {
     cell: React.PropTypes.any,
     id: React.PropTypes.string,

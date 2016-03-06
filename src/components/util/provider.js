@@ -1,7 +1,6 @@
 import React from 'react';
 
 export default class Provider extends React.Component {
-  static displayName = 'Provider';
   static propTypes = {
     children: React.PropTypes.any,
     rx: React.PropTypes.object,

@@ -3,8 +3,6 @@ import React from 'react';
 import { createCellAfter, createCellBefore, createCellAppend } from '../../actions';
 
 export default class CellCreatorButtons extends React.Component {
-  static displayName = 'CellCreatorButtons';
-
   static propTypes = {
     above: React.PropTypes.bool,
     id: React.PropTypes.string,

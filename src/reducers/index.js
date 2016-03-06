@@ -48,21 +48,21 @@ function cleanupKernel(state) {
     state.channels.shell.complete();
     state.channels.iopub.complete();
     state.channels.stdin.complete();
-    state.channels = null;
   }
   if (state.spawn) {
     state.spawn.kill();
-    state.spawn = null;
   }
   if (state.connectionFile) {
     fs.unlink(state.connectionFile);
-    state.connectionFile = null;
   }
 
-  delete state.channels;
-  delete state.spawn;
-  delete state.connectionFile;
-  return state;
+  const cleanState = Object.assign({}, state, {
+    channels: null,
+    spawn: null,
+    connectionFile: null,
+  });
+
+  return cleanState;
 }
 
 reducers[NEW_KERNEL] = function newKernel(state, action) {
@@ -95,7 +95,7 @@ reducers[DONE_SAVING] = function doneSaving(state) {
 
 reducers[CHANGE_FILENAME] = function changeFilename(state, action) {
   const { filename } = action;
-  if(!filename) {
+  if (!filename) {
     return state;
   }
   return Object.assign({}, state, { filename });

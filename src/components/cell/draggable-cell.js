@@ -50,8 +50,6 @@ function collectTarget(connect, monitor) {
 }
 
 class DraggableCell extends React.Component {
-  static displayName = 'DraggableCell';
-
   static propTypes = {
     cell: React.PropTypes.any,
     connectDragPreview: React.PropTypes.func.isRequired,

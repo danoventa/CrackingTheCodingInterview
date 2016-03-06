@@ -1,8 +1,6 @@
 import React from 'react';
 
 export default class Inputs extends React.Component {
-  static displayName = 'Inputs';
-
   static propTypes = {
     executionCount: React.PropTypes.number,
   };
