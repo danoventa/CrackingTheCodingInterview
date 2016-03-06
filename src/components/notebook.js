@@ -16,7 +16,6 @@ class Notebook extends React.Component {
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
     notebook: React.PropTypes.any,
     onCellChange: React.PropTypes.func,
-    selected: React.PropTypes.array,
     transforms: React.PropTypes.instanceOf(Immutable.Map),
   };
 
@@ -67,12 +66,10 @@ class Notebook extends React.Component {
         <CellCreator id={cellOrder.get(0, null)} above={true}/>
       {
         cellOrder.map(id => {
-          const selected = this.props.selected && this.props.selected.indexOf(id) !== -1;
           return (<div key={'cell-container-' + id}><DraggableCell cell={cellMap.get(id)}
                     language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
                     id={id}
                     key={id}
-                    isSelected={selected}
                     displayOrder={this.props.displayOrder}
                     transforms={this.props.transforms}
                     onTextChange={text => {

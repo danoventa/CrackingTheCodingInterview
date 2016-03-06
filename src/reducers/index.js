@@ -12,7 +12,6 @@ import {
   NEW_KERNEL,
   SET_NOTEBOOK,
   REMOVE_CELL,
-  SET_SELECTED,
   START_SAVING,
   UPDATE_CELL_EXECUTION_COUNT,
   UPDATE_CELL_OUTPUTS,
@@ -43,15 +42,6 @@ reducers[UPDATE_CELL_SOURCE] = updateSource;
 reducers[UPDATE_CELL_OUTPUTS] = updateOutputs;
 reducers[MOVE_CELL] = moveCell;
 reducers[REMOVE_CELL] = removeCell;
-
-reducers[SET_SELECTED] = function setSelected(state, action) {
-  const selected = action.additive ?
-      state.selected.concat(action.ids) :
-      action.ids;
-  return Object.assign({}, state, {
-    selected,
-  });
-};
 
 function cleanupKernel(state) {
   if (state.channels) {

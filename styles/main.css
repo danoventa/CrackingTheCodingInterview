@@ -101,11 +101,6 @@ img
     box-shadow: 1px 1px 3px rgba(0,0,0,.12), -1px -1px 3px rgba(0,0,0,.12);
 }
 
-.cell.selected
-{
-    box-shadow: 3px 3px 9px rgba(0,0,0,.12), -3px -3px 9px rgba(0,0,0,.12);
-}
-
 .cell:hover .input_area .cell_inputs,
 .cell:active .input_area .cell_inputs,
 .cell:focus .input_area .cell_inputs
@@ -119,12 +114,17 @@ img
     top: -37px;
     right: -5px;
     z-index: 99;
+    height: 32px;
 
-    padding: 5px 5px 0;
+    /* Set the left padding to 50px to give users extra room to move their
+    mouse to the toolbar without causing the cell to go out of focus and thus
+    hide the toolbar before they get there. */
+    padding: 5px 5px 0px 50px;
 }
 
 .cell_toolbar
 {
+    display: inline-box;
     background: white;
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.50);
 }
@@ -205,11 +205,12 @@ img
   display: flex;
   position: relative;
   overflow: visible;
-  top: -50px;
-  height: 100px;
+  top: -30px;
+  height: 60px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  pointer-events: none;
 }
 
 .creator-tool {
@@ -217,6 +218,7 @@ img
   background: white;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.50);
   margin-top: -15px;
+  pointer-events: all;
 }
 
 .creator-tool button
