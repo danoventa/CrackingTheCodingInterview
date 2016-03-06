@@ -26,10 +26,6 @@ import {
 } from './constants';
 
 import Immutable from 'immutable';
-import * as path from 'path';
-
-const remote = require('remote');
-const dialog = remote.require('dialog');
 
 export function exit() {
   return {
@@ -60,22 +56,10 @@ export function newKernel(kernelSpecName) {
 }
 
 export function save(filename, notebook) {
-  return (subject, dispatch) => {
+  return (subject) => {
     // If there isn't a filename, save-as it instead
     if (!filename) {
-      const opts = {
-        title: 'Save Notebook As',
-        filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
-      };
-      dialog.showSaveDialog(opts, (fname) => {
-        if (!filename) {
-          return;
-        }
-        const ext = path.extname(fname) === '' ? '.ipynb' : '';
-
-        dispatch(saveAs(fname + ext, notebook));
-      });
-      return;
+      throw new Error('save needs a filename');
     }
 
     subject.next({

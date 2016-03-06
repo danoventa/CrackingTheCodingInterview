@@ -16,6 +16,10 @@ import {
 import { initKeymap } from './actions/keymap';
 import { ipcRenderer as ipc } from 'electron';
 
+import * as path from 'path';
+const remote = require('remote');
+const dialog = remote.require('dialog');
+
 ipc.on('main:load', (e, launchData) => {
   const { store, dispatch } = createStore({
     notebook: null,
@@ -23,11 +27,31 @@ ipc.on('main:load', (e, launchData) => {
   }, reducers);
   initKeymap(window, dispatch);
 
+
+  function triggerSaveAs() {
+    const opts = {
+      title: 'Save Notebook As',
+      filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
+    };
+    dialog.showSaveDialog(opts, (fname) => {
+      if (!fname) {
+        return;
+      }
+      const ext = path.extname(fname) === '' ? '.ipynb' : '';
+      const { notebook } = store.getState();
+      dispatch(saveAs(fname + ext, notebook));
+    });
+  }
+
   ipc.on('menu:new-kernel', (evt, name) => dispatch(newKernel(name)));
   ipc.on('menu:save', () => {
     const state = store.getState();
     const { notebook, filename } = state;
-    dispatch(save(filename, notebook));
+    if (!filename) {
+      triggerSaveAs();
+    } else {
+      dispatch(save(filename, notebook));
+    }
   });
   ipc.on('menu:save-as', (evt, filename) => {
     const state = store.getState();
