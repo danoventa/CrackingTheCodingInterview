@@ -9,8 +9,6 @@ import { moveCell } from '../actions';
 import Immutable from 'immutable';
 
 class Notebook extends React.Component {
-  static displayName = 'Notebook';
-
   static propTypes = {
     channels: React.PropTypes.any,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),

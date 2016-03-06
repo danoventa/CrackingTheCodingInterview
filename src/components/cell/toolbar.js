@@ -3,8 +3,6 @@ import React from 'react';
 import { executeCell, removeCell } from '../../actions';
 
 class Toolbar extends React.Component {
-  static displayName = 'Toolbar';
-
   static propTypes = {
     cell: React.PropTypes.any,
     id: React.PropTypes.string,

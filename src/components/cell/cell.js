@@ -5,8 +5,6 @@ import MarkdownCell from './markdown-cell';
 import Toolbar from './toolbar';
 
 class Cell extends React.Component {
-  static displayName = 'Cell';
-
   static propTypes = {
     cell: React.PropTypes.any,
     id: React.PropTypes.string,

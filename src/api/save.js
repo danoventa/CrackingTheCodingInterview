@@ -13,7 +13,7 @@ export function showDialog(defaultPath) {
   });
 
   if (filename && path.extname(filename) === '') {
-    return filename + '.ipynb';
+    return `${filename}.ipynb`;
   }
 
   return filename;

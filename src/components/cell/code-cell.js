@@ -12,8 +12,6 @@ import {
 } from '../../actions';
 
 export default class CodeCell extends React.Component {
-  static displayName = 'CodeCell';
-
   static propTypes = {
     cell: React.PropTypes.any,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),

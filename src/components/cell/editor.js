@@ -6,8 +6,6 @@ import CodeMirror from 'react-code-mirror';
 import { updateCellSource } from '../../actions';
 
 export default class Editor extends React.Component {
-  static displayName = 'Editor';
-
   static propTypes = {
     id: React.PropTypes.string,
     input: React.PropTypes.any,

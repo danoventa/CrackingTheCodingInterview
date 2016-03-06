@@ -7,7 +7,7 @@ function registerListeners(window, dispatch) {
 
   // Register action event listeners on the window for every know action.
   Object.keys(actions).forEach(actionName => {
-    window.addEventListener('action:' + actionName, () => {
+    window.addEventListener(`'action:${actionName}`, () => {
       try {
         dispatch(actions[actionName]());
       } catch (err) {

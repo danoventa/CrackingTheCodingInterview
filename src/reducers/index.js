@@ -48,21 +48,21 @@ function cleanupKernel(state) {
     state.channels.shell.complete();
     state.channels.iopub.complete();
     state.channels.stdin.complete();
-    state.channels = null;
   }
   if (state.spawn) {
     state.spawn.kill();
-    state.spawn = null;
   }
   if (state.connectionFile) {
     fs.unlink(state.connectionFile);
-    state.connectionFile = null;
   }
 
-  delete state.channels;
-  delete state.spawn;
-  delete state.connectionFile;
-  return state;
+  const cleanState = Object.assign({}, state, {
+    channels: null,
+    spawn: null,
+    connectionFile: null,
+  });
+
+  return cleanState;
 }
 
 reducers[NEW_KERNEL] = function newKernel(state, action) {

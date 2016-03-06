@@ -61,7 +61,6 @@ export function newKernel(kernelSpecName) {
 
 export function save() {
   return (subject, dispatch, state) => {
-
     // If there isn't a filename, save-as it instead
     if (!state.filename) {
       const opts = {
@@ -72,11 +71,9 @@ export function save() {
         if (!filename) {
           return;
         }
+        const ext = path.extname(filename) === '' ? '.ipynb' : '';
 
-        if (path.extname(filename) === '') {
-          filename = filename + '.ipynb';
-        }
-        dispatch(saveAs(filename));
+        dispatch(saveAs(filename + ext));
       });
       return;
     }
@@ -93,7 +90,6 @@ export function save() {
         type: DONE_SAVING,
       });
     });
-
   };
 }
 

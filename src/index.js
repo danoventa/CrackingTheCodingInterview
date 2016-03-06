@@ -19,13 +19,13 @@ import { ipcRenderer as ipc } from 'electron';
 ipc.on('main:load', (e, launchData) => {
   const { store, dispatch } = createStore({
     notebook: null,
-    filename: launchData.filename
+    filename: launchData.filename,
   }, reducers);
   initKeymap(window, dispatch);
 
-  ipc.on('menu:new-kernel', (e, name) => dispatch(newKernel(name)));
+  ipc.on('menu:new-kernel', (evt, name) => dispatch(newKernel(name)));
   ipc.on('menu:save', () => dispatch(save()));
-  ipc.on('menu:save-as', (e, fn) => dispatch(saveAs(fn)));
+  ipc.on('menu:save-as', (evt, fn) => dispatch(saveAs(fn)));
   ipc.on('menu:kill-kernel', () => dispatch(killKernel()));
 
   class App extends React.Component {
@@ -49,7 +49,8 @@ ipc.on('main:load', (e, launchData) => {
               this.state.notebook &&
               <Notebook
                 notebook={this.state.notebook}
-                channels={this.state.channels} />
+                channels={this.state.channels}
+              />
             }
           </div>
         </Provider>
@@ -57,10 +58,8 @@ ipc.on('main:load', (e, launchData) => {
     }
   }
 
-  App.displayName = 'App';
-
   ReactDOM.render(
-    <App/>,
+    <App />,
     document.querySelector('#app')
   );
 });
