@@ -59,21 +59,21 @@ export function newKernel(kernelSpecName) {
   };
 }
 
-export function save() {
-  return (subject, dispatch, state) => {
+export function save(filename, notebook) {
+  return (subject, dispatch) => {
     // If there isn't a filename, save-as it instead
-    if (!state.filename) {
+    if (!filename) {
       const opts = {
         title: 'Save Notebook As',
         filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
       };
-      dialog.showSaveDialog(opts, (filename) => {
+      dialog.showSaveDialog(opts, (fname) => {
         if (!filename) {
           return;
         }
-        const ext = path.extname(filename) === '' ? '.ipynb' : '';
+        const ext = path.extname(fname) === '' ? '.ipynb' : '';
 
-        dispatch(saveAs(filename + ext));
+        dispatch(saveAs(fname + ext, notebook));
       });
       return;
     }
@@ -81,7 +81,7 @@ export function save() {
     subject.next({
       type: START_SAVING,
     });
-    writeFile(state.filename, JSON.stringify(commutable.toJS(state.notebook), null, 2), (err) => {
+    writeFile(filename, JSON.stringify(commutable.toJS(notebook), null, 2), (err) => {
       if (err) {
         console.error(err);
         throw err;
@@ -93,13 +93,13 @@ export function save() {
   };
 }
 
-export function saveAs(filename) {
+export function saveAs(filename, notebook) {
   return (subject, dispatch) => {
     subject.next({
       type: CHANGE_FILENAME,
       filename,
     });
-    dispatch(save());
+    dispatch(save(filename, notebook));
   };
 }
 

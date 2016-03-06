@@ -24,8 +24,16 @@ ipc.on('main:load', (e, launchData) => {
   initKeymap(window, dispatch);
 
   ipc.on('menu:new-kernel', (evt, name) => dispatch(newKernel(name)));
-  ipc.on('menu:save', () => dispatch(save()));
-  ipc.on('menu:save-as', (evt, fn) => dispatch(saveAs(fn)));
+  ipc.on('menu:save', () => {
+    const state = store.getState();
+    const { notebook, filename } = state;
+    dispatch(save(filename, notebook));
+  });
+  ipc.on('menu:save-as', (evt, filename) => {
+    const state = store.getState();
+    const { notebook } = state;
+    dispatch(saveAs(filename, notebook));
+  });
   ipc.on('menu:kill-kernel', () => dispatch(killKernel()));
 
   class App extends React.Component {
