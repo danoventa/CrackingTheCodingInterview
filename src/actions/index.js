@@ -1,5 +1,7 @@
 import * as commutable from 'commutable';
 
+import * as agendas from '../agendas';
+
 import { launchKernel } from '../api/kernel';
 
 import { writeFile } from 'fs';
@@ -22,11 +24,6 @@ import {
   UPDATE_CELL_EXECUTION_COUNT,
   ERROR_KERNEL_NOT_CONNECTED,
 } from './constants';
-
-import {
-  createExecuteRequest,
-  msgSpecToNotebookFormat,
-} from '../api/messaging';
 
 import Immutable from 'immutable';
 import * as path from 'path';
@@ -72,7 +69,7 @@ export function save() {
         filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
       };
       dialog.showSaveDialog(opts, (filename) => {
-        if(!filename) {
+        if (!filename) {
           return;
         }
 
@@ -88,7 +85,7 @@ export function save() {
       type: START_SAVING,
     });
     writeFile(state.filename, JSON.stringify(commutable.toJS(state.notebook), null, 2), (err) => {
-      if(err) {
+      if (err) {
         console.error(err);
         throw err;
       }
@@ -121,9 +118,9 @@ export function setNotebook(nbData) {
     // Get the kernel name from the kernelspec, fallback on language_info, and
     // in the worse case scenario spawn a Python 3 kernel.
     const kernelName = data.getIn([
-      'metadata', 'kernelspec', 'name'
+      'metadata', 'kernelspec', 'name',
     ], data.getIn([
-      'metadata', 'language_info', 'name'
+      'metadata', 'language_info', 'name',
     ], 'python3'));
     dispatch(newKernel(kernelName));
   };
@@ -194,48 +191,11 @@ export function updateCellExecutionCount(id, count) {
 
 export function executeCell(id, source) {
   return (subject, dispatch, state) => {
-    const { iopub, shell } = state.channels;
-
-    if(!iopub || !shell) {
-      subject.next({ type: ERROR_KERNEL_NOT_CONNECTED });
-      return;
-    }
-
-    const executeRequest = createExecuteRequest(source);
-
-    // Limitation of the Subject implementation in enchannel
-    // we must shell.subscribe in order to shell.next
-    shell.subscribe(() => {});
-
-    // Set the current outputs to an empty list
-    dispatch(updateCellOutputs(id, new Immutable.List()));
-
-    const childMessages = iopub.childOf(executeRequest)
-                               .share();
-
-    childMessages.ofMessageType(['execute_input'])
-                 .pluck('content', 'execution_count')
-                 .first()
-                 .subscribe((ct) => {
-                   dispatch(updateCellExecutionCount(id, ct));
-                 });
-
-    // Handle all the nbformattable messages
-    childMessages
-         .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
-         .map(msgSpecToNotebookFormat)
-         // Iteratively reduce on the outputs
-         .scan((outputs, output) => {
-           if(output.output_type === 'clear_output') {
-             return new Immutable.List();
-           }
-           return outputs.push(Immutable.fromJS(output));
-         }, new Immutable.List())
-         // Update the outputs with each change
-         .subscribe(outputs => {
-           dispatch(updateCellOutputs(id, outputs));
-         });
-
-    shell.next(executeRequest);
+    const obs = agendas.executeCell(id, source)(state.channels);
+    obs.subscribe(action => {
+      subject.next(action);
+    }, (error) => {
+      subject.next({ type: ERROR_KERNEL_NOT_CONNECTED, message: error });
+    });
   };
 }
