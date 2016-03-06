@@ -95,7 +95,7 @@ reducers[DONE_SAVING] = function doneSaving(state) {
 
 reducers[CHANGE_FILENAME] = function changeFilename(state, action) {
   const { filename } = action;
-  if(!filename) {
+  if (!filename) {
     return state;
   }
   return Object.assign({}, state, { filename });
