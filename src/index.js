@@ -7,6 +7,10 @@ import Provider from './components/util/provider';
 import Notebook from './components/notebook';
 
 import {
+  showSaveAsDialog,
+} from './api/save';
+
+import {
   setNotebook,
   newKernel,
   save,
@@ -23,9 +27,34 @@ ipc.on('main:load', (e, launchData) => {
   }, reducers);
   initKeymap(window, dispatch);
 
+
+  function triggerSaveAs() {
+    showSaveAsDialog()
+      .then(filename => {
+        if (!filename) {
+          return;
+        }
+        const { notebook } = store.getState();
+        dispatch(saveAs(filename, notebook));
+      }
+    );
+  }
+
   ipc.on('menu:new-kernel', (evt, name) => dispatch(newKernel(name)));
-  ipc.on('menu:save', () => dispatch(save()));
-  ipc.on('menu:save-as', (evt, fn) => dispatch(saveAs(fn)));
+  ipc.on('menu:save', () => {
+    const state = store.getState();
+    const { notebook, filename } = state;
+    if (!filename) {
+      triggerSaveAs();
+    } else {
+      dispatch(save(filename, notebook));
+    }
+  });
+  ipc.on('menu:save-as', (evt, filename) => {
+    const state = store.getState();
+    const { notebook } = state;
+    dispatch(saveAs(filename, notebook));
+  });
   ipc.on('menu:kill-kernel', () => dispatch(killKernel()));
 
   class App extends React.Component {

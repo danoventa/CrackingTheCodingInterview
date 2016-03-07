@@ -26,10 +26,6 @@ import {
 } from './constants';
 
 import Immutable from 'immutable';
-import * as path from 'path';
-
-const remote = require('remote');
-const dialog = remote.require('dialog');
 
 export function exit() {
   return {
@@ -59,29 +55,17 @@ export function newKernel(kernelSpecName) {
   };
 }
 
-export function save() {
-  return (subject, dispatch, state) => {
+export function save(filename, notebook) {
+  return (subject) => {
     // If there isn't a filename, save-as it instead
-    if (!state.filename) {
-      const opts = {
-        title: 'Save Notebook As',
-        filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
-      };
-      dialog.showSaveDialog(opts, (filename) => {
-        if (!filename) {
-          return;
-        }
-        const ext = path.extname(filename) === '' ? '.ipynb' : '';
-
-        dispatch(saveAs(filename + ext));
-      });
-      return;
+    if (!filename) {
+      throw new Error('save needs a filename');
     }
 
     subject.next({
       type: START_SAVING,
     });
-    writeFile(state.filename, JSON.stringify(commutable.toJS(state.notebook), null, 2), (err) => {
+    writeFile(filename, JSON.stringify(commutable.toJS(notebook), null, 2), (err) => {
       if (err) {
         console.error(err);
         throw err;
@@ -93,13 +77,13 @@ export function save() {
   };
 }
 
-export function saveAs(filename) {
+export function saveAs(filename, notebook) {
   return (subject, dispatch) => {
     subject.next({
       type: CHANGE_FILENAME,
       filename,
     });
-    dispatch(save());
+    dispatch(save(filename, notebook));
   };
 }
 
