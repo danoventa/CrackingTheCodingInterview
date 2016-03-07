@@ -20,10 +20,6 @@ import {
 import { initKeymap } from './actions/keymap';
 import { ipcRenderer as ipc } from 'electron';
 
-import * as path from 'path';
-const remote = require('remote');
-const dialog = remote.require('dialog');
-
 ipc.on('main:load', (e, launchData) => {
   const { store, dispatch } = createStore({
     notebook: null,
