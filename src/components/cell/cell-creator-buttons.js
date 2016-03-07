@@ -15,11 +15,11 @@ export default class CellCreatorButtons extends React.Component {
   render() {
     return (
       <div className='creator-tool'>
-        <span className='creator-label'>Add cell</span>
-        <button onClick={this._createTextCell.bind(this)}>
+        <button onClick={this._createTextCell.bind(this)} title="create text cell">
           <i className='material-icons'>art_track</i>
         </button>
-        <button onClick={this._createCodeCell.bind(this)}>
+        <span className='creator-label'>Add cell</span>
+        <button onClick={this._createCodeCell.bind(this)} title="create code cell">
           <i className='material-icons'>code</i>
         </button>
       </div>
