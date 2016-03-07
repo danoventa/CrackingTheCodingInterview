@@ -7,6 +7,10 @@ import Provider from './components/util/provider';
 import Notebook from './components/notebook';
 
 import {
+  showSaveAsDialog,
+} from './api/save';
+
+import {
   setNotebook,
   newKernel,
   save,
@@ -29,18 +33,15 @@ ipc.on('main:load', (e, launchData) => {
 
 
   function triggerSaveAs() {
-    const opts = {
-      title: 'Save Notebook As',
-      filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
-    };
-    dialog.showSaveDialog(opts, (fname) => {
-      if (!fname) {
-        return;
+    showSaveAsDialog()
+      .then(filename => {
+        if (!filename) {
+          return;
+        }
+        const { notebook } = store.getState();
+        dispatch(saveAs(filename, notebook));
       }
-      const ext = path.extname(fname) === '' ? '.ipynb' : '';
-      const { notebook } = store.getState();
-      dispatch(saveAs(fname + ext, notebook));
-    });
+    );
   }
 
   ipc.on('menu:new-kernel', (evt, name) => dispatch(newKernel(name)));
