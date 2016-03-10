@@ -17,7 +17,7 @@ import {
   saveAs,
   killKernel,
 } from './actions';
-import { initKeymap } from './actions/keymap';
+import { initKeymap } from './keys/keymap';
 import { ipcRenderer as ipc } from 'electron';
 
 ipc.on('main:load', (e, launchData) => {

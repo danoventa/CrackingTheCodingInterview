@@ -1,41 +1,20 @@
+import Immutable from 'immutable';
 import * as commutable from 'commutable';
-
-import * as agendas from '../agendas';
-
-import { launchKernel } from '../api/kernel';
-
 import { writeFile } from 'fs';
 
-import {
-  EXIT,
-  KILL_KERNEL,
-  NEW_KERNEL,
-  START_SAVING,
-  DONE_SAVING,
-  CHANGE_FILENAME,
-  UPDATE_CELL_SOURCE,
-  UPDATE_CELL_OUTPUTS,
-  MOVE_CELL,
-  NEW_CELL_AFTER,
-  NEW_CELL_APPEND,
-  NEW_CELL_BEFORE,
-  REMOVE_CELL,
-  SET_NOTEBOOK,
-  UPDATE_CELL_EXECUTION_COUNT,
-  ERROR_KERNEL_NOT_CONNECTED,
-} from './constants';
-
-import Immutable from 'immutable';
+import * as agendas from '../agendas';
+import { launchKernel } from '../api/kernel';
+import * as constants from '../constants';
 
 export function exit() {
   return {
-    type: EXIT,
+    type: constants.EXIT,
   };
 }
 
 export function killKernel() {
   return {
-    type: KILL_KERNEL,
+    type: constants.KILL_KERNEL,
   };
 }
 
@@ -45,7 +24,7 @@ export function newKernel(kernelSpecName) {
       .then(kc => {
         const { channels, connectionFile, spawn } = kc;
         subject.next({
-          type: NEW_KERNEL,
+          type: constants.NEW_KERNEL,
           channels,
           connectionFile,
           spawn,
@@ -63,7 +42,7 @@ export function save(filename, notebook) {
     }
 
     subject.next({
-      type: START_SAVING,
+      type: constants.START_SAVING,
     });
     writeFile(filename, JSON.stringify(commutable.toJS(notebook), null, 2), (err) => {
       if (err) {
@@ -71,7 +50,7 @@ export function save(filename, notebook) {
         throw err;
       }
       subject.next({
-        type: DONE_SAVING,
+        type: constants.DONE_SAVING,
       });
     });
   };
@@ -80,7 +59,7 @@ export function save(filename, notebook) {
 export function saveAs(filename, notebook) {
   return (subject, dispatch) => {
     subject.next({
-      type: CHANGE_FILENAME,
+      type: constants.CHANGE_FILENAME,
       filename,
     });
     dispatch(save(filename, notebook));
@@ -91,7 +70,7 @@ export function setNotebook(nbData) {
   return (subject, dispatch) => {
     const data = Immutable.fromJS(nbData);
     subject.next({
-      type: SET_NOTEBOOK,
+      type: constants.SET_NOTEBOOK,
       data,
     });
 
@@ -108,7 +87,7 @@ export function setNotebook(nbData) {
 
 export function updateCellSource(id, source) {
   return {
-    type: UPDATE_CELL_SOURCE,
+    type: constants.UPDATE_CELL_SOURCE,
     id,
     source,
   };
@@ -116,7 +95,7 @@ export function updateCellSource(id, source) {
 
 export function updateCellOutputs(id, outputs) {
   return {
-    type: UPDATE_CELL_OUTPUTS,
+    type: constants.UPDATE_CELL_OUTPUTS,
     id,
     outputs,
   };
@@ -124,7 +103,7 @@ export function updateCellOutputs(id, outputs) {
 
 export function moveCell(id, destinationId, above) {
   return {
-    type: MOVE_CELL,
+    type: constants.MOVE_CELL,
     id,
     destinationId,
     above,
@@ -133,14 +112,14 @@ export function moveCell(id, destinationId, above) {
 
 export function removeCell(id) {
   return {
-    type: REMOVE_CELL,
+    type: constants.REMOVE_CELL,
     id,
   };
 }
 
 export function createCellAfter(cellType, id) {
   return {
-    type: NEW_CELL_AFTER,
+    type: constants.NEW_CELL_AFTER,
     cellType,
     id,
   };
@@ -148,7 +127,7 @@ export function createCellAfter(cellType, id) {
 
 export function createCellBefore(cellType, id) {
   return {
-    type: NEW_CELL_BEFORE,
+    type: constants.NEW_CELL_BEFORE,
     cellType,
     id,
   };
@@ -156,14 +135,14 @@ export function createCellBefore(cellType, id) {
 
 export function createCellAppend(cellType) {
   return {
-    type: NEW_CELL_APPEND,
+    type: constants.NEW_CELL_APPEND,
     cellType,
   };
 }
 
 export function updateCellExecutionCount(id, count) {
   return {
-    type: UPDATE_CELL_EXECUTION_COUNT,
+    type: constants.UPDATE_CELL_EXECUTION_COUNT,
     id,
     count,
   };
@@ -175,7 +154,7 @@ export function executeCell(id, source) {
     obs.subscribe(action => {
       subject.next(action);
     }, (error) => {
-      subject.next({ type: ERROR_KERNEL_NOT_CONNECTED, message: error });
+      subject.next({ type: constants.ERROR_KERNEL_NOT_CONNECTED, message: error });
     });
   };
 }
