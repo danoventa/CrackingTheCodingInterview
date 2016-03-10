@@ -7,7 +7,7 @@
 :notebook: It's an Electron-based Notebook! :notebook:
 
 Note: this isn't feature complete yet. There will be :bug:s and we're currently
-lacking a lot of core features like [tab completion](https://github.com/nteract/nteract/issues/134), and [creating new cells](https://github.com/nteract/nteract/issues/85).
+lacking a lot of core features like [tab completion](https://github.com/nteract/nteract/issues/134) and switching focus to the next cell on shift-enter.
 
 ### Scope and goals
 
@@ -127,3 +127,14 @@ are working through tutorials right now and would love a study group! If you hav
 > I did: "$ npm install" then "$ npm start", and I got: "no such file or directory, open '.../node_modules/electron-prebuilt/path.txt'"
 
 - Try `$ npm install electron-prebuilt`
+
+
+### Sponsors
+
+Work on the nteract notebook is currently sponsored by
+
+[![Plotly](https://cloud.githubusercontent.com/assets/836375/13661288/0f1d6d8c-e657-11e5-897b-9d047cb30ef4.png)](https://plot.ly/)
+
+[![Domino Data Lab](https://cloud.githubusercontent.com/assets/836375/13661281/052c8506-e657-11e5-8e93-1497c6097519.png)](https://www.dominodatalab.com/)
+
+We're on a common mission to build a great notebook experience, feel free to [get in touch](mailto:rgbkrk@gmail.com) if you'd like to help.
