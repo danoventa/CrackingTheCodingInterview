@@ -9,8 +9,6 @@ export function launch(notebook, filename) {
   let win = new BrowserWindow({
     width: 800,
     height: 1000,
-    // frame: false,
-    darkTheme: true,
     title: !filename ? 'Untitled' : path.relative('.', filename.replace(/.ipynb$/, '')),
   });
 

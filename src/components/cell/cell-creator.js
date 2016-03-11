@@ -8,6 +8,10 @@ export default class CellCreator extends React.Component {
     id: React.PropTypes.string,
   };
 
+  state = {
+    show: false,
+  };
+
   componentWillMount() {
     // Listen to the page level mouse move event and manually check for
     // intersection because we don't want the hover region to actually capture
@@ -21,26 +25,27 @@ export default class CellCreator extends React.Component {
     document.removeEventListener('mousemove', this._boundUpdateVisibility);
   }
 
-  state = {
-    show: false,
-  };
-
-  render() {
-    return (
-      <div className='creator-hover-mask'>
-        <div className='creator-hover-region' ref={el => this._el = el}>
-          {this.state.show || this.props.id === null ? (<CellCreatorButtons {...this.props} />) : ''}
-        </div>
-      </div>);
-  }
-
   _updateVisibility(mouseEvent) {
     if (this._el) {
       const x = mouseEvent.clientX;
       const y = mouseEvent.clientY;
       const regionRect = this._el.getBoundingClientRect();
-      const show = (regionRect.left < x && x < regionRect.right) && (regionRect.top < y && y < regionRect.bottom);
+      const show = (regionRect.left < x && x < regionRect.right) &&
+                   (regionRect.top < y && y < regionRect.bottom);
       this.setState({ show });
     }
   }
+
+
+  render() {
+    return (
+      <div className="creator-hover-mask">
+        <div className="creator-hover-region" ref={el => this._el = el}>
+          {this.state.show || this.props.id === null ?
+            (<CellCreatorButtons {...this.props} />) :
+            ''}
+        </div>
+      </div>);
+  }
+
 }

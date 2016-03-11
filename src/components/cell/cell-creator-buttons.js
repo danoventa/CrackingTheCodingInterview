@@ -12,29 +12,14 @@ export default class CellCreatorButtons extends React.Component {
     dispatch: React.PropTypes.func,
   };
 
-  render() {
-    return (
-      <div className='creator-tool'>
-        <button onClick={this._createTextCell.bind(this)} title="create text cell">
-          <i className='material-icons'>art_track</i>
-        </button>
-        <span className='creator-label'>Add cell</span>
-        <button onClick={this._createCodeCell.bind(this)} title="create code cell">
-          <i className='material-icons'>code</i>
-        </button>
-      </div>
-    );
+  constructor() {
+    super();
+    this.createCodeCell = this.createCell.bind(this, 'code');
+    this.createTextCell = this.createCell.bind(this, 'markdown');
+    this.createCell = this.createCell.bind(this);
   }
 
-  _createCodeCell() {
-    this._createCell('code');
-  }
-
-  _createTextCell() {
-    this._createCell('markdown');
-  }
-
-  _createCell(type) {
+  createCell(type) {
     if (!this.props.id) {
       this.context.dispatch(createCellAppend(type));
       return;
@@ -46,4 +31,19 @@ export default class CellCreatorButtons extends React.Component {
       this.context.dispatch(createCellAfter(type, this.props.id));
     }
   }
+
+  render() {
+    return (
+      <div className="creator-tool">
+        <button onClick={this.createTextCell} title="create text cell">
+          <i className="material-icons">art_track</i>
+        </button>
+        <span className="creator-label">Add cell</span>
+        <button onClick={this.createCodeCell} title="create code cell">
+          <i className="material-icons">code</i>
+        </button>
+      </div>
+    );
+  }
+
 }
