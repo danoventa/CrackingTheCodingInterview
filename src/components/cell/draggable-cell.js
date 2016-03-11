@@ -29,7 +29,6 @@ const cellTarget = {
   },
 
   hover(props, monitor, component) {
-
     component.setState({ hoverUpperHalf: isDragUpper(props, monitor, component) });
   },
 };
@@ -63,10 +62,6 @@ class DraggableCell extends React.Component {
   static contextTypes = {
     dispatch: React.PropTypes.func,
   };
-
-  constructor(props) {
-    super(props);
-  }
 
   state = {
     hoverUpperHalf: true,
@@ -111,9 +106,10 @@ class DraggableCell extends React.Component {
           borderBottom: (this.props.isOver && !this.state.hoverUpperHalf) ?
             '3px lightgray solid' : '3px transparent solid',
         }}
-        className={'draggable-cell'}>
+        className={'draggable-cell'}
+      >
         {
-          <Cell {...this.props}/>
+          <Cell {...this.props} />
         }
       </div>
     ));

@@ -26,13 +26,18 @@ export default class CodeCell extends React.Component {
     dispatch: React.PropTypes.func,
   };
 
+  constructor() {
+    super();
+    this.keyDown = this.keyDown.bind(this);
+  }
+
   keyDown(e) {
-    if(e.key !== 'Enter') {
+    if (e.key !== 'Enter') {
       return;
     }
 
     const shiftXORctrl = (e.shiftKey || e.ctrlKey) && !(e.shiftKey && e.ctrlKey);
-    if(!shiftXORctrl) {
+    if (!shiftXORctrl) {
       return;
     }
 
@@ -50,19 +55,20 @@ export default class CodeCell extends React.Component {
 
   render() {
     return (
-      <div className='code_cell'>
-        <div className='input_area' onKeyDown={this.keyDown.bind(this)}>
-          <Inputs executionCount={this.props.cell.get('execution_count')}/>
+      <div className="code_cell">
+        <div className="input_area" onKeyDown={this.keyDown}>
+          <Inputs executionCount={this.props.cell.get('execution_count')} />
           <Editor
             id={this.props.id}
             input={this.props.cell.get('source')}
             language={this.props.language}
           />
         </div>
-        <Display className='cell_display'
-                 outputs={this.props.cell.get('outputs')}
-                 displayOrder={this.props.displayOrder}
-                 transforms={this.props.transforms}
+        <Display
+          className="cell_display"
+          outputs={this.props.cell.get('outputs')}
+          displayOrder={this.props.displayOrder}
+          transforms={this.props.transforms}
         />
       </div>
     );

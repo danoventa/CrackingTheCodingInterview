@@ -5,13 +5,13 @@ function registerListeners(window, dispatch) {
   if (!window) throw new Error('window not defined');
   if (!dispatch) throw new Error('dispatch not defined');
 
-  // Register action event listeners on the window for every know action.
+  // Register action event listeners on the window for every known action.
   Object.keys(actions).forEach(actionName => {
     window.addEventListener(`'action:${actionName}`, () => {
       try {
         dispatch(actions[actionName]());
       } catch (err) {
-        console.error('key bound action ivoke failure', actionName, err);
+        console.error('key bound action invoke failure', actionName, err);
       }
     });
   });

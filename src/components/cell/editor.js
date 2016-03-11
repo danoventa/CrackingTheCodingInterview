@@ -31,6 +31,8 @@ export default class Editor extends React.Component {
     this.state = {
       source: this.props.input,
     };
+
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
@@ -48,32 +50,34 @@ export default class Editor extends React.Component {
     });
   }
 
+  onChange(e) {
+    if (this.props.onChange) {
+      this.props.onChange(e.target.value);
+    } else {
+      this.setState({
+        source: e.target.value,
+      });
+      this.context.dispatch(updateCellSource(this.props.id, e.target.value));
+    }
+  }
+
   render() {
     return (
-      <div className='cell_editor'>
-        <CodeMirror value={this.state.source}
-                    ref='codemirror'
-                    className='cell_cm'
-                    mode={this.props.language}
-                    textAreaClassName={['editor']}
-                    textAreaStyle={{
-                      minHeight: '10em',
-                      backgroundColor: 'red',
-                    }}
-                    lineNumbers={this.props.lineNumbers}
-                    theme={this.props.theme}
-                    onChange={
-                      (e) => {
-                        if (this.props.onChange) {
-                          this.props.onChange(e.target.value);
-                        } else {
-                          this.setState({
-                            source: e.target.value,
-                          });
-                          this.context.dispatch(updateCellSource(this.props.id, e.target.value));
-                        }
-                      }
-                    }/>
+      <div className="cell_editor">
+        <CodeMirror
+          value={this.state.source}
+          ref="codemirror"
+          className="cell_cm"
+          mode={this.props.language}
+          textAreaClassName={['editor']}
+          textAreaStyle={{
+            minHeight: '10em',
+            backgroundColor: 'red',
+          }}
+          lineNumbers={this.props.lineNumbers}
+          theme={this.props.theme}
+          onChange={this.onChange}
+        />
       </div>
     );
   }
