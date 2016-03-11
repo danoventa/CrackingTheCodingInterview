@@ -3,11 +3,11 @@ import { expect } from 'chai';
 import * as commutable from 'commutable';
 import * as constants from '../../../src/constants';
 
-import documentReducer from '../../../src/reducers/document';
+import { reducers } from '../../../src/reducers';
 
-const setNotebook = documentReducer[constants.SET_NOTEBOOK];
-const updateExecutionCount = documentReducer[constants.UPDATE_CELL_EXECUTION_COUNT];
-const newCellAfter = documentReducer[constants.NEW_CELL_AFTER];
+const setNotebook = reducers[constants.SET_NOTEBOOK];
+const updateExecutionCount = reducers[constants.UPDATE_CELL_EXECUTION_COUNT];
+const newCellAfter = reducers[constants.NEW_CELL_AFTER];
 
 import {
   dummyJSON,
