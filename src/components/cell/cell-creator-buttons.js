@@ -19,6 +19,10 @@ export default class CellCreatorButtons extends React.Component {
     this.createCell = this.createCell.bind(this);
   }
 
+  shouldComponentUpdate() {
+    return false;
+  }
+
   createCell(type) {
     if (!this.props.id) {
       this.context.dispatch(createCellAppend(type));
