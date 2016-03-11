@@ -18,6 +18,10 @@ class Toolbar extends React.Component {
     this.executeCell = this.executeCell.bind(this);
   }
 
+  shouldComponentUpdate() {
+    return false;
+  }
+
   removeCell() {
     this.context.dispatch(removeCell(this.props.id));
   }
