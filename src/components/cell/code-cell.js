@@ -11,27 +11,8 @@ import {
   executeCell,
 } from '../../actions';
 
-export default class CodeCell extends React.Component {
-  static propTypes = {
-    cell: React.PropTypes.any,
-    displayOrder: React.PropTypes.instanceOf(Immutable.List),
-    id: React.PropTypes.string,
-    language: React.PropTypes.string,
-    theme: React.PropTypes.string,
-    transforms: React.PropTypes.instanceOf(Immutable.Map),
-  };
-
-  static contextTypes = {
-    channels: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-  };
-
-  constructor() {
-    super();
-    this.keyDown = this.keyDown.bind(this);
-  }
-
-  keyDown(e) {
+const CodeCell = (props, context) => {
+  function keyDown(e) {
     if (e.key !== 'Enter') {
       return;
     }
@@ -43,34 +24,48 @@ export default class CodeCell extends React.Component {
 
     if (e.shiftKey) {
       // TODO: Remove this, as it should be created if at the end of document only
-      // this.context.dispatch(createCellAfter('code', this.props.id));
+      // this.context.dispatch(createCellAfter('code', props.id));
 
       // should instead be
-      // this.context.dispatch(nextCell(this.props.id));
+      // this.context.dispatch(nextCell(props.id));
     }
 
-    this.context.dispatch(executeCell(this.props.id,
-                                      this.props.cell.get('source')));
+    context.dispatch(executeCell(props.id,
+                                      props.cell.get('source')));
   }
 
-  render() {
-    return (
-      <div className="code_cell">
-        <div className="input_area" onKeyDown={this.keyDown}>
-          <Inputs executionCount={this.props.cell.get('execution_count')} />
-          <Editor
-            id={this.props.id}
-            input={this.props.cell.get('source')}
-            language={this.props.language}
-          />
-        </div>
-        <Display
-          className="cell_display"
-          outputs={this.props.cell.get('outputs')}
-          displayOrder={this.props.displayOrder}
-          transforms={this.props.transforms}
+  return (
+    <div className="code_cell">
+      <div className="input_area" onKeyDown={keyDown}>
+        <Inputs executionCount={props.cell.get('execution_count')} />
+        <Editor
+          id={props.id}
+          input={props.cell.get('source')}
+          language={props.language}
         />
       </div>
-    );
-  }
-}
+      <Display
+        className="cell_display"
+        outputs={props.cell.get('outputs')}
+        displayOrder={props.displayOrder}
+        transforms={props.transforms}
+      />
+    </div>
+  );
+};
+
+CodeCell.propTypes = {
+  cell: React.PropTypes.any,
+  displayOrder: React.PropTypes.instanceOf(Immutable.List),
+  id: React.PropTypes.string,
+  language: React.PropTypes.string,
+  theme: React.PropTypes.string,
+  transforms: React.PropTypes.instanceOf(Immutable.Map),
+};
+
+CodeCell.contextTypes = {
+  channels: React.PropTypes.object,
+  dispatch: React.PropTypes.func,
+};
+
+export default CodeCell;
