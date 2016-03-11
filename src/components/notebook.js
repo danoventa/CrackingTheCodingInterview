@@ -25,6 +25,12 @@ class Notebook extends React.Component {
     channels: React.PropTypes.object,
   };
 
+  constructor() {
+    super();
+    this.createCellElement = this.createCellElement.bind(this);
+    this.moveCell = this.moveCell.bind(this);
+  }
+
   getChildContext() {
     return {
       channels: this.props.channels,
@@ -43,45 +49,51 @@ class Notebook extends React.Component {
     // This is the notebook though, so hands off
     // We'll want to check for this existing later
     // and any other validation
-    require('codemirror/mode/' + lang + '/' + lang);
+    require(`codemirror/mode/${lang}/${lang}`);
     // Assume markdown should be required
   }
 
+  moveCell(sourceId, destinationId, above) {
+    this.context.dispatch(moveCell(sourceId, destinationId, above));
+  }
+
+  createCellElement(id) {
+    const cellMap = this.props.notebook.get('cellMap');
+
+    return (
+      <div key={`cell-container-${id}`}><DraggableCell cell={cellMap.get(id)}
+        language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
+        id={id}
+        key={id}
+        displayOrder={this.props.displayOrder}
+        transforms={this.props.transforms}
+        onTextChange={text => {
+          const newCell = cellMap.get(id).set('source', text);
+          this.props.onCellChange(id, newCell);
+        }}
+        moveCell={this.moveCell}
+      />
+        <CellCreator key={`creator-${id}`} id={id} above={false} />
+      </div>);
+  }
+
   render() {
-    if(!this.props.notebook) {
+    if (!this.props.notebook) {
       return (
         <div></div>
       );
     }
-    const cellMap = this.props.notebook.get('cellMap');
     const cellOrder = this.props.notebook.get('cellOrder');
     return (
       <div style={{
         paddingTop: '10px',
         paddingLeft: '10px',
         paddingRight: '10px',
-      }} ref='cells'>
-        <CellCreator id={cellOrder.get(0, null)} above={true}/>
+      }} ref="cells"
+      >
+        <CellCreator id={cellOrder.get(0, null)} above />
       {
-        cellOrder.map(id => {
-          return (<div key={'cell-container-' + id}><DraggableCell cell={cellMap.get(id)}
-                    language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
-                    id={id}
-                    key={id}
-                    displayOrder={this.props.displayOrder}
-                    transforms={this.props.transforms}
-                    onTextChange={text => {
-                     const newCell = cellMap.get(id).set('source', text);
-                     this.props.onCellChange(id, newCell);
-                    }
-                    }
-                    moveCell={(sourceId, destinationId, above) => {
-                     return this.context.dispatch(moveCell(sourceId, destinationId, above));
-                    }}
-                    />
-                    <CellCreator key={'creator-' + id} id={id} above={false}/>
-                  </div>);
-        })
+        cellOrder.map(this.createCellElement)
       }
       </div>
     );
