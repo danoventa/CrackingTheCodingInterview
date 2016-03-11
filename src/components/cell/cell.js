@@ -11,15 +11,15 @@ class Cell extends React.Component {
     onCellChange: React.PropTypes.func,
   };
 
-  state = {
-    showToolbar: false,
-  };
-
   constructor() {
     super();
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
   }
+
+  state = {
+    showToolbar: false,
+  };
 
   onMouseEnter() {
     this.setState({ showToolbar: true });
@@ -37,9 +37,7 @@ class Cell extends React.Component {
         className="cell"
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        onTextChange={text => {
-          this.props.onCellChange(this.props.id, cell.set('source', text))
-        }} >
+      >
         {
           this.state.showToolbar ? <Toolbar { ...this.props } /> : null
         }
