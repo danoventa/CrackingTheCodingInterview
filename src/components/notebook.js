@@ -61,18 +61,15 @@ class Notebook extends React.Component {
     const cellMap = this.props.notebook.get('cellMap');
 
     return (
-      <div key={`cell-container-${id}`}><DraggableCell cell={cellMap.get(id)}
-        language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
-        id={id}
-        key={id}
-        displayOrder={this.props.displayOrder}
-        transforms={this.props.transforms}
-        onTextChange={text => {
-          const newCell = cellMap.get(id).set('source', text);
-          this.props.onCellChange(id, newCell);
-        }}
-        moveCell={this.moveCell}
-      />
+      <div key={`cell-container-${id}`}>
+        <DraggableCell cell={cellMap.get(id)}
+          language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
+          id={id}
+          key={id}
+          displayOrder={this.props.displayOrder}
+          transforms={this.props.transforms}
+          moveCell={this.moveCell}
+        />
         <CellCreator key={`creator-${id}`} id={id} above={false} />
       </div>);
   }
