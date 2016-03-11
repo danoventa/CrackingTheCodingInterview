@@ -29,13 +29,13 @@ class Toolbar extends React.Component {
 
   render() {
     return (
-      <div className='cell_toolbar-mask'>
-        <div className='cell_toolbar'>
+      <div className="cell_toolbar-mask">
+        <div className="cell_toolbar">
           <button onClick={this.executeCell}>
-            <i className='material-icons'>play_arrow</i>
+            <i className="material-icons">play_arrow</i>
           </button>
           <button onClick={this.removeCell}>
-            <i className='material-icons'>delete</i>
+            <i className="material-icons">delete</i>
           </button>
         </div>
       </div>
