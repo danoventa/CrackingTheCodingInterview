@@ -22,11 +22,11 @@ class Cell extends React.Component {
   }
 
   onMouseEnter() {
-    this.setState({ showToolbar: true })
+    this.setState({ showToolbar: true });
   }
 
   onMouseLeave() {
-    this.setState({ showToolbar: false })
+    this.setState({ showToolbar: false });
   }
 
   render() {

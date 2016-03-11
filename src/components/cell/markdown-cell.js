@@ -3,7 +3,6 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import Editor from './editor';
-import { updateCellSource } from '../../actions';
 
 export default class MarkdownCell extends React.Component {
   static propTypes = {
@@ -22,6 +21,8 @@ export default class MarkdownCell extends React.Component {
       // HACK: We'll need to handle props and state change better here
       source: this.props.cell.get('source'),
     };
+    this.openEditor = this.openEditor.bind(this);
+    this.keyDown = this.keyDown.bind(this);
   }
 
 
@@ -38,29 +39,29 @@ export default class MarkdownCell extends React.Component {
     this.setState({ view: true });
   }
 
+  openEditor() {
+    this.setState({ view: false });
+  }
+
   render() {
     return (
         (this.state && this.state.view) ?
           <div
-            className='cell_markdown'
-            onDoubleClick={() => this.setState({ view: false }) }>
+            className="cell_markdown"
+            onDoubleClick={this.openEditor}
+          >
             <ReactMarkdown source={
               this.state.source ?
                 this.state.source :
-                `*Empty markdown cell, double click me to add content.*`} />
+                '*Empty markdown cell, double click me to add content.*'}
+            />
           </div> :
-          <div onKeyDown={this.keyDown.bind(this)}>
-            <Editor language='markdown'
-                    id={this.props.id}
-                    input={this.state.source}
-                    onChange={
-                      (text) => {
-                        this.setState({
-                          source: text,
-                        });
-                        this.context.dispatch(updateCellSource(this.props.id, text));
-                      }
-                    }/>
+          <div onKeyDown={this.keyDown}>
+            <Editor
+              language="markdown"
+              id={this.props.id}
+              input={this.state.source}
+            />
           </div>
     );
   }
