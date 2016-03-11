@@ -100,6 +100,34 @@ Assets are compiled via electron-compile directly, no build steps until we make 
 
 - Try `$ npm install electron-prebuilt`
 
+### Frontend background
+
+As much as possible, we'd like to get people speaking a common language for
+development of nteract components and packages.
+
+Core tech behind the scenes:
+
+* [Observables](http://cycle.js.org/observables.html) through [RxJS](https://github.com/ReactiveX/RxJS)
+* [React](https://facebook.github.io/react/)
+* [Jupyter Messaging](http://jupyter-client.readthedocs.org/en/latest/messaging.html)
+* [ZeroMQ](http://zguide.zeromq.org/page:all)
+
+These are our suggested tutorials and background to help you get up to speed:
+
+* [Build your own REPL with enchannel](https://github.com/nteract/docs/blob/master/enchannel/build-your-own-repl.md)
+* [The introduction to Reactive Programming you've been missing](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754)
+* [Full Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html)
+
+Depending on where you plug yourself in, you may find the introduction to Reactive
+programming is the biggest help.
+
+If you'd like to experiment with the core Jupyter messaging and Observables
+without working with React, check out [ick](https://github.com/nteract/ick),
+an interactive console.
+
+Post in [Slack](http://slack.nteract.in/) if you need help with these or have questions. Several people
+are working through tutorials right now and would love a study group! If you have trouble creating an account, either email rgbkrk@gmail.com or post an issue on GitHub.
+
 ### Support
 
 #### Sponsors
