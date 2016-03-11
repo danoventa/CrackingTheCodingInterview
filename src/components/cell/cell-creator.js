@@ -8,6 +8,11 @@ export default class CellCreator extends React.Component {
     id: React.PropTypes.string,
   };
 
+  constructor() {
+    super();
+    this.setHoverElement = this.setHoverElement.bind(this);
+  }
+
   state = {
     show: false,
   };
@@ -25,11 +30,15 @@ export default class CellCreator extends React.Component {
     document.removeEventListener('mousemove', this._boundUpdateVisibility);
   }
 
+  setHoverElement(el) {
+    this.hoverElement = el;
+  }
+
   _updateVisibility(mouseEvent) {
-    if (this._el) {
+    if (this.hoverElement) {
       const x = mouseEvent.clientX;
       const y = mouseEvent.clientY;
-      const regionRect = this._el.getBoundingClientRect();
+      const regionRect = this.hoverElement.getBoundingClientRect();
       const show = (regionRect.left < x && x < regionRect.right) &&
                    (regionRect.top < y && y < regionRect.bottom);
       this.setState({ show });
@@ -40,7 +49,7 @@ export default class CellCreator extends React.Component {
   render() {
     return (
       <div className="creator-hover-mask">
-        <div className="creator-hover-region" ref={el => this._el = el}>
+        <div className="creator-hover-region" ref={this.setHoverElement}>
           {this.state.show || this.props.id === null ?
             (<CellCreatorButtons {...this.props} />) :
             ''}
