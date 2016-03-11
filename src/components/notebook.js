@@ -34,7 +34,7 @@ class Notebook extends React.Component {
   componentWillMount() {
     require('codemirror/mode/markdown/markdown');
 
-    const lang = this.props.notebook.getIn(['metadata', 'language_info', 'name']);
+    const lang = this.props.notebook.getIn(['metadata', 'kernelspec', 'language']);
     if (!lang) {
       return;
     }

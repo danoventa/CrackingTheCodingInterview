@@ -30,13 +30,25 @@ export function launch(notebook, filename) {
 }
 
 export function launchNewNotebook(kernelspec) {
-  return Promise.resolve(launch(
-    appendCell(emptyNotebook, emptyCodeCell)
-      .set('kernelspec', immutable.fromJS(kernelspec))));
+  const starterNotebook = appendCell(emptyNotebook, emptyCodeCell);
+
+  let nb = starterNotebook;
+
+  if (kernelspec && kernelspec.name && kernelspec.spec
+                 && kernelspec.spec.language && kernelspec.spec.display_name) {
+    nb = starterNotebook.setIn(['metadata', 'kernelspec'], immutable.fromJS({
+      name: kernelspec.name,
+      language: kernelspec.spec.language,
+      display_name: kernelspec.spec.display_name,
+    }));
+  }
+
+  return Promise.resolve(launch(nb));
 }
 
 export function launchFilename(filename) {
   if (!filename) {
+    console.warn('WARNING: launching a notebook with no filename and no kernelspec');
     return Promise.resolve(launchNewNotebook());
   }
 
