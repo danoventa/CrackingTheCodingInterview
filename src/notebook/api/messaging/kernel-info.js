@@ -2,9 +2,6 @@ import {
   createMessage,
 } from '../api/messaging';
 
-// Usage, assuming using Fluorine
-// dispatch(executeCell(id,source)(channels))
-
 export default function kernelInfo(channels) {
   if (!channels || !channels.shell) {
     throw new Error('shell channel not available for sending kernel info request');
