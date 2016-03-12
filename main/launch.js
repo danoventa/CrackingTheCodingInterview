@@ -12,7 +12,7 @@ export function launch(notebook, filename) {
     title: !filename ? 'Untitled' : path.relative('.', filename.replace(/.ipynb$/, '')),
   });
 
-  const index = path.join(__dirname, '..', 'index.html');
+  const index = path.join(__dirname, '..', 'src', 'index.html');
   win.loadURL(`file://${index}`);
 
   // When the page finishes loading, send the notebook data via IPC
