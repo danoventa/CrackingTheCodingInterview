@@ -2,14 +2,14 @@
   "name": "nteract",
   "version": "0.0.1",
   "description": ":notebook: the nteract notebook",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint .",
     "test": "npm run test:main && npm run test:renderer",
     "test:renderer": "electron-mocha --renderer --compilers js:babel-core/register 'test/renderer/**/*.js'",
     "test:main": "electron-mocha --compilers js:babel-core/register 'test/main/**/*.js'",
     "test:watch": "watch 'npm run test' test/",
-    "start": "electron main.js"
+    "start": "electron index.js"
   },
   "repository": {
     "type": "git",
