@@ -1,10 +1,10 @@
 // This gets bootstrapped by main.js
 import app from 'app';
 
-import { launchFilename } from './main/launch';
+import { launchFilename } from './launch';
 
 import { Menu } from 'electron';
-import { defaultMenu, loadFullMenu } from './main/menu';
+import { defaultMenu, loadFullMenu } from './menu';
 
 app.on('window-all-closed', () => {
   // On OS X, we want to keep the app and menu bar active
