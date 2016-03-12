@@ -2,7 +2,7 @@
   "name": "nteract",
   "version": "0.0.1",
   "description": ":notebook: the nteract notebook",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint .",
     "test": "npm run test:main && npm run test:renderer",
