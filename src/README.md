@@ -1,3 +1,10 @@
-For those getting started with Electron based development, it's good to know about the main thread and the rendering thread.
+nteract is an [Electron app](https://github.com/atom/electron) that runs on your
+desktop, which means that some code is intended to run in a main thread (native OS X menus, etc.)
+while the rest goes in rendering threads (browser).
 
-With nteract, our main thread components are in `main/` while the notebook app is in `notebook/`.
+> In Electron, GUI-related modules (such as dialog, menu etc.) are only available in the main process, not in the renderer process.
+
+Here in `src/`, there are two primary components:
+
+* `main/` - the main thread and boot up code for all notebook windows
+* `notebook/` - all the UI goodness of the notebook, intended for a single window
