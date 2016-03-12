@@ -1,4 +1,3 @@
-// This gets bootstrapped by main.js
 import app from 'app';
 
 import { launchFilename } from './launch';
