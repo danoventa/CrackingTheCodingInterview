@@ -78,7 +78,7 @@ For RedHat/CentOS/Fedora based variants, you'll need `zeromq` and `zeromq-devel`
 
 #### Install
 
-Requires node 5.x and npm 3. Join us in the future.
+Requires node 5.x, npm 3, and [git-lfs](https://git-lfs.github.com/).
 
 1. Fork this repo
 2. Clone it `git clone https://github.com/nteract/nteract`
