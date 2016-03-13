@@ -1,6 +1,6 @@
 import {
   createMessage,
-} from '../api/messaging';
+} from './index';
 
 export default function complete(channels, code, cursorPos) {
   if (!channels || !channels.shell) {
@@ -21,6 +21,6 @@ export default function complete(channels, code, cursorPos) {
     .first()
     .toPromise();
 
-  shell.send(message);
+  shell.next(message);
   return p;
 }

@@ -1,6 +1,6 @@
 import {
   createMessage,
-} from '../api/messaging';
+} from './index';
 
 export default function kernelInfo(channels) {
   if (!channels || !channels.shell) {
@@ -15,8 +15,8 @@ export default function kernelInfo(channels) {
     .ofMessageType('kernel_info_reply')
     .pluck('content')
     .first()
-    .toPromse();
+    .toPromise();
 
-  shell.send(message);
+  shell.next(message);
   return p;
 }
