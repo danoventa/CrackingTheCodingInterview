@@ -17,7 +17,7 @@ export default function complete(channels, code, cursorPos) {
   const p = shell
     .childOf(message)
     .ofMessageType('complete_reply')
-    .map(msg => msg.content)
+    .pluck('content')
     .first()
     .toPromise();
 

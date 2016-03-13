@@ -18,7 +18,7 @@ export default function inspect(channels, code, cursorPos, detailLevel = 0) {
   const p = shell
     .childOf(message)
     .ofMessageType('inspect_reply')
-    .map(msg => msg.content)
+    .pluck('content')
     .first()
     .toPromse();
   shell.send(message);

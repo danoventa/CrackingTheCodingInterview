@@ -12,7 +12,7 @@ export default function kernelInfo(channels) {
   const p = shell
     .childOf(message)
     .ofMessageType('kernel_info_reply')
-    .map(msg => msg.content)
+    .pluck('content')
     .first()
     .toPromse();
 
