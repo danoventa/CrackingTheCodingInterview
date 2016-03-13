@@ -17,7 +17,7 @@ export default function inspect(channels, code, cursorPos, detailLevel = 0) {
 
   return shell
     .childOf(message)
-    .filter(msg => msg.header.msg_type === 'inspect_reply')
+    .ofMessageType('inspect_reply')
     .map(msg => msg.content)
     .first()
     .toPromse();

@@ -11,6 +11,7 @@ export default function kernelInfo(channels) {
   const message = createMessage('kernel_info_request');
   return shell
     .childOf(message)
+    .ofMessageType('kernel_info_reply')
     .map(msg => msg.content)
     .first()
     .toPromse();

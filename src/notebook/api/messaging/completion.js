@@ -16,7 +16,7 @@ export default function complete(channels, code, cursorPos) {
 
   return shell
     .childOf(message)
-    .filter(msg => msg.header.msg_type === 'complete_reply')
+    .ofMessageType('complete_reply')
     .map(msg => msg.content)
     .first()
     .toPromse();
