@@ -15,10 +15,12 @@ export default function inspect(channels, code, cursorPos, detailLevel = 0) {
     detail_level: detailLevel,
   };
 
-  return shell
+  const p = shell
     .childOf(message)
     .ofMessageType('inspect_reply')
     .map(msg => msg.content)
     .first()
     .toPromse();
+  shell.send(message);
+  return p;
 }

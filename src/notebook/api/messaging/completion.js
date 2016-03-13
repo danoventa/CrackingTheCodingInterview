@@ -14,10 +14,13 @@ export default function complete(channels, code, cursorPos) {
     cursor_pos: cursorPos,
   };
 
-  return shell
+  const p = shell
     .childOf(message)
     .ofMessageType('complete_reply')
     .map(msg => msg.content)
     .first()
-    .toPromse();
+    .toPromise();
+
+  shell.send(message);
+  return p;
 }
