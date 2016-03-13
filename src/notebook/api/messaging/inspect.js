@@ -3,8 +3,7 @@ import {
 } from './index';
 
 /**
- * inspect handles the req/rep with kernel to produce an inspect_reply, via the
- * jupyter messaging protocol.
+ * Request introspection of code via the jupyter messaging protocol.
  *
  * http://jupyter-client.readthedocs.org/en/latest/messaging.html#introspection
  *
