@@ -9,6 +9,7 @@ export default function kernelInfo(channels) {
   const { shell } = channels;
 
   const message = createMessage('kernel_info_request');
+
   const p = shell
     .childOf(message)
     .ofMessageType('kernel_info_reply')

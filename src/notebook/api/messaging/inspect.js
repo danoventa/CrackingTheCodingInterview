@@ -21,6 +21,7 @@ export default function inspect(channels, code, cursorPos, detailLevel = 0) {
     .pluck('content')
     .first()
     .toPromse();
+
   shell.send(message);
   return p;
 }
