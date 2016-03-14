@@ -98,4 +98,12 @@ export default {
       notebook: commutable.updateOutputs(notebook, id, outputs),
     };
   },
+  [constants.SET_LANGUAGE_INFO]: function setLanguageInfo(state, action) {
+    const { langInfo } = action;
+    const { notebook } = state;
+    return {
+      ...state,
+      notebook: notebook.setIn(['metadata', 'language_info'], langInfo),
+    };
+  },
 };
