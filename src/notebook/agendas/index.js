@@ -4,12 +4,32 @@ const Immutable = require('immutable');
 import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
+  createMessage,
 } from '../api/messaging';
 
 import {
   updateCellExecutionCount,
   updateCellOutputs,
+  setLanguageInfo,
 } from '../actions';
+
+export function acquireKernelInfo(channels) {
+  const { shell } = channels;
+
+  const message = createMessage('kernel_info_request');
+
+  const obs = shell
+    .childOf(message)
+    .ofMessageType('kernel_info_reply')
+    .first()
+    .pluck('content', 'language_info')
+    .map(setLanguageInfo)
+    .publishReplay(1)
+    .refCount();
+
+  shell.next(message);
+  return obs;
+}
 
 export function executeCell(channels, id, source) {
   return Rx.Observable.create((subscriber) => {

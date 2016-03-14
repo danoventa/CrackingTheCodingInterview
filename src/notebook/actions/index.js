@@ -18,11 +18,24 @@ export function killKernel() {
   };
 }
 
+export function setLanguageInfo(langInfo) {
+  return {
+    type: constants.SET_LANGUAGE_INFO,
+    langInfo,
+  };
+}
+
 export function newKernel(kernelSpecName) {
   return (subject) => {
     launchKernel(kernelSpecName)
       .then(kc => {
         const { channels, connectionFile, spawn } = kc;
+
+        agendas.acquireKernelInfo(channels)
+              .subscribe(action => {
+                subject.next(action);
+              });
+
         subject.next({
           type: constants.NEW_KERNEL,
           channels,
