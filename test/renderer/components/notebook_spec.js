@@ -10,7 +10,7 @@ import {
   dummyCommutable,
 } from '../dummy-nb';
 
-import Notebook from '../../../notebook/components/notebook';
+import Notebook from '../../../src/notebook/components/notebook';
 
 // Boilerplate test to make sure the testing setup is configured
 describe('Notebook', () => {

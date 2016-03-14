@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 
-import createStore from '../../../notebook/store';
+import createStore from '../../../src/notebook/store';
 
 describe('createStore', () => {
   it('sets up our store model', (done) => {
     const reducers = {
-      'EAT_FOOD': function eat(state, action) {
+      EAT_FOOD: function eat(state, action) {
         const { amount } = action;
         return Object.assign({}, state, {
           food: state.food - amount,
