@@ -9,6 +9,7 @@ class Toolbar extends React.Component {
   };
 
   static contextTypes = {
+    channels: React.PropTypes.object,
     dispatch: React.PropTypes.func,
   };
 
@@ -27,7 +28,8 @@ class Toolbar extends React.Component {
   }
 
   executeCell() {
-    this.context.dispatch(executeCell(this.props.id,
+    this.context.dispatch(executeCell(this.context.channels,
+                                      this.props.id,
                                       this.props.cell.get('source')));
   }
 
