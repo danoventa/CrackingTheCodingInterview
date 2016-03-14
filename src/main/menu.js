@@ -63,10 +63,8 @@ export const fileSubMenus = {
           return;
         }
 
-        if (path.extname(filename) === '') {
-          filename = filename + '.ipynb';
-        }
-        send(focusedWindow, 'menu:save-as', filename);
+        const ext = path.extname(filename) === '' ? '.ipynb' : '';
+        send(focusedWindow, 'menu:save-as', `${filename}${ext}`);
       });
     },
     accelerator: 'CmdOrCtrl+Shift+S',
@@ -227,7 +225,7 @@ export const named = {
       type: 'separator',
     },
     {
-      label: 'Hide ' + name,
+      label: `Hide ${name}`,
       accelerator: 'Command+H',
       role: 'hide',
     },
@@ -269,14 +267,17 @@ export function generateDefaultTemplate() {
 
 export const defaultMenu = Menu.buildFromTemplate(generateDefaultTemplate());
 
+
 export function loadFullMenu() {
   return kernelspecs.findAll().then(kernelSpecs => {
-    const kernelMenuItems = Object.keys(kernelSpecs).map(kernelName => {
+    function generateSubMenu(kernelName) {
       return {
         label: kernelSpecs[kernelName].spec.display_name,
         click: createSender('menu:new-kernel', kernelName),
       };
-    });
+    }
+
+    const kernelMenuItems = Object.keys(kernelSpecs).map(generateSubMenu);
 
     const newNotebookItems = Object.keys(kernelSpecs).map(kernelName => {
       const kernelSpec = kernelSpecs[kernelName];
@@ -302,7 +303,7 @@ export function loadFullMenu() {
     };
     const template = [];
 
-    if(process.platform === 'darwin') {
+    if (process.platform === 'darwin') {
       template.push(named);
     }
 
