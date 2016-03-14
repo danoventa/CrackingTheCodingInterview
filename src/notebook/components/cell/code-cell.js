@@ -30,8 +30,9 @@ const CodeCell = (props, context) => {
       // this.context.dispatch(nextCell(props.id));
     }
 
-    context.dispatch(executeCell(props.id,
-                                      props.cell.get('source')));
+    context.dispatch(executeCell(context.channels,
+                                 props.id,
+                                 props.cell.get('source')));
   }
 
   return (

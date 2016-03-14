@@ -148,9 +148,9 @@ export function updateCellExecutionCount(id, count) {
   };
 }
 
-export function executeCell(id, source) {
-  return (subject, dispatch, state) => {
-    const obs = agendas.executeCell(id, source)(state.channels);
+export function executeCell(channels, id, source) {
+  return (subject) => {
+    const obs = agendas.executeCell(channels, id, source);
     obs.subscribe(action => {
       subject.next(action);
     }, (error) => {
