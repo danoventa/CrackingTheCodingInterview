@@ -17,8 +17,6 @@ export default function createStore(initialState, reducers) {
     initialState || {}
   ).share();
 
-  // Debugging time
-
   const stateSymbol = Symbol('state');
   store.subscribe(state => {
     store[stateSymbol] = state;
@@ -28,9 +26,8 @@ export default function createStore(initialState, reducers) {
   store.getState = () => store[stateSymbol];
 
   function dispatch(action) {
-    // We need the current state at this time
     return typeof action === 'function'
-      ? action.call(null, subject, dispatch, store.getState())
+      ? action.call(null, subject, dispatch)
       : subject.next(action);
   }
 
