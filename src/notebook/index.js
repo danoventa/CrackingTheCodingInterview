@@ -7,55 +7,21 @@ import Provider from './components/util/provider';
 import Notebook from './components/notebook';
 
 import {
-  showSaveAsDialog,
-} from './api/save';
-
-import {
   setNotebook,
-  newKernel,
-  save,
-  saveAs,
-  killKernel,
 } from './actions';
 import { initKeymap } from './keys/keymap';
 import { ipcRenderer as ipc } from 'electron';
+
+import { initMenuHandlers } from './menu';
 
 ipc.on('main:load', (e, launchData) => {
   const { store, dispatch } = createStore({
     notebook: null,
     filename: launchData.filename,
   }, reducers);
+
   initKeymap(window, dispatch);
-
-
-  function triggerSaveAs() {
-    showSaveAsDialog()
-      .then(filename => {
-        if (!filename) {
-          return;
-        }
-        const { notebook } = store.getState();
-        dispatch(saveAs(filename, notebook));
-      }
-    );
-  }
-
-  ipc.on('menu:new-kernel', (evt, name) => dispatch(newKernel(name)));
-  ipc.on('menu:save', () => {
-    const state = store.getState();
-    const { notebook, filename } = state;
-    if (!filename) {
-      triggerSaveAs();
-    } else {
-      dispatch(save(filename, notebook));
-    }
-  });
-  ipc.on('menu:save-as', (evt, filename) => {
-    const state = store.getState();
-    const { notebook } = state;
-    dispatch(saveAs(filename, notebook));
-  });
-  ipc.on('menu:kill-kernel', () => dispatch(killKernel()));
+  initMenuHandlers(store, dispatch);
 
   class App extends React.Component {
     constructor(props) {
