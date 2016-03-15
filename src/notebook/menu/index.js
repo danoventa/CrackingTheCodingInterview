@@ -39,9 +39,17 @@ export function dispatchSave(store, dispatch) {
   }
 }
 
+export function dispatchNewkernel(store, dispatch, evt, name) {
+  dispatch(newKernel(name));
+}
+
+export function dispatchKillKernel(store, dispatch) {
+  dispatch(killKernel());
+}
+
 export function initMenuHandlers(store, dispatch) {
-  ipc.on('menu:new-kernel', (evt, name) => dispatch(newKernel(name)));
+  ipc.on('menu:new-kernel', dispatchNewkernel.bind(null, store, dispatch));
   ipc.on('menu:save', dispatchSave.bind(null, store, dispatch));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
-  ipc.on('menu:kill-kernel', () => dispatch(killKernel()));
+  ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store, dispatch));
 }
