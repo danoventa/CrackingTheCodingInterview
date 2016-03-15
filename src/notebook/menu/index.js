@@ -11,33 +11,37 @@ import {
 } from '../actions';
 import { ipcRenderer as ipc } from 'electron';
 
-export function initMenuHandlers(store, dispatch) {
-  function triggerSaveAs() {
-    showSaveAsDialog()
-      .then(filename => {
-        if (!filename) {
-          return;
-        }
-        const { notebook } = store.getState();
-        dispatch(saveAs(filename, notebook));
-      }
-    );
-  }
+export function dispatchSaveAs(store, dispatch, evt, filename) {
+  const state = store.getState();
+  const { notebook } = state;
+  dispatch(saveAs(filename, notebook));
+}
 
-  ipc.on('menu:new-kernel', (evt, name) => dispatch(newKernel(name)));
-  ipc.on('menu:save', () => {
-    const state = store.getState();
-    const { notebook, filename } = state;
-    if (!filename) {
-      triggerSaveAs();
-    } else {
-      dispatch(save(filename, notebook));
+export function triggerSaveAs(store, dispatch) {
+  showSaveAsDialog()
+    .then(filename => {
+      if (!filename) {
+        return;
+      }
+      const { notebook } = store.getState();
+      dispatch(saveAs(filename, notebook));
     }
-  });
-  ipc.on('menu:save-as', (evt, filename) => {
-    const state = store.getState();
-    const { notebook } = state;
-    dispatch(saveAs(filename, notebook));
-  });
+  );
+}
+
+export function dispatchSave(store, dispatch) {
+  const state = store.getState();
+  const { notebook, filename } = state;
+  if (!filename) {
+    triggerSaveAs(store, dispatch);
+  } else {
+    dispatch(save(filename, notebook));
+  }
+}
+
+export function initMenuHandlers(store, dispatch) {
+  ipc.on('menu:new-kernel', (evt, name) => dispatch(newKernel(name)));
+  ipc.on('menu:save', dispatchSave.bind(null, store, dispatch));
+  ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
   ipc.on('menu:kill-kernel', () => dispatch(killKernel()));
 }

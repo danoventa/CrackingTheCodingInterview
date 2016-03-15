@@ -9,6 +9,7 @@ import Notebook from './components/notebook';
 import {
   setNotebook,
 } from './actions';
+
 import { initKeymap } from './keys/keymap';
 import { ipcRenderer as ipc } from 'electron';
 
