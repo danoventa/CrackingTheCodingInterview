@@ -43,6 +43,7 @@ ipc.on('main:load', (e, launchData) => {
 
   store
     .pluck('executionState')
+    .distinctUntilChanged()
     .subscribe(executionState => {
       console.warn(`kernel status: ${executionState}`);
       // TODO: Update the app title with the execution state.
