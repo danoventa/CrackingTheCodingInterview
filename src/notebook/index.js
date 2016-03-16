@@ -15,6 +15,7 @@ import { initKeymap } from './keys/keymap';
 import { ipcRenderer as ipc } from 'electron';
 
 import { initMenuHandlers } from './menu';
+import { initNativeHandlers } from './native-window';
 
 const Rx = require('@reactivex/rxjs');
 
@@ -41,14 +42,7 @@ ipc.on('main:load', (e, launchData) => {
       dispatch(setExecutionState(st));
     });
 
-  store
-    .pluck('executionState')
-    .distinctUntilChanged()
-    .subscribe(executionState => {
-      console.warn(`kernel status: ${executionState}`);
-      // TODO: Update the app title with the execution state.
-    });
-
+  initNativeHandlers(store);
   initKeymap(window, dispatch);
   initMenuHandlers(store, dispatch);
 
