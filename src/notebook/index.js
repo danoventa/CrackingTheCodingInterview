@@ -22,7 +22,7 @@ ipc.on('main:load', (e, launchData) => {
   const { store, dispatch } = createStore({
     notebook: null,
     filename: launchData.filename,
-    executionState: 'prestart',
+    executionState: 'not connected',
   }, reducers);
 
   store
