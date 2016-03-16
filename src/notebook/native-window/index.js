@@ -7,6 +7,7 @@ export function initNativeHandlers(store) {
       return `${filename || 'Untitled'} - ${executionState}`;
     })
     .distinctUntilChanged()
+    .debounceTime(200)
     .subscribe(title => {
       const win = getCurrentWindow();
       win.setTitle(title);
