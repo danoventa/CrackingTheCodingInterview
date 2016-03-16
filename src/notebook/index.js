@@ -8,6 +8,7 @@ import Notebook from './components/notebook';
 
 import {
   setNotebook,
+  setExecutionState,
 } from './actions';
 
 import { initKeymap } from './keys/keymap';
@@ -15,11 +16,37 @@ import { ipcRenderer as ipc } from 'electron';
 
 import { initMenuHandlers } from './menu';
 
+const Rx = require('@reactivex/rxjs');
+
 ipc.on('main:load', (e, launchData) => {
   const { store, dispatch } = createStore({
     notebook: null,
     filename: launchData.filename,
+    executionState: 'prestart',
   }, reducers);
+
+  store
+    .pluck('channels')
+    .distinctUntilChanged()
+    .switchMap(channels => {
+      if (!channels || !channels.iopub) {
+        return Rx.Observable.of('not connected');
+      }
+      return channels
+        .iopub
+        .ofMessageType('status')
+        .pluck('content', 'execution_state');
+    })
+    .subscribe(st => {
+      dispatch(setExecutionState(st));
+    });
+
+  store
+    .pluck('executionState')
+    .subscribe(executionState => {
+      console.warn(`kernel status: ${executionState}`);
+      // TODO: Update the app title with the execution state.
+    });
 
   initKeymap(window, dispatch);
   initMenuHandlers(store, dispatch);

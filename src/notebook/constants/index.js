@@ -27,3 +27,5 @@ export const UPDATE_CELL_OUTPUTS = Symbol('UPDATE_CELL_OUTPUTS');
 export const UPDATE_CELL_SOURCE = Symbol('UPDATE_CELL_SOURCE');
 
 export const SET_LANGUAGE_INFO = Symbol('SET_LANGUAGE_INFO');
+
+export const SET_EXECUTION_STATE = Symbol('SET_EXECUTION_STATE');

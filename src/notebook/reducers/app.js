@@ -46,6 +46,10 @@ export default {
   [constants.ERROR_KERNEL_NOT_CONNECTED]: function alertKernelNotConnected(state) {
     return { ...state, error: 'Error: We\'re not connected to a runtime!' };
   },
+  [constants.SET_EXECUTION_STATE]: function setExecutionState(state, action) {
+    const { executionState } = action;
+    return { ...state, executionState };
+  },
   [constants.DONE_SAVING]: function doneSaving(state) {
     return { ...state, isSaving: false };
   },
