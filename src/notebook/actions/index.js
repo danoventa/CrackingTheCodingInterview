@@ -12,6 +12,13 @@ export function exit() {
   };
 }
 
+export function setExecutionState(executionState) {
+  return {
+    type: constants.SET_EXECUTION_STATE,
+    executionState,
+  };
+}
+
 export function killKernel() {
   return {
     type: constants.KILL_KERNEL,
