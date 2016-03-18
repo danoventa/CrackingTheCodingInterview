@@ -13,7 +13,6 @@ class Notebook extends React.Component {
     channels: React.PropTypes.any,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
     notebook: React.PropTypes.any,
-    onCellChange: React.PropTypes.func,
     transforms: React.PropTypes.instanceOf(Immutable.Map),
   };
 
