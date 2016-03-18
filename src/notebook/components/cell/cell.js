@@ -39,7 +39,7 @@ class Cell extends React.Component {
         onMouseLeave={this.onMouseLeave}
       >
         {
-          this.state.showToolbar ? <Toolbar { ...this.props } /> : null
+          this.state.showToolbar ? <Toolbar type={type} { ...this.props } /> : null
         }
         {
         type === 'markdown' ?
