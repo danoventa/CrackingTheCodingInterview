@@ -6,6 +6,7 @@ class Toolbar extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     id: React.PropTypes.string,
+    type: React.PropTypes.string,
   };
 
   static contextTypes = {
@@ -34,12 +35,14 @@ class Toolbar extends React.Component {
   }
 
   render() {
+    const showPlay = this.props.type !== 'markdown';
     return (
       <div className="cell_toolbar-mask">
         <div className="cell_toolbar">
-          <button onClick={this.executeCell}>
-            <i className="material-icons">play_arrow</i>
-          </button>
+          { showPlay &&
+            <button onClick={this.executeCell}>
+              <i className="material-icons">play_arrow</i>
+            </button>}
           <button onClick={this.removeCell}>
             <i className="material-icons">delete</i>
           </button>
