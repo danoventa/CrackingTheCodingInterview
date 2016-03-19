@@ -46,13 +46,13 @@
     "react-dnd": "^2.1.2",
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^0.14.7",
-    "react-jupyter-display-area": "0.1.1",
+    "react-jupyter-display-area": "0.2.1",
     "react-markdown": "^1.2.4",
     "react-router": "^1.0.3",
     "source-code-pro": "git://github.com/adobe-fonts/source-code-pro.git#release",
     "source-sans-pro": "git://github.com/adobe-fonts/source-sans-pro.git#release",
     "spawnteract": "^1.0.2",
-    "transformime-react": "0.3.0",
+    "transformime-react": "0.4.0",
     "uuid": "^2.0.1"
   },
   "devDependencies": {

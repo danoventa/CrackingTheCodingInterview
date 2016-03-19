@@ -258,3 +258,8 @@ img
   vertical-align: text-bottom;
   font-weight: bold;
 }
+
+code {
+  font-family: 'Source Code Pro';
+  font-size: '14px';
+}
