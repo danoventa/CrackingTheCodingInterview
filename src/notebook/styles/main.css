@@ -261,4 +261,6 @@ img
 
 code {
   font-family: 'Source Code Pro';
+  white-space: pre;
+  font-size: 14px;
 }
