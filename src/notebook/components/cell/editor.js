@@ -13,6 +13,7 @@ export default class Editor extends React.Component {
     lineNumbers: React.PropTypes.bool,
     onChange: React.PropTypes.func,
     theme: React.PropTypes.string,
+    focused: React.PropTypes.bool,
   };
 
   static contextTypes = {

@@ -57,6 +57,7 @@ class DraggableCell extends React.Component {
     id: React.PropTypes.string,
     isDragging: React.PropTypes.bool.isRequired,
     isOver: React.PropTypes.bool.isRequired,
+    focusedCell: React.PropTypes.string,
   };
 
   static contextTypes = {

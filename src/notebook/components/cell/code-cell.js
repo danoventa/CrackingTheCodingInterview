@@ -9,6 +9,7 @@ import Immutable from 'immutable';
 
 import {
   executeCell,
+  focusNextCell,
 } from '../../actions';
 
 const CodeCell = (props, context) => {
@@ -26,8 +27,7 @@ const CodeCell = (props, context) => {
       // TODO: Remove this, as it should be created if at the end of document only
       // this.context.dispatch(createCellAfter('code', props.id));
 
-      // should instead be
-      // this.context.dispatch(nextCell(props.id));
+      context.dispatch(focusNextCell(props.id));
     }
 
     context.dispatch(executeCell(context.channels,
@@ -43,6 +43,7 @@ const CodeCell = (props, context) => {
           id={props.id}
           input={props.cell.get('source')}
           language={props.language}
+          focused={props.id === props.focusedCell}
         />
       </div>
       <Display
@@ -62,6 +63,7 @@ CodeCell.propTypes = {
   language: React.PropTypes.string,
   theme: React.PropTypes.string,
   transforms: React.PropTypes.instanceOf(Immutable.Map),
+  focusedCell: React.PropTypes.string,
 };
 
 CodeCell.contextTypes = {

@@ -10,6 +10,15 @@ export default {
       notebook: action.data,
     };
   },
+  [constants.FOCUS_NEXT_CELL]: function focusNextCell(state, action) {
+    const { notebook } = state;
+    const cellOrder = notebook.get('cellOrder');
+    const curIndex = cellOrder.findIndex(id => id === action.id);
+    return {
+      ...state,
+      focusedCell: cellOrder.get(curIndex + 1),
+    };
+  },
   [constants.UPDATE_CELL_EXECUTION_COUNT]: function updateExecutionCount(state, action) {
     const { id, count } = action;
     const { notebook } = state;

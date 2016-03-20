@@ -8,6 +8,7 @@ class Cell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     id: React.PropTypes.string,
+    focusedCell: React.PropTypes.string,
     onCellChange: React.PropTypes.func,
   };
 

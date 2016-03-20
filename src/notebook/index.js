@@ -68,6 +68,7 @@ ipc.on('main:load', (e, launchData) => {
               <Notebook
                 notebook={this.state.notebook}
                 channels={this.state.channels}
+                focusedCell={this.state.focusedCell}
               />
             }
           </div>
