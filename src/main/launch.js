@@ -20,6 +20,10 @@ export function launch(notebook, filename) {
     win.webContents.send('main:load', { notebook: notebook.toJS(), filename });
   });
 
+  win.on('close', () => {
+    win.webContents.send('menu:kill-kernel');
+  });
+
   // Emitted when the window is closed.
   win.on('closed', () => {
     win = null;
