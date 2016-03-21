@@ -14,6 +14,7 @@ class Notebook extends React.Component {
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
     notebook: React.PropTypes.any,
     transforms: React.PropTypes.instanceOf(Immutable.Map),
+    focusedCell: React.PropTypes.string,
   };
 
   static contextTypes = {
@@ -68,6 +69,7 @@ class Notebook extends React.Component {
           displayOrder={this.props.displayOrder}
           transforms={this.props.transforms}
           moveCell={this.moveCell}
+          focusedCell={this.props.focusedCell}
         />
         <CellCreator key={`creator-${id}`} id={id} above={false} />
       </div>);

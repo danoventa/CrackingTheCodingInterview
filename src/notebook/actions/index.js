@@ -168,6 +168,13 @@ export function updateCellExecutionCount(id, count) {
   };
 }
 
+export function focusNextCell(id) {
+  return {
+    type: constants.FOCUS_NEXT_CELL,
+    id,
+  };
+}
+
 export function executeCell(channels, id, source) {
   return (subject) => {
     const obs = agendas.executeCell(channels, id, source);
