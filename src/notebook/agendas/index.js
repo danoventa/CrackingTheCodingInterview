@@ -42,9 +42,13 @@ function reduceOutputs(outputs, output) {
   // This should be broken out into a nice testable function
   // Additionally, stdout and stderr should be in order as stdout followed
   // by stderr, as implemented in the Jupyter notebook
-  if (output.output_type === 'stream') {
-    const last = outputs.last();
-    if (last && last.get('name') === output.name) {
+  if (outputs.size > 0 &&
+      output.output_type === 'stream' &&
+      typeof output.name !== 'undefined' &&
+      outputs.last().get('output_type') === 'stream'
+    ) {
+    // Invariant: size > 0, outputs.last() exists
+    if (outputs.last().get('name') === output.name) {
       return outputs.updateIn([outputs.size - 1, 'text'], text => text + output.text);
     }
     const nextToLast = outputs.butLast().last();
