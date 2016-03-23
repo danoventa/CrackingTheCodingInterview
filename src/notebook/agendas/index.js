@@ -31,6 +31,35 @@ export function acquireKernelInfo(channels) {
   return obs;
 }
 
+const emptyOutputs = new Immutable.List();
+
+function reduceOutputs(outputs, output) {
+  if (output.output_type === 'clear_output') {
+    return emptyOutputs;
+  }
+
+  // Naive implementation of kernel stream buffering
+  // This should be broken out into a nice testable function
+  if (outputs.size > 0 &&
+      output.output_type === 'stream' &&
+      typeof output.name !== 'undefined' &&
+      outputs.last().get('output_type') === 'stream'
+    ) {
+    // Invariant: size > 0, outputs.last() exists
+    if (outputs.last().get('name') === output.name) {
+      return outputs.updateIn([outputs.size - 1, 'text'], text => text + output.text);
+    }
+    const nextToLast = outputs.butLast().last();
+    if (nextToLast &&
+        nextToLast.get('output_type') === 'stream' &&
+        nextToLast.get('name') === output.name) {
+      return outputs.updateIn([outputs.size - 2, 'text'], text => text + output.text);
+    }
+  }
+
+  return outputs.push(Immutable.fromJS(output));
+}
+
 export function executeCell(channels, id, source) {
   return Rx.Observable.create((subscriber) => {
     if (!channels || !channels.iopub || !channels.shell) {
@@ -70,12 +99,7 @@ export function executeCell(channels, id, source) {
          .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
          .map(msgSpecToNotebookFormat)
          // Iteratively reduce on the outputs
-         .scan((outputs, output) => {
-           if (output.output_type === 'clear_output') {
-             return new Immutable.List();
-           }
-           return outputs.push(Immutable.fromJS(output));
-         }, new Immutable.List())
+         .scan(reduceOutputs, emptyOutputs)
          // Update the outputs with each change
          .subscribe(outputs => {
            subscriber.next(updateCellOutputs(id, outputs));
