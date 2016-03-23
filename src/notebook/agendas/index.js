@@ -74,6 +74,22 @@ export function executeCell(channels, id, source) {
            if (output.output_type === 'clear_output') {
              return new Immutable.List();
            }
+
+           // Naive implementation of stream buffering
+           // This should be broken out into a nice testable function
+           // Additionally, stdout and stderr should be in order as stdout followed
+           // by stderr, as implemented in the Jupyter notebook
+           if (output.output_type === 'stream') {
+             const last = outputs.last();
+             if (last && last.get('name') === output.name) {
+               return outputs.updateIn([outputs.size - 1, 'text'], text => text + output.text);
+             }
+             const nextToLast = outputs.butLast().last();
+             if (nextToLast && nextToLast.get('name') === output.name) {
+               return outputs.updateIn([outputs.size - 2, 'text'], text => text + output.text);
+             }
+           }
+
            return outputs.push(Immutable.fromJS(output));
          }, new Immutable.List())
          // Update the outputs with each change
