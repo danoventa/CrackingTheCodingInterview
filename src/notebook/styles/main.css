@@ -167,6 +167,11 @@ img
     padding: 10px 10px 10px 60px;
 }
 
+.cell_display:empty
+{
+    display:none;
+}
+
 .code_cell .input_area
 {
     display: flex;
