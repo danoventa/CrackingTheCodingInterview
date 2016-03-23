@@ -10,6 +10,13 @@ export default {
       notebook: action.data,
     };
   },
+  [constants.FOCUS_CELL]: function focusCell(state, action){
+    const { id } = action;
+    return {
+      ...state,
+      focusedCell: id,
+    };
+  },
   [constants.FOCUS_NEXT_CELL]: function focusNextCell(state, action) {
     const { notebook } = state;
     const cellOrder = notebook.get('cellOrder');
