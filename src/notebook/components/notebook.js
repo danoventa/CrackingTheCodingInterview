@@ -73,8 +73,17 @@ class Notebook extends React.Component {
       const belowFold = (cellTop + cellHeight) > (viewportOffset + viewportHeight);
       const aboveFold = cellTop < viewportOffset;
 
-      if (aboveFold || belowFold) {
+      if (aboveFold) {
         document.body.scrollTop = cellTop;
+      }
+
+      if (belowFold) {
+        if (cellHeight > viewportHeight) {
+          document.body.scrollTop = cellTop;
+        } else {
+          const offset = viewportHeight - cellHeight;
+          document.body.scrollTop = cellTop - offset;
+        }
       }
     }
   }
