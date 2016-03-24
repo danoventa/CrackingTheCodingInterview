@@ -11,7 +11,6 @@ export function initNativeHandlers(store) {
     .subscribe(res => {
       const win = getCurrentWindow();
       // no indication of this does not exists or is no-op on Non OSX.
-      debugger;
       if(res.path){
           (win.setRepresentedFilename||function(){})(res.path);
       }
