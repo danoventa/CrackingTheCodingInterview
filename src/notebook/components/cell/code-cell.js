@@ -26,9 +26,6 @@ const CodeCell = (props, context) => {
     e.preventDefault();
 
     if (e.shiftKey) {
-      // TODO: Remove this, as it should be created if at the end of document only
-      // this.context.dispatch(createCellAfter('code', props.id));
-
       context.dispatch(focusNextCell(props.id));
     }
 

@@ -10,7 +10,7 @@ export default {
       notebook: action.data,
     };
   },
-  [constants.FOCUS_CELL]: function focusCell(state, action){
+  [constants.FOCUS_CELL]: function focusCell(state, action) {
     const { id } = action;
     return {
       ...state,
