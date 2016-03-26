@@ -51,6 +51,12 @@ export default class Editor extends React.Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.focused && prevProps.focused !== this.props.focused) {
+      this.refs.codemirror.editor.focus();
+    }
+  }
+
   onChange(e) {
     if (this.props.onChange) {
       this.props.onChange(e.target.value);

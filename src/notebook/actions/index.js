@@ -168,6 +168,13 @@ export function updateCellExecutionCount(id, count) {
   };
 }
 
+export function focusCell(id) {
+  return {
+    type: constants.FOCUS_CELL,
+    id,
+  };
+}
+
 export function focusNextCell(id) {
   return {
     type: constants.FOCUS_NEXT_CELL,

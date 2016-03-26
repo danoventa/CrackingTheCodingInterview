@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
@@ -53,6 +54,40 @@ class Notebook extends React.Component {
     // Assume markdown should be required
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.focusedCell !== this.props.focusedCell) {
+      this.resolveScrollPosition(nextProps.focusedCell);
+    }
+  }
+
+  resolveScrollPosition(id) {
+    const viewportHeight = window.innerHeight;
+    const viewportOffset = document.body.scrollTop;
+
+    const focusedCell = ReactDOM.findDOMNode(this.refs[id]);
+
+    if (focusedCell) {
+      const cellTop = focusedCell.offsetTop;
+      const cellHeight = focusedCell.offsetHeight;
+
+      const belowFold = (cellTop + cellHeight) > (viewportOffset + viewportHeight);
+      const aboveFold = cellTop < viewportOffset;
+
+      if (aboveFold) {
+        document.body.scrollTop = cellTop;
+      }
+
+      if (belowFold) {
+        if (cellHeight > viewportHeight) {
+          document.body.scrollTop = cellTop;
+        } else {
+          const offset = viewportHeight - cellHeight;
+          document.body.scrollTop = cellTop - offset;
+        }
+      }
+    }
+  }
+
   moveCell(sourceId, destinationId, above) {
     this.context.dispatch(moveCell(sourceId, destinationId, above));
   }
@@ -61,11 +96,15 @@ class Notebook extends React.Component {
     const cellMap = this.props.notebook.get('cellMap');
 
     return (
-      <div key={`cell-container-${id}`}>
+      <div
+        key={`cell-container-${id}`}
+        ref="container"
+      >
         <DraggableCell cell={cellMap.get(id)}
           language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
           id={id}
           key={id}
+          ref={id}
           displayOrder={this.props.displayOrder}
           transforms={this.props.transforms}
           moveCell={this.moveCell}

@@ -4,6 +4,8 @@ import CodeCell from './code-cell';
 import MarkdownCell from './markdown-cell';
 import Toolbar from './toolbar';
 
+import { focusCell } from '../../actions';
+
 class Cell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
@@ -12,10 +14,15 @@ class Cell extends React.Component {
     onCellChange: React.PropTypes.func,
   };
 
+  static contextTypes = {
+    dispatch: React.PropTypes.func,
+  };
+
   constructor() {
     super();
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
+    this.selectCell = this.selectCell.bind(this);
   }
 
   state = {
@@ -30,12 +37,18 @@ class Cell extends React.Component {
     this.setState({ showToolbar: false });
   }
 
+  selectCell() {
+    this.context.dispatch(focusCell(this.props.id));
+  }
+
   render() {
     const cell = this.props.cell;
     const type = cell.get('cell_type');
+    const focused = this.props.focusedCell === this.props.id;
     return (
       <div
-        className="cell"
+        className={`cell ${focused ? 'focused' : ''}`}
+        onClick={this.selectCell}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >

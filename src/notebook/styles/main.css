@@ -101,6 +101,10 @@ img
     box-shadow: 1px 1px 3px rgba(0,0,0,.12), -1px -1px 3px rgba(0,0,0,.12);
 }
 
+.cell.focused {
+    box-shadow: 3px 3px 9px rgba(0,0,0,.12), -3px -3px 9px rgba(0,0,0,.12);
+}
+
 .cell:hover .input_area .cell_inputs,
 .cell:active .input_area .cell_inputs,
 .cell:focus .input_area .cell_inputs
