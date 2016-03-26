@@ -23,6 +23,8 @@ const CodeCell = (props, context) => {
       return;
     }
 
+    e.preventDefault();
+
     if (e.shiftKey) {
       // TODO: Remove this, as it should be created if at the end of document only
       // this.context.dispatch(createCellAfter('code', props.id));

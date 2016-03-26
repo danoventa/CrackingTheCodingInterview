@@ -36,15 +36,6 @@ export default class Editor extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  componentDidMount() {
-    const editor = ReactDOM.findDOMNode(this.refs.codemirror);
-    editor.addEventListener('keypress', (e) => {
-      if (e.keyCode === 13 && e.shiftKey) {
-        e.preventDefault();
-      }
-    });
-  }
-
   componentWillReceiveProps(nextProps) {
     this.setState({
       source: nextProps.input,
