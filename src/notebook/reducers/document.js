@@ -21,9 +21,25 @@ export default {
     const { notebook } = state;
     const cellOrder = notebook.get('cellOrder');
     const curIndex = cellOrder.findIndex(id => id === action.id);
+
+    const nextIndex = curIndex + 1;
+
+    // When at the end, create a new cell
+    if (nextIndex >= cellOrder.size) {
+      const cellID = uuid.v4();
+      // TODO: condition on state.defaultCellType (markdown vs. code)
+      const cell = commutable.emptyCodeCell;
+      return {
+        ...state,
+        focusedCell: cellID,
+        notebook: commutable.insertCellAt(notebook, cell, cellID, nextIndex),
+      };
+    }
+
+    // When in the middle of the notebook document, move to the next cell
     return {
       ...state,
-      focusedCell: cellOrder.get(curIndex + 1),
+      focusedCell: cellOrder.get(nextIndex),
     };
   },
   [constants.UPDATE_CELL_EXECUTION_COUNT]: function updateExecutionCount(state, action) {
