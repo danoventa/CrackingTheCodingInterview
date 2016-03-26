@@ -4,6 +4,7 @@ import { launchFilename } from './launch';
 
 import { Menu } from 'electron';
 import { defaultMenu, loadFullMenu } from './menu';
+import { resolve } from 'path';
 
 app.on('window-all-closed', () => {
   // On OS X, we want to keep the app and menu bar active
@@ -24,5 +25,5 @@ app.on('ready', () => {
   Menu.setApplicationMenu(defaultMenu);
   // Let the kernels/languages come in after
   loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
-  notebooks.forEach(launchFilename);
+  notebooks.map(f=>resolve(f)).forEach(launchFilename);
 });
