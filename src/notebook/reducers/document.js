@@ -5,9 +5,11 @@ import * as constants from '../constants';
 
 export default {
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
+    const notebook = action.data;
     return {
       ...state,
-      notebook: action.data,
+      notebook,
+      focusedCell: notebook.getIn(['cellOrder', 0]),
     };
   },
   [constants.FOCUS_CELL]: function focusCell(state, action) {
