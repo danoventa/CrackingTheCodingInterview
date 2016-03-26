@@ -36,6 +36,11 @@ export default class Editor extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
+  componentWillMount() {
+      require('codemirror/addon/hint/show-hint');
+      require('codemirror/addon/hint/anyword-hint');
+  }
+
   componentDidMount() {
     // On first load, if focused, set codemirror to focus
     if (this.props.focused) {
@@ -82,6 +87,7 @@ export default class Editor extends React.Component {
           lineNumbers={this.props.lineNumbers}
           theme={this.props.theme}
           onChange={this.onChange}
+          extraKeys={{"Ctrl-Space": "autocomplete"}}
         />
       </div>
     );

@@ -29,3 +29,32 @@
 
 .cm-s-composition .CodeMirror-activeline-background { background: #e8f2ff; }
 .cm-s-composition .CodeMirror-matchingbracket { outline:1px solid grey; color:black !important; }
+
+/* Overwrite some of the hint Styling */
+
+.CodeMirror-hints {
+
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  border-radius: 0px;
+  border: none;
+  padding:0;
+
+  background: white;
+  font-size: 90%;
+  font-family: 'Source Code Pro', monospace;
+
+  overflow-y: auto;
+}
+
+.CodeMirror-hint {
+  border-radius: 0px;
+  max-width: 19em;
+  white-space: pre;
+  cursor: pointer;
+}
+
+li.CodeMirror-hint-active {
+  background: #ABD1FF;
+}
