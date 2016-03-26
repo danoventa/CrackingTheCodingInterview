@@ -24,6 +24,7 @@ export default class Editor extends React.Component {
     lineNumbers: false,
     text: '',
     theme: 'composition',
+    focused: false,
   };
 
   constructor(props) {
@@ -33,6 +34,13 @@ export default class Editor extends React.Component {
     };
 
     this.onChange = this.onChange.bind(this);
+  }
+
+  componentDidMount() {
+    // On first load, if focused, set codemirror to focus
+    if (this.props.focused) {
+      this.refs.codemirror.editor.focus();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
