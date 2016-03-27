@@ -92,9 +92,24 @@ export function executeCell(channels, id, code) {
         .pluck('text')
         .subscribe(text => {
           subscriber.next(updateCellSource(id, text));
-        })
+        }));
+    subscriptions.push(
       // TODO: Handle case where x.replace is false by creating new cell
-    );
+      setInputStream.filter(x => !x.replace)
+        .pluck('text')
+        .subscribe((text) => {
+          console.warn('set_next_input not implemented for replace=false');
+          console.warn(text);
+        }));
+
+    subscriptions.push(
+      payloadStream.filter(p => p.source === 'page')
+        .pluck('data')
+        .subscribe((mimebundle) => {
+          console.warn('pager not implemented yet');
+          // TODO: use transformime-react + a design for the pager
+          console.warn(mimebundle);
+        }));
 
     // Set the current outputs to an empty list
     subscriber.next(updateCellOutputs(id, new Immutable.List()));
