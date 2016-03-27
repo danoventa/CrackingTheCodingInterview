@@ -26,13 +26,19 @@ body
     color: rgb(51,51,51);
 }
 
-/* By default the notebook centers all images. */
 img
 {
     display: block;
+    max-width: 100%;
 
     margin-right: auto;
     margin-left: auto;
+}
+
+th,
+td {
+    padding: 0.5em 1em;
+    border: 1px solid #cbcbcb;
 }
 
 /*
@@ -273,17 +279,4 @@ code {
   font-family: 'Source Code Pro';
   white-space: pre;
   font-size: 14px;
-}
-
-/* Tables! */
-
-th,
-td {
-    padding: 0.5em 1em;
-    border: 1px solid #cbcbcb;
-}
-
-img {
-  display:block;
-  max-width: 100%;
 }
