@@ -9,6 +9,7 @@ import {
 
 import {
   updateCellExecutionCount,
+  updateCellSource,
   updateCellOutputs,
   setLanguageInfo,
 } from '../actions';
@@ -60,7 +61,7 @@ function reduceOutputs(outputs, output) {
   return outputs.push(Immutable.fromJS(output));
 }
 
-export function executeCell(channels, id, source) {
+export function executeCell(channels, id, code) {
   return Rx.Observable.create((subscriber) => {
     if (!channels || !channels.iopub || !channels.shell) {
       subscriber.error('kernel not connected');
@@ -73,18 +74,26 @@ export function executeCell(channels, id, source) {
     // Track all of our subscriptions for full disposal
     const subscriptions = [];
 
-    const executeRequest = createExecuteRequest(source);
-
+    const executeRequest = createExecuteRequest(code);
 
     const shellChildren = shell.childOf(executeRequest).share();
 
-    // Limitation of the Subject implementation in enchannel
-    // we must shell.subscribe in order to shell.next
+    const payloadStream = shellChildren
+      .ofMessageType('execute_reply')
+      .pluck('content', 'payload')
+      .filter(Boolean)
+      .flatMap(payloads => Rx.Observable.from(payloads));
+
+    const setInputStream = payloadStream
+      .filter(payload => payload.source === 'set_next_input');
+
     subscriptions.push(
-      shellChildren
-           .ofMessageType('execute_reply')
-           .pluck('content')
-           .subscribe((content) => {console.warn(content);})
+      setInputStream.filter(x => x.replace)
+        .pluck('text')
+        .subscribe(text => {
+          subscriber.next(updateCellSource(id, text));
+        })
+      // TODO: Handle case where x.replace is false by creating new cell
     );
 
     // Set the current outputs to an empty list
