@@ -1,3 +1,5 @@
+const path = require('path');
+
 import Immutable from 'immutable';
 import * as commutable from 'commutable';
 import { writeFile } from 'fs';
@@ -32,9 +34,9 @@ export function setLanguageInfo(langInfo) {
   };
 }
 
-export function newKernel(kernelSpecName, spawnOptions) {
+export function newKernel(kernelSpecName, cwd) {
   return (subject) => {
-    launchKernel(kernelSpecName, spawnOptions)
+    launchKernel(kernelSpecName, { cwd })
       .then(kc => {
         const { channels, connectionFile, spawn } = kc;
 
@@ -86,7 +88,8 @@ export function saveAs(filename, notebook) {
   };
 }
 
-export function setNotebook(nbData, spawnOptions) {
+export function setNotebook(nbData, filename) {
+  const cwd = path.dirname(path.resolve(filename));
   return (subject, dispatch) => {
     const data = Immutable.fromJS(nbData);
     subject.next({
@@ -101,7 +104,7 @@ export function setNotebook(nbData, spawnOptions) {
     ], data.getIn([
       'metadata', 'language_info', 'name',
     ], 'python3'));
-    dispatch(newKernel(kernelName, spawnOptions));
+    dispatch(newKernel(kernelName, cwd));
   };
 }
 

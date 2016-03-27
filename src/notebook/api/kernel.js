@@ -1,5 +1,3 @@
-const path = require('path');
-
 import {
   createControlSubject,
   createStdinSubject,
@@ -29,12 +27,4 @@ export function launchKernel(kernelSpecName, spawnOptions) {
           spawn,
         };
       });
-}
-
-export function createSpawnOptions(filename) {
-  const spawnOptions = {};
-  if (filename) {
-    spawnOptions.cwd = path.dirname(path.resolve(filename));
-  }
-  return spawnOptions;
 }

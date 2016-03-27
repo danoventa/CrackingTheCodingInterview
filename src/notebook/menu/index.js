@@ -1,10 +1,8 @@
+const path = require('path');
+
 import {
   showSaveAsDialog,
 } from '../api/save';
-
-import {
-  createSpawnOptions,
-} from '../api/kernel';
 
 import {
   newKernel,
@@ -43,8 +41,11 @@ export function dispatchSave(store, dispatch) {
 }
 
 export function dispatchNewkernel(store, dispatch, evt, name) {
-  const { filename } = store.getState();
-  const spawnOptions = createSpawnOptions(filename);
+  const state = store.getState();
+  const spawnOptions = {};
+  if (state && state.filename) {
+    spawnOptions.cwd = path.dirname(path.resolve(state.filename));
+  }
   dispatch(newKernel(name, spawnOptions));
 }
 

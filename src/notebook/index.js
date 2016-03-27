@@ -11,10 +11,6 @@ import {
   setExecutionState,
 } from './actions';
 
-import {
-  createSpawnOptions,
-} from './api/kernel';
-
 import { initKeymap } from './keys/keymap';
 import { ipcRenderer as ipc } from 'electron';
 
@@ -59,8 +55,7 @@ ipc.on('main:load', (e, launchData) => {
     componentDidMount() {
       const state = store.getState();
       const filename = (state && state.filename) || launchData.filename;
-      const spawnOptions = createSpawnOptions(filename);
-      dispatch(setNotebook(launchData.notebook, spawnOptions));
+      dispatch(setNotebook(launchData.notebook, filename));
     }
     render() {
       return (
