@@ -89,7 +89,7 @@ export function saveAs(filename, notebook) {
 }
 
 export function setNotebook(nbData, filename) {
-  const cwd = path.dirname(path.resolve(filename));
+  const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd;
   return (subject, dispatch) => {
     const data = Immutable.fromJS(nbData);
     subject.next({
