@@ -1,7 +1,10 @@
-
 import {
   showSaveAsDialog,
 } from '../api/save';
+
+import {
+  createSpawnOptions,
+} from '../api/kernel';
 
 import {
   newKernel,
@@ -40,7 +43,9 @@ export function dispatchSave(store, dispatch) {
 }
 
 export function dispatchNewkernel(store, dispatch, evt, name) {
-  dispatch(newKernel(name));
+  const { filename } = store.getState();
+  const spawnOptions = createSpawnOptions(filename);
+  dispatch(newKernel(name, spawnOptions));
 }
 
 export function dispatchKillKernel(store, dispatch) {

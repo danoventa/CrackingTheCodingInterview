@@ -32,9 +32,9 @@ export function setLanguageInfo(langInfo) {
   };
 }
 
-export function newKernel(kernelSpecName) {
+export function newKernel(kernelSpecName, spawnOptions) {
   return (subject) => {
-    launchKernel(kernelSpecName)
+    launchKernel(kernelSpecName, spawnOptions)
       .then(kc => {
         const { channels, connectionFile, spawn } = kc;
 
@@ -86,7 +86,7 @@ export function saveAs(filename, notebook) {
   };
 }
 
-export function setNotebook(nbData) {
+export function setNotebook(nbData, spawnOptions) {
   return (subject, dispatch) => {
     const data = Immutable.fromJS(nbData);
     subject.next({
@@ -101,7 +101,7 @@ export function setNotebook(nbData) {
     ], data.getIn([
       'metadata', 'language_info', 'name',
     ], 'python3'));
-    dispatch(newKernel(kernelName));
+    dispatch(newKernel(kernelName, spawnOptions));
   };
 }
 

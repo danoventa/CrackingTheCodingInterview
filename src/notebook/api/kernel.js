@@ -1,3 +1,5 @@
+const path = require('path');
+
 import {
   createControlSubject,
   createStdinSubject,
@@ -8,8 +10,8 @@ import {
 import * as uuid from 'uuid';
 import { launch } from 'spawnteract';
 
-export function launchKernel(kernelSpecName) {
-  return launch(kernelSpecName)
+export function launchKernel(kernelSpecName, spawnOptions) {
+  return launch(kernelSpecName, spawnOptions)
       .then(c => {
         const kernelConfig = c.config;
         const spawn = c.spawn;
@@ -27,4 +29,12 @@ export function launchKernel(kernelSpecName) {
           spawn,
         };
       });
+}
+
+export function createSpawnOptions(filename) {
+  const spawnOptions = {};
+  if (filename) {
+    spawnOptions.cwd = path.dirname(path.resolve(filename));
+  }
+  return spawnOptions;
 }
