@@ -4,6 +4,9 @@ import CodeMirror from 'react-code-mirror';
 
 import { updateCellSource } from '../../actions';
 
+require('codemirror/addon/hint/show-hint');
+require('codemirror/addon/hint/anyword-hint');
+
 export default class Editor extends React.Component {
   static propTypes = {
     id: React.PropTypes.string,
@@ -34,11 +37,6 @@ export default class Editor extends React.Component {
     };
 
     this.onChange = this.onChange.bind(this);
-  }
-
-  componentWillMount() {
-      require('codemirror/addon/hint/show-hint');
-      require('codemirror/addon/hint/anyword-hint');
   }
 
   componentDidMount() {
@@ -87,7 +85,7 @@ export default class Editor extends React.Component {
           lineNumbers={this.props.lineNumbers}
           theme={this.props.theme}
           onChange={this.onChange}
-          extraKeys={{"Ctrl-Space": "autocomplete"}}
+          extraKeys={{ 'Ctrl-Space': 'autocomplete' }}
         />
       </div>
     );
