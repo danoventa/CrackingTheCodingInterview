@@ -75,9 +75,17 @@ export function executeCell(channels, id, source) {
 
     const executeRequest = createExecuteRequest(source);
 
+
+    const shellChildren = shell.childOf(executeRequest).share();
+
     // Limitation of the Subject implementation in enchannel
     // we must shell.subscribe in order to shell.next
-    subscriptions.push(shell.subscribe(() => {}));
+    subscriptions.push(
+      shellChildren
+           .ofMessageType('execute_reply')
+           .pluck('content')
+           .subscribe((content) => {console.warn(content);})
+    );
 
     // Set the current outputs to an empty list
     subscriber.next(updateCellOutputs(id, new Immutable.List()));
