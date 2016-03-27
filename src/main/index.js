@@ -25,5 +25,5 @@ app.on('ready', () => {
   Menu.setApplicationMenu(defaultMenu);
   // Let the kernels/languages come in after
   loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
-  notebooks.map(f=>resolve(f)).forEach(launchFilename);
+  notebooks.filter(Boolean).map(f => resolve(f)).forEach(launchFilename);
 });
