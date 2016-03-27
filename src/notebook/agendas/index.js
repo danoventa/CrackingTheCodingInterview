@@ -8,7 +8,9 @@ import {
 } from '../api/messaging';
 
 import {
+  createCellAfter,
   updateCellExecutionCount,
+  updateCellSource,
   updateCellOutputs,
   setLanguageInfo,
 } from '../actions';
@@ -60,7 +62,7 @@ function reduceOutputs(outputs, output) {
   return outputs.push(Immutable.fromJS(output));
 }
 
-export function executeCell(channels, id, source) {
+export function executeCell(channels, id, code) {
   return Rx.Observable.create((subscriber) => {
     if (!channels || !channels.iopub || !channels.shell) {
       subscriber.error('kernel not connected');
@@ -73,11 +75,42 @@ export function executeCell(channels, id, source) {
     // Track all of our subscriptions for full disposal
     const subscriptions = [];
 
-    const executeRequest = createExecuteRequest(source);
+    const executeRequest = createExecuteRequest(code);
 
-    // Limitation of the Subject implementation in enchannel
-    // we must shell.subscribe in order to shell.next
-    subscriptions.push(shell.subscribe(() => {}));
+    const shellChildren = shell.childOf(executeRequest).share();
+
+    const payloadStream = shellChildren
+      .ofMessageType('execute_reply')
+      .pluck('content', 'payload')
+      .filter(Boolean)
+      .flatMap(payloads => Rx.Observable.from(payloads));
+
+    const setInputStream = payloadStream
+      .filter(payload => payload.source === 'set_next_input');
+
+    subscriptions.push(
+      setInputStream.filter(x => x.replace)
+        .pluck('text')
+        .subscribe(text => {
+          subscriber.next(updateCellSource(id, text));
+        }));
+    subscriptions.push(
+      // TODO: Handle case where x.replace is false by creating new cell
+      setInputStream.filter(x => !x.replace)
+        .pluck('text')
+        .subscribe((text) => {
+          subscriber.next(createCellAfter('code', id, text));
+        }));
+
+    subscriptions.push(
+      payloadStream.filter(p => p.source === 'page')
+        .subscribe((pagerData) => {
+          // pagerData.data has the mimebundle (use transformime-react)
+          // pagerData.start is the line offset to start from
+          // could we display this inline in codemirror?
+          console.warn('pager not implemented yet');
+          console.warn(pagerData);
+        }));
 
     // Set the current outputs to an empty list
     subscriber.next(updateCellOutputs(id, new Immutable.List()));
