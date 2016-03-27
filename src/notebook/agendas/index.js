@@ -104,11 +104,12 @@ export function executeCell(channels, id, code) {
 
     subscriptions.push(
       payloadStream.filter(p => p.source === 'page')
-        .pluck('data')
-        .subscribe((mimebundle) => {
+        .subscribe((pagerData) => {
+          // pagerData.data has the mimebundle (use transformime-react)
+          // pagerData.start is the line offset to start from
+          // could we display this inline in codemirror?
           console.warn('pager not implemented yet');
-          // TODO: use transformime-react + a design for the pager
-          console.warn(mimebundle);
+          console.warn(pagerData);
         }));
 
     // Set the current outputs to an empty list
