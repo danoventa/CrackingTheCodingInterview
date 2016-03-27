@@ -36,6 +36,7 @@ export const fileSubMenus = {
         properties: [
           'openFile',
         ],
+        // TODO: This should be based on the currently opened notebook
         defaultPath: process.cwd(),
       };
       dialog.showOpenDialog(opts, (fname) => {
