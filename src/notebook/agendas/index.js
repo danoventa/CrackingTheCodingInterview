@@ -8,6 +8,7 @@ import {
 } from '../api/messaging';
 
 import {
+  createCellAfter,
   updateCellExecutionCount,
   updateCellSource,
   updateCellOutputs,
@@ -98,8 +99,7 @@ export function executeCell(channels, id, code) {
       setInputStream.filter(x => !x.replace)
         .pluck('text')
         .subscribe((text) => {
-          console.warn('set_next_input not implemented for replace=false');
-          console.warn(text);
+          subscriber.next(createCellAfter('code', id, text));
         }));
 
     subscriptions.push(

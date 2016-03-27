@@ -140,9 +140,10 @@ export function removeCell(id) {
   };
 }
 
-export function createCellAfter(cellType, id) {
+export function createCellAfter(cellType, id, source) {
   return {
     type: constants.NEW_CELL_AFTER,
+    source: source || '',
     cellType,
     id,
   };

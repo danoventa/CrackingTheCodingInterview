@@ -79,7 +79,7 @@ export default {
   },
   [constants.NEW_CELL_AFTER]: function newCellAfter(state, action) {
     // Draft API
-    const { cellType, id } = action;
+    const { cellType, id, source } = action;
     const { notebook } = state;
     const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
                                            commutable.emptyCodeCell;
@@ -87,7 +87,7 @@ export default {
     const cellID = uuid.v4();
     return {
       ...state,
-      notebook: commutable.insertCellAt(notebook, cell, cellID, index),
+      notebook: commutable.insertCellAt(notebook, cell.set('source', source), cellID, index),
     };
   },
   [constants.NEW_CELL_BEFORE]: function newCellBefore(state, action) {
