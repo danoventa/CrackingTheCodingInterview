@@ -1,3 +1,4 @@
+const path = require('path');
 
 import {
   showSaveAsDialog,
@@ -40,7 +41,12 @@ export function dispatchSave(store, dispatch) {
 }
 
 export function dispatchNewkernel(store, dispatch, evt, name) {
-  dispatch(newKernel(name));
+  const state = store.getState();
+  const spawnOptions = {};
+  if (state && state.filename) {
+    spawnOptions.cwd = path.dirname(path.resolve(state.filename));
+  }
+  dispatch(newKernel(name, spawnOptions));
 }
 
 export function dispatchKillKernel(store, dispatch) {

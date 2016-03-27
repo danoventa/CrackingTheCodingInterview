@@ -8,8 +8,8 @@ import {
 import * as uuid from 'uuid';
 import { launch } from 'spawnteract';
 
-export function launchKernel(kernelSpecName) {
-  return launch(kernelSpecName)
+export function launchKernel(kernelSpecName, spawnOptions) {
+  return launch(kernelSpecName, spawnOptions)
       .then(c => {
         const kernelConfig = c.config;
         const spawn = c.spawn;
