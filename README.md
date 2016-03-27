@@ -6,9 +6,10 @@
 
 :notebook: It's an Electron-based Notebook! :notebook:
 
+![nteract demo](https://cloud.githubusercontent.com/assets/836375/14068164/6ebbc6ea-f42f-11e5-98bc-eb149d0b0730.gif)
+
 Note: this isn't feature complete yet. There will be :bug:s and we're currently
-lacking a lot of core features like [tab completion](https://github.com/nteract/nteract/issues/134),
-switching focus to the next cell on shift-enter, and closing down kernels properly.
+lacking a lot of core features like [tab completion](https://github.com/nteract/nteract/issues/134), introspection, and closing down kernels properly.
 
 ### Scope and goals
 
