@@ -114,14 +114,15 @@ class Notebook extends React.Component {
     e.preventDefault();
 
     const cellMap = this.props.notebook.get('cellMap');
-    const cell = cellMap.get(this.props.focusedCell);
+    const id = this.props.focusedCell;
+    const cell = cellMap.get(id);
 
     if (e.shiftKey) {
       this.context.dispatch(focusNextCell(this.props.focusedCell));
     }
 
     this.context.dispatch(
-      executeCell(this.props.channels, cell.get('id'), cell.get('source'))
+      executeCell(this.props.channels, id, cell.get('source'))
     );
   }
 
