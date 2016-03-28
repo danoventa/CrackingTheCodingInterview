@@ -5,7 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import DraggableCell from './cell/draggable-cell';
 import CellCreator from './cell/cell-creator';
-import { moveCell } from '../actions';
+import { executeCell, focusNextCell, moveCell } from '../actions';
 
 import Immutable from 'immutable';
 
@@ -29,6 +29,7 @@ class Notebook extends React.Component {
   constructor() {
     super();
     this.createCellElement = this.createCellElement.bind(this);
+    this.keyDown = this.keyDown.bind(this);
     this.moveCell = this.moveCell.bind(this);
   }
 
@@ -54,10 +55,18 @@ class Notebook extends React.Component {
     // Assume markdown should be required
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.keyDown);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.focusedCell !== this.props.focusedCell) {
       this.resolveScrollPosition(nextProps.focusedCell);
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.keyDown);
   }
 
   resolveScrollPosition(id) {
@@ -86,6 +95,34 @@ class Notebook extends React.Component {
         }
       }
     }
+  }
+
+  keyDown(e) {
+    if (e.keyCode !== 13) {
+      return;
+    }
+
+    const shiftXORctrl = (e.shiftKey || e.ctrlKey) && !(e.shiftKey && e.ctrlKey);
+    if (!shiftXORctrl) {
+      return;
+    }
+
+    if (!this.props.focusedCell) {
+      return;
+    }
+
+    e.preventDefault();
+
+    const cellMap = this.props.notebook.get('cellMap');
+    const cell = cellMap.get(this.props.focusedCell);
+
+    if (e.shiftKey) {
+      this.context.dispatch(focusNextCell(this.props.focusedCell));
+    }
+
+    this.context.dispatch(
+      executeCell(this.props.channels, cell.get('id'), cell.get('source'))
+    );
   }
 
   moveCell(sourceId, destinationId, above) {
