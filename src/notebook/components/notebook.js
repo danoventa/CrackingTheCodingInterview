@@ -121,9 +121,11 @@ class Notebook extends React.Component {
       this.context.dispatch(focusNextCell(this.props.focusedCell));
     }
 
-    this.context.dispatch(
-      executeCell(this.props.channels, id, cell.get('source'))
-    );
+    if (cell.get('cell_type') === 'code') {
+      this.context.dispatch(
+        executeCell(this.props.channels, id, cell.get('source'))
+      );
+    }
   }
 
   moveCell(sourceId, destinationId, above) {
