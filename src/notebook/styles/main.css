@@ -112,7 +112,12 @@ td {
 }
 
 .cell:hover .input_area .cell_inputs,
-.cell:active .input_area .cell_inputs,
+.cell:active .input_area .cell_inputs
+{
+    background-color: #eeedee;
+}
+
+
 .cell:focus .input_area .cell_inputs,
 .cell.focused .input_area .cell_inputs
 {
