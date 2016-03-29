@@ -34,6 +34,7 @@
     "atom-keymap": "^6.3.1",
     "codemirror": "^5.12.0",
     "color": "^0.10.1",
+    "commander": "^2.9.0",
     "commutable": "^0.6.0",
     "enchannel-zmq-backend": "^1.0.1",
     "history": "^1.17.0",
