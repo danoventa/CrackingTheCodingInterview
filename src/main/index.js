@@ -1,10 +1,23 @@
 import app from 'app';
 
-import { launchFilename } from './launch';
+import {
+  launchFilename,
+  launchNewNotebook,
+} from './launch';
 
 import { Menu } from 'electron';
 import { defaultMenu, loadFullMenu } from './menu';
 import { resolve } from 'path';
+
+const program = require('commander');
+const version = require('../../package.json').version;
+
+program
+  .version(version)
+  .option('-k', '--kernel [kernel]', '')
+  .parse(process.argv);
+
+const notebooks = program.args;
 
 app.on('window-all-closed', () => {
   // On OS X, we want to keep the app and menu bar active
@@ -13,17 +26,14 @@ app.on('window-all-closed', () => {
   }
 });
 
-// First two arguments are Electron and main.js
-// We'll assume the rest are the notebooks to be opened
-const notebooks = process.argv.slice(2);
-if (notebooks <= 0) {
-  notebooks.push(null);
-}
-
 app.on('ready', () => {
   // Get the default menu first
   Menu.setApplicationMenu(defaultMenu);
   // Let the kernels/languages come in after
   loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
-  notebooks.filter(Boolean).forEach(f => launchFilename(resolve(f)));
+  if (notebooks <= 0) {
+    launchNewNotebook('python3');
+  } else {
+    notebooks.filter(Boolean).forEach(f => launchFilename(resolve(f)));
+  }
 });
