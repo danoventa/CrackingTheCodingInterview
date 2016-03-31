@@ -180,6 +180,7 @@ td {
 
 .cell_display
 {
+    word-wrap: break-word;
     padding: 10px 10px 10px 60px;
 }
 
