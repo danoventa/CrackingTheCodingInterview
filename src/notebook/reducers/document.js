@@ -132,6 +132,14 @@ export default {
       notebook: commutable.updateOutputs(notebook, id, outputs),
     };
   },
+  [constants.UPDATE_CELL_PAGER]: function updateCellPager(state, action) {
+    const { id, pagerDatas } = action;
+    const { pagers } = state;
+    return {
+      ...state,
+      pagers: pagers.set(id, pagerDatas),
+    };
+  },
   [constants.SET_LANGUAGE_INFO]: function setLanguageInfo(state, action) {
     const { langInfo } = action;
     const { notebook } = state;

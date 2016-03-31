@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Immutable from 'immutable';
+
 import createStore from './store';
 import { reducers } from './reducers';
 import Provider from './components/util/provider';
@@ -23,6 +25,7 @@ ipc.on('main:load', (e, launchData) => {
   const { store, dispatch } = createStore({
     notebook: null,
     filename: launchData.filename,
+    pagers: new Immutable.Map(),
     executionState: 'not connected',
   }, reducers);
 
@@ -70,6 +73,7 @@ ipc.on('main:load', (e, launchData) => {
               <Notebook
                 notebook={this.state.notebook}
                 channels={this.state.channels}
+                pagers={this.state.pagers}
                 focusedCell={this.state.focusedCell}
               />
             }

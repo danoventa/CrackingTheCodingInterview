@@ -15,6 +15,7 @@ class Notebook extends React.Component {
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
     notebook: React.PropTypes.any,
     transforms: React.PropTypes.instanceOf(Immutable.Map),
+    pagers: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
   };
 
@@ -148,6 +149,7 @@ class Notebook extends React.Component {
           displayOrder={this.props.displayOrder}
           transforms={this.props.transforms}
           moveCell={this.moveCell}
+          pager={this.props.pagers.get(id)}
           focusedCell={this.props.focusedCell}
         />
         <CellCreator key={`creator-${id}`} id={id} above={false} />

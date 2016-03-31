@@ -172,6 +172,14 @@ export function updateCellExecutionCount(id, count) {
   };
 }
 
+export function updateCellPager(id, pagerDatas) {
+  return {
+    type: constants.UPDATE_CELL_PAGER,
+    id,
+    pagerDatas,
+  };
+}
+
 export function focusCell(id) {
   return {
     type: constants.FOCUS_CELL,
