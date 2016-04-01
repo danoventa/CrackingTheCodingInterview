@@ -52,6 +52,7 @@ python3 -m ipykernel install --user
 
 For all systems, you'll need
 
+- Node.js 5.x
 - [`npm`](https://docs.npmjs.com/getting-started/installing-node)
 - [ZeroMQ](http://zeromq.org/intro:get-the-software)
 - Python 2 (for builds - you can still run Python 3 code)
