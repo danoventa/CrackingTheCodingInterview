@@ -12,7 +12,7 @@ import {
   updateCellExecutionCount,
   updateCellSource,
   updateCellOutputs,
-  updateCellPager,
+  updateCellPagers,
   setLanguageInfo,
 } from '../actions';
 
@@ -103,12 +103,12 @@ export function executeCell(channels, id, code) {
           subscriber.next(createCellAfter('code', id, text));
         }));
 
-    subscriber.next(updateCellPager(id, new Immutable.List()));
+    subscriber.next(updateCellPagers(id, new Immutable.List()));
     subscriptions.push(
       payloadStream.filter(p => p.source === 'page')
-        .scan((acc, pd) => acc.push(Immutable.fromJS(pd)))
-        .subscribe((pagerData) => {
-          updateCellPager(id, pagerData);
+        .scan((acc, pd) => acc.push(Immutable.fromJS(pd)), new Immutable.List())
+        .subscribe((pagerDatas) => {
+          subscriber.next(updateCellPagers(id, pagerDatas));
         }));
 
     // Set the current outputs to an empty list

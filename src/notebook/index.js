@@ -25,7 +25,7 @@ ipc.on('main:load', (e, launchData) => {
   const { store, dispatch } = createStore({
     notebook: null,
     filename: launchData.filename,
-    pagers: new Immutable.Map(),
+    cellPagers: new Immutable.Map(),
     executionState: 'not connected',
   }, reducers);
 
@@ -73,7 +73,7 @@ ipc.on('main:load', (e, launchData) => {
               <Notebook
                 notebook={this.state.notebook}
                 channels={this.state.channels}
-                pagers={this.state.pagers}
+                cellPagers={this.state.cellPagers}
                 focusedCell={this.state.focusedCell}
               />
             }

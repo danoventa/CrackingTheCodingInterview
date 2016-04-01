@@ -9,7 +9,7 @@ import Pager from './pager';
 
 import Immutable from 'immutable';
 
-const CodeCell = (props) => (
+const CodeCell = (props) =>
   <div className="code_cell">
     <div className="input_area">
       <Inputs executionCount={props.cell.get('execution_count')} />
@@ -21,13 +21,14 @@ const CodeCell = (props) => (
       />
     </div>
     {
-      (!props.pager || !props.pager.has('data')) ? null :
-      <Pager
-        className="pager"
-        displayOrder={props.displayOrder}
-        transforms={props.transforms}
-        pager={props.pager}
-      />
+      props.pagers.map((pager) =>
+        <Pager
+          className="pager"
+          displayOrder={props.displayOrder}
+          transforms={props.transforms}
+          pager={pager}
+        />
+      )
     }
     <Display
       className="cell_display"
@@ -35,18 +36,21 @@ const CodeCell = (props) => (
       displayOrder={props.displayOrder}
       transforms={props.transforms}
     />
-  </div>
-);
+  </div>;
 
 CodeCell.propTypes = {
-  cell: React.PropTypes.any,
-  displayOrder: React.PropTypes.instanceOf(Immutable.List),
+  cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
+  displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
   id: React.PropTypes.string,
   language: React.PropTypes.string,
   theme: React.PropTypes.string,
   transforms: React.PropTypes.instanceOf(Immutable.Map),
   focusedCell: React.PropTypes.string,
-  pager: React.PropTypes.instanceOf(Immutable.List),
+  pagers: React.PropTypes.instanceOf(Immutable.List),
+};
+
+CodeCell.defaultProps = {
+  pagers: new Immutable.List(),
 };
 
 export default CodeCell;

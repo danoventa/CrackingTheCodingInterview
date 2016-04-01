@@ -172,11 +172,11 @@ export function updateCellExecutionCount(id, count) {
   };
 }
 
-export function updateCellPager(id, pagerDatas) {
+export function updateCellPagers(id, pagers) {
   return {
-    type: constants.UPDATE_CELL_PAGER,
+    type: constants.UPDATE_CELL_PAGERS,
     id,
-    pagerDatas,
+    pagers,
   };
 }
 

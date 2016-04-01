@@ -2,6 +2,8 @@ import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
 
+import Immutable from 'immutable';
+
 import Cell from './cell';
 
 const cellSource = {
@@ -50,14 +52,16 @@ function collectTarget(connect, monitor) {
 
 class DraggableCell extends React.Component {
   static propTypes = {
-    cell: React.PropTypes.any,
+    cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     connectDragPreview: React.PropTypes.func.isRequired,
     connectDragSource: React.PropTypes.func.isRequired,
     connectDropTarget: React.PropTypes.func.isRequired,
+    displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
     id: React.PropTypes.string,
     isDragging: React.PropTypes.bool.isRequired,
     isOver: React.PropTypes.bool.isRequired,
     focusedCell: React.PropTypes.string,
+    transforms: React.PropTypes.instanceOf(Immutable.Map).isRequired,
   };
 
   static contextTypes = {
