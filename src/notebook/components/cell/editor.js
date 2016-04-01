@@ -55,6 +55,8 @@ export default class Editor extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.focused && prevProps.focused !== this.props.focused) {
       this.refs.codemirror.editor.focus();
+    } else if (!this.props.focused && prevProps.focused !== this.props.focused) {
+      this.refs.codemirror.editor.getInputField().blur();
     }
   }
 
