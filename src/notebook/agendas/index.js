@@ -12,6 +12,7 @@ import {
   updateCellExecutionCount,
   updateCellSource,
   updateCellOutputs,
+  updateCellPagers,
   setLanguageInfo,
 } from '../actions';
 
@@ -102,14 +103,12 @@ export function executeCell(channels, id, code) {
           subscriber.next(createCellAfter('code', id, text));
         }));
 
+    subscriber.next(updateCellPagers(id, new Immutable.List()));
     subscriptions.push(
       payloadStream.filter(p => p.source === 'page')
-        .subscribe((pagerData) => {
-          // pagerData.data has the mimebundle (use transformime-react)
-          // pagerData.start is the line offset to start from
-          // could we display this inline in codemirror?
-          console.warn('pager not implemented yet');
-          console.warn(pagerData);
+        .scan((acc, pd) => acc.push(Immutable.fromJS(pd)), new Immutable.List())
+        .subscribe((pagerDatas) => {
+          subscriber.next(updateCellPagers(id, pagerDatas));
         }));
 
     // Set the current outputs to an empty list

@@ -9,13 +9,21 @@ import { executeCell, focusNextCell, moveCell } from '../actions';
 
 import Immutable from 'immutable';
 
+import { displayOrder, transforms } from 'transformime-react';
+
 class Notebook extends React.Component {
   static propTypes = {
     channels: React.PropTypes.any,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
     notebook: React.PropTypes.any,
     transforms: React.PropTypes.instanceOf(Immutable.Map),
+    cellPagers: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
+  };
+
+  static defaultProps = {
+    displayOrder,
+    transforms,
   };
 
   static contextTypes = {
@@ -140,7 +148,8 @@ class Notebook extends React.Component {
         key={`cell-container-${id}`}
         ref="container"
       >
-        <DraggableCell cell={cellMap.get(id)}
+        <DraggableCell
+          cell={cellMap.get(id)}
           language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
           id={id}
           key={id}
@@ -148,6 +157,7 @@ class Notebook extends React.Component {
           displayOrder={this.props.displayOrder}
           transforms={this.props.transforms}
           moveCell={this.moveCell}
+          pagers={this.props.cellPagers.get(id)}
           focusedCell={this.props.focusedCell}
         />
         <CellCreator key={`creator-${id}`} id={id} above={false} />
