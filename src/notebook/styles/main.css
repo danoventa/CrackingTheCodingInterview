@@ -178,6 +178,13 @@ td {
     padding: 10px 50px 10px 50px;
 }
 
+.pagers
+{
+    padding: 10px 50px 10px 50px;
+    background-color: #fafafa;
+    word-wrap: break-word;
+}
+
 .cell_display
 {
     word-wrap: break-word;

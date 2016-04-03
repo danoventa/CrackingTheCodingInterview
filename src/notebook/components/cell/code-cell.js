@@ -21,14 +21,20 @@ const CodeCell = (props) =>
       />
     </div>
     {
-      props.pagers.map((pager) =>
-        <Pager
-          className="pager"
-          displayOrder={props.displayOrder}
-          transforms={props.transforms}
-          pager={pager}
-        />
-      )
+      props.pagers && !props.pagers.isEmpty() ?
+        <div className="pagers">
+        {
+          props.pagers.map((pager, key) =>
+            <Pager
+              className="pager"
+              displayOrder={props.displayOrder}
+              transforms={props.transforms}
+              pager={pager}
+              key={key}
+            />
+          )
+        }
+        </div> : null
     }
     <Display
       className="cell_display"
