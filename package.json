@@ -64,7 +64,7 @@
     "electron-compile": "^2.0.4",
     "electron-compilers": "^2.0.4",
     "electron-mocha": "^1.0.0",
-    "electron-prebuilt": "^0.36.2",
+    "electron-prebuilt": "^0.37.4",
     "eslint": "^2.3.0",
     "eslint-config-airbnb": "^6.0.2",
     "eslint-plugin-react": "^4.1.0",
