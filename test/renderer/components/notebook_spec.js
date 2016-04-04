@@ -2,6 +2,8 @@ import React from 'react';
 
 import { expect } from 'chai';
 
+import Immutable from 'Immutable';
+
 import {
   renderIntoDocument,
 } from 'react-addons-test-utils';
@@ -16,7 +18,7 @@ import Notebook from '../../../src/notebook/components/notebook';
 describe('Notebook', () => {
   it('accepts an Immutable.List of cells', () => {
     const component = renderIntoDocument(
-      <Notebook notebook={dummyCommutable} />
+      <Notebook notebook={dummyCommutable} cellPagers={new Immutable.Map()} />
     );
     expect(component).to.not.be.null;
   });
