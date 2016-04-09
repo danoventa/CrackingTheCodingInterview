@@ -5,7 +5,7 @@ import reactRenderer from 'remark-react';
 
 import Editor from './editor';
 
-const renderer = remark().use(reactRenderer);
+const markdownRenderer = remark().use(reactRenderer);
 
 export default class MarkdownCell extends React.Component {
   static propTypes = {
@@ -53,7 +53,7 @@ export default class MarkdownCell extends React.Component {
             className="cell_markdown"
             onDoubleClick={this.openEditor}
           >
-            {renderer.process(
+            {markdownRenderer.process(
               this.state.source ?
                 this.state.source :
                 '*Empty markdown cell, double click me to add content.*')
