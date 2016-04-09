@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ReactMarkdown from 'react-markdown';
+import Markdown from 'react-remarkable';
 
 import Editor from './editor';
 
@@ -50,7 +50,7 @@ export default class MarkdownCell extends React.Component {
             className="cell_markdown"
             onDoubleClick={this.openEditor}
           >
-            <ReactMarkdown source={
+            <Markdown source={
               this.state.source ?
                 this.state.source :
                 '*Empty markdown cell, double click me to add content.*'}
