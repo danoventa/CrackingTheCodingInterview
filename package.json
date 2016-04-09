@@ -37,7 +37,6 @@
     "enchannel-zmq-backend": "^1.0.1",
     "immutable": "^3.7.6",
     "kernelspecs": "^1.0.1",
-    "material-design-icons": "^2.2.0",
     "normalize.css": "^4.0.0",
     "react": "^15.0.1",
     "react-code-mirror": "^3.0.6",
