@@ -45,7 +45,6 @@
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.0.1",
     "react-jupyter-display-area": "^0.3.0",
-    "react-markdown": "^2.1.1",
     "react-remarkable": "^1.1.1",
     "source-code-pro": "git://github.com/adobe-fonts/source-code-pro.git#release",
     "source-sans-pro": "git://github.com/adobe-fonts/source-sans-pro.git#release",
