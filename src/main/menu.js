@@ -161,6 +161,19 @@ export const view = {
         }
       },
     },
+    {
+      label: 'Theme',
+      submenu: [
+        {
+          label: 'Light',
+          click: createSender('menu:theme', 'light'),
+        },
+        {
+          label: 'Dark',
+          click: createSender('menu:theme', 'dark'),
+        },
+      ],
+    },
   ],
 };
 
@@ -267,7 +280,6 @@ export function generateDefaultTemplate() {
 }
 
 export const defaultMenu = Menu.buildFromTemplate(generateDefaultTemplate());
-
 
 export function loadFullMenu() {
   return kernelspecs.findAll().then(kernelSpecs => {
