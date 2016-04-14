@@ -89,6 +89,7 @@ Requires node 5.x, npm 3, and [git-lfs](https://git-lfs.github.com/).
 1. Fork this repo
 2. Clone it `git clone https://github.com/nteract/nteract`
 3. `cd` to where you `clone`d it
+4. `git lfs fetch`
 4. `git lfs checkout`
 4. `npm install`
 5. `npm run start`
