@@ -59,7 +59,6 @@ For all systems, you'll need
 - [`npm`](https://docs.npmjs.com/getting-started/installing-node)
 - [ZeroMQ](http://zeromq.org/intro:get-the-software)
 - Python 2 (for builds - you can still run Python 3 code)
-- [`git-lfs`](https://git-lfs.github.com/)
 
 Each operating system has their own instruction set. Please read on down to save yourself time.
 
@@ -84,13 +83,11 @@ For RedHat/CentOS/Fedora based variants, you'll need `zeromq` and `zeromq-devel`
 
 #### Install `nteract` itself
 
-Requires node 5.x, npm 3, and [git-lfs](https://git-lfs.github.com/).
+Requires node 5.x and npm 3.
 
 1. Fork this repo
 2. Clone it `git clone https://github.com/nteract/nteract`
 3. `cd` to where you `clone`d it
-4. `git lfs fetch`
-4. `git lfs checkout`
 4. `npm install`
 5. `npm run start`
 
