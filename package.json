@@ -38,6 +38,7 @@
     "immutable": "^3.7.6",
     "kernelspecs": "^1.0.1",
     "normalize.css": "^4.0.0",
+    "nteract-assets": "^1.0.0",
     "react": "^15.0.1",
     "react-code-mirror": "^3.0.6",
     "react-dnd": "^2.1.4",
