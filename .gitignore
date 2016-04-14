@@ -27,3 +27,6 @@ build/Release
 node_modules
 
 .ipynb_checkpoints
+
+# LFS things
+src/notebook/fonts/material-design-icons/MaterialIcons-Regular*
