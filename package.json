@@ -9,7 +9,8 @@
     "test:renderer": "electron-mocha --renderer --compilers js:babel-core/register 'test/renderer/**/*.js'",
     "test:main": "electron-mocha --compilers js:babel-core/register 'test/main/**/*.js'",
     "test:watch": "watch 'npm run test' test/",
-    "start": "electron index.js"
+    "start": "electron index.js",
+    "build": "electron-packager . --all"
   },
   "repository": {
     "type": "git",
@@ -67,6 +68,7 @@
     "electron-compile": "^2.0.4",
     "electron-compilers": "^2.0.4",
     "electron-mocha": "^1.0.3",
+    "electron-packager": "^6.0.2",
     "electron-prebuilt": "^0.37.4",
     "eslint": "^2.3.0",
     "eslint-config-airbnb": "^6.0.2",
