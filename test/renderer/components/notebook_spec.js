@@ -2,7 +2,7 @@ import React from 'react';
 
 import { expect } from 'chai';
 
-import Immutable from 'Immutable';
+import Immutable from 'immutable';
 
 import {
   renderIntoDocument,
@@ -12,7 +12,7 @@ import {
   dummyCommutable,
 } from '../dummy-nb';
 
-import Notebook from '../../../src/notebook/components/notebook';
+import Notebook from '../../../es5/notebook/components/notebook';
 
 // Boilerplate test to make sure the testing setup is configured
 describe('Notebook', () => {
