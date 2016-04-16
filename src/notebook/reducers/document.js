@@ -103,6 +103,29 @@ export default {
       notebook: commutable.insertCellAt(notebook, cell, cellID, index),
     };
   },
+  [constants.MERGE_CELL_AFTER]: function mergeCellAfter(state, action) {
+    const { id } = action;
+    const { notebook } = state;
+    const cellOrder = notebook.get('cellOrder');
+    const cellMap = notebook.get('cellMap');
+    const index = cellOrder.indexOf(id);
+    // do nothing if this is the last cell
+    if (cellOrder.size === index + 1) {
+      return state;
+    }
+    const nextId = cellOrder.get(index + 1);
+    const source = cellMap.getIn([id, 'source'])
+                          .concat('\n', '\n', cellMap.getIn([nextId, 'source']));
+
+    return {
+      ...state,
+      notebook:
+        commutable.removeCell(
+          commutable.updateSource(notebook, id, source),
+        nextId
+        ),
+    };
+  },
   [constants.NEW_CELL_APPEND]: function newCellAppend(state, action) {
     // Draft API
     const { cellType } = action;

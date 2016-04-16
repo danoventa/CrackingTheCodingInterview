@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { createCellAfter, createCellBefore, createCellAppend } from '../../actions';
+import {
+  createCellAfter,
+  createCellBefore,
+  createCellAppend,
+  mergeCellAfter } from '../../actions';
 
 export default class CellCreatorButtons extends React.Component {
   static propTypes = {
@@ -17,6 +21,7 @@ export default class CellCreatorButtons extends React.Component {
     this.createCodeCell = this.createCell.bind(this, 'code');
     this.createTextCell = this.createCell.bind(this, 'markdown');
     this.createCell = this.createCell.bind(this);
+    this.mergeCell = this.mergeCell.bind(this);
   }
 
   shouldComponentUpdate() {
@@ -36,7 +41,17 @@ export default class CellCreatorButtons extends React.Component {
     }
   }
 
+  mergeCell() {
+    this.context.dispatch(mergeCellAfter(this.props.id));
+  }
+
   render() {
+    const mergeButton = (
+      <button onClick={this.mergeCell} title="merge cells">
+        <i className="material-icons" style={{ transform: 'rotate(90deg)' }}>
+          compare_arrows
+        </i>
+      </button>);
     return (
       <div className="creator-tool">
         <button onClick={this.createTextCell} title="create text cell">
@@ -46,6 +61,7 @@ export default class CellCreatorButtons extends React.Component {
         <button onClick={this.createCodeCell} title="create code cell">
           <i className="material-icons">code</i>
         </button>
+        {this.props.above ? null : mergeButton}
       </div>
     );
   }

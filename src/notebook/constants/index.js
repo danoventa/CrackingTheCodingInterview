@@ -22,6 +22,8 @@ export const NEW_CELL_AFTER = Symbol('NEW_CELL_AFTER');
 export const NEW_CELL_BEFORE = Symbol('NEW_CELL_BEFORE');
 export const NEW_CELL_APPEND = Symbol('NEW_CELL_APPEND');
 
+export const MERGE_CELL_AFTER = Symbol('MERGE_CELL_AFTER');
+
 export const UPDATE_CELL_EXECUTION_COUNT = Symbol('UPDATE_CELL_EXECUTION_COUNT');
 export const UPDATE_CELL_OUTPUTS = Symbol('UPDATE_CELL_OUTPUTS');
 export const UPDATE_CELL_SOURCE = Symbol('UPDATE_CELL_SOURCE');
