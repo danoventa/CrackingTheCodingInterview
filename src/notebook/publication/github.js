@@ -2,9 +2,13 @@ const Rx = require('@reactivex/rxjs');
 const commutable = require('commutable');
 const path = require('path');
 
-const shell = require('electron').shell;
+import { shell } from 'electron';
 
-const actions = require('../actions');
+import {
+  doneUploading,
+  startedUploading,
+  overwriteMetadata,
+} from '../actions';
 
 function notifyUser(filename, gistURL, gistID) {
   const title = 'Gist uploaded';
@@ -30,9 +34,9 @@ function createGistCallback(hotOffThePresses, agenda, filename) {
 
     notifyUser(filename, gistURL, gistID);
     if (hotOffThePresses) {
-      agenda.next(actions.overwriteMetadata('gist_id', gistID));
+      agenda.next(overwriteMetadata('gist_id', gistID));
     }
-    agenda.next(actions.doneUploading);
+    agenda.next(doneUploading);
   };
 }
 
@@ -43,7 +47,7 @@ export function publish(github, notebook, filepath) {
     const filename = path.parse(filepath).base;
     files[filename] = { content: notebookString };
 
-    agenda.next(actions.startedUploading);
+    agenda.next(startedUploading);
 
     // Already in a gist, update the gist
     if (notebook.hasIn(['metadata', 'gist_id'])) {
