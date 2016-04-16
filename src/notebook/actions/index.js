@@ -204,3 +204,19 @@ export function executeCell(channels, id, source) {
     });
   };
 }
+
+export function overwriteMetadata(field, value) {
+  return {
+    type: constants.OVERWRITE_METADATA_FIELD,
+    field,
+    value,
+  };
+}
+
+export const startedUploading = {
+  type: constants.STARTED_UPLOADING,
+};
+
+export const doneUploading = {
+  type: constants.DONE_UPLOADING,
+};

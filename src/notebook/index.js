@@ -19,6 +19,8 @@ import { ipcRenderer as ipc } from 'electron';
 import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
 
+const Github = require('github4');
+
 const Rx = require('@reactivex/rxjs');
 
 ipc.on('main:load', (e, launchData) => {
@@ -27,6 +29,7 @@ ipc.on('main:load', (e, launchData) => {
     filename: launchData.filename,
     cellPagers: new Immutable.Map(),
     executionState: 'not connected',
+    github: new Github(),
   }, reducers);
 
   store
