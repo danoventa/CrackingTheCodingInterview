@@ -3,6 +3,10 @@ import * as uuid from 'uuid';
 
 import * as constants from '../constants';
 
+import Immutable from 'immutable';
+
+const noop = state => state;
+
 export default {
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.data;
@@ -171,4 +175,14 @@ export default {
       notebook: notebook.setIn(['metadata', 'language_info'], langInfo),
     };
   },
+  [constants.OVERWRITE_METADATA_FIELD]: function overwriteMetadata(state, action) {
+    const { field, value } = action;
+    const { notebook } = state;
+    return {
+      ...state,
+      notebook: notebook.setIn(['metadata', field], Immutable.fromJS(value)),
+    };
+  },
+  [constants.STARTED_UPLOADING]: noop,
+  [constants.DONE_UPLOADING]: noop,
 };
