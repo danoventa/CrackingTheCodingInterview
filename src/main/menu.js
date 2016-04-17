@@ -206,7 +206,9 @@ export const help = {
   ],
 };
 
-const name = app.getName();
+const name = 'nteract';
+app.setName(name);
+
 export const named = {
   label: name,
   submenu: [
