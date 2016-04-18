@@ -29,4 +29,5 @@ node_modules
 .ipynb_checkpoints
 
 # Ignore compiled output
-es5/
+build/
+dist/

@@ -10,10 +10,15 @@
     "test:main": "electron-mocha --compilers js:babel-core/register 'test/main/**/*.js'",
     "test:watch": "watch 'npm run test' test/",
     "start": "electron .",
-    "prebuild": "rimraf es5",
-    "build": "babel src --out-dir es5",
+    "prebuild": "rimraf build",
+    "build": "babel src --out-dir build",
     "build:watch": "npm run build -- --watch",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "predist": "npm run build && rimraf dist",
+    "postdist": "npm install",
+    "dist": "electron-packager . nteract --prune --out dist",
+    "dist:linux64": "npm run dist -- --platform=linux --arch=x64",
+    "dist:linux32": "npm run dist -- --platform=linux --arch=ia32"
   },
   "repository": {
     "type": "git",
@@ -38,6 +43,7 @@
     "codemirror": "^5.13.4",
     "commander": "^2.9.0",
     "commutable": "^0.6.0",
+    "electron-packager": "^7.0.0",
     "enchannel-zmq-backend": "^1.0.1",
     "github-api": "^0.11.2",
     "github4": "^0.5.5",
