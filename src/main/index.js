@@ -26,6 +26,11 @@ app.on('window-all-closed', () => {
   }
 });
 
+app.on('open-file', (event, path) => {
+  event.preventDefault();
+  launchFilename(resolve(path));
+});
+
 app.on('ready', () => {
   // Get the default menu first
   Menu.setApplicationMenu(defaultMenu);
