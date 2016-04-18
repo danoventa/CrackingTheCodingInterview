@@ -55,7 +55,7 @@ export function childOf(parentMessage) {
     // since we're in an arrow function `this` is from the outer scope.
     // save our inner subscription
     const subscription = this.subscribe(msg => {
-      console.info('looking for complete_reply...', msg.parent_header.msg_type);
+      console.info('looking for complete_reply...', msg.header.msg_type);
       if (!msg.parent_header || !msg.parent_header.msg_id) {
         subscriber.error(new Error('no parent_header.msg_id on message'));
         return;
