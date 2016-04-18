@@ -18,6 +18,7 @@ const CodeCell = (props) =>
         input={props.cell.get('source')}
         language={props.language}
         focused={props.id === props.focusedCell}
+        getCompletions={props.getCompletions}
       />
     </div>
     {
