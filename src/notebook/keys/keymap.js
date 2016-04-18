@@ -26,6 +26,6 @@ export function initKeymap(window, dispatch) {
   document.addEventListener('keydown', event => keymaps.handleKeyboardEvent(event));
 
   // Add the keymap files, can also be specified as directories
-  keymaps.add('/default-keymap', require('./default-map.json'));
+  keymaps.add('/default-keymap', require('../../../static/default-map.json'));
   // keymaps.loadKeymap('/path/to/keymap-file.json');
 }
