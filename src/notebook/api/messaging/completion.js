@@ -36,6 +36,7 @@ export default function complete(channels, code, cursorPos) {
   };
 
   const p = shell
+    .logInfo()
     .childOf(message)
     .ofMessageType('complete_reply')
     .pluck('content')
