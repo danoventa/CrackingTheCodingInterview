@@ -177,6 +177,16 @@ export const view = {
   ],
 };
 
+export const publish = {
+  label: 'Publish',
+  submenu: [
+    {
+      label: 'to Gist...',
+      click: createSender('menu:publish:gist'),
+    },
+  ],
+};
+
 const windowDraft = {
   label: 'Window',
   role: 'window',
@@ -219,7 +229,9 @@ export const help = {
   ],
 };
 
-const name = app.getName();
+const name = 'nteract';
+app.setName(name);
+
 export const named = {
   label: name,
   submenu: [
@@ -273,6 +285,7 @@ export function generateDefaultTemplate() {
   template.push(file);
   template.push(edit);
   template.push(view);
+  template.push(publish);
   template.push(window);
   template.push(help);
 
@@ -341,6 +354,7 @@ export function loadFullMenu() {
 
     // Application specific functionality should go before window and help
     template.push(languageMenu);
+    template.push(publish);
     template.push(window);
     template.push(help);
 

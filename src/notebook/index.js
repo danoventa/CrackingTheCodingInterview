@@ -20,7 +20,18 @@ import storage from 'electron-json-storage';
 import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
 
+const Github = require('github4');
+
 const Rx = require('@reactivex/rxjs');
+
+const github = new Github();
+
+if (process.env.GITHUB_TOKEN) {
+  github.authenticate({
+    type: 'oauth',
+    token: process.env.GITHUB_TOKEN,
+  }, (x) => console.error(x));
+}
 
 ipc.on('main:load', (e, launchData) => {
   const { store, dispatch } = createStore({
@@ -28,6 +39,7 @@ ipc.on('main:load', (e, launchData) => {
     filename: launchData.filename,
     cellPagers: new Immutable.Map(),
     executionState: 'not connected',
+    github,
   }, reducers);
 
   store
@@ -92,8 +104,8 @@ ipc.on('main:load', (e, launchData) => {
                 focusedCell={this.state.focusedCell}
               />
             }
-            <link rel="stylesheet" href={`./styles/theme-${this.state.theme}.css`} />
-            <link rel="stylesheet" href="./styles/main.css" />
+            <link rel="stylesheet" href={`../../static/styles/theme-${this.state.theme}.css`} />
+            <link rel="stylesheet" href="../../static/styles/main.css" />
           </div>
         </Provider>
       );

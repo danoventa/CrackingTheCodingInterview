@@ -39,6 +39,9 @@ By participating, you are expected to uphold this code. Please report unacceptab
 
 ### Development
 
+To get started developing install a [python runtime](#python-runtime), the
+[dependencies](#dependencies) and [`nteract` itself](#install-nteract-itself).
+
 #### Python runtime
 
 At least for now, we need the python 3 kernel installed when hacking on nteract:
@@ -78,9 +81,9 @@ After these are installed, you'll likely need to restart your machine (especiall
 For Debian/Ubuntu based variants, you'll need `libzmq3-dev` (preferred) or alternatively `libzmq-dev`.   
 For RedHat/CentOS/Fedora based variants, you'll need `zeromq` and `zeromq-devel`.
 
-#### Install
+#### Install `nteract` itself
 
-Requires node 5.x, npm 3, and [git-lfs](https://git-lfs.github.com/).
+Requires node 5.x and npm 3.
 
 1. Fork this repo
 2. Clone it `git clone https://github.com/nteract/nteract`

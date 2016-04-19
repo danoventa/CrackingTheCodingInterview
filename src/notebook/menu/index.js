@@ -12,6 +12,10 @@ import {
 } from '../actions';
 import { ipcRenderer as ipc } from 'electron';
 
+import {
+  publish,
+} from '../publication/github';
+
 export function dispatchSaveAs(store, dispatch, evt, filename) {
   const state = store.getState();
   const { notebook } = state;
@@ -49,6 +53,17 @@ export function dispatchNewkernel(store, dispatch, evt, name) {
   dispatch(newKernel(name, spawnOptions));
 }
 
+export function dispatchPublishGist(store, dispatch) {
+  const { notebook, filename, github } = store.getState();
+  const agenda = publish(github, notebook, filename);
+
+  agenda.subscribe((action) => {
+    dispatch(action);
+  }, (err) => {
+    console.error(err);
+  });
+}
+
 export function dispatchKillKernel(store, dispatch) {
   dispatch(killKernel());
 }
@@ -58,4 +73,5 @@ export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:save', dispatchSave.bind(null, store, dispatch));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
   ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store, dispatch));
+  ipc.on('menu:publish:gist', dispatchPublishGist.bind(null, store, dispatch));
 }

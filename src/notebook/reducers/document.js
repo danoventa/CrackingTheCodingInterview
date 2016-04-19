@@ -3,6 +3,10 @@ import * as uuid from 'uuid';
 
 import * as constants from '../constants';
 
+import Immutable from 'immutable';
+
+const noop = state => state;
+
 export default {
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.data;
@@ -103,6 +107,29 @@ export default {
       notebook: commutable.insertCellAt(notebook, cell, cellID, index),
     };
   },
+  [constants.MERGE_CELL_AFTER]: function mergeCellAfter(state, action) {
+    const { id } = action;
+    const { notebook } = state;
+    const cellOrder = notebook.get('cellOrder');
+    const cellMap = notebook.get('cellMap');
+    const index = cellOrder.indexOf(id);
+    // do nothing if this is the last cell
+    if (cellOrder.size === index + 1) {
+      return state;
+    }
+    const nextId = cellOrder.get(index + 1);
+    const source = cellMap.getIn([id, 'source'])
+                          .concat('\n', '\n', cellMap.getIn([nextId, 'source']));
+
+    return {
+      ...state,
+      notebook:
+        commutable.removeCell(
+          commutable.updateSource(notebook, id, source),
+        nextId
+        ),
+    };
+  },
   [constants.NEW_CELL_APPEND]: function newCellAppend(state, action) {
     // Draft API
     const { cellType } = action;
@@ -148,4 +175,14 @@ export default {
       notebook: notebook.setIn(['metadata', 'language_info'], langInfo),
     };
   },
+  [constants.OVERWRITE_METADATA_FIELD]: function overwriteMetadata(state, action) {
+    const { field, value } = action;
+    const { notebook } = state;
+    return {
+      ...state,
+      notebook: notebook.setIn(['metadata', field], Immutable.fromJS(value)),
+    };
+  },
+  [constants.STARTED_UPLOADING]: noop,
+  [constants.DONE_UPLOADING]: noop,
 };

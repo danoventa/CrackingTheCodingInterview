@@ -22,6 +22,8 @@ export const NEW_CELL_AFTER = Symbol('NEW_CELL_AFTER');
 export const NEW_CELL_BEFORE = Symbol('NEW_CELL_BEFORE');
 export const NEW_CELL_APPEND = Symbol('NEW_CELL_APPEND');
 
+export const MERGE_CELL_AFTER = Symbol('MERGE_CELL_AFTER');
+
 export const UPDATE_CELL_EXECUTION_COUNT = Symbol('UPDATE_CELL_EXECUTION_COUNT');
 export const UPDATE_CELL_OUTPUTS = Symbol('UPDATE_CELL_OUTPUTS');
 export const UPDATE_CELL_SOURCE = Symbol('UPDATE_CELL_SOURCE');
@@ -33,3 +35,8 @@ export const SET_LANGUAGE_INFO = Symbol('SET_LANGUAGE_INFO');
 export const SET_EXECUTION_STATE = Symbol('SET_EXECUTION_STATE');
 export const FOCUS_CELL = Symbol('FOCUS_CELL');
 export const FOCUS_NEXT_CELL = Symbol('FOCUS_NEXT_CELL');
+
+export const OVERWRITE_METADATA_FIELD = Symbol('OVERWRITE_METADATA_FIELD');
+
+export const STARTED_UPLOADING = Symbol('STARTED_UPLOADING');
+export const DONE_UPLOADING = Symbol('DONE_UPLOADING');
