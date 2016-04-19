@@ -12,6 +12,7 @@
     "start": "electron .",
     "prebuild": "rimraf build",
     "build": "babel src --out-dir build",
+    "build:icon": "cd static/icons;iconutil -c icns nteract.iconset; mv nteract.icns ../icon.icns",
     "build:watch": "npm run build -- --watch",
     "prepublish": "npm run build",
     "predist": "npm run build && rimraf dist",
