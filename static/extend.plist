@@ -3,22 +3,24 @@
 <plist version="1.0">
   <dict>
     <key>CFBundleDocumentTypes</key>
-    <dict>
-      <key>CFBundleTypeExtensions</key>
-      <array>
-        <string>ipynb</string>
-      </array>
-      <key>CFBundleTypeName</key>
-      <string>public.ipynb</string>
-      <key>CFBundleTypeRole</key>
-      <string>Editor</string>
-      <key>LSHandlerRank</key>
-      <string>Owner</string>
-      <key>LSItemContentTypes</key>
-      <array>
+    <array>
+      <dict>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>ipynb</string>
+        </array>
+        <key>CFBundleTypeName</key>
         <string>public.ipynb</string>
-      </array>
-    </dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>LSHandlerRank</key>
+        <string>Owner</string>
+        <key>LSItemContentTypes</key>
+        <array>
+          <string>public.ipynb</string>
+        </array>
+      </dict>
+    </array>
     <key>UTImportedTypeDeclarations</key>
     <dict>
       <key>UTTypeConformsTo</key>
