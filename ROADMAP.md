@@ -16,6 +16,7 @@ usability of our notebook. It is expected that we'll make lots of pre-alpha
 * Specification Compliance
     * Full compliance with Notebook format v4
     * Full compliance with message spec v5
+* Testing coverage > 50%
 
 ## Alpha
 
@@ -23,15 +24,16 @@ usability of our notebook. It is expected that we'll make lots of pre-alpha
     * OS X and Linux packaged release
 * Specification Compliance
     * Read compliance with Notebook format v3 (v4 is already supported)
-* Editor Functionality
-    * LaTeX (https://github.com/nteract/mathjax-electron)
+* Notebook Functionality
+    * Inline and block mathematics via LaTeX (https://github.com/nteract/mathjax-electron)
     * Code completion and introspection
     * Clipboard
     * Undo/redo stack
 * Communication
     * Comm message handling (preliminary/provisional API)
-* Extra Goodies
+* Insight 
     * Metrics/instrumentation around usage of the notebook
+* Testing coverage > 70%
 
 A big part of the notebook is the ecosystem of libraries that rely on it. We need
 to make sure that we support many of the common libraries in use across Python, 
@@ -47,6 +49,8 @@ libraries.
 ## Beta
 Beta should be feature-complete (relative to the Jupyter Notebook) and stable 
 enough for a wide class of users to trust with running their notebooks in.
+
+* Testing coverage > 90%
 
 ## Release Candidate
 
