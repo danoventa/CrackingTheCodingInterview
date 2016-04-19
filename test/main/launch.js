@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { launchNewNotebook } from '../../es5/main/launch';
+import { launchNewNotebook } from '../../build/main/launch';
 describe('launch', () => {
   describe('launchNewNotebook', () => {
     it('launches a window', () => {

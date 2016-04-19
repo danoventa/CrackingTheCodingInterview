@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import createStore from '../../../es5/notebook/store';
+import createStore from '../../../build/notebook/store';
 
 describe('createStore', () => {
   it('sets up our store model', (done) => {
