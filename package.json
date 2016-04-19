@@ -19,8 +19,8 @@
     "dist": "electron-packager . nteract --prune --out dist",
     "dist:linux64": "npm run dist -- --platform=linux --arch=x64",
     "dist:linux32": "npm run dist -- --platform=linux --arch=ia32",
-    "dist:osx64": "npm run dist -- --platform=darwin --arch=x64 --icon ./static/icon.icns --app-category-type=public.app-category.developer-tools --app-bundle-id=io.nteract.nteract",
-    "dist:osx32": "npm run dist -- --platform=darwin --arch=ia32 --icon ./static/icon.icns --app-category-type=public.app-category.developer-tools --app-bundle-id=io.nteract.nteract"
+    "dist:osx64": "npm run dist -- --platform=darwin --arch=x64 --icon ./static/icon.icns --extend-info=./static/extend.plist --app-category-type=public.app-category.developer-tools --app-bundle-id=io.nteract.nteract",
+    "dist:osx32": "npm run dist -- --platform=darwin --arch=ia32 --icon ./static/icon.icns --extend-info=./static/extend.plist --app-category-type=public.app-category.developer-tools --app-bundle-id=io.nteract.nteract"
   },
   "repository": {
     "type": "git",

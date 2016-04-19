@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>CFBbundleDocumentTypes</key>
+    <dict>
+      <key>CFBundleTypeExtensions</key>
+      <array>
+        <string>ipynb</string>
+      </array>
+      <key>CFBundleTypeName</key>
+      <string>public.ipynb</string>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>LSHandlerRank</key>
+      <string>Owner</string>
+      <key>LSItemContentTypes</key>
+      <array>
+        <string>public.ipynb</string>
+      </array>
+    </dict>
+    <key>UTImportedTypeDeclarations</key>
+    <dict>
+      <key>UTTypeConformsTo</key>
+      <array>
+        <string>public.data</string>
+      </array>
+      <key>UTTypeIdentifier</key>
+      <string>public.ipynb</string>
+      <key>UTTypeTagSpecification</key>
+      <dict>
+        <key>com.apple.ostype</key>
+        <string>IPYNB</string>
+        <key>public.filename-extension</key>
+        <array>
+          <string>ipynb</string>
+        </array>
+        <key>public.mime-type</key>
+        <string>application/x-ipynb+json</string>
+      </dict>
+    </dict>
+  </dict>
+</plist>
