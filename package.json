@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "npm run test:main && npm run test:renderer",
-    "test:renderer": "electron-mocha --renderer --compilers js:babel-core/register 'test/renderer/**/*.js'",
-    "test:main": "electron-mocha --compilers js:babel-core/register 'test/main/**/*.js'",
+    "test": "npm run test:functional && npm run test:unit",
+    "test:unit": "electron-mocha --renderer --compilers js:babel-core/register 'test/renderer/**/*.js'",
+    "test:functional": "npm run build && electron-mocha --compilers js:babel-core/register 'test/main/**/*.js'",
     "test:watch": "watch 'npm run test' test/",
     "start": "electron .",
     "prebuild": "rimraf build",
