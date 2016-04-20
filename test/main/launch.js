@@ -1,8 +1,7 @@
 import { expect } from 'chai';
 
 import { launchNewNotebook } from '../../build/main/launch';
-
-var ipc = require('ipc');
+import {ipcMain as ipc} from 'electron';
 
 describe('launch', () => {
   describe('launchNewNotebook', () => {
