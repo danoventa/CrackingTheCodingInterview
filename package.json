@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "npm run test:functional && npm run test:unit",
-    "test:unit": "electron-mocha --renderer --compilers js:babel-core/register 'test/renderer/**/*.js'",
+    "test:unit": "mocha --compilers js:babel-core/register 'test/renderer/**/*.js'",
     "pretest:functional": "npm run build",
     "test:functional": "electron-mocha --compilers js:babel-core/register 'test/main/**/*.js'",
     "test:watch": "watch 'npm run test' test/",
@@ -82,6 +82,7 @@
     "eslint": "^2.3.0",
     "eslint-config-airbnb": "^6.0.2",
     "eslint-plugin-react": "^4.3.0",
+    "mocha": "^2.4.5",
     "react-addons-test-utils": "^15.0.1",
     "rimraf": "^2.5.2",
     "watch": "^0.17.1"
