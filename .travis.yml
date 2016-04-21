@@ -17,6 +17,13 @@ env:
   matrix:
   - GROUP=unit
   - GROUP=functional
+
+cache:
+  apt: true
+  directories:
+    - node_modules
+    - zeromq-$ZMQ
+
 before_install:
   - source travis_before_install
 
