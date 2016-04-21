@@ -14,7 +14,6 @@ node_js:
 env:
   global:
   - ZMQ="3.2.5"
-  - secure: 322RGbn3C8LZ9u6HlKPDKvD/YyMz/fmvnizV5LAgtMt07+421cfLG+XlWurlxIdyytKI6i/ynz1cxPcG3wWSi7GCa7DNbQ/3LbmeeKm9n4+HGcdiOjnzGYpp9Dm8n1l6VDNwUNcwZLjCDdgWKU3GSEr9euayJ+CgVtC8tYGdmbEBFnfuoDbHHmTqwW5n7h5mKsra78TrsVbSE6flA3DYtrm0/glaTCg7RgqZumrly/zi45n0KswUp2ugzU+aFZ0q01xmPvsxaYxMQkSUhSym3p+Ftz0gtJsOjBAun+n2osMuSbrrnW3A7s5T4agxONCUZNg76/11T6n8A2MhlQ1XQE5VHefBiJb6dFcmkCzhBXomJZr6NnEVlgy6GEiuaOG9gd9OOx1WGdBCyv1Pd9QSGwHNxz09IHwV4imvV5JYTQJ5NSpgYA9ZyfdZAwWiC1tLkd553ePBza/hS0vr1ozc4Im6WF0hier1h7mXyZDLA9cpvgBTYuNJYdTwy9tft5rTLm76BLRPOU6TpcgcgRlkj4e+kuzXI2n9r1F1OmsNPllxqyT0UbUyox8LOpmogRl/x0FyH308zDTZjqyM8jFzwhEJh8kf6dkFHOOjIFzVZ33OM+NaSd3hWNdA0yyYX6uHTnWohgBgiNxPlOrXARpneMMezssF/dlm6fKRgV+aES8=
   matrix:
   - GROUP=unit
   - GROUP=functional
