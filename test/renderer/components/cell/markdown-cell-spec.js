@@ -7,7 +7,6 @@ import MarkdownCell from '../../../../src/notebook/components/cell/markdown-cell
 import * as commutable from 'commutable';
 import { displayOrder, transforms } from 'transformime-react';
 
-const sharedProps = { displayOrder, transforms };
 describe('MarkdownCell', () => {
   it('can be rendered', () => {
     const cell = shallow(
