@@ -20,3 +20,25 @@ describe('childOf', () => {
     });
   });
 });
+
+describe('ofMessageType', () => {
+  it('filters messages of type requested', () => {
+    const requested = Rx.Observable.from([
+      {header: {msg_type: 'a'}},
+      {header: {msg_type: 'd'}},
+      {header: {msg_type: 'b'}},
+      {header: {msg_type: 'a'}},
+      {header: {msg_type: 'd'}},
+    ])
+    .ofMessageType(['a', 'd'])
+    .do(val => {
+      expect(val.header.msg_type === 'a' || val.header.msg_type === 'd')
+    })
+    .pluck('header', 'msg_type')
+    .count()
+    .toPromise()
+    .then(val => {
+      expect(val).to.equal(4);
+    });
+  });
+});
