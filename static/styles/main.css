@@ -22,8 +22,8 @@ body
     font-family: 'Source Sans Pro';
     font-size: 16px;
     line-height: 22px;
-
-    color: rgb(51,51,51);
+    background-color: var(--main-bg-color);
+    color: var(--main-fg-color);
 }
 
 img
@@ -38,7 +38,215 @@ img
 th,
 td {
     padding: 0.5em 1em;
-    border: 1px solid #cbcbcb;
+    border: 1px solid var(--primary-border);
+}
+
+/*
+  Cell
+ */
+
+.draggable-cell
+{
+    padding: 10px;
+}
+
+.cell
+{
+    position: relative;
+    background: var(--cell-bg);
+    transition: all .1s ease-in-out;
+}
+
+.cell:hover
+{
+    box-shadow: 1px 1px 3px rgba(0,0,0,.12), -1px -1px 3px rgba(0,0,0,.12);
+}
+
+.cell.focused {
+    box-shadow: 3px 3px 9px rgba(0,0,0,.12), -3px -3px 9px rgba(0,0,0,.12);
+}
+
+.cell:hover .input_area .cell_inputs,
+.cell:active .input_area .cell_inputs
+{
+    background-color: var(--cell-bg-hover);
+}
+
+
+.cell:focus .input_area .cell_inputs,
+.cell.focused .input_area .cell_inputs
+{
+    background-color: var(--cell-bg-focus);
+}
+
+.cell_toolbar-mask
+{
+    position: absolute;
+    top: -37px;
+    right: -5px;
+    z-index: 99;
+    height: 32px;
+
+    /* Set the left padding to 50px to give users extra room to move their
+    mouse to the toolbar without causing the cell to go out of focus and thus
+    hide the toolbar before they get there. */
+    padding: 5px 5px 0px 50px;
+}
+
+.cell_toolbar
+{
+    display: inline-box;
+    background: var(--toolbar-bg);
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.50);
+}
+
+.cell_toolbar button
+{
+    display: inline-block;
+
+    width: 22px;
+    height: 20px;
+    padding: 2px 4px;
+
+    text-align: center;
+
+    border: none;
+    outline: none;
+    background: none;
+}
+
+.cell_toolbar button i
+{
+    font-size: 16px;
+    line-height: 1;
+
+    color: var(--toolbar-button);
+}
+
+.cell_toolbar button i:hover
+{
+    color: var(--toolbar-button-hover);
+}
+
+.cell_markdown
+{
+    padding: 10px 50px 10px 50px;
+}
+
+.pagers
+{
+    padding: 10px 50px 10px 50px;
+    background-color: var(--pager-bg);
+    word-wrap: break-word;
+}
+
+.cell_display
+{
+    word-wrap: break-word;
+    padding: 10px 10px 10px 60px;
+}
+
+.cell_display:empty
+{
+    display:none;
+}
+
+.code_cell .input_area
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.code_cell .input_area .cell_inputs
+{
+    font-family: monospace;
+    font-size: 12px;
+
+    width: 50px;
+    padding: 9px 0;
+
+    text-align: center;
+
+    color: var(--input-color);
+    background-color: var(--pager-bg);
+
+    flex: 0 0 auto;
+}
+
+.code_cell .input_area .cell_editor
+{
+    flex: 1 1 auto;
+}
+
+.creator-hover-mask {
+  display: block;
+  position: relative;
+  overflow: visible;
+  height: 0px;
+}
+
+.creator-hover-region {
+  display: flex;
+  position: relative;
+  overflow: visible;
+  top: -30px;
+  height: 60px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.creator-tool {
+  display: inline-block;
+  background: var(--main-bg-color);
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.50);
+  margin-top: -15px;
+  pointer-events: all;
+}
+
+.creator-tool button
+{
+  display: inline-block;
+
+  width: 22px;
+  height: 20px;
+  padding: 2px 4px;
+
+  text-align: center;
+
+  border: none;
+  outline: none;
+  background: none;
+}
+
+.creator-tool button i
+{
+  /* These icons are thin, use a larger font than the cell toolbar */
+  font-size: 17px;
+  line-height: 1;
+
+  color: var(--toolbar-button);
+}
+
+.creator-tool button i:hover
+{
+  color: var(--toolbar-button-hover);
+}
+
+.creator-tool .creator-label {
+  color: var(--toolbar-button);
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 5px;
+  vertical-align: text-bottom;
+  font-weight: bold;
+}
+
+code {
+  font-family: 'Source Code Pro';
+  white-space: pre;
+  font-size: 14px;
 }
 
 /*
@@ -54,6 +262,13 @@ td {
     height: auto;
 
     background: none;
+}
+
+.CodeMirror-cursor
+{
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: var(--cm-color)
 }
 
 .CodeMirror-scroll
@@ -86,210 +301,63 @@ td {
     border-radius: 0;
 }
 
-/*
-  Cell
- */
-
-.draggable-cell
-{
-    padding: 10px;
+.cm-s-composition.CodeMirror {
+	font-family: 'Source Code Pro', monospace;
+	letter-spacing: 0.3px;
+	word-spacing: 1px;
+	background: var(--cm-background);
+	color: var(--cm-color);
+}
+.cm-s-composition .CodeMirror-lines {
+  padding: 10px;
+}
+.cm-s-composition .CodeMirror-gutters {
+	box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.5);
+	background-color: var(--cm-gutter-bg);
+	padding-right: 10px;
+	z-index: 3;
+	border: none;
 }
 
-.cell
-{
-    position: relative;
+.cm-s-composition span.cm-comment { color: var(--cm-comment) }
+.cm-s-composition span.cm-keyword { line-height: 1em; font-weight: bold; color: var(--cm-keyword); }
+.cm-s-composition span.cm-string { color: var(--cm-string); }
+.cm-s-composition span.cm-builtin { line-height: 1em; font-weight: bold; color: var(--cm-builtin); }
+.cm-s-composition span.cm-special { line-height: 1em; font-weight: bold; color: var(--cm-special); }
+.cm-s-composition span.cm-variable { color: var(--cm-variable); }
+.cm-s-composition span.cm-number, .cm-s-composition span.cm-atom { color: var(--cm-number); }
+.cm-s-composition span.cm-meta { color: var(--cm-meta); }
+.cm-s-composition span.cm-link { color: var(--cm-link); }
 
-    transition: all .1s ease-in-out;
-}
+.cm-s-composition .CodeMirror-activeline-background { background: var(--cm-activeline-bg); }
+.cm-s-composition .CodeMirror-matchingbracket { outline:1px solid var(--cm-matchingbracket-outline); color:var(--cm-matchingbracket-color) !important; }
 
-.cell:hover
-{
-    box-shadow: 1px 1px 3px rgba(0,0,0,.12), -1px -1px 3px rgba(0,0,0,.12);
-}
+/* Overwrite some of the hint Styling */
 
-.cell.focused {
-    box-shadow: 3px 3px 9px rgba(0,0,0,.12), -3px -3px 9px rgba(0,0,0,.12);
-}
+.CodeMirror-hints {
 
-.cell:hover .input_area .cell_inputs,
-.cell:active .input_area .cell_inputs
-{
-    background-color: #eeedee;
-}
-
-
-.cell:focus .input_area .cell_inputs,
-.cell.focused .input_area .cell_inputs
-{
-    background-color: #e2dfe3;
-}
-
-.cell_toolbar-mask
-{
-    position: absolute;
-    top: -37px;
-    right: -5px;
-    z-index: 99;
-    height: 32px;
-
-    /* Set the left padding to 50px to give users extra room to move their
-    mouse to the toolbar without causing the cell to go out of focus and thus
-    hide the toolbar before they get there. */
-    padding: 5px 5px 0px 50px;
-}
-
-.cell_toolbar
-{
-    display: inline-box;
-    background: white;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,.50);
-}
-
-.cell_toolbar button
-{
-    display: inline-block;
-
-    width: 22px;
-    height: 20px;
-    padding: 2px 4px;
-
-    text-align: center;
-
-    border: none;
-    outline: none;
-    background: none;
-}
-
-.cell_toolbar button i
-{
-    font-size: 16px;
-    line-height: 1;
-
-    color: #aaa;
-}
-
-.cell_toolbar button i:hover
-{
-    color: #555;
-}
-
-.cell_markdown
-{
-    padding: 10px 50px 10px 50px;
-}
-
-.pagers
-{
-    padding: 10px 50px 10px 50px;
-    background-color: #fafafa;
-    word-wrap: break-word;
-}
-
-.cell_display
-{
-    word-wrap: break-word;
-    padding: 10px 10px 10px 60px;
-}
-
-.cell_display:empty
-{
-    display:none;
-}
-
-.code_cell .input_area
-{
-    display: flex;
-    flex-direction: row;
-}
-
-.code_cell .input_area .cell_inputs
-{
-    font-family: monospace;
-    font-size: 12px;
-
-    width: 50px;
-    padding: 9px 0;
-
-    text-align: center;
-
-    color: #8c8a8e;
-    background-color: #fafafa;
-
-    flex: 0 0 auto;
-}
-
-.code_cell .input_area .cell_editor
-{
-    flex: 1 1 auto;
-}
-
-.creator-hover-mask {
-  display: block;
-  position: relative;
-  overflow: visible;
-  height: 0px;
-}
-
-.creator-hover-region {
-  display: flex;
-  position: relative;
-  overflow: visible;
-  top: -30px;
-  height: 60px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-}
-
-.creator-tool {
-  display: inline-block;
-  background: white;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.50);
-  margin-top: -15px;
-  pointer-events: all;
-}
-
-.creator-tool button
-{
-  display: inline-block;
-
-  width: 22px;
-  height: 20px;
-  padding: 2px 4px;
-
-  text-align: center;
-
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  border-radius: 0px;
   border: none;
-  outline: none;
-  background: none;
+  padding:0;
+
+  background: var(--cm-hint-bg);
+  font-size: 90%;
+  font-family: 'Source Code Pro', monospace;
+
+  overflow-y: auto;
 }
 
-.creator-tool button i
-{
-  /* These icons are thin, use a larger font than the cell toolbar */
-  font-size: 17px;
-  line-height: 1;
-
-  color: #aaa;
-}
-
-.creator-tool button i:hover
-{
-  color: #555;
-}
-
-.creator-tool .creator-label {
-  color: #aaa;
-  font-size: 12px;
-  text-transform: uppercase;
-  padding: 5px;
-  vertical-align: text-bottom;
-  font-weight: bold;
-}
-
-code {
-  font-family: 'Source Code Pro';
+.CodeMirror-hint {
+  border-radius: 0px;
+  max-width: 19em;
   white-space: pre;
-  font-size: 14px;
+  cursor: pointer;
+}
+
+li.CodeMirror-hint-active {
+  background: var(--cm-hint-bg-active);
 }

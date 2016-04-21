@@ -15,6 +15,7 @@ import {
 
 import { initKeymap } from './keys/keymap';
 import { ipcRenderer as ipc } from 'electron';
+import storage from 'electron-json-storage';
 
 import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
@@ -64,8 +65,21 @@ ipc.on('main:load', (e, launchData) => {
   class App extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = {
+        theme: 'light',
+      };
       store.subscribe(state => this.setState(state));
+      storage.get('theme', (error, data) => {
+        if (error) throw error;
+        if (data.length > 0) return;
+        this.setState({
+          theme: data.theme,
+        });
+      });
+      ipc.on('menu:theme', (ev, theme) => {
+        storage.set('theme', { theme });
+        this.setState({ theme });
+      });
     }
     componentDidMount() {
       const state = store.getState();
@@ -83,12 +97,15 @@ ipc.on('main:load', (e, launchData) => {
             {
               this.state.notebook &&
               <Notebook
+                theme={this.state.theme}
                 notebook={this.state.notebook}
                 channels={this.state.channels}
                 cellPagers={this.state.cellPagers}
                 focusedCell={this.state.focusedCell}
               />
             }
+            <link rel="stylesheet" href={`../../static/styles/theme-${this.state.theme}.css`} />
+            <link rel="stylesheet" href="../../static/styles/main.css" />
           </div>
         </Provider>
       );
