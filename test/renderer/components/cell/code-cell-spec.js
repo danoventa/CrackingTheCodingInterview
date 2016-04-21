@@ -11,13 +11,13 @@ const sharedProps = { displayOrder, transforms };
 describe('CodeCell', () => {
   it('can be rendered', () => {
     const cell = shallow(
-      <CodeCell cell={commutable.emptyCodeCell} {...{ displayOrder, transforms }}/>
+      <CodeCell cell={commutable.emptyCodeCell} {...sharedProps}/>
     );
     expect(cell).to.not.be.null;
   });
   it('creates an editor', () => {
     const cell = mount(
-      <CodeCell cell={commutable.emptyCodeCell} {...{ displayOrder, transforms }}/>
+      <CodeCell cell={commutable.emptyCodeCell} {...sharedProps}/>
     );
     expect(cell.find('.cell_editor').length).to.be.greaterThan(0);
   });
