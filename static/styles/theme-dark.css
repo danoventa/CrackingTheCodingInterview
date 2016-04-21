@@ -4,14 +4,15 @@
 
   --primary-border: #cbcbcb;
 
-  --cell-bg: #222;
+  --cell-bg: #2b2b2b;
   --cell-bg-hover: #151515;
-  --cell-bg-focus: #111;
+  --cell-bg-focus: #1f1f1f;
 
+  --toolbar-bg: #2b2b2b;
   --toolbar-button: #aaa;
   --toolbar-button-hover: #555;
 
-  --pager-bg: #1f1f1f;
+  --pager-bg: #111;
   --input-color: #fafafa;
 
   --cm-background: #111;
