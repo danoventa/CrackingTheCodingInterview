@@ -8,20 +8,30 @@ export LD_RUN_PATH=$LDHACK/lib
 export LD_LIBRARY_PATH=$LDHACK/lib
 export PKG_CONFIG_PATH=$LDHACK/lib/pkgconfig
 echo $PKG_CONFIG_PATH
-wget http://download.zeromq.org/zeromq-$ZMQ.tar.gz
-tar xzvf zeromq-$ZMQ.tar.gz
-'[ -z "$SODIUM" ] || wget https://download.libsodium.org/libsodium/releases/libsodium-$SODIUM.tar.gz'
-'[ -z "$SODIUM" ] || tar xzvf libsodium-$SODIUM.tar.gz'
-'[ -z "$SODIUM" ] || cd libsodium-$SODIUM'
-'[ -z "$SODIUM" ] || ./autogen.sh'
-'[ -z "$SODIUM" ] || ./configure --prefix=$LDHACK'
-'[ -z "$SODIUM" ] || make'
-'[ -z "$SODIUM" ] || make install'
-'[ -z "$SODIUM" ] || cd ..'
-'[ -z "$SODIUM" ] || export LIBS=-lsodium && export sodium_CFLAGS=$CFLAGS && export sodium_LIBS=$LDFLAGS'
+
+if [ ! -d "zeromq-$ZMQ" ]; then
+  echo "ZMQ not found in cache, downloading and building"
+  wget http://download.zeromq.org/zeromq-$ZMQ.tar.gz
+  tar xzvf zeromq-$ZMQ.tar.gz
+  '[ -z "$SODIUM" ] || wget https://download.libsodium.org/libsodium/releases/libsodium-$SODIUM.tar.gz'
+  '[ -z "$SODIUM" ] || tar xzvf libsodium-$SODIUM.tar.gz'
+  '[ -z "$SODIUM" ] || cd libsodium-$SODIUM'
+  '[ -z "$SODIUM" ] || ./autogen.sh'
+  '[ -z "$SODIUM" ] || ./configure --prefix=$LDHACK'
+  '[ -z "$SODIUM" ] || make'
+  '[ -z "$SODIUM" ] || make install'
+  '[ -z "$SODIUM" ] || cd ..'
+  '[ -z "$SODIUM" ] || export LIBS=-lsodium && export sodium_CFLAGS=$CFLAGS && export sodium_LIBS=$LDFLAGS'
+
+  cd zeromq-$ZMQ
+  ./autogen.sh
+  if [[ -z "$SODIUM" ]]; then ./configure --prefix=$LDHACK; else ./configure --prefix=$LDHACK --with-libsodium=$LDHACK; fi
+  make
+  cd ..
+else
+  echo "ZMQ found in cache"
+fi
+
 cd zeromq-$ZMQ
-./autogen.sh
-if [[ -z "$SODIUM" ]]; then ./configure --prefix=$LDHACK; else ./configure --prefix=$LDHACK --with-libsodium=$LDHACK; fi
-make
 make install
 cd ..
