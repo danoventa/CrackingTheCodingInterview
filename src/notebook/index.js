@@ -104,8 +104,8 @@ ipc.on('main:load', (e, launchData) => {
                 focusedCell={this.state.focusedCell}
               />
             }
-            <link rel="stylesheet" href={`../../static/styles/theme-${this.state.theme}.css`} />
-            <link rel="stylesheet" href="../../static/styles/main.css" />
+            <link rel="stylesheet" href={`../static/styles/theme-${this.state.theme}.css`} />
+            <link rel="stylesheet" href="../static/styles/main.css" />
           </div>
         </Provider>
       );
