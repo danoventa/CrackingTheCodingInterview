@@ -71,7 +71,7 @@ ipc.on('main:load', (e, launchData) => {
       store.subscribe(state => this.setState(state));
       storage.get('theme', (error, data) => {
         if (error) throw error;
-        if (data.length > 0) return;
+        if (Object.keys(data).length === 0) return;
         this.setState({
           theme: data.theme,
         });
