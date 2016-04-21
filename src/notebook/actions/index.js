@@ -21,12 +21,6 @@ export function setExecutionState(executionState) {
   };
 }
 
-export function killKernel() {
-  return {
-    type: constants.KILL_KERNEL,
-  };
-}
-
 export function setLanguageInfo(langInfo) {
   return {
     type: constants.SET_LANGUAGE_INFO,
@@ -226,4 +220,8 @@ export const startedUploading = {
 
 export const doneUploading = {
   type: constants.DONE_UPLOADING,
+};
+
+export const killKernel = {
+  type: constants.KILL_KERNEL,
 };
