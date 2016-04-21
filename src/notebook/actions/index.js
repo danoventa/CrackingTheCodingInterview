@@ -8,22 +8,10 @@ import * as agendas from '../agendas';
 import { launchKernel } from '../api/kernel';
 import * as constants from '../constants';
 
-export function exit() {
-  return {
-    type: constants.EXIT,
-  };
-}
-
 export function setExecutionState(executionState) {
   return {
     type: constants.SET_EXECUTION_STATE,
     executionState,
-  };
-}
-
-export function killKernel() {
-  return {
-    type: constants.KILL_KERNEL,
   };
 }
 
@@ -226,4 +214,8 @@ export const startedUploading = {
 
 export const doneUploading = {
   type: constants.DONE_UPLOADING,
+};
+
+export const killKernel = {
+  type: constants.KILL_KERNEL,
 };

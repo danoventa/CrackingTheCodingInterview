@@ -65,7 +65,7 @@ export function dispatchPublishGist(store, dispatch) {
 }
 
 export function dispatchKillKernel(store, dispatch) {
-  dispatch(killKernel());
+  dispatch(killKernel);
 }
 
 export function initMenuHandlers(store, dispatch) {
