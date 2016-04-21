@@ -9,7 +9,6 @@ import Immutable from 'immutable';
 import { NEW_CELL_AFTER } from '../../../../src/notebook/constants';
 import CellCreatorButtons from '../../../../src/notebook/components/cell/cell-creator-buttons';
 
-// Boilerplate test to make sure the testing setup is configured
 describe('CellCreatorButtons', () => {
   it('can be constructed', () => {
     const component = shallow(
