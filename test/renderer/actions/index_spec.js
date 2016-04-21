@@ -200,4 +200,28 @@ describe('executeCell', () => {
 
     actions.executeCell(channels, id, source)(subject);
   });
+
+  // Incomplete test setup, skipping yet providing boilerplate
+  it.skip('echoes actions passed on from agendas.executeCell', (done) => {
+    const channels = {
+      iopub: new Rx.Subject(), // need to mock these
+      shell: new Rx.Subject(), // or mock agendas.executeCell
+    };
+    const id = '235';
+    const source = 'print("hey")';
+
+    const subject = new Rx.Subject();
+
+    subject
+      .take(4)
+      .subscribe((action) => {
+        expect(action).to.deep.equal({});
+        done();
+      }, (action) => {
+        expect.fail();
+      }
+    );
+
+    actions.executeCell(channels, id, source)(subject);
+  });
 });
