@@ -54,11 +54,11 @@ export default class CellCreatorButtons extends React.Component {
       </button>);
     return (
       <div className="creator-tool">
-        <button onClick={this.createTextCell} title="create text cell">
+        <button onClick={this.createTextCell} title="create text cell" className="add-text-cell">
           <i className="material-icons">art_track</i>
         </button>
         <span className="creator-label">Add cell</span>
-        <button onClick={this.createCodeCell} title="create code cell">
+        <button onClick={this.createCodeCell} title="create code cell" className="add-code-cell">
           <i className="material-icons">code</i>
         </button>
         {this.props.above ? null : mergeButton}
