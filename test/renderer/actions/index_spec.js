@@ -6,6 +6,8 @@ import * as constants from '../../../src/notebook/constants';
 
 import createStore from '../../../src/notebook/store';
 
+const Rx = require('@reactivex/rxjs');
+
 describe('setExecutionState', () => {
   it('creates a SET_EXECUTION_STATE action', () => {
     expect(actions.setExecutionState('idle')).to.deep.equal({
@@ -171,5 +173,31 @@ describe('overwriteMetadata', () => {
       field: 'foo',
       value: {bar: 3}
     });
+  });
+});
+
+describe('executeCell', () => {
+  it('creates an ERROR_KERNEL_NOT_CONNECTED action with channels not setup', (done) => {
+    const channels = {
+    };
+    const id = '235';
+    const source = 'print("hey")';
+
+    const subject = new Rx.Subject();
+
+    subject
+      .first()
+      .subscribe((action) => {
+        expect(action).to.deep.equal({
+          type: constants.ERROR_KERNEL_NOT_CONNECTED,
+          message: 'kernel not connected',
+        })
+        done();
+      }, (action) => {
+        expect.fail();
+      }
+    );
+
+    actions.executeCell(channels, id, source)(subject);
   });
 });
