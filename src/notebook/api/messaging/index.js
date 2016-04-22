@@ -44,20 +44,6 @@ export function msgSpecToNotebookFormat(msg) {
   });
 }
 
-export function logInfo(){
-  return Observable.create(subscriber => {
-    const subscription = this.subscribe(msg => {
-      console.info('looking for complete_reply...', msg.header.msg_type);
-    },
-    err => subscriber.error(err),
-    () => subscriber.complete());
-
-    return subscription;
-  });
-}
-
-Observable.prototype.logInfo = logInfo;
-
 /**
  * childOf filters out messages that don't have the parent header matching parentMessage
  * @param  {Object}  parentMessage Jupyter message protocol message
