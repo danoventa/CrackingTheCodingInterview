@@ -7,8 +7,9 @@ export function beforeUnload(store, dispatch, e) {
 }
 */
 
-export function unload(store, dispatch, e) {
-  console.warn(e);
+export function unload(store) {
+  // Note that the full signature is (store, dispatch, e)
+  // though we only use store here as shutdown is required to be an immediate action
   const state = store.getState();
   shutdownKernel(state.channels, state.spawn, state.connectionFile);
 }

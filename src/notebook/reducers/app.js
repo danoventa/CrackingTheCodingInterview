@@ -1,20 +1,8 @@
-import * as fs from 'fs';
-
 import * as constants from '../constants';
 
-export function shutdownKernel(channels, spawn, connectionFile) {
-  if (channels) {
-    channels.shell.complete();
-    channels.iopub.complete();
-    channels.stdin.complete();
-  }
-  if (spawn) {
-    spawn.kill();
-  }
-  if (connectionFile) {
-    fs.unlink(connectionFile);
-  }
-}
+import {
+  shutdownKernel,
+} from '../api/kernel';
 
 export function cleanupKernel(state) {
   shutdownKernel(state.channels, state.spawn, state.connectionFile);
