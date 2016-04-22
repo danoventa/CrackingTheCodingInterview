@@ -38,6 +38,7 @@ class Notebook extends React.Component {
 
   constructor() {
     super();
+    this.languageCache = {};
     this.createCellElement = this.createCellElement.bind(this);
     this.keyDown = this.keyDown.bind(this);
     this.moveCell = this.moveCell.bind(this);
@@ -52,18 +53,6 @@ class Notebook extends React.Component {
 
   componentWillMount() {
     require('codemirror/mode/markdown/markdown');
-
-    const lang = this.props.notebook.getIn(['metadata', 'kernelspec', 'language']);
-    if (!lang) {
-      return;
-    }
-    // HACK: This should give you the heeby-jeebies
-    // Mostly because lang could be ../../../../whatever
-    // This is the notebook though, so hands off
-    // We'll want to check for this existing later
-    // and any other validation
-    require(`codemirror/mode/${lang}/${lang}`);
-    // Assume markdown should be required
   }
 
   componentDidMount() {
@@ -147,9 +136,35 @@ class Notebook extends React.Component {
     this.context.dispatch(moveCell(sourceId, destinationId, above));
   }
 
+  getLanguageMode() {
+    // The syntax highlighting language should be set in the language info
+    // object.  First try codemirror_mode, then name, and fallback on 'null'.
+    let language =
+      this.props.notebook.getIn(['metadata', 'language_info', 'codemirror_mode', 'name'],
+      this.props.notebook.getIn(['metadata', 'language_info', 'codemirror_mode'],
+      this.props.notebook.getIn(['metadata', 'language_info', 'name'],
+      'text')));
+
+    // TODO: Load the ipython codemirror mode from somewhere
+    if (language === 'ipython') {
+      language = 'python';
+    }
+
+    if (language !== 'text' && !this.languageCache[language]) {
+      this.languageCache[language] = true;
+
+      // HACK: This should give you the heeby-jeebies
+      // Mostly because language could be ../../../../whatever
+      // This is the notebook though, so hands off
+      // We'll want to check for this existing later
+      // and any other validation
+      require(`codemirror/mode/${language}/${language}`);
+    }
+    return language;
+  }
+
   createCellElement(id) {
     const cellMap = this.props.notebook.get('cellMap');
-
     return (
       <div
         key={`cell-container-${id}`}
@@ -157,7 +172,7 @@ class Notebook extends React.Component {
       >
         <DraggableCell
           cell={cellMap.get(id)}
-          language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
+          language={this.getLanguageMode()}
           getCompletions={this.getCompletions}
           id={id}
           key={id}
