@@ -5,7 +5,9 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import DraggableCell from './cell/draggable-cell';
 import CellCreator from './cell/cell-creator';
-import { executeCell, focusNextCell, moveCell } from '../actions';
+import { executeCell, focusNextCell, moveCell, getCompletions} from '../actions';
+
+import complete from '../api/messaging/completion';
 
 import Immutable from 'immutable';
 
@@ -39,6 +41,7 @@ class Notebook extends React.Component {
     this.createCellElement = this.createCellElement.bind(this);
     this.keyDown = this.keyDown.bind(this);
     this.moveCell = this.moveCell.bind(this);
+    this.getCompletions = this.getCompletions.bind(this);
   }
 
   getChildContext() {
@@ -136,6 +139,11 @@ class Notebook extends React.Component {
     }
   }
 
+  getCompletions(source, cursor) {
+      return complete(this.props.channels, source, cursor)
+      
+  }
+
   moveCell(sourceId, destinationId, above) {
     this.context.dispatch(moveCell(sourceId, destinationId, above));
   }
@@ -151,6 +159,7 @@ class Notebook extends React.Component {
         <DraggableCell
           cell={cellMap.get(id)}
           language={this.props.notebook.getIn(['metadata', 'language_info', 'name'])}
+          getCompletions={this.getCompletions}
           id={id}
           key={id}
           ref={id}

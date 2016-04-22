@@ -4,8 +4,10 @@ import CodeMirror from 'react-code-mirror';
 
 import { updateCellSource } from '../../actions';
 
-require('codemirror/addon/hint/show-hint');
-require('codemirror/addon/hint/anyword-hint');
+import 'codemirror/addon/hint/show-hint';
+import 'codemirror/addon/hint/anyword-hint';
+
+import { completions } from './jupyter-codemirror-completions';
 
 export default class Editor extends React.Component {
   static propTypes = {
@@ -35,7 +37,7 @@ export default class Editor extends React.Component {
     this.state = {
       source: this.props.input,
     };
-
+    this._complete = this.props.getCompletions;
     this.onChange = this.onChange.bind(this);
   }
 
@@ -70,8 +72,11 @@ export default class Editor extends React.Component {
       this.context.dispatch(updateCellSource(this.props.id, e.target.value));
     }
   }
-
   render() {
+    const extraKeys = {"Ctrl-Space": "autocomplete"}
+    let cmp = (...args) => {return completions(this._complete, ...args);}
+    cmp.async = true;
+
     return (
       <div className="cell_editor">
         <CodeMirror
@@ -87,7 +92,8 @@ export default class Editor extends React.Component {
           lineNumbers={this.props.lineNumbers}
           theme={this.props.theme}
           onChange={this.onChange}
-          extraKeys={{ 'Ctrl-Space': 'autocomplete' }}
+          extraKeys={extraKeys}
+          hintOptions={{hint: cmp}}
         />
       </div>
     );
