@@ -29,10 +29,6 @@ export function launch(notebook, filename) {
 
   win.webContents.on('will-navigate', deferURL);
 
-  win.on('close', () => {
-    win.webContents.send('menu:kill-kernel');
-  });
-
   // Emitted when the window is closed.
   win.on('closed', () => {
     win = null;

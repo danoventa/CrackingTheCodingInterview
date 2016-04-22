@@ -1,19 +1,11 @@
-import * as fs from 'fs';
-
 import * as constants from '../constants';
 
-function cleanupKernel(state) {
-  if (state.channels) {
-    state.channels.shell.complete();
-    state.channels.iopub.complete();
-    state.channels.stdin.complete();
-  }
-  if (state.spawn) {
-    state.spawn.kill();
-  }
-  if (state.connectionFile) {
-    fs.unlink(state.connectionFile);
-  }
+import {
+  shutdownKernel,
+} from '../api/kernel';
+
+export function cleanupKernel(state) {
+  shutdownKernel(state.channels, state.spawn, state.connectionFile);
 
   const cleanState = {
     ...state,

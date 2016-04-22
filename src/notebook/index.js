@@ -22,6 +22,7 @@ import storage from 'electron-json-storage';
 
 import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
+import { initGlobalHandlers } from './global-events';
 
 const Github = require('github4');
 
@@ -64,6 +65,7 @@ ipc.on('main:load', (e, launchData) => {
   initNativeHandlers(store);
   initKeymap(window, dispatch);
   initMenuHandlers(store, dispatch);
+  initGlobalHandlers(store, dispatch);
 
   class App extends React.Component {
     constructor(props) {

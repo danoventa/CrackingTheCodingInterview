@@ -5,6 +5,7 @@ import {
   createShellSubject,
 } from 'enchannel-zmq-backend';
 
+import * as fs from 'fs';
 import * as uuid from 'uuid';
 import { launch } from 'spawnteract';
 
@@ -27,4 +28,18 @@ export function launchKernel(kernelSpecName, spawnOptions) {
           spawn,
         };
       });
+}
+
+export function shutdownKernel(channels, spawn, connectionFile) {
+  if (channels) {
+    channels.shell.complete();
+    channels.iopub.complete();
+    channels.stdin.complete();
+  }
+  if (spawn) {
+    spawn.kill();
+  }
+  if (connectionFile) {
+    fs.unlink(connectionFile);
+  }
 }
