@@ -7,12 +7,11 @@ import { updateCellSource } from '../../actions';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/anyword-hint';
 
-import { completions } from './jupyter-codemirror-completions';
-
 export default class Editor extends React.Component {
   static propTypes = {
     id: React.PropTypes.string,
     input: React.PropTypes.any,
+    getCompletions: React.PropTypes.any,
     language: React.PropTypes.string,
     lineNumbers: React.PropTypes.bool,
     onChange: React.PropTypes.func,
@@ -37,8 +36,10 @@ export default class Editor extends React.Component {
     this.state = {
       source: this.props.input,
     };
-    this._complete = this.props.getCompletions;
     this.onChange = this.onChange.bind(this);
+
+    this.hint = this.completions.bind(this);
+    this.hint.async = true;
   }
 
   componentDidMount() {
@@ -72,11 +73,24 @@ export default class Editor extends React.Component {
       this.context.dispatch(updateCellSource(this.props.id, e.target.value));
     }
   }
-  render() {
-    const extraKeys = {"Ctrl-Space": "autocomplete"}
-    let cmp = (...args) => {return completions(this._complete, ...args);}
-    cmp.async = true;
 
+  completions(editor, callback) {
+    const cursor = editor.getCursor();
+    this.props.getCompletions(editor.getValue(), cursor.ch).then(results => callback({
+      list: results.matches,
+      from: {
+        line: cursor.line,
+        ch: results.cursor_start,
+      },
+      to: {
+        line: cursor.line,
+        ch: results.cursor_end,
+      },
+    }));
+  }
+
+  render() {
+    const extraKeys = { 'Ctrl-Space': 'autocomplete' };
     return (
       <div className="cell_editor">
         <CodeMirror
@@ -93,7 +107,7 @@ export default class Editor extends React.Component {
           theme={this.props.theme}
           onChange={this.onChange}
           extraKeys={extraKeys}
-          hintOptions={{hint: cmp}}
+          hintOptions={{ hint: this.hint }}
         />
       </div>
     );
