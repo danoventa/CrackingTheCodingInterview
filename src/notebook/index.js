@@ -8,8 +8,11 @@ import { reducers } from './reducers';
 import Provider from './components/util/provider';
 import Notebook from './components/notebook';
 
+import NotificationSystem from 'react-notification-system';
+
 import {
   setNotebook,
+  setNotificationSystem,
   setExecutionState,
 } from './actions';
 
@@ -82,6 +85,7 @@ ipc.on('main:load', (e, launchData) => {
       });
     }
     componentDidMount() {
+      dispatch(setNotificationSystem(this.refs.notificationSystem));
       const state = store.getState();
       const filename = (state && state.filename) || launchData.filename;
       dispatch(setNotebook(launchData.notebook, filename));
@@ -104,6 +108,7 @@ ipc.on('main:load', (e, launchData) => {
                 focusedCell={this.state.focusedCell}
               />
             }
+            <NotificationSystem ref="notificationSystem" />
             <link rel="stylesheet" href={`../static/styles/theme-${this.state.theme}.css`} />
             <link rel="stylesheet" href="../static/styles/main.css" />
           </div>

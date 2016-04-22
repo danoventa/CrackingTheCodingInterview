@@ -185,4 +185,11 @@ export default {
   },
   [constants.STARTED_UPLOADING]: noop,
   [constants.DONE_UPLOADING]: noop,
+  [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
+    const { notificationSystem } = action;
+    return {
+      ...state,
+      notificationSystem,
+    };
+  },
 };
