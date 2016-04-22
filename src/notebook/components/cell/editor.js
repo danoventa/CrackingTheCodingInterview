@@ -73,19 +73,10 @@ export default class Editor extends React.Component {
     }
   }
   render() {
-    const extraKeys = { 'Ctrl-Space': cm => {
-        cm.showHint({
-            hint: (cm, options) => {return completions(cm, this._complete)},
-            completeSingle: true,
-            alignWithWord: true,
-            closeCharacters: /[\s()\[\]{};:>,]/,
-            closeOnUnfocus: false,
-            completeOnSingleClick: true,
-            container: null,
-            customKeys: null,
-            extraKeys: null
-        })
-    } }
+    const extraKeys = {"Ctrl-Space": "autocomplete"}
+    let cmp = (...args) => {return completions(this._complete, ...args);}
+    cmp.async = true;
+
     return (
       <div className="cell_editor">
         <CodeMirror
@@ -102,6 +93,7 @@ export default class Editor extends React.Component {
           theme={this.props.theme}
           onChange={this.onChange}
           extraKeys={extraKeys}
+          hintOptions={{hint: cmp}}
         />
       </div>
     );
