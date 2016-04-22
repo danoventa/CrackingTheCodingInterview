@@ -1,9 +1,16 @@
 import BrowserWindow from 'browser-window';
 import path from 'path';
 
+import { shell } from 'electron';
+
 import { emptyNotebook, emptyCodeCell, appendCell, fromJS } from 'commutable';
 import * as immutable from 'immutable';
 import fs from 'fs';
+
+export function deferURL(event, url) {
+  event.preventDefault();
+  shell.openExternal(url);
+}
 
 export function launch(notebook, filename) {
   let win = new BrowserWindow({
@@ -19,6 +26,8 @@ export function launch(notebook, filename) {
   win.webContents.on('did-finish-load', () => {
     win.webContents.send('main:load', { notebook: notebook.toJS(), filename });
   });
+
+  win.webContents.on('will-navigate', deferURL);
 
   win.on('close', () => {
     win.webContents.send('menu:kill-kernel');
