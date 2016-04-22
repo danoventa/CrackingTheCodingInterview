@@ -4,6 +4,7 @@
   "description": ":notebook: the nteract notebook",
   "main": "index.js",
   "scripts": {
+    "prestart": "npm run build",
     "start": "electron .",
     "prepublish": "npm run build",
     "clean": "rimraf build dist",
