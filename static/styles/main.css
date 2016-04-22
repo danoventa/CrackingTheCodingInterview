@@ -268,7 +268,7 @@ code {
 {
     border-left-width: 1px;
     border-left-style: solid;
-    border-left-color: var(--cm-color)
+    border-left-color: var(--cm-color);
 }
 
 .CodeMirror-scroll
@@ -331,7 +331,7 @@ code {
 .cm-s-composition span.cm-link { color: var(--cm-link); }
 
 .cm-s-composition .CodeMirror-activeline-background { background: var(--cm-activeline-bg); }
-.cm-s-composition .CodeMirror-matchingbracket { outline:1px solid var(--cm-matchingbracket-outline); color:var(--cm-matchingbracket-color) !important; }
+.cm-s-composition .CodeMirror-matchingbracket { outline:1px solid var(--cm-matchingbracket-outline); color: var(--cm-matchingbracket-color) !important; }
 
 /* Overwrite some of the hint Styling */
 
