@@ -11,13 +11,9 @@ import {
 } from '../actions';
 
 function notifyUser(filename, gistURL, gistID, notificationSystem) {
-  const title = 'Gist uploaded';
-  const options = {
-    body: `${filename} is ready`,
-  };
   notificationSystem.addNotification({
-    title,
-    message: options.body,
+    title: 'Gist uploaded',
+    message: `${filename} is ready`,
     dismissible: true,
     position: 'tr',
     level: 'success',
@@ -51,9 +47,17 @@ function createGistCallback(hotOffThePresses, agenda, filename, notificationSyst
 
 export function publish(github, notebook, filepath, notificationSystem) {
   return Rx.Observable.create((agenda) => {
-    const files = {};
     const notebookString = JSON.stringify(commutable.toJS(notebook), undefined, 1);
-    const filename = path.parse(filepath).base;
+
+    let filename;
+
+    if (filepath) {
+      filename = path.parse(filepath).base;
+    } else {
+      filename = 'Untitled.ipynb';
+    }
+
+    const files = {};
     files[filename] = { content: notebookString };
 
     agenda.next(startedUploading);
@@ -64,13 +68,15 @@ export function publish(github, notebook, filepath, notificationSystem) {
         files,
         id: notebook.getIn(['metadata', 'gist_id']),
       };
-      github.gists.edit(gistRequest, createGistCallback(false, agenda, filename, notificationSystem));
+      github.gists.edit(gistRequest,
+        createGistCallback(false, agenda, filename, notificationSystem));
     } else {
       const gistRequest = {
         files,
         public: false,
       };
-      github.gists.create(gistRequest, createGistCallback(true, agenda, filename, notificationSystem));
+      github.gists.create(gistRequest,
+        createGistCallback(true, agenda, filename, notificationSystem));
     }
   });
 }

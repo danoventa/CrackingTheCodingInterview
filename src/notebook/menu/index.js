@@ -60,7 +60,29 @@ export function dispatchPublishGist(store, dispatch) {
   agenda.subscribe((action) => {
     dispatch(action);
   }, (err) => {
-    console.error(err);
+    if (err.message) {
+      const githubError = JSON.parse(err.message);
+      if (githubError.message === 'Bad credentials') {
+        notificationSystem.addNotification({
+          title: 'Bad credentials',
+          message: 'Unable to authenticate with your credentials.\n' +
+                   'What do you have $GITHUB_TOKEN set to?',
+          level: 'error',
+        });
+        return;
+      }
+      notificationSystem.addNotification({
+        title: 'Publication Error',
+        message: githubError.message,
+        level: 'error',
+      });
+      return;
+    }
+    notificationSystem.addNotification({
+      title: 'Unknown Publication Error',
+      message: err.toString(),
+      level: 'error',
+    });
   });
 }
 
