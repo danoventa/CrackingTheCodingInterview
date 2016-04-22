@@ -2,18 +2,22 @@ import * as fs from 'fs';
 
 import * as constants from '../constants';
 
-function cleanupKernel(state) {
-  if (state.channels) {
-    state.channels.shell.complete();
-    state.channels.iopub.complete();
-    state.channels.stdin.complete();
+export function shutdownKernel(channels, spawn, connectionFile) {
+  if (channels) {
+    channels.shell.complete();
+    channels.iopub.complete();
+    channels.stdin.complete();
   }
-  if (state.spawn) {
-    state.spawn.kill();
+  if (spawn) {
+    spawn.kill();
   }
-  if (state.connectionFile) {
-    fs.unlink(state.connectionFile);
+  if (connectionFile) {
+    fs.unlink(connectionFile);
   }
+}
+
+export function cleanupKernel(state) {
+  shutdownKernel(state.channels, state.spawn, state.connectionFile);
 
   const cleanState = {
     ...state,

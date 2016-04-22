@@ -270,7 +270,7 @@ export const named = {
     {
       label: 'Quit',
       accelerator: 'Command+Q',
-      click: () => { app.quit(); },
+      click: () => app.quit(),
     },
   ],
 };
