@@ -219,3 +219,10 @@ export const doneUploading = {
 export const killKernel = {
   type: constants.KILL_KERNEL,
 };
+
+export function setNotificationSystem(notificationSystem) {
+  return {
+    type: constants.SET_NOTIFICATION_SYSTEM,
+    notificationSystem,
+  };
+}

@@ -10,18 +10,27 @@ import {
   overwriteMetadata,
 } from '../actions';
 
-function notifyUser(filename, gistURL, gistID) {
+function notifyUser(filename, gistURL, gistID, notificationSystem) {
   const title = 'Gist uploaded';
   const options = {
-    body: `${filename} ready at ${gistURL}`,
+    body: `${filename} is ready`,
   };
-  const notification = new Notification(title, options);
-  notification.onclick = function openGist() {
-    shell.openExternal(`https://nbviewer.jupyter.org/${gistID}`);
-  };
+  notificationSystem.addNotification({
+    title,
+    message: options.body,
+    dismissible: true,
+    position: 'tr',
+    level: 'success',
+    action: {
+      label: 'Open Gist',
+      callback: function openGist() {
+        shell.openExternal(`https://nbviewer.jupyter.org/${gistID}`);
+      },
+    },
+  });
 }
 
-function createGistCallback(hotOffThePresses, agenda, filename) {
+function createGistCallback(hotOffThePresses, agenda, filename, notificationSystem) {
   return function gistCallback(err, response) {
     if (err) {
       agenda.error(err);
@@ -32,7 +41,7 @@ function createGistCallback(hotOffThePresses, agenda, filename) {
     const gistID = response.id;
     const gistURL = response.html_url;
 
-    notifyUser(filename, gistURL, gistID);
+    notifyUser(filename, gistURL, gistID, notificationSystem);
     if (hotOffThePresses) {
       agenda.next(overwriteMetadata('gist_id', gistID));
     }
@@ -40,7 +49,7 @@ function createGistCallback(hotOffThePresses, agenda, filename) {
   };
 }
 
-export function publish(github, notebook, filepath) {
+export function publish(github, notebook, filepath, notificationSystem) {
   return Rx.Observable.create((agenda) => {
     const files = {};
     const notebookString = JSON.stringify(commutable.toJS(notebook), undefined, 1);
@@ -55,13 +64,13 @@ export function publish(github, notebook, filepath) {
         files,
         id: notebook.getIn(['metadata', 'gist_id']),
       };
-      github.gists.edit(gistRequest, createGistCallback(false, agenda, filename));
+      github.gists.edit(gistRequest, createGistCallback(false, agenda, filename, notificationSystem));
     } else {
       const gistRequest = {
         files,
         public: false,
       };
-      github.gists.create(gistRequest, createGistCallback(true, agenda, filename));
+      github.gists.create(gistRequest, createGistCallback(true, agenda, filename, notificationSystem));
     }
   });
 }
