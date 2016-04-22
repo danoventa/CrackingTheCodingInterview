@@ -9,8 +9,8 @@ export LD_LIBRARY_PATH=$LDHACK/lib
 export PKG_CONFIG_PATH=$LDHACK/lib/pkgconfig
 echo $PKG_CONFIG_PATH
 
-if [ ! -d "zeromq-$ZMQ" ]; then
-  echo "ZMQ not found in cache, downloading and building"
+function installZMQ {
+  echo "Downloading and building ZMQ"
   wget http://download.zeromq.org/zeromq-$ZMQ.tar.gz
   tar xzvf zeromq-$ZMQ.tar.gz
   '[ -z "$SODIUM" ] || wget https://download.libsodium.org/libsodium/releases/libsodium-$SODIUM.tar.gz'
@@ -28,10 +28,23 @@ if [ ! -d "zeromq-$ZMQ" ]; then
   if [[ -z "$SODIUM" ]]; then ./configure --prefix=$LDHACK; else ./configure --prefix=$LDHACK --with-libsodium=$LDHACK; fi
   make
   cd ..
+}
+
+if [ ! -d "zeromq-$ZMQ" ]; then
+  echo "ZMQ not found in cache"
+  installZMQ
 else
   echo "ZMQ found in cache"
 fi
 
 cd zeromq-$ZMQ
-make install
+if make install; then
+  echo "Make success"
+else
+  echo "Make failed, updating cache"
+  cd ..
+  installZMQ
+  cd zeromq-$ZMQ
+  make install
+fi
 cd ..
