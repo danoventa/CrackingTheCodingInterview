@@ -63,7 +63,16 @@ export default class Editor extends React.Component {
     //       is deleted
     inputEvents
       .debounceTime(20)
-      .subscribe(event => event.cm.execCommand('autocomplete'));
+      // Filter out whitespace changes, only propagate when a partial token
+      .filter(event => {
+        const editor = event.cm;
+        const tokenRange = editor.findWordAt(editor.getCursor());
+        const token = editor.getRange(tokenRange.anchor, tokenRange.head);
+        return /\S/.test(token);
+      })
+      .subscribe(event => {
+        event.cm.execCommand('autocomplete');
+      });
   }
 
   componentWillReceiveProps(nextProps) {
