@@ -35,6 +35,7 @@ export function shutdownKernel(channels, spawn, connectionFile) {
     channels.shell.complete();
     channels.iopub.complete();
     channels.stdin.complete();
+    channels.control.complete();
   }
   if (spawn) {
     spawn.stdin.destroy();
