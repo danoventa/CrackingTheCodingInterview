@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CodeMirror from 'react-code-mirror';
+import CodeMirror from 'react-codemirror';
 
 import { updateCellSource } from '../../actions';
 
@@ -45,7 +45,7 @@ export default class Editor extends React.Component {
   componentDidMount() {
     // On first load, if focused, set codemirror to focus
     if (this.props.focused) {
-      this.refs.codemirror.editor.focus();
+      this.refs.codemirror.focus();
     }
   }
 
@@ -57,20 +57,21 @@ export default class Editor extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.focused && prevProps.focused !== this.props.focused) {
-      this.refs.codemirror.editor.focus();
+      this.refs.codemirror.focus();
     } else if (!this.props.focused && prevProps.focused !== this.props.focused) {
-      this.refs.codemirror.editor.getInputField().blur();
+      const cm = this.refs.codemirror.getCodeMirror();
+      cm.getInputField().blur();
     }
   }
 
-  onChange(e) {
+  onChange(text) {
     if (this.props.onChange) {
-      this.props.onChange(e.target.value);
+      this.props.onChange(text);
     } else {
       this.setState({
-        source: e.target.value,
+        source: text,
       });
-      this.context.dispatch(updateCellSource(this.props.id, e.target.value));
+      this.context.dispatch(updateCellSource(this.props.id, text));
     }
   }
 
@@ -90,24 +91,26 @@ export default class Editor extends React.Component {
   }
 
   render() {
-    const extraKeys = { 'Ctrl-Space': 'autocomplete' };
+    const options = {
+      mode: this.props.language,
+      lineNumbers: this.props.lineNumbers,
+      theme: this.props.theme,
+      autofocus: false,
+      hintOptions: {
+        hint: this.hint,
+      },
+      extraKeys: {
+        'Ctrl-Space': 'autocomplete',
+      },
+    };
     return (
       <div className="cell_editor">
         <CodeMirror
           value={this.state.source}
           ref="codemirror"
           className="cell_cm"
-          mode={this.props.language}
-          textAreaClassName={['editor']}
-          textAreaStyle={{
-            minHeight: '10em',
-            backgroundColor: 'red',
-          }}
-          lineNumbers={this.props.lineNumbers}
-          theme={this.props.theme}
+          options={options}
           onChange={this.onChange}
-          extraKeys={extraKeys}
-          hintOptions={{ hint: this.hint }}
         />
       </div>
     );
