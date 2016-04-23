@@ -47,6 +47,11 @@ export default class Editor extends React.Component {
     if (this.props.focused) {
       this.refs.codemirror.focus();
     }
+    this.refs.codemirror.getCodeMirror().on('change', (cm, change) => {
+      if (change.origin === '+input') {
+        cm.execCommand('autocomplete');
+      }
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -100,7 +105,6 @@ export default class Editor extends React.Component {
         hint: this.hint,
       },
       extraKeys: {
-        'Ctrl-Space': 'autocomplete',
       },
     };
     return (
