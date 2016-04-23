@@ -61,6 +61,7 @@
     "nteract-assets": "^1.0.0",
     "react": "^15.0.1",
     "react-code-mirror": "^3.0.6",
+    "react-codemirror": "^0.2.6",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.0.1",
