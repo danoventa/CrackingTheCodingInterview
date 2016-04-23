@@ -7,7 +7,12 @@ import {
 
 describe('the circle of life', () => {
   it('is available for creating and destroying kernels', () => {
-    const kernel = launchKernel('python');
-    shutdownKernel(kernel.channels, kernel.connectionFile, kernel.spawn);
+    const kernelPromise = launchKernel('python2');
+
+    return kernelPromise.then(kernel => {
+      expect(kernel.spawn.killed).to.not.be.true;
+      shutdownKernel(kernel);
+      expect(kernel.spawn.killed).to.be.true;
+    })
   });
 });

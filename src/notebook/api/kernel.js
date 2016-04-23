@@ -30,20 +30,20 @@ export function launchKernel(kernelSpecName, spawnOptions) {
       });
 }
 
-export function shutdownKernel(channels, spawn, connectionFile) {
-  if (channels) {
-    channels.shell.complete();
-    channels.iopub.complete();
-    channels.stdin.complete();
-    channels.control.complete();
+export function shutdownKernel(kernel) {
+  if (kernel.channels) {
+    kernel.channels.shell.complete();
+    kernel.channels.iopub.complete();
+    kernel.channels.stdin.complete();
+    kernel.channels.control.complete();
   }
-  if (spawn) {
-    spawn.stdin.destroy();
-    spawn.stdout.destroy();
-    spawn.stderr.destroy();
-    spawn.kill('SIGKILL');
+  if (kernel.spawn) {
+    kernel.spawn.stdin.destroy();
+    kernel.spawn.stdout.destroy();
+    kernel.spawn.stderr.destroy();
+    kernel.spawn.kill('SIGKILL');
   }
-  if (connectionFile) {
-    fs.unlinkSync(connectionFile);
+  if (kernel.connectionFile) {
+    fs.unlinkSync(kernel.connectionFile);
   }
 }
