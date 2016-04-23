@@ -18,7 +18,7 @@ export function setExecutionState(executionState) {
 export function setLanguageInfo(langInfo) {
   return {
     type: constants.SET_LANGUAGE_INFO,
-    langInfo: Immutable.fromJS(langInfo),
+    langInfo,
   };
 }
 
