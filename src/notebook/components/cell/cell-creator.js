@@ -22,19 +22,19 @@ export default class CellCreator extends React.Component {
     // intersection because we don't want the hover region to actually capture
     // any mouse events.  The hover region is an invisible element that
     // describes the "hot region" that toggles the creator buttons.
-    this._boundUpdateVisibility = this._updateVisibility.bind(this);
-    document.addEventListener('mousemove', this._boundUpdateVisibility, false);
+    this.boundUpdateVisibility = this.updateVisibility.bind(this);
+    document.addEventListener('mousemove', this.boundUpdateVisibility, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousemove', this._boundUpdateVisibility);
+    document.removeEventListener('mousemove', this.boundUpdateVisibility);
   }
 
   setHoverElement(el) {
     this.hoverElement = el;
   }
 
-  _updateVisibility(mouseEvent) {
+  updateVisibility(mouseEvent) {
     if (this.hoverElement) {
       const x = mouseEvent.clientX;
       const y = mouseEvent.clientY;

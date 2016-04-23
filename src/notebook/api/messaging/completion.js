@@ -41,7 +41,7 @@ export default function complete(channels, code, cursorPos) {
     .pluck('content')
     .first()
     .toPromise();
-  
+
   shell.next(message);
   return p;
 }

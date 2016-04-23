@@ -39,7 +39,7 @@ class Toolbar extends React.Component {
     return (
       <div className="cell_toolbar-mask">
         <div className="cell_toolbar">
-          { showPlay &&
+          {showPlay &&
             <button onClick={this.executeCell}>
               <i className="material-icons">play_arrow</i>
             </button>}

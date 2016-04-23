@@ -98,17 +98,17 @@ ipc.on('main:load', (e, launchData) => {
           <div>
             {
               this.state.err &&
-              <pre>{this.state.err.toString()}</pre>
+                <pre>{this.state.err.toString()}</pre>
             }
             {
               this.state.notebook &&
-              <Notebook
-                theme={this.state.theme}
-                notebook={this.state.notebook}
-                channels={this.state.channels}
-                cellPagers={this.state.cellPagers}
-                focusedCell={this.state.focusedCell}
-              />
+                <Notebook
+                  theme={this.state.theme}
+                  notebook={this.state.notebook}
+                  channels={this.state.channels}
+                  cellPagers={this.state.cellPagers}
+                  focusedCell={this.state.focusedCell}
+                />
             }
             <NotificationSystem ref="notificationSystem" />
             <link rel="stylesheet" href={`../static/styles/theme-${this.state.theme}.css`} />

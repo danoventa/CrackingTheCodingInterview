@@ -5,7 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import DraggableCell from './cell/draggable-cell';
 import CellCreator from './cell/cell-creator';
-import { executeCell, focusNextCell, moveCell, getCompletions } from '../actions';
+import { executeCell, focusNextCell, moveCell } from '../actions';
 
 import complete from '../api/messaging/completion';
 
@@ -69,6 +69,10 @@ class Notebook extends React.Component {
     document.removeEventListener('keydown', this.keyDown);
   }
 
+  getCompletions(source, cursor) {
+    return complete(this.props.channels, source, cursor);
+  }
+
   resolveScrollPosition(id) {
     const viewportHeight = window.innerHeight;
     const viewportOffset = document.body.scrollTop;
@@ -126,10 +130,6 @@ class Notebook extends React.Component {
         executeCell(this.props.channels, id, cell.get('source'))
       );
     }
-  }
-
-  getCompletions(source, cursor) {
-    return complete(this.props.channels, source, cursor);
   }
 
   moveCell(sourceId, destinationId, above) {
