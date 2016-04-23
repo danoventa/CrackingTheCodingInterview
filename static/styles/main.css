@@ -356,8 +356,10 @@ code {
   max-width: 19em;
   white-space: pre;
   cursor: pointer;
+  color: var(--cm-hint-color);
 }
 
 li.CodeMirror-hint-active {
   background: var(--cm-hint-bg-active);
+  color: var(--cm-hint-color-active);
 }

@@ -2,6 +2,8 @@ import React from 'react';
 
 import CodeMirror from 'react-codemirror';
 
+const Rx = require('@reactivex/rxjs');
+
 import { updateCellSource } from '../../actions';
 
 import 'codemirror/addon/hint/show-hint';
@@ -47,6 +49,30 @@ export default class Editor extends React.Component {
     if (this.props.focused) {
       this.refs.codemirror.focus();
     }
+
+    const inputEvents = Rx.Observable.fromEvent(this.refs.codemirror.getCodeMirror(),
+      'change', (cm, change) => {
+        return {
+          cm,
+          change,
+        };
+      })
+      .filter(x => x.change.origin === '+input');
+
+    // TODO: The subscription created here needs to be cleaned up when the cell
+    //       is deleted
+    inputEvents
+      .debounceTime(20)
+      // Filter out whitespace changes, only propagate when a partial token
+      .filter(event => {
+        const editor = event.cm;
+        const tokenRange = editor.findWordAt(editor.getCursor());
+        const token = editor.getRange(tokenRange.anchor, tokenRange.head);
+        return /\S/.test(token);
+      })
+      .subscribe(event => {
+        event.cm.execCommand('autocomplete');
+      });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -98,6 +124,7 @@ export default class Editor extends React.Component {
       autofocus: false,
       hintOptions: {
         hint: this.hint,
+        completeSingle: false, // In automatic autocomplete mode we don't want override
       },
       extraKeys: {
         'Ctrl-Space': 'autocomplete',
