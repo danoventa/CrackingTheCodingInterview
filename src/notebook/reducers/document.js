@@ -172,7 +172,7 @@ export default {
     const { notebook } = state;
     return {
       ...state,
-      notebook: notebook.setIn(['metadata', 'language_info'], langInfo),
+      notebook: notebook.setIn(['metadata', 'language_info'], Immutable.fromJS(langInfo)),
     };
   },
   [constants.OVERWRITE_METADATA_FIELD]: function overwriteMetadata(state, action) {
