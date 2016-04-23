@@ -10,7 +10,7 @@
 ![nteract demo](https://cloud.githubusercontent.com/assets/836375/14068164/6ebbc6ea-f42f-11e5-98bc-eb149d0b0730.gif)
 
 Note: this isn't feature complete yet. There will be :bug:s and we're currently
-lacking a lot of core features like jupyter-js-widgets, introspection, and closing down kernels properly.
+lacking a lot of core features like jupyter-js-widgets, introspection, cut/copy/paste of cells.
 
 ### Scope and goals
 
