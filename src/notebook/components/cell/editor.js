@@ -63,12 +63,12 @@ export default class Editor extends React.Component {
     //       is deleted
     inputEvents
       .debounceTime(20)
-      // Filter out whitespace changes, only propagate when a partial token
+      // Pass through only partial tokens that are composed of words
       .filter(event => {
         const editor = event.cm;
         const tokenRange = editor.findWordAt(editor.getCursor());
         const token = editor.getRange(tokenRange.anchor, tokenRange.head);
-        return /\S/.test(token);
+        return /(\w|\.)/.test(token);
       })
       .subscribe(event => {
         event.cm.execCommand('autocomplete');
