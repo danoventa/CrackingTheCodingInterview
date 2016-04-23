@@ -68,7 +68,7 @@ export default class Editor extends React.Component {
         const editor = event.cm;
         const tokenRange = editor.findWordAt(editor.getCursor());
         const token = editor.getRange(tokenRange.anchor, tokenRange.head);
-        return /\w/.test(token);
+        return /(\w|\.)/.test(token);
       })
       .subscribe(event => {
         event.cm.execCommand('autocomplete');
