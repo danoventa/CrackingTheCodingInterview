@@ -91,11 +91,17 @@ export default class Editor extends React.Component {
   }
 
   render() {
-    const extraKeys = { 'Ctrl-Space': 'autocomplete' };
     const options = {
       mode: this.props.language,
       lineNumbers: this.props.lineNumbers,
       theme: this.props.theme,
+      autofocus: false,
+      hintOptions: {
+        hint: this.hint,
+      },
+      extraKeys: {
+        'Ctrl-Space': 'autocomplete',
+      },
     };
     return (
       <div className="cell_editor">
@@ -105,8 +111,6 @@ export default class Editor extends React.Component {
           className="cell_cm"
           options={options}
           onChange={this.onChange}
-          extraKeys={extraKeys}
-          hintOptions={{ hint: this.hint }}
         />
       </div>
     );
