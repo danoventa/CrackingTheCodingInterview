@@ -35,11 +35,15 @@ export function shutdownKernel(channels, spawn, connectionFile) {
     channels.shell.complete();
     channels.iopub.complete();
     channels.stdin.complete();
+    channels.control.complete();
   }
   if (spawn) {
-    spawn.kill();
+    spawn.stdin.destroy();
+    spawn.stdout.destroy();
+    spawn.stderr.destroy();
+    spawn.kill('SIGKILL');
   }
   if (connectionFile) {
-    fs.unlink(connectionFile);
+    fs.unlinkSync(connectionFile);
   }
 }
