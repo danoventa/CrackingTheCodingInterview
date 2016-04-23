@@ -48,6 +48,7 @@ const CodeCell = (props) =>
 CodeCell.propTypes = {
   cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
   displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
+  getCompletions: React.PropTypes.any,
   id: React.PropTypes.string,
   language: React.PropTypes.string,
   theme: React.PropTypes.string,
