@@ -7,7 +7,7 @@ import {
 
 describe('the circle of life', () => {
   it('is available for creating and destroying kernels', () => {
-    const kernelPromise = launchKernel('python3');
+    const kernelPromise = launchKernel('python2');
 
     return kernelPromise.then(kernel => {
       expect(kernel.spawn.killed).to.not.be.true;
