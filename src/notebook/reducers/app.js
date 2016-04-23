@@ -4,7 +4,7 @@ import {
   shutdownKernel,
 } from '../api/kernel';
 
-export function cleanupKernel(state) {
+function cleanupKernel(state) {
   const kernel = {
     channels: state.channels,
     spawn: state.spawn,
