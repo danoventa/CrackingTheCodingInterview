@@ -1,6 +1,10 @@
 /*
   App
  */
+:root {
+  --prompt-width: 50px;
+}
+
 #app {
   padding-top: 20px;
 }
@@ -45,8 +49,7 @@ td {
   Cell
  */
 
-.draggable-cell
-{
+.draggable-cell {
     position: relative;
     padding: 10px;
 }
@@ -55,7 +58,7 @@ td {
 {
     position: absolute;
     z-index: 999;
-    width: 50px;
+    width: var(--prompt-width);
     height: 100%;
     cursor: move;
 }
@@ -138,14 +141,19 @@ td {
     color: var(--toolbar-button-hover);
 }
 
-.cell_markdown
+.cell_markdown.rendered
 {
-    padding: 10px 50px 10px 50px;
+    padding: 10px 10px 10px var(--prompt-width);
+}
+
+.cell_markdown.unrendered .CodeMirror-lines
+{
+    padding-left: var(--prompt-width);
 }
 
 .pagers
 {
-    padding: 10px 50px 10px 50px;
+    padding: 10px var(--prompt-width) 10px var(--prompt-width);
     background-color: var(--pager-bg);
     word-wrap: break-word;
 }
@@ -153,7 +161,7 @@ td {
 .cell_display
 {
     word-wrap: break-word;
-    padding: 10px 10px 10px 60px;
+    padding: 10px 10px 10px calc(var(--prompt-width) + 10px);
 }
 
 .cell_display:empty
@@ -161,18 +169,18 @@ td {
     display:none;
 }
 
-.code_cell .input_area
+.cell_code .input_area
 {
     display: flex;
     flex-direction: row;
 }
 
-.code_cell .input_area .cell_inputs
+.cell_code .input_area .cell_inputs
 {
     font-family: monospace;
     font-size: 12px;
 
-    width: 50px;
+    width: var(--prompt-width);
     padding: 9px 0;
 
     text-align: center;
@@ -183,7 +191,7 @@ td {
     flex: 0 0 auto;
 }
 
-.code_cell .input_area .cell_editor
+.cell_code .input_area .cell_editor
 {
     flex: 1 1 auto;
 }

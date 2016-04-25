@@ -50,7 +50,7 @@ export default class MarkdownCell extends React.Component {
     return (
         (this.state && this.state.view) ?
           <div
-            className="cell_markdown"
+            className="cell_markdown rendered"
             onDoubleClick={this.openEditor}
           >
             {markdownRenderer.process(
@@ -59,7 +59,7 @@ export default class MarkdownCell extends React.Component {
                 '*Empty markdown cell, double click me to add content.*')
             }
           </div> :
-          <div onKeyDown={this.keyDown}>
+          <div onKeyDown={this.keyDown} className="cell_markdown unrendered">
             <Editor
               language="markdown"
               id={this.props.id}

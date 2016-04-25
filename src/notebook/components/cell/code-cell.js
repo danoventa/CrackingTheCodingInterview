@@ -10,7 +10,7 @@ import Pager from './pager';
 import Immutable from 'immutable';
 
 const CodeCell = (props) =>
-  <div className="code_cell">
+  <div className="cell_code">
     <div className="input_area">
       <Inputs executionCount={props.cell.get('execution_count')} />
       <Editor

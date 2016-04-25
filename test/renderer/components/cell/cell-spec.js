@@ -21,6 +21,6 @@ describe('Cell', () => {
       <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
     );
     expect(cell).to.not.be.null;
-    expect(cell.find('div.code_cell').length).to.be.greaterThan(0);
+    expect(cell.find('div.cell_code').length).to.be.greaterThan(0);
   });
 });
