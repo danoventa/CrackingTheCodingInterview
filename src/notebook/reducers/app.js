@@ -17,6 +17,7 @@ function cleanupKernel(state) {
     channels: null,
     spawn: null,
     connectionFile: null,
+    executionState: 'not connected',
   };
 
   return cleanState;
@@ -31,6 +32,7 @@ export default {
       channels,
       connectionFile,
       spawn,
+      executionState: 'idle',
     };
   },
   [constants.EXIT]: function exit(state) {
