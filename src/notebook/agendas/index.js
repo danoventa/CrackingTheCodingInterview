@@ -96,7 +96,6 @@ export function executeCell(channels, id, code) {
           subscriber.next(updateCellSource(id, text));
         }));
     subscriptions.push(
-      // TODO: Handle case where x.replace is false by creating new cell
       setInputStream.filter(x => !x.replace)
         .pluck('text')
         .subscribe((text) => {
