@@ -102,7 +102,7 @@ class DraggableCell extends React.Component {
   }
 
   render() {
-    return this.props.connectDropTarget(this.props.connectDragSource(
+    return this.props.connectDropTarget(
       <div
         style={{
           opacity: this.props.isDragging ? 0.25 : 1,
@@ -114,10 +114,13 @@ class DraggableCell extends React.Component {
         className={'draggable-cell'}
       >
         {
+          this.props.connectDragSource(<div className={'cell-drag-handle'} />)
+        }
+        {
           <Cell {...this.props} />
         }
       </div>
-    ));
+    );
   }
 }
 

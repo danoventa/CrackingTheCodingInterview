@@ -47,7 +47,16 @@ td {
 
 .draggable-cell
 {
+    position: relative;
     padding: 10px;
+}
+
+.cell-drag-handle
+{
+    position: absolute;
+    z-index: 999;
+    width: 50px;
+    height: 100%;
 }
 
 .cell
