@@ -1,6 +1,6 @@
 import {
-  shutdownKernel,
-} from '../reducers/app';
+  forceShutdownKernel,
+} from '../api/kernel';
 
 /**
 export function beforeUnload(store, dispatch, e) {
@@ -16,7 +16,7 @@ export function unload(store) {
     spawn: state.spawn,
     connectionFile: state.connectionFile,
   };
-  shutdownKernel(kernel);
+  forceShutdownKernel(kernel);
 }
 
 export function initGlobalHandlers(store, dispatch) {

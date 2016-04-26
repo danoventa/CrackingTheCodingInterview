@@ -10,9 +10,9 @@ describe('the circle of life', () => {
     const kernelPromise = launchKernel('python2');
 
     return kernelPromise.then(kernel => {
-      expect(kernel.spawn.killed).to.not.be.true;
+      expect(kernel.spawn).to.not.be.undefined;
       shutdownKernel(kernel);
-      expect(kernel.spawn.killed).to.be.true;
+      expect(kernel.spawn).to.be.undefined;
     })
   });
 });
