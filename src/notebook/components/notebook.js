@@ -20,6 +20,7 @@ class Notebook extends React.Component {
     notebook: React.PropTypes.any,
     transforms: React.PropTypes.instanceOf(Immutable.Map),
     cellPagers: React.PropTypes.instanceOf(Immutable.Map),
+    cellStatuses: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
   };
 
@@ -182,6 +183,7 @@ class Notebook extends React.Component {
           moveCell={this.moveCell}
           pagers={this.props.cellPagers.get(id)}
           focusedCell={this.props.focusedCell}
+          running={this.props.cellStatuses.get(id) === 'busy'}
         />
         <CellCreator key={`creator-${id}`} id={id} above={false} />
       </div>);

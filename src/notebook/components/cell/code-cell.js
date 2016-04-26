@@ -12,7 +12,7 @@ import Immutable from 'immutable';
 const CodeCell = (props) =>
   <div className="cell_code">
     <div className="input_area">
-      <Inputs executionCount={props.cell.get('execution_count')} />
+      <Inputs executionCount={props.cell.get('execution_count')} running={props.running} />
       <Editor
         id={props.id}
         input={props.cell.get('source')}
@@ -55,10 +55,12 @@ CodeCell.propTypes = {
   transforms: React.PropTypes.instanceOf(Immutable.Map),
   focusedCell: React.PropTypes.string,
   pagers: React.PropTypes.instanceOf(Immutable.List),
+  running: React.PropTypes.bool,
 };
 
 CodeCell.defaultProps = {
   pagers: new Immutable.List(),
+  running: false,
 };
 
 export default CodeCell;

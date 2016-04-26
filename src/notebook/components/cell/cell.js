@@ -12,6 +12,7 @@ class Cell extends React.Component {
     id: React.PropTypes.string,
     focusedCell: React.PropTypes.string,
     onCellChange: React.PropTypes.func,
+    running: React.PropTypes.bool,
   };
 
   static contextTypes = {
