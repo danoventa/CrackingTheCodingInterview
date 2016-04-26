@@ -5,11 +5,15 @@ import * as uuid from 'uuid';
 const Rx = require('@reactivex/rxjs');
 const Observable = Rx.Observable;
 
-const session = uuid.v4();
+export const session = uuid.v4();
+
+export function getUsername() {
+  return process.env.LOGNAME || process.env.USER || process.env.LNAME ||
+    process.env.USERNAME;
+}
 
 export function createMessage(msg_type) {
-  const username = process.env.LOGNAME || process.env.USER ||
-                   process.env.LNAME || process.env.USERNAME;
+  const username = getUsername();
   return {
     header: {
       username,
