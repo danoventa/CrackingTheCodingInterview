@@ -13,6 +13,7 @@ import {
   updateCellSource,
   updateCellOutputs,
   updateCellPagers,
+  updateCellStatus,
   setLanguageInfo,
 } from '../actions';
 
@@ -86,9 +87,9 @@ export function executeCell(channels, id, code) {
       .filter(Boolean)
       .flatMap(payloads => Rx.Observable.from(payloads));
 
+    // Sets the next cell source
     const setInputStream = payloadStream
       .filter(payload => payload.source === 'set_next_input');
-
     subscriptions.push(
       setInputStream.filter(x => x.replace)
         .pluck('text')
@@ -102,6 +103,7 @@ export function executeCell(channels, id, code) {
           subscriber.next(createCellAfter('code', id, text));
         }));
 
+    // Update the doc/pager section, clearing it first
     subscriber.next(updateCellPagers(id, new Immutable.List()));
     subscriptions.push(
       payloadStream.filter(p => p.source === 'page')
@@ -110,12 +112,17 @@ export function executeCell(channels, id, code) {
           subscriber.next(updateCellPagers(id, pagerDatas));
         }));
 
-    // Set the current outputs to an empty list
-    subscriber.next(updateCellOutputs(id, new Immutable.List()));
-
     const childMessages = iopub.childOf(executeRequest)
                                .share();
 
+    childMessages
+      .ofMessageType(['status'])
+      .pluck('content', 'execution_state')
+      .subscribe((status) => {
+        subscriber.next(updateCellStatus(id, status));
+      });
+
+    // Update the input numbering: `[ ]`
     subscriptions.push(
       childMessages.ofMessageType(['execute_input'])
                  .pluck('content', 'execution_count')
@@ -125,7 +132,8 @@ export function executeCell(channels, id, code) {
                  })
     );
 
-    // Handle all the nbformattable messages
+    // Handle all nbformattable messages, clearing output first
+    subscriber.next(updateCellOutputs(id, new Immutable.List()));
     subscriptions.push(childMessages
          .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
          .map(msgSpecToNotebookFormat)

@@ -167,6 +167,14 @@ export default {
       cellPagers: cellPagers.set(id, pagers),
     };
   },
+  [constants.UPDATE_CELL_STATUS]: function updateCellStatus(state, action) {
+    const { id, status } = action;
+    const { cellStatuses } = state;
+    return {
+      ...state,
+      cellStatuses: cellStatuses.set(id, status),
+    };
+  },
   [constants.SET_LANGUAGE_INFO]: function setLanguageInfo(state, action) {
     const { langInfo } = action;
     const { notebook } = state;

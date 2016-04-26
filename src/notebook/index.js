@@ -42,6 +42,7 @@ ipc.on('main:load', (e, launchData) => {
     notebook: null,
     filename: launchData.filename,
     cellPagers: new Immutable.Map(),
+    cellStatuses: new Immutable.Map(),
     executionState: 'not connected',
     github,
   }, reducers);
@@ -108,6 +109,7 @@ ipc.on('main:load', (e, launchData) => {
                   channels={this.state.channels}
                   cellPagers={this.state.cellPagers}
                   focusedCell={this.state.focusedCell}
+                  cellStatuses={this.state.cellStatuses}
                 />
             }
             <NotificationSystem ref="notificationSystem" />
