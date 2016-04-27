@@ -127,7 +127,9 @@ export const cell = {
     {
       label: 'Run All',
       accelerator: 'Cmd+E',
-      role: 'run-all'
+      click: (item, focusedWindow) => {
+        console.log(focusedWindow);
+      },
     },
   ],
 };
