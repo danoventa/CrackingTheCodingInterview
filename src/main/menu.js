@@ -127,9 +127,7 @@ export const cell = {
     {
       label: 'Run All',
       accelerator: 'Cmd+E',
-      click: (item, focusedWindow) => {
-        console.log(focusedWindow);
-      },
+      click: createSender('menu:run-all')
     },
   ],
 };
