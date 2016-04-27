@@ -9,6 +9,9 @@ import { updateCellSource } from '../../actions';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/anyword-hint';
 
+// Hint picker
+const pick = (cm, handle) => handle.pick();
+
 export default class Editor extends React.Component {
   static propTypes = {
     id: React.PropTypes.string,
@@ -126,6 +129,9 @@ export default class Editor extends React.Component {
       hintOptions: {
         hint: this.hint,
         completeSingle: false, // In automatic autocomplete mode we don't want override
+        extraKeys: {
+          Right: pick,
+        },
       },
       extraKeys: {
         'Ctrl-Space': 'autocomplete',
