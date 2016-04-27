@@ -16,6 +16,7 @@ export default class Editor extends React.Component {
     getCompletions: React.PropTypes.any,
     language: React.PropTypes.string,
     lineNumbers: React.PropTypes.bool,
+    lineWrapping: React.PropTypes.bool,
     onChange: React.PropTypes.func,
     theme: React.PropTypes.string,
     focused: React.PropTypes.bool,
@@ -123,6 +124,7 @@ export default class Editor extends React.Component {
     const options = {
       mode: this.props.language,
       lineNumbers: this.props.lineNumbers,
+      lineWrapping: this.props.lineWrapping,
       theme: this.props.theme,
       autofocus: false,
       hintOptions: {
