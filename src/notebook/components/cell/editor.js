@@ -66,6 +66,11 @@ export default class Editor extends React.Component {
     //       is deleted
     inputEvents
       .debounceTime(20)
+      // Pass through changes that aren't newlines
+      .filter(event => event.change.text.length === 1 ||
+                       event.change.text.length === 2 &&
+                       !(event.change.text[0] === '' && event.change.text[1] === '')
+      )
       // Pass through only partial tokens that are composed of words
       .filter(event => {
         const editor = event.cm;
