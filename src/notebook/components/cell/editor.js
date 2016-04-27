@@ -28,7 +28,6 @@ export default class Editor extends React.Component {
   static defaultProps = {
     language: 'python',
     lineNumbers: false,
-    text: '',
     theme: 'composition',
     focused: false,
   };
@@ -71,10 +70,9 @@ export default class Editor extends React.Component {
         return /(\w|\.)/.test(token);
       })
       .subscribe(event => {
-        if(!event.cm.state.completionActive){
+        if (!event.cm.state.completionActive) {
           event.cm.execCommand('autocomplete');
         }
-
       });
   }
 
