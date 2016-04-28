@@ -53,13 +53,15 @@ export default class Editor extends React.Component {
       this.refs.codemirror.focus();
     }
 
+    function formChangeObject(cm, change) {
+      return {
+        cm,
+        change,
+      };
+    }
+
     const inputEvents = Rx.Observable.fromEvent(this.refs.codemirror.getCodeMirror(),
-      'change', (cm, change) => {
-        return {
-          cm,
-          change,
-        };
-      })
+      'change', formChangeObject)
       .filter(x => x.change.origin === '+input');
 
     // TODO: The subscription created here needs to be cleaned up when the cell

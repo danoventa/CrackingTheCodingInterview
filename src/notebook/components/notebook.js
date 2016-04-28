@@ -13,6 +13,9 @@ import Immutable from 'immutable';
 
 import { displayOrder, transforms } from 'transformime-react';
 
+// Always set up the markdown mode
+require('codemirror/mode/markdown/markdown');
+
 class Notebook extends React.Component {
   static propTypes = {
     channels: React.PropTypes.any,
@@ -52,10 +55,6 @@ class Notebook extends React.Component {
     };
   }
 
-  componentWillMount() {
-    require('codemirror/mode/markdown/markdown');
-  }
-
   componentDidMount() {
     document.addEventListener('keydown', this.keyDown);
   }
@@ -74,33 +73,37 @@ class Notebook extends React.Component {
     return complete(this.props.channels, source, cursor);
   }
 
-  resolveScrollPosition(id) {
-    const viewportHeight = window.innerHeight;
-    const viewportOffset = document.body.scrollTop;
+  getLanguageMode() {
+    // The syntax highlighting language should be set in the language info
+    // object.  First try codemirror_mode, then name, and fallback on 'null'.
+    let language =
+      this.props.notebook.getIn(['metadata', 'language_info', 'codemirror_mode', 'name'],
+      this.props.notebook.getIn(['metadata', 'language_info', 'codemirror_mode'],
+      this.props.notebook.getIn(['metadata', 'language_info', 'name'],
+      'text')));
 
-    const focusedCell = ReactDOM.findDOMNode(this.refs[id]);
-
-    if (focusedCell) {
-      const cellTop = focusedCell.offsetTop;
-      const cellHeight = focusedCell.offsetHeight;
-
-      const belowFold = (cellTop + cellHeight) > (viewportOffset + viewportHeight);
-      const aboveFold = cellTop < viewportOffset;
-
-      if (aboveFold) {
-        document.body.scrollTop = cellTop;
-      }
-
-      if (belowFold) {
-        if (cellHeight > viewportHeight) {
-          document.body.scrollTop = cellTop;
-        } else {
-          const offset = viewportHeight - cellHeight;
-          document.body.scrollTop = cellTop - offset;
-        }
-      }
+    // TODO: Load the ipython codemirror mode from somewhere
+    if (language === 'ipython') {
+      language = 'python';
     }
+
+    if (language !== 'text' && !this.languageCache[language]) {
+      this.languageCache[language] = true;
+
+      // HACK: This should give you the heeby-jeebies
+      // Mostly because language could be ../../../../whatever
+      // This is the notebook though, so hands off
+      // We'll want to check for this existing later
+      // and any other validation
+      require(`codemirror/mode/${language}/${language}`);
+    }
+    return language;
   }
+
+  moveCell(sourceId, destinationId, above) {
+    this.context.dispatch(moveCell(sourceId, destinationId, above));
+  }
+
 
   keyDown(e) {
     if (e.keyCode !== 13) {
@@ -133,35 +136,32 @@ class Notebook extends React.Component {
     }
   }
 
-  moveCell(sourceId, destinationId, above) {
-    this.context.dispatch(moveCell(sourceId, destinationId, above));
-  }
+  resolveScrollPosition(id) {
+    const viewportHeight = window.innerHeight;
+    const viewportOffset = document.body.scrollTop;
 
-  getLanguageMode() {
-    // The syntax highlighting language should be set in the language info
-    // object.  First try codemirror_mode, then name, and fallback on 'null'.
-    let language =
-      this.props.notebook.getIn(['metadata', 'language_info', 'codemirror_mode', 'name'],
-      this.props.notebook.getIn(['metadata', 'language_info', 'codemirror_mode'],
-      this.props.notebook.getIn(['metadata', 'language_info', 'name'],
-      'text')));
+    const focusedCell = ReactDOM.findDOMNode(this.refs[id]);
 
-    // TODO: Load the ipython codemirror mode from somewhere
-    if (language === 'ipython') {
-      language = 'python';
+    if (focusedCell) {
+      const cellTop = focusedCell.offsetTop;
+      const cellHeight = focusedCell.offsetHeight;
+
+      const belowFold = (cellTop + cellHeight) > (viewportOffset + viewportHeight);
+      const aboveFold = cellTop < viewportOffset;
+
+      if (aboveFold) {
+        document.body.scrollTop = cellTop;
+      }
+
+      if (belowFold) {
+        if (cellHeight > viewportHeight) {
+          document.body.scrollTop = cellTop;
+        } else {
+          const offset = viewportHeight - cellHeight;
+          document.body.scrollTop = cellTop - offset;
+        }
+      }
     }
-
-    if (language !== 'text' && !this.languageCache[language]) {
-      this.languageCache[language] = true;
-
-      // HACK: This should give you the heeby-jeebies
-      // Mostly because language could be ../../../../whatever
-      // This is the notebook though, so hands off
-      // We'll want to check for this existing later
-      // and any other validation
-      require(`codemirror/mode/${language}/${language}`);
-    }
-    return language;
   }
 
   createCellElement(id) {
@@ -197,11 +197,13 @@ class Notebook extends React.Component {
     }
     const cellOrder = this.props.notebook.get('cellOrder');
     return (
-      <div style={{
-        paddingTop: '10px',
-        paddingLeft: '10px',
-        paddingRight: '10px',
-      }} ref="cells"
+      <div
+        style={{
+          paddingTop: '10px',
+          paddingLeft: '10px',
+          paddingRight: '10px',
+        }}
+        ref="cells"
       >
         <CellCreator id={cellOrder.get(0, null)} above />
       {
