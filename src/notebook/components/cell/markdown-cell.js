@@ -63,7 +63,7 @@ export default class MarkdownCell extends React.Component {
             <Editor
               language="markdown"
               id={this.props.id}
-              lineWrapping={true}
+              lineWrapping
               input={this.state.source}
             />
           </div>
