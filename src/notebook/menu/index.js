@@ -5,6 +5,7 @@ import {
 } from '../api/save';
 
 import {
+  executeCell,
   newKernel,
   save,
   saveAs,
@@ -86,12 +87,20 @@ export function dispatchPublishGist(store, dispatch) {
   });
 }
 
+export function dispatchRunAll(store, dispatch) {
+  const { notebook, channels} = store.getState();
+  notebook.get('cellMap').map((value, key) => {
+    dispatch(executeCell(channels, key, value.get("source")));
+  });
+}
+
 export function dispatchKillKernel(store, dispatch) {
   dispatch(killKernel);
 }
 
 export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:new-kernel', dispatchNewkernel.bind(null, store, dispatch));
+  ipc.on('menu:run-all', dispatchRunAll.bind(null, store, dispatch));
   ipc.on('menu:save', dispatchSave.bind(null, store, dispatch));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
   ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store, dispatch));
