@@ -5,6 +5,7 @@ import {
 } from '../api/save';
 
 import {
+  executeCell,
   newKernel,
   save,
   saveAs,
@@ -86,8 +87,11 @@ export function dispatchPublishGist(store, dispatch) {
   });
 }
 
-export function dispatchRunAll(store, dispath) {
-  const { notebook, filename, github, notificationSystem } = store.getState();
+export function dispatchRunAll(store, dispatch) {
+  const { notebook, channels} = store.getState();
+  notebook.get('cellMap').map((value, key) => {
+    dispatch(executeCell(channels, key, value.get("source")));
+  });
 }
 
 export function dispatchKillKernel(store, dispatch) {
