@@ -1,6 +1,6 @@
 {
   "name": "nteract",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": ":notebook: the nteract notebook",
   "main": "index.js",
   "scripts": {
