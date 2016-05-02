@@ -89,8 +89,10 @@ export function dispatchPublishGist(store, dispatch) {
 
 export function dispatchRunAll(store, dispatch) {
   const { notebook, channels} = store.getState();
-  notebook.get('cellMap').map((value, key) => {
-    dispatch(executeCell(channels, key, value.get("source")));
+  const cells = notebook.get('cellMap');
+  notebook.get('cellOrder').map((value, key) => {
+    var cell = cells.get(value);
+    dispatch(executeCell(channels, value, cell.get("source")));
   });
 }
 
