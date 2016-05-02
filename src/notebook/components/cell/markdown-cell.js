@@ -11,6 +11,7 @@ export default class MarkdownCell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     id: React.PropTypes.string,
+    theme: React.PropTypes.string,
   };
 
   static contextTypes = {
@@ -65,6 +66,7 @@ export default class MarkdownCell extends React.Component {
               id={this.props.id}
               lineWrapping
               input={this.state.source}
+              theme={this.props.theme}
             />
           </div>
     );

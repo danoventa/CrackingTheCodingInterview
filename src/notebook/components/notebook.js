@@ -25,6 +25,7 @@ class Notebook extends React.Component {
     cellPagers: React.PropTypes.instanceOf(Immutable.Map),
     cellStatuses: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
+    theme: React.PropTypes.string,
   };
 
   static defaultProps = {
@@ -184,6 +185,7 @@ class Notebook extends React.Component {
           pagers={this.props.cellPagers.get(id)}
           focusedCell={this.props.focusedCell}
           running={this.props.cellStatuses.get(id) === 'busy'}
+          theme={this.props.theme}
         />
         <CellCreator key={`creator-${id}`} id={id} above={false} />
       </div>);
