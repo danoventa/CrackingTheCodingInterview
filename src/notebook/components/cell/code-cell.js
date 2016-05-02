@@ -19,6 +19,7 @@ const CodeCell = (props) =>
         language={props.language}
         focused={props.id === props.focusedCell}
         getCompletions={props.getCompletions}
+        theme={props.theme}
       />
     </div>
     {

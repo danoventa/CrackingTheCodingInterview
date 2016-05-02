@@ -22,6 +22,7 @@ export default class Editor extends React.Component {
     lineWrapping: React.PropTypes.bool,
     onChange: React.PropTypes.func,
     theme: React.PropTypes.string,
+    cmtheme: React.PropTypes.string,
     focused: React.PropTypes.bool,
   };
 
@@ -32,7 +33,7 @@ export default class Editor extends React.Component {
   static defaultProps = {
     language: 'python',
     lineNumbers: false,
-    theme: 'composition',
+    cmtheme: 'composition',
     focused: false,
   };
 
@@ -45,6 +46,10 @@ export default class Editor extends React.Component {
 
     this.hint = this.completions.bind(this);
     this.hint.async = true;
+
+    // Remember the name of the theme that's applied so that when it changes we
+    // can force codemirror to remeasure.
+    this.theme = null;
   }
 
   componentDidMount() {
@@ -100,6 +105,11 @@ export default class Editor extends React.Component {
       const cm = this.refs.codemirror.getCodeMirror();
       cm.getInputField().blur();
     }
+
+    if (this.theme !== this.props.theme) {
+      this.theme = this.props.theme;
+      this.refs.codemirror.getCodeMirror().refresh();
+    }
   }
 
   onChange(text) {
@@ -133,7 +143,7 @@ export default class Editor extends React.Component {
       mode: this.props.language,
       lineNumbers: this.props.lineNumbers,
       lineWrapping: this.props.lineWrapping,
-      theme: this.props.theme,
+      theme: this.props.cmtheme,
       autofocus: false,
       hintOptions: {
         hint: this.hint,
