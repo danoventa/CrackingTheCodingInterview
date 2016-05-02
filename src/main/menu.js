@@ -126,7 +126,6 @@ export const cell = {
   submenu: [
     {
       label: 'Run All',
-      accelerator: 'Cmd+E',
       click: createSender('menu:run-all')
     },
   ],
