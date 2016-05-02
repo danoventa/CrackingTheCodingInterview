@@ -56,6 +56,7 @@
     "enchannel-zmq-backend": "^1.0.1",
     "github-api": "^0.11.2",
     "github4": "^0.6.0",
+    "home-dir": "^1.0.0",
     "immutable": "^3.7.6",
     "kernelspecs": "^1.0.1",
     "normalize.css": "^4.0.0",
