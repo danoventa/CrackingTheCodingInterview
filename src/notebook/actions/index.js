@@ -54,7 +54,7 @@ export function save(filename, notebook) {
     subject.next({
       type: constants.START_SAVING,
     });
-    writeFile(filename, JSON.stringify(commutable.toJS(notebook), null, 2), (err) => {
+    writeFile(filename, JSON.stringify(commutable.toJS(notebook), null, 1), (err) => {
       if (err) {
         console.error(err);
         throw err;
