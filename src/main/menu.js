@@ -173,12 +173,12 @@ export const view = {
     },
     {
       label: 'Zoom In',
-      accelerator: 'CmdorCtrl++',
+      accelerator: 'CmdOrCtrl+=',
       click: createSender('menu:zoom-in')
     },
     {
       label: 'Zoom Out',
-      accelerator: 'CmdorCtrl+-',
+      accelerator: 'CmdOrCtrl+-',
       click: createSender('menu:zoom-out')
     },
     {
