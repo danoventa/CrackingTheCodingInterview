@@ -172,6 +172,16 @@ export const view = {
       },
     },
     {
+      label: 'Zoom In',
+      accelerator: 'CmdOrCtrl+=',
+      click: createSender('menu:zoom-in')
+    },
+    {
+      label: 'Zoom Out',
+      accelerator: 'CmdOrCtrl+-',
+      click: createSender('menu:zoom-out')
+    },
+    {
       label: 'Theme',
       submenu: [
         {
