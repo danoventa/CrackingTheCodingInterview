@@ -11,7 +11,7 @@ import {
   saveAs,
   killKernel,
 } from '../actions';
-import { ipcRenderer as ipc } from 'electron';
+import { ipcRenderer as ipc, webFrame} from 'electron';
 
 import {
   publish,
@@ -100,6 +100,14 @@ export function dispatchKillKernel(store, dispatch) {
   dispatch(killKernel);
 }
 
+export function dispatchZoomIn(store, dispatch) {
+  webFrame.setZoomLevel(webFrame.getZoomLevel() + 1);
+}
+
+export function dispatchZoomOut(store, dispatch) {
+  webFrame.setZoomLevel(webFrame.getZoomLevel() - 1);
+}
+
 export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:new-kernel', dispatchNewkernel.bind(null, store, dispatch));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store, dispatch));
@@ -107,4 +115,6 @@ export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
   ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store, dispatch));
   ipc.on('menu:publish:gist', dispatchPublishGist.bind(null, store, dispatch));
+  ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store, dispatch));
+  ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store, dispatch));
 }
