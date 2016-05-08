@@ -1,6 +1,7 @@
 import React from 'react';
 
 import CodeMirror from 'react-codemirror';
+import CM from 'codemirror'
 
 const Rx = require('@reactivex/rxjs');
 
@@ -11,6 +12,34 @@ import 'codemirror/addon/hint/anyword-hint';
 
 // Hint picker
 const pick = (cm, handle) => handle.pick();
+
+const goLineUpOrEmit = (editor) =>{
+  const cur = editor.getCursor();
+  if(cur.line == 0 && cur.ch ==0 && !editor.somethingSelected() ){
+    CM.signal(editor, 'topBoundary')
+  } else {
+    editor.execCommand('goLineUp')
+  }
+
+}
+
+const goLineDownOrEmit = (editor) =>{
+  const cur = editor.getCursor();
+  const lastLineNumber = editor.lastLine()
+  const lastLine = editor.getLine(lastLineNumber);
+  if(cur.line == lastLineNumber  && cur.ch == lastLine.length && !editor.somethingSelected() ){
+    CM.signal(editor, 'bottomBoundary')
+  } else {
+    editor.execCommand('goLineDown')
+  }
+
+}
+
+
+CM.keyMap.basic.Up = 'goLineUpOrEmit';
+CM.keyMap.basic.Down = 'goLineDownOrEmit';
+CM.commands.goLineUpOrEmit = goLineUpOrEmit
+CM.commands.goLineDownOrEmit = goLineDownOrEmit
 
 export default class Editor extends React.Component {
   static propTypes = {
