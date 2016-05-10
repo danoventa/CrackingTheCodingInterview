@@ -17,7 +17,10 @@ import {
   setLanguageInfo,
 } from '../actions';
 
+import { mark, measure } from '../performance';
+
 export function acquireKernelInfo(channels) {
+  mark('acquireKernelInfo:start');
   const { shell } = channels;
 
   const message = createMessage('kernel_info_request');
@@ -61,10 +64,12 @@ function reduceOutputs(outputs, output) {
     }
   }
 
+  mark('acquireKernelInfo:end');
   return outputs.push(Immutable.fromJS(output));
 }
 
 export function executeCell(channels, id, code) {
+  mark('executeCell:start');
   return Rx.Observable.create((subscriber) => {
     if (!channels || !channels.iopub || !channels.shell) {
       subscriber.error('kernel not connected');
@@ -141,11 +146,14 @@ export function executeCell(channels, id, code) {
          .scan(reduceOutputs, emptyOutputs)
          // Update the outputs with each change
          .subscribe(outputs => {
+           mark('executeCell:output');
+           measure('executeCell:roundtrip', 'executeCell:start','executeCell:output');
            subscriber.next(updateCellOutputs(id, outputs));
          })
     );
 
     shell.next(executeRequest);
+    mark('executeCell:end');
 
     return function executionDisposed() {
       subscriptions.forEach((sub) => sub.unsubscribe());

@@ -12,7 +12,14 @@ export default function createStore(initialState, reducers) {
         return state; // no reduction
       }
 
-      return reducers[action.type].call(null, state, action);
+      // Do not allow reducers to fail silently!  console.error errors as they
+      // happen.
+      try {
+        return reducers[action.type].call(null, state, action);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     },
     initialState || {}
   ).share();
@@ -23,6 +30,7 @@ export default function createStore(initialState, reducers) {
   }, (err) => {
     console.error('Error in the store', err);
   });
+  store[stateSymbol] = initialState;
   store.getState = () => store[stateSymbol];
 
   function dispatch(action) {

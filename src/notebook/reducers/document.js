@@ -4,11 +4,13 @@ import * as uuid from 'uuid';
 import * as constants from '../constants';
 
 import Immutable from 'immutable';
+import { mark } from '../performance';
 
 const noop = state => state;
 
 export default {
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
+    mark('setNotebook');
     const notebook = action.data;
     return {
       ...state,
@@ -17,6 +19,7 @@ export default {
     };
   },
   [constants.FOCUS_CELL]: function focusCell(state, action) {
+    mark('focusCell');
     const { id } = action;
     return {
       ...state,
@@ -24,6 +27,7 @@ export default {
     };
   },
   [constants.FOCUS_NEXT_CELL]: function focusNextCell(state, action) {
+    mark('focusNextCell');
     const { notebook } = state;
     const cellOrder = notebook.get('cellOrder');
     const curIndex = cellOrder.findIndex(id => id === action.id);
@@ -49,6 +53,7 @@ export default {
     };
   },
   [constants.UPDATE_CELL_EXECUTION_COUNT]: function updateExecutionCount(state, action) {
+    mark('updateExecutionCount');
     const { id, count } = action;
     const { notebook } = state;
     return {
@@ -57,6 +62,7 @@ export default {
     };
   },
   [constants.MOVE_CELL]: function moveCell(state, action) {
+    mark('moveCell');
     const { notebook } = state;
     return {
       ...state,
@@ -74,6 +80,7 @@ export default {
     };
   },
   [constants.REMOVE_CELL]: function removeCell(state, action) {
+    mark('removeCell');
     const { notebook } = state;
     const { id } = action;
     return {
@@ -82,6 +89,7 @@ export default {
     };
   },
   [constants.NEW_CELL_AFTER]: function newCellAfter(state, action) {
+    mark('newCellAfter');
     // Draft API
     const { cellType, id, source } = action;
     const { notebook } = state;
@@ -95,6 +103,7 @@ export default {
     };
   },
   [constants.NEW_CELL_BEFORE]: function newCellBefore(state, action) {
+    mark('newCellBefore');
     // Draft API
     const { cellType, id } = action;
     const { notebook } = state;
@@ -108,6 +117,7 @@ export default {
     };
   },
   [constants.MERGE_CELL_AFTER]: function mergeCellAfter(state, action) {
+    mark('mergeCellAfter');
     const { id } = action;
     const { notebook } = state;
     const cellOrder = notebook.get('cellOrder');
@@ -131,6 +141,7 @@ export default {
     };
   },
   [constants.NEW_CELL_APPEND]: function newCellAppend(state, action) {
+    mark('newCellAppend');
     // Draft API
     const { cellType } = action;
     const { notebook } = state;
@@ -144,6 +155,7 @@ export default {
     };
   },
   [constants.UPDATE_CELL_SOURCE]: function updateSource(state, action) {
+    mark('updateSource');
     const { id, source } = action;
     const { notebook } = state;
     return {
@@ -152,6 +164,7 @@ export default {
     };
   },
   [constants.UPDATE_CELL_OUTPUTS]: function updateOutputs(state, action) {
+    mark('updateOutputs');
     const { id, outputs } = action;
     const { notebook } = state;
     return {
@@ -160,6 +173,7 @@ export default {
     };
   },
   [constants.UPDATE_CELL_PAGERS]: function updateCellPagers(state, action) {
+    mark('updateCellPagers');
     const { id, pagers } = action;
     const { cellPagers } = state;
     return {
@@ -168,6 +182,7 @@ export default {
     };
   },
   [constants.UPDATE_CELL_STATUS]: function updateCellStatus(state, action) {
+    mark('updateCellStatus');
     const { id, status } = action;
     const { cellStatuses } = state;
     return {
@@ -176,6 +191,7 @@ export default {
     };
   },
   [constants.SET_LANGUAGE_INFO]: function setLanguageInfo(state, action) {
+    mark('setLanguageInfo');
     const { langInfo } = action;
     const { notebook } = state;
     return {
@@ -184,6 +200,7 @@ export default {
     };
   },
   [constants.OVERWRITE_METADATA_FIELD]: function overwriteMetadata(state, action) {
+    mark('overwriteMetadata');
     const { field, value } = action;
     const { notebook } = state;
     return {
@@ -194,6 +211,7 @@ export default {
   [constants.STARTED_UPLOADING]: noop,
   [constants.DONE_UPLOADING]: noop,
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
+    mark('setNotificationsSystem');
     const { notificationSystem } = action;
     return {
       ...state,
