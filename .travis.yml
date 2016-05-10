@@ -17,6 +17,7 @@ env:
   matrix:
   - GROUP=unit
   - GROUP=functional
+  - GROUP=performance
 
 cache:
   apt: true
