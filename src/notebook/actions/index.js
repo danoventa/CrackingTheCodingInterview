@@ -197,9 +197,17 @@ export function focusCell(id) {
   };
 }
 
-export function focusNextCell(id) {
+export function focusNextCell(id, createCellIfUndefined) {
   return {
     type: constants.FOCUS_NEXT_CELL,
+    id,
+    createCellIfUndefined,
+  };
+}
+
+export function focusPreviousCell(id) {
+  return {
+    type: constants.FOCUS_PREVIOUS_CELL,
     id,
   };
 }
