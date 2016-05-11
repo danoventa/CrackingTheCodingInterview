@@ -35,6 +35,7 @@ export const SET_LANGUAGE_INFO = Symbol('SET_LANGUAGE_INFO');
 export const SET_EXECUTION_STATE = Symbol('SET_EXECUTION_STATE');
 export const FOCUS_CELL = Symbol('FOCUS_CELL');
 export const FOCUS_NEXT_CELL = Symbol('FOCUS_NEXT_CELL');
+export const FOCUS_PREVIOUS_CELL = Symbol('FOCUS_PREVIOUS_CELL');
 
 export const OVERWRITE_METADATA_FIELD = Symbol('OVERWRITE_METADATA_FIELD');
 

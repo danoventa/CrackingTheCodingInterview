@@ -20,6 +20,8 @@ const CodeCell = (props) =>
         focused={props.id === props.focusedCell}
         getCompletions={props.getCompletions}
         theme={props.theme}
+        focusAbove={props.focusAbove}
+        focusBelow={props.focusBelow}
       />
     </div>
     {
@@ -57,6 +59,8 @@ CodeCell.propTypes = {
   focusedCell: React.PropTypes.string,
   pagers: React.PropTypes.instanceOf(Immutable.List),
   running: React.PropTypes.bool,
+  focusAbove: React.PropTypes.func,
+  focusBelow: React.PropTypes.func,
 };
 
 CodeCell.defaultProps = {

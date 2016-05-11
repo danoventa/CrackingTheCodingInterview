@@ -4,7 +4,7 @@ import CodeCell from './code-cell';
 import MarkdownCell from './markdown-cell';
 import Toolbar from './toolbar';
 
-import { focusCell } from '../../actions';
+import { focusCell, focusPreviousCell, focusNextCell } from '../../actions';
 
 class Cell extends React.Component {
   static propTypes = {
@@ -25,6 +25,8 @@ class Cell extends React.Component {
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
     this.selectCell = this.selectCell.bind(this);
+    this.focusAboveCell = this.focusAboveCell.bind(this);
+    this.focusBelowCell = this.focusBelowCell.bind(this);
   }
 
   state = {
@@ -43,6 +45,14 @@ class Cell extends React.Component {
     this.context.dispatch(focusCell(this.props.id));
   }
 
+  focusAboveCell() {
+    this.context.dispatch(focusPreviousCell(this.props.id));
+  }
+
+  focusBelowCell() {
+    this.context.dispatch(focusNextCell(this.props.id));
+  }
+
   render() {
     const cell = this.props.cell;
     const type = cell.get('cell_type');
@@ -59,8 +69,16 @@ class Cell extends React.Component {
         }
         {
         type === 'markdown' ?
-          <MarkdownCell {...this.props} /> :
-          <CodeCell {...this.props} />
+          <MarkdownCell
+            focusAbove={this.focusAboveCell}
+            focusBelow={this.focusBelowCell}
+            {...this.props}
+          /> :
+          <CodeCell
+            focusAbove={this.focusAboveCell}
+            focusBelow={this.focusBelowCell}
+            {...this.props}
+          />
         }
       </div>
     );

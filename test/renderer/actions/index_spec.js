@@ -115,6 +115,23 @@ describe('focusNextCell', () => {
     expect(actions.focusNextCell('1234')).to.deep.equal({
       type: constants.FOCUS_NEXT_CELL,
       id: '1234',
+      createCellIfUndefined: undefined,
+    });
+  });
+  it('creates a FOCUS_NEXT_CELL action with cell creation flag', () => {
+    expect(actions.focusNextCell('1234', true)).to.deep.equal({
+      type: constants.FOCUS_NEXT_CELL,
+      id: '1234',
+      createCellIfUndefined: true,
+    });
+  });
+});
+
+describe('focusNextCell', () => {
+  it('creates a FOCUS_PREVIOUS_CELL action', () => {
+    expect(actions.focusPreviousCell('1234')).to.deep.equal({
+      type: constants.FOCUS_PREVIOUS_CELL,
+      id: '1234',
     });
   });
 });

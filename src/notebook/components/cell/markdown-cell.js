@@ -12,6 +12,8 @@ export default class MarkdownCell extends React.Component {
     cell: React.PropTypes.any,
     id: React.PropTypes.string,
     theme: React.PropTypes.string,
+    focusAbove: React.PropTypes.func,
+    focusBelow: React.PropTypes.func,
   };
 
   static contextTypes = {
@@ -67,6 +69,8 @@ export default class MarkdownCell extends React.Component {
               lineWrapping
               input={this.state.source}
               theme={this.props.theme}
+              focusAbove={this.props.focusAbove}
+              focusBelow={this.props.focusBelow}
             />
           </div>
     );

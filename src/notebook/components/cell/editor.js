@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CodeMirror from 'react-codemirror';
-import CM from 'codemirror'
+import CM from 'codemirror';
 
 const Rx = require('@reactivex/rxjs');
 
@@ -13,33 +13,32 @@ import 'codemirror/addon/hint/anyword-hint';
 // Hint picker
 const pick = (cm, handle) => handle.pick();
 
-const goLineUpOrEmit = (editor) =>{
-  const cur = editor.getCursor();
-  if(cur.line == 0 && cur.ch ==0 && !editor.somethingSelected() ){
-    CM.signal(editor, 'topBoundary')
+function goLineUpOrEmit(editor) {
+  const cursor = editor.getCursor();
+  if (cursor.line === 0 && cursor.ch === 0 && !editor.somethingSelected()) {
+    CM.signal(editor, 'topBoundary');
   } else {
-    editor.execCommand('goLineUp')
+    editor.execCommand('goLineUp');
   }
-
 }
 
-const goLineDownOrEmit = (editor) =>{
-  const cur = editor.getCursor();
-  const lastLineNumber = editor.lastLine()
+function goLineDownOrEmit(editor) {
+  const cursor = editor.getCursor();
+  const lastLineNumber = editor.lastLine();
   const lastLine = editor.getLine(lastLineNumber);
-  if(cur.line == lastLineNumber  && cur.ch == lastLine.length && !editor.somethingSelected() ){
-    CM.signal(editor, 'bottomBoundary')
+  if (cursor.line === lastLineNumber &&
+      cursor.ch === lastLine.length &&
+      !editor.somethingSelected()) {
+    CM.signal(editor, 'bottomBoundary');
   } else {
-    editor.execCommand('goLineDown')
+    editor.execCommand('goLineDown');
   }
-
 }
-
 
 CM.keyMap.basic.Up = 'goLineUpOrEmit';
 CM.keyMap.basic.Down = 'goLineDownOrEmit';
-CM.commands.goLineUpOrEmit = goLineUpOrEmit
-CM.commands.goLineDownOrEmit = goLineDownOrEmit
+CM.commands.goLineUpOrEmit = goLineUpOrEmit;
+CM.commands.goLineDownOrEmit = goLineDownOrEmit;
 
 export default class Editor extends React.Component {
   static propTypes = {
@@ -53,6 +52,8 @@ export default class Editor extends React.Component {
     theme: React.PropTypes.string,
     cmtheme: React.PropTypes.string,
     focused: React.PropTypes.bool,
+    focusAbove: React.PropTypes.func,
+    focusBelow: React.PropTypes.func,
   };
 
   static contextTypes = {
@@ -94,7 +95,11 @@ export default class Editor extends React.Component {
       };
     }
 
-    const inputEvents = Rx.Observable.fromEvent(this.refs.codemirror.getCodeMirror(),
+    const cm = this.refs.codemirror.getCodeMirror();
+    cm.on('topBoundary', this.props.focusAbove);
+    cm.on('bottomBoundary', this.props.focusBelow);
+
+    const inputEvents = Rx.Observable.fromEvent(cm,
       'change', formChangeObject)
       .filter(x => x.change.origin === '+input');
 
