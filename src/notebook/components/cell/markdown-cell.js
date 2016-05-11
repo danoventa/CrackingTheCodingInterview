@@ -14,10 +14,15 @@ export default class MarkdownCell extends React.Component {
     theme: React.PropTypes.string,
     focusAbove: React.PropTypes.func,
     focusBelow: React.PropTypes.func,
+    focused: React.PropTypes.bool,
   };
 
   static contextTypes = {
     dispatch: React.PropTypes.func,
+  };
+
+  static defaultProps = {
+    focused: false,
   };
 
   constructor(props) {
@@ -28,9 +33,16 @@ export default class MarkdownCell extends React.Component {
       source: this.props.cell.get('source'),
     };
     this.openEditor = this.openEditor.bind(this);
-    this.keyDown = this.keyDown.bind(this);
+    this.editorKeyDown = this.editorKeyDown.bind(this);
+    this.renderedKeyDown = this.renderedKeyDown.bind(this);
   }
 
+  componentDidMount() {
+    // On first load, if focused, focus rendered view
+    if (this.state && this.state.view && this.props.focused) {
+      this.refs.rendered.focus();
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -38,8 +50,15 @@ export default class MarkdownCell extends React.Component {
     });
   }
 
-  keyDown(e) {
-    if (!e.shiftKey || e.key !== 'Enter') {
+  componentDidUpdate(prevProps) {
+    if (this.state && this.state.view && this.props.focused &&
+      prevProps.focused !== this.props.focused) {
+      this.refs.rendered.focus();
+    }
+  }
+
+  editorKeyDown(e) {
+    if (!(e.shiftKey && e.key === 'Enter')) {
       return;
     }
     this.setState({ view: true });
@@ -49,12 +68,30 @@ export default class MarkdownCell extends React.Component {
     this.setState({ view: false });
   }
 
+  renderedKeyDown(e) {
+    switch (e.key) {
+      case 'ArrowUp':
+        this.props.focusAbove();
+        break;
+      case 'ArrowDown':
+        this.props.focusBelow();
+        break;
+      case 'Enter':
+        this.openEditor();
+        break;
+      default:
+    }
+  }
+
   render() {
     return (
         (this.state && this.state.view) ?
           <div
             className="cell_markdown rendered"
             onDoubleClick={this.openEditor}
+            onKeyDown={this.renderedKeyDown}
+            ref="rendered"
+            tabIndex="0"
           >
             {markdownRenderer.process(
               this.state.source ?
@@ -62,7 +99,7 @@ export default class MarkdownCell extends React.Component {
                 '*Empty markdown cell, double click me to add content.*')
             }
           </div> :
-          <div onKeyDown={this.keyDown} className="cell_markdown unrendered">
+          <div onKeyDown={this.editorKeyDown} className="cell_markdown unrendered">
             <Editor
               language="markdown"
               id={this.props.id}
@@ -71,6 +108,7 @@ export default class MarkdownCell extends React.Component {
               theme={this.props.theme}
               focusAbove={this.props.focusAbove}
               focusBelow={this.props.focusBelow}
+              focused={this.props.focused}
             />
           </div>
     );

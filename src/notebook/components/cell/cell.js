@@ -72,11 +72,13 @@ class Cell extends React.Component {
           <MarkdownCell
             focusAbove={this.focusAboveCell}
             focusBelow={this.focusBelowCell}
+            focused={this.props.id === this.props.focusedCell}
             {...this.props}
           /> :
           <CodeCell
             focusAbove={this.focusAboveCell}
             focusBelow={this.focusBelowCell}
+            focused={this.props.id === this.props.focusedCell}
             {...this.props}
           />
         }
