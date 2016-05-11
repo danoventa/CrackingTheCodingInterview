@@ -20,7 +20,7 @@ import {
 import { mark, measure } from '../performance';
 
 export function acquireKernelInfo(channels) {
-  mark('acquireKernelInfo:start');
+  mark('acquireKernelInfo:enter');
   const { shell } = channels;
 
   const message = createMessage('kernel_info_request');
@@ -64,12 +64,12 @@ function reduceOutputs(outputs, output) {
     }
   }
 
-  mark('acquireKernelInfo:end');
+  mark('acquireKernelInfo:exit');
   return outputs.push(Immutable.fromJS(output));
 }
 
 export function executeCell(channels, id, code) {
-  mark('executeCell:start');
+  mark('executeCell:enter');
   return Rx.Observable.create((subscriber) => {
     if (!channels || !channels.iopub || !channels.shell) {
       subscriber.error('kernel not connected');
@@ -147,13 +147,13 @@ export function executeCell(channels, id, code) {
          // Update the outputs with each change
          .subscribe(outputs => {
            mark('executeCell:output');
-           measure('executeCell:roundtrip', 'executeCell:start','executeCell:output');
+           measure('executeCell:roundtrip', 'executeCell:enter', 'executeCell:output');
            subscriber.next(updateCellOutputs(id, outputs));
          })
     );
 
     shell.next(executeRequest);
-    mark('executeCell:end');
+    mark('executeCell:exit');
 
     return function executionDisposed() {
       subscriptions.forEach((sub) => sub.unsubscribe());
