@@ -17,7 +17,7 @@ const CodeCell = (props) =>
         id={props.id}
         input={props.cell.get('source')}
         language={props.language}
-        focused={props.id === props.focusedCell}
+        focused={props.focused}
         getCompletions={props.getCompletions}
         theme={props.theme}
         focusAbove={props.focusAbove}
@@ -56,7 +56,7 @@ CodeCell.propTypes = {
   language: React.PropTypes.string,
   theme: React.PropTypes.string,
   transforms: React.PropTypes.instanceOf(Immutable.Map),
-  focusedCell: React.PropTypes.string,
+  focused: React.PropTypes.bool,
   pagers: React.PropTypes.instanceOf(Immutable.List),
   running: React.PropTypes.bool,
   focusAbove: React.PropTypes.func,
