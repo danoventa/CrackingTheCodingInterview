@@ -56,6 +56,9 @@ export default class MarkdownCell extends React.Component {
     }
   }
 
+  /**
+   * Handles when a keydown event occurs on the unrendered MD cell
+   */
   editorKeyDown(e) {
     const shift = e.shiftKey;
     const ctrl = e.ctrlKey;
@@ -68,6 +71,9 @@ export default class MarkdownCell extends React.Component {
     this.setState({ view: false });
   }
 
+  /**
+   * Handles when a keydown event occurs on the rendered MD cell
+   */
   renderedKeyDown(e) {
     switch (e.key) {
       case 'ArrowUp':
@@ -78,9 +84,11 @@ export default class MarkdownCell extends React.Component {
         break;
       case 'Enter':
         this.openEditor();
-        break;
+        e.preventDefault();
+        return false;
       default:
     }
+    return true;
   }
 
   render() {
