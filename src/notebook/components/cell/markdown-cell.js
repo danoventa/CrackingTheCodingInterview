@@ -50,18 +50,18 @@ export default class MarkdownCell extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.state && this.state.view && this.props.focused &&
-      prevProps.focused !== this.props.focused) {
+  componentDidUpdate() {
+    if (this.state && this.state.view && this.props.focused) {
       this.refs.rendered.focus();
     }
   }
 
   editorKeyDown(e) {
-    if (!(e.shiftKey && e.key === 'Enter')) {
-      return;
+    const shift = e.shiftKey;
+    const ctrl = e.ctrlKey;
+    if ((shift || ctrl) && e.key === 'Enter') {
+      this.setState({ view: true });
     }
-    this.setState({ view: true });
   }
 
   openEditor() {

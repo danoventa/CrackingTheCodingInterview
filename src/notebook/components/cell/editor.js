@@ -159,17 +159,19 @@ export default class Editor extends React.Component {
 
   completions(editor, callback) {
     const cursor = editor.getCursor();
-    this.props.getCompletions(editor.getValue(), cursor.ch).then(results => callback({
-      list: results.matches,
-      from: {
-        line: cursor.line,
-        ch: results.cursor_start,
-      },
-      to: {
-        line: cursor.line,
-        ch: results.cursor_end,
-      },
-    }));
+    if (this.props.getCompletions) {
+      this.props.getCompletions(editor.getValue(), cursor.ch).then(results => callback({
+        list: results.matches,
+        from: {
+          line: cursor.line,
+          ch: results.cursor_start,
+        },
+        to: {
+          line: cursor.line,
+          ch: results.cursor_end,
+        },
+      }));
+    }
   }
 
   render() {
