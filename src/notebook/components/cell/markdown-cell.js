@@ -78,9 +78,11 @@ export default class MarkdownCell extends React.Component {
         break;
       case 'Enter':
         this.openEditor();
-        break;
+        e.preventDefault();
+        return false;
       default:
     }
+    return true;
   }
 
   render() {
