@@ -2,10 +2,14 @@ import React from 'react';
 
 import remark from 'remark';
 import reactRenderer from 'remark-react';
+import { loadMathJax, mathProcessor } from 'mathjax-electron';
 
 import Editor from './editor';
 
 const markdownRenderer = remark().use(reactRenderer);
+
+// Initialize the mathjax renderer.
+loadMathJax(document);
 
 export default class MarkdownCell extends React.Component {
   static propTypes = {
@@ -38,10 +42,7 @@ export default class MarkdownCell extends React.Component {
   }
 
   componentDidMount() {
-    // On first load, if focused, focus rendered view
-    if (this.state && this.state.view && this.props.focused) {
-      this.refs.rendered.focus();
-    }
+    this.updateRenderedElement();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,8 +52,18 @@ export default class MarkdownCell extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state && this.state.view && this.props.focused) {
-      this.refs.rendered.focus();
+    this.updateRenderedElement();
+  }
+
+  updateRenderedElement() {
+    // On first load, if focused, focus rendered view
+    if (this.state && this.state.view) {
+      if (this.props.focused) {
+        this.refs.rendered.focus();
+      }
+
+      // Render the math in the rendered markdown.
+      mathProcessor(this.refs.rendered);
     }
   }
 
