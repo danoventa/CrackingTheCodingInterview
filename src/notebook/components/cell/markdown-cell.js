@@ -4,6 +4,7 @@ import remark from 'remark';
 import reactRenderer from 'remark-react';
 
 import Editor from './editor';
+import LatexRenderer from '../latex';
 
 const markdownRenderer = remark().use(reactRenderer);
 
@@ -38,10 +39,7 @@ export default class MarkdownCell extends React.Component {
   }
 
   componentDidMount() {
-    // On first load, if focused, focus rendered view
-    if (this.state && this.state.view && this.props.focused) {
-      this.refs.rendered.focus();
-    }
+    this.updateRenderedElement();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,6 +49,11 @@ export default class MarkdownCell extends React.Component {
   }
 
   componentDidUpdate() {
+    this.updateRenderedElement();
+  }
+
+  updateRenderedElement() {
+    // On first load, if focused, focus rendered view
     if (this.state && this.state.view && this.props.focused) {
       this.refs.rendered.focus();
     }
@@ -101,11 +104,13 @@ export default class MarkdownCell extends React.Component {
             ref="rendered"
             tabIndex="0"
           >
-            {markdownRenderer.process(
-              this.state.source ?
-                this.state.source :
-                '*Empty markdown cell, double click me to add content.*')
-            }
+            <LatexRenderer>
+              {markdownRenderer.process(
+                this.state.source ?
+                  this.state.source :
+                  '*Empty markdown cell, double click me to add content.*')
+              }
+            </LatexRenderer>
           </div> :
           <div onKeyDown={this.editorKeyDown} className="cell_markdown unrendered">
             <Editor
