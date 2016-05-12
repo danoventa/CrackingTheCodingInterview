@@ -4,6 +4,7 @@ import Inputs from './inputs';
 
 import Editor from './editor';
 import Display from 'react-jupyter-display-area';
+import LatexRenderer from '../latex';
 
 import Pager from './pager';
 
@@ -40,12 +41,14 @@ const CodeCell = (props) =>
         }
         </div> : null
     }
-    <Display
-      className="cell_display"
-      outputs={props.cell.get('outputs')}
-      displayOrder={props.displayOrder}
-      transforms={props.transforms}
-    />
+    <LatexRenderer>
+      <Display
+        className="cell_display"
+        outputs={props.cell.get('outputs')}
+        displayOrder={props.displayOrder}
+        transforms={props.transforms}
+      />
+    </LatexRenderer>
   </div>;
 
 CodeCell.propTypes = {

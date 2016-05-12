@@ -2,14 +2,11 @@ import React from 'react';
 
 import remark from 'remark';
 import reactRenderer from 'remark-react';
-import { loadMathJax, mathProcessor } from 'mathjax-electron';
 
 import Editor from './editor';
+import LatexRenderer from '../latex';
 
 const markdownRenderer = remark().use(reactRenderer);
-
-// Initialize the mathjax renderer.
-loadMathJax(document);
 
 export default class MarkdownCell extends React.Component {
   static propTypes = {
@@ -57,13 +54,8 @@ export default class MarkdownCell extends React.Component {
 
   updateRenderedElement() {
     // On first load, if focused, focus rendered view
-    if (this.state && this.state.view) {
-      if (this.props.focused) {
-        this.refs.rendered.focus();
-      }
-
-      // Render the math in the rendered markdown.
-      mathProcessor(this.refs.rendered);
+    if (this.state && this.state.view && this.props.focused) {
+      this.refs.rendered.focus();
     }
   }
 
@@ -112,11 +104,13 @@ export default class MarkdownCell extends React.Component {
             ref="rendered"
             tabIndex="0"
           >
-            {markdownRenderer.process(
-              this.state.source ?
-                this.state.source :
-                '*Empty markdown cell, double click me to add content.*')
-            }
+            <LatexRenderer>
+              {markdownRenderer.process(
+                this.state.source ?
+                  this.state.source :
+                  '*Empty markdown cell, double click me to add content.*')
+              }
+            </LatexRenderer>
           </div> :
           <div onKeyDown={this.editorKeyDown} className="cell_markdown unrendered">
             <Editor
