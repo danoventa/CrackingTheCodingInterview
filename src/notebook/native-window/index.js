@@ -1,19 +1,20 @@
 import { getCurrentWindow } from 'remote';
 import home from 'home-dir';
-import path from 'path'
+import path from 'path';
 
 const HOME = home();
 
-function _tildify(home, p) {
-  const s = path.normalize(p) + path.sep;
-  return (s.indexOf(home) === 0 ? s.replace(home + path.sep, '~' + path.sep) : s).slice(0, -1);
-}
-
-function tildify(path) {
-  if(!path){
-    return ''
+/**
+ * Turn a path like /Users/n/mine.ipynb to ~/mine.ipynb
+ * @param  {string} p the full path to a file
+ * @return {string}   tildified path
+ */
+function tildify(p) {
+  if (!p) {
+    return '';
   }
-  return _tildify(HOME, path)
+  const s = path.normalize(p) + path.sep;
+  return (s.indexOf(HOME) === 0 ? s.replace(HOME + path.sep, `~${path.sep}`) : s).slice(0, -1);
 }
 
 export function initNativeHandlers(store) {
