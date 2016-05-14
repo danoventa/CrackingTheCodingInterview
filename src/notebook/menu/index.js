@@ -11,7 +11,7 @@ import {
   saveAs,
   killKernel,
 } from '../actions';
-import { ipcRenderer as ipc, webFrame} from 'electron';
+import { ipcRenderer as ipc, webFrame } from 'electron';
 
 import {
   publish,

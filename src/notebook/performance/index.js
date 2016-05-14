@@ -31,7 +31,8 @@ export function getEntries() {
  * Clear the performance entries
  */
 export function clear() {
-  if (!(typeof performance !== 'undefined' && performance.clearMarks && performance.clearMeasures)) return;
+  if (!(typeof performance !== 'undefined' && performance.clearMarks &&
+                                              performance.clearMeasures)) return;
   performance.clearMarks();
   performance.clearMeasures();
 }
