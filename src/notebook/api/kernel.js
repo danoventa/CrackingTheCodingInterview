@@ -70,7 +70,6 @@ export function forceShutdownKernel(kernel) {
   cleanupKernel(kernel, true);
 
   // TODO: Refactor to either return a new blank kernel "reduction" or how we do this
-
   delete kernel.channels; // eslint-disable-line
   delete kernel.spawn; // eslint-disable-line
   delete kernel.connectionFile; // eslint-disable-line
