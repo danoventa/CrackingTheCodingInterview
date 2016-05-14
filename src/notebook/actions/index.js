@@ -32,7 +32,7 @@ export function newKernel(kernelSpecName, cwd) {
         channels.iopub
           .filter(msg => msg.header.msg_type === 'status')
           .map(msg => msg.content.execution_state)
-          .subscribe(state => subject.next(setExecutionState('idle')));
+          .subscribe(() => subject.next(setExecutionState('idle')));
 
         agendas.acquireKernelInfo(channels)
               .subscribe(action => {

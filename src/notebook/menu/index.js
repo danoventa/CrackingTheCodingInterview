@@ -99,11 +99,11 @@ export function dispatchKillKernel(store, dispatch) {
   dispatch(killKernel);
 }
 
-export function dispatchZoomIn(store, dispatch) {
+export function dispatchZoomIn() {
   webFrame.setZoomLevel(webFrame.getZoomLevel() + 1);
 }
 
-export function dispatchZoomOut(store, dispatch) {
+export function dispatchZoomOut() {
   webFrame.setZoomLevel(webFrame.getZoomLevel() - 1);
 }
 
