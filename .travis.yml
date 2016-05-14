@@ -18,6 +18,7 @@ env:
   - GROUP=unit
   - GROUP=functional
   - GROUP=performance
+  - GROUP=lint
 
 cache:
   apt: true
