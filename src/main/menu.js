@@ -1,4 +1,4 @@
-import { dialog, app, Menu } from 'electron';
+import { dialog, app, shell, Menu } from 'electron';
 
 const kernelspecs = require('kernelspecs');
 
@@ -126,7 +126,7 @@ export const cell = {
   submenu: [
     {
       label: 'Run All',
-      click: createSender('menu:run-all')
+      click: createSender('menu:run-all'),
     },
   ],
 };
@@ -174,12 +174,12 @@ export const view = {
     {
       label: 'Zoom In',
       accelerator: 'CmdOrCtrl+=',
-      click: createSender('menu:zoom-in')
+      click: createSender('menu:zoom-in'),
     },
     {
       label: 'Zoom Out',
       accelerator: 'CmdOrCtrl+-',
-      click: createSender('menu:zoom-out')
+      click: createSender('menu:zoom-out'),
     },
     {
       label: 'Theme',
@@ -244,7 +244,7 @@ export const help = {
   submenu: [
     {
       label: 'Learn More',
-      click: () => { require('electron').shell.openExternal('http://github.com/nteract/nteract'); },
+      click: () => { shell.openExternal('http://github.com/nteract/nteract'); },
     },
   ],
 };
