@@ -16,7 +16,6 @@ import {
   setExecutionState,
 } from './actions';
 
-import { initKeymap } from './keys/keymap';
 import { ipcRenderer as ipc } from 'electron';
 import storage from 'electron-json-storage';
 
@@ -64,7 +63,6 @@ ipc.on('main:load', (e, launchData) => {
     });
 
   initNativeHandlers(store);
-  initKeymap(window, dispatch);
   initMenuHandlers(store, dispatch);
   initGlobalHandlers(store, dispatch);
 
