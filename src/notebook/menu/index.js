@@ -88,12 +88,11 @@ export function dispatchPublishGist(store, dispatch) {
 }
 
 export function dispatchRunAll(store, dispatch) {
-  const { notebook, channels} = store.getState();
+  const { notebook, channels } = store.getState();
   const cells = notebook.get('cellMap');
-  notebook.get('cellOrder').map((value, key) => {
-    var cell = cells.get(value);
-    dispatch(executeCell(channels, value, cell.get("source")));
-  });
+  notebook.get('cellOrder').map((value) => dispatch(
+    executeCell(channels, value, cells.getIn([value, 'source'])))
+  );
 }
 
 export function dispatchKillKernel(store, dispatch) {
