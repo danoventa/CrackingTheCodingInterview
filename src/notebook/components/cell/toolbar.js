@@ -41,10 +41,10 @@ class Toolbar extends React.Component {
         <div className="cell_toolbar">
           {showPlay &&
             <button onClick={this.executeCell}>
-              <i className="material-icons">play_arrow</i>
+              <span className="octicon octicon-triangle-right" />
             </button>}
           <button onClick={this.removeCell}>
-            <i className="material-icons">delete</i>
+            <span className="octicon octicon-trashcan" />
           </button>
         </div>
       </div>
