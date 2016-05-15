@@ -3,7 +3,7 @@ import React from 'react';
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
 
-const Rx = require('@reactivex/rxjs');
+const Rx = require('rxjs/Rx');
 
 import { updateCellSource } from '../../actions';
 

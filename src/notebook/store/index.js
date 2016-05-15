@@ -1,4 +1,4 @@
-import * as Rx from '@reactivex/rxjs';
+import * as Rx from 'rxjs/Rx';
 import { mark, measure } from '../performance';
 
 export default function createStore(initialState, reducers) {

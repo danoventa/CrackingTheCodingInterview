@@ -25,7 +25,7 @@ import { initGlobalHandlers } from './global-events';
 
 const Github = require('github4');
 
-const Rx = require('@reactivex/rxjs');
+const Rx = require('rxjs/Rx');
 
 const github = new Github();
 

@@ -6,7 +6,7 @@ import * as constants from '../../../src/notebook/constants';
 
 import createStore from '../../../src/notebook/store';
 
-const Rx = require('@reactivex/rxjs');
+const Rx = require('rxjs/Rx');
 
 describe('setExecutionState', () => {
   it('creates a SET_EXECUTION_STATE action', () => {
