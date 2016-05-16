@@ -47,7 +47,6 @@
   },
   "homepage": "https://github.com/nteract/nteract",
   "dependencies": {
-    "rxjs": "^5.0.0-beta.6",
     "codemirror": "^5.13.4",
     "commander": "^2.9.0",
     "commutable": "^0.9.0",
@@ -70,8 +69,13 @@
     "react-dom": "^15.0.1",
     "react-jupyter-display-area": "^1.0.0",
     "react-notification-system": "^0.2.7",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "redux-actions": "^0.9.1",
+    "redux-observable": "^0.4.0",
     "remark": "^4.2.0",
     "remark-react": "^2.1.0",
+    "rxjs": "^5.0.0-beta.6",
     "spawnteract": "^2.0.0",
     "transformime-react": "^1.0.0",
     "uuid": "^2.0.2"

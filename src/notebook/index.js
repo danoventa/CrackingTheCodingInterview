@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Immutable from 'immutable';
 
-import createStore from './store';
+import configureStore from './store';
 import { reducers } from './reducers';
 import Provider from './components/util/provider';
 import Notebook from './components/notebook';
@@ -37,16 +37,22 @@ if (process.env.GITHUB_TOKEN) {
 }
 
 ipc.on('main:load', (e, launchData) => {
-  const { store, dispatch } = createStore({
-    notebook: null,
-    filename: launchData.filename,
-    cellPagers: new Immutable.Map(),
-    cellStatuses: new Immutable.Map(),
-    executionState: 'not connected',
-    github,
+  const store = configureStore({
+    app: {
+      executionState: 'not connected',
+    },
+    document: {
+      notebook: null,
+      filename: launchData.filename,
+      cellPagers: new Immutable.Map(),
+      cellStatuses: new Immutable.Map(),
+      github,
+    }
   }, reducers);
 
-  store
+  const { dispatch } = store;
+
+  Rx.Observable.from(store)
     .pluck('channels')
     .distinctUntilChanged()
     .switchMap(channels => {

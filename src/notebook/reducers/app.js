@@ -1,4 +1,5 @@
 import * as constants from '../constants';
+import { handleActions } from 'redux-actions';
 
 import {
   shutdownKernel,
@@ -22,7 +23,7 @@ function cleanupKernel(state) {
   return cleanState;
 }
 
-export default {
+export default handleActions({
   [constants.NEW_KERNEL]: function newKernel(state, action) {
     const { channels, connectionFile, spawn } = action;
 
@@ -58,4 +59,4 @@ export default {
     }
     return { ...state, filename };
   },
-};
+}, {});

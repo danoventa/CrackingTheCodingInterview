@@ -2,12 +2,13 @@ import * as commutable from 'commutable';
 import * as uuid from 'uuid';
 
 import * as constants from '../constants';
+import { handleActions } from 'redux-actions';
 
 import Immutable from 'immutable';
 
 const noop = state => state;
 
-export default {
+export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.data;
     return {
@@ -223,4 +224,4 @@ export default {
       notificationSystem,
     };
   },
-};
+}, {});
