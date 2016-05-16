@@ -9,6 +9,18 @@
   padding-top: 20px;
 }
 
+@keyframes fadeOut {
+    from {opacity: 1.0;}
+    to {opacity: 0.0;}
+}
+
+div#loading {
+  animation-name: fadeOut;
+  animation-duration: 0.25s;
+  animation-fill-mode: forwards;
+}
+
+
 /*
   Globals
  */
