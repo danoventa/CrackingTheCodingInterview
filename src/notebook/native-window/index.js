@@ -1,4 +1,5 @@
-import { getCurrentWindow } from 'remote';
+import { remote } from 'electron';
+const { getCurrentWindow } = remote;
 import home from 'home-dir';
 import path from 'path';
 
