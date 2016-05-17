@@ -93,7 +93,12 @@ ipc.on('main:load', (e, launchData) => {
     }
     render() {
       return (
-        <Provider rx={{ dispatch, store }}>
+        <Provider
+          rx={{ dispatch, store }}
+          notificationSystem={this.state.notificationSystem}
+          executionState={this.state.executionState}
+          channels={this.state.channels}
+        >
           <div>
             {
               this.state.err &&

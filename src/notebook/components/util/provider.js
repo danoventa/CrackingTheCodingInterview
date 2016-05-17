@@ -4,49 +4,28 @@ export default class Provider extends React.Component {
   static propTypes = {
     children: React.PropTypes.any,
     rx: React.PropTypes.object,
+    notificationSystem: React.PropTypes.object,
+    channels: React.PropTypes.object,
+    executionState: React.PropTypes.string,
   };
   static childContextTypes = {
     dispatch: React.PropTypes.func,
     store: React.PropTypes.object,
     notificationSystem: React.PropTypes.object,
-    hasKernel: React.PropTypes.bool,
-  };
-
-  state = {
-    notificationSystem: undefined,
-    hasKernel: false,
+    kernelConnected: React.PropTypes.bool,
   };
 
   getChildContext() {
-    const { dispatch, store } = this.props.rx;
-    const { notificationSystem, hasKernel } = this.state;
+    const { notificationSystem, executionState, channels, rx } = this.props;
+    const { dispatch, store } = rx;
+    const kernelConnected = channels &&
+      !(executionState === 'starting' || executionState === 'not connected');
     return {
       dispatch,
       store,
       notificationSystem,
-      hasKernel,
+      kernelConnected,
     };
-  }
-
-  componentWillReceiveProps(newProps) {
-    const { store } = newProps.rx;
-    if (store !== this.store) {
-      this.updateStore(store);
-    }
-  }
-
-  updateStore(store) {
-    this.store = store;
-    store.subscribe(state => {
-      if (state) {
-        const { notificationSystem, executionState, channels } = state;
-        this.setState({
-          notificationSystem,
-          hasKernel: channels &&
-            !(executionState === 'starting' || executionState === 'not connected'),
-        });
-      }
-    });
   }
 
   render() {

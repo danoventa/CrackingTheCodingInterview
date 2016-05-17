@@ -212,9 +212,9 @@ export function focusPreviousCell(id) {
   };
 }
 
-export function executeCell(channels, id, source, hasKernel, notificationSystem) {
+export function executeCell(channels, id, source, kernelConnected, notificationSystem) {
   return (subject, dispatch) => {
-    if (!hasKernel) {
+    if (!kernelConnected) {
       notificationSystem.addNotification({
         title: 'Could not execute cell',
         message: 'The cell could not be executed because the kernel is not connected.',

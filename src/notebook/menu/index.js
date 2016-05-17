@@ -93,11 +93,17 @@ export function dispatchPublishGist(store, dispatch) {
 export function dispatchRunAll(store, dispatch) {
   const { notebook, channels, notificationSystem, executionState } = store.getState();
   const cells = notebook.get('cellMap');
-  const hasKernel = channels &&
+  const kernelConnected = channels &&
     !(executionState === 'starting' || executionState === 'not connected');
   notebook.get('cellOrder').map((value) => dispatch(
-    executeCell(channels, value, cells.getIn([value, 'source']), hasKernel, notificationSystem))
-  );
+    executeCell(
+      channels,
+      value,
+      cells.getIn([value, 'source']),
+      kernelConnected,
+      notificationSystem
+    )
+  ));
 }
 
 export function dispatchKillKernel(store, dispatch) {
