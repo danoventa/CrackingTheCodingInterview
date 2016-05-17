@@ -10,7 +10,7 @@ const HOME = home();
  * @param  {string} p the full path to a file
  * @return {string}   tildified path
  */
-function tildify(p) {
+export function tildify(p) {
   if (!p) {
     return '';
   }
