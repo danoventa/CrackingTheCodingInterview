@@ -84,15 +84,13 @@ td {
     cursor: move;
 }
 
-.cell
-{
+.cell {
     position: relative;
     background: var(--cell-bg);
     transition: all .1s ease-in-out;
 }
 
-.cell:hover
-{
+.cell:hover {
     box-shadow: 1px 1px 3px rgba(0,0,0,.12), -1px -1px 3px rgba(0,0,0,.12);
 }
 
@@ -165,6 +163,7 @@ td {
 .cell.text .rendered
 {
     padding: 10px 10px 10px var(--prompt-width);
+    outline: none;
 }
 
 .pagers
@@ -174,13 +173,13 @@ td {
     word-wrap: break-word;
 }
 
-.outputs-display
+.outputs>div
 {
     word-wrap: break-word;
     padding: 10px 10px 10px calc(var(--prompt-width) + 10px);
 }
 
-.outputs-display:empty
+.outputs>div:empty
 {
     display:none;
 }
@@ -353,7 +352,8 @@ code {
 .cm-s-composition span.cm-number, .cm-s-composition span.cm-atom { color: var(--cm-number); }
 .cm-s-composition span.cm-meta { color: var(--cm-meta); }
 .cm-s-composition span.cm-link { color: var(--cm-link); }
-
+.cm-s-composition span.cm-operator { color: var(--cm-operator); }
+.cm-s-composition span.cm-def { color: var(--cm-def); }
 .cm-s-composition .CodeMirror-activeline-background { background: var(--cm-activeline-bg); }
 .cm-s-composition .CodeMirror-matchingbracket { outline:1px solid var(--cm-matchingbracket-outline); color: var(--cm-matchingbracket-color) !important; }
 
