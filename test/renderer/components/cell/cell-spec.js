@@ -23,4 +23,13 @@ describe('Cell', () => {
     expect(cell).to.not.be.null;
     expect(cell.find('div.code.cell').length).to.be.greaterThan(0);
   });
+  it('setCellHoverState does not error', () => {
+    const cell = mount(
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
+    );
+    expect(() => cell.instance().setCellHoverState({
+      clientX: 0,
+      clientY: 0,
+    })).to.not.throw(Error);
+  });
 });
