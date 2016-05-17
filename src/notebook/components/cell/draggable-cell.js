@@ -5,6 +5,7 @@ import { findDOMNode } from 'react-dom';
 import Immutable from 'immutable';
 
 import Cell from './cell';
+import { focusCell } from '../../actions';
 
 const cellSource = {
   beginDrag(props) {
@@ -68,6 +69,11 @@ class DraggableCell extends React.Component {
     dispatch: React.PropTypes.func,
   };
 
+  constructor() {
+    super();
+    this.selectCell = this.selectCell.bind(this);
+  }
+
   state = {
     hoverUpperHalf: true,
   };
@@ -101,6 +107,10 @@ class DraggableCell extends React.Component {
     };
   }
 
+  selectCell() {
+    this.context.dispatch(focusCell(this.props.id));
+  }
+
   render() {
     return this.props.connectDropTarget(
       <div
@@ -114,7 +124,12 @@ class DraggableCell extends React.Component {
         className={'draggable-cell'}
       >
         {
-          this.props.connectDragSource(<div className={'cell-drag-handle'} />)
+          this.props.connectDragSource(
+            <div
+              className="cell-drag-handle"
+              onClick={this.selectCell}
+            />
+          )
         }
         {
           <Cell {...this.props} />
