@@ -174,13 +174,13 @@ td {
     word-wrap: break-word;
 }
 
-.outputs
+.outputs-display
 {
     word-wrap: break-word;
     padding: 10px 10px 10px calc(var(--prompt-width) + 10px);
 }
 
-.outputs:empty
+.outputs-display:empty
 {
     display:none;
 }

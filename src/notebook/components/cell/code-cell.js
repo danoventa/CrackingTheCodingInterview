@@ -44,6 +44,7 @@ const CodeCell = (props) =>
     <LatexRenderer>
       <div className="outputs">
         <Display
+          className="outputs-display"
           outputs={props.cell.get('outputs')}
           displayOrder={props.displayOrder}
           transforms={props.transforms}
