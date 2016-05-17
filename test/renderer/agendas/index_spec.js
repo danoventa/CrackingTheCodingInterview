@@ -16,7 +16,7 @@ describe('executeCell', function() {
       // HACK: Wait 100ms before executing a cell because kernel ready and idle
       // aren't enough.  There must be another signal that we need to listen to.
       return (new Promise(resolve => setTimeout(resolve, 100)))
-        .then(() => dispatch(executeCell(kernel.channels, cellId, source)))
+        .then(() => dispatch(executeCell(kernel.channels, cellId, source, true, undefined)))
         .then(() => dispatchQueuePromise(dispatch))
         .then(() => waitForOutputs(store, cellId))
         .then(() => {
