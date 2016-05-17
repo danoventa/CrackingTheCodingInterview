@@ -4,6 +4,8 @@ import {
   showSaveAsDialog,
 } from '../api/save';
 
+import { tildify } from '../native-window';
+
 import {
   executeCell,
   newKernel,
@@ -11,7 +13,7 @@ import {
   saveAs,
   killKernel,
 } from '../actions';
-import { ipcRenderer as ipc, webFrame } from 'electron';
+import { ipcRenderer as ipc, webFrame, BrowserWindow } from 'electron';
 
 import {
   publish,
@@ -29,8 +31,9 @@ export function triggerSaveAs(store, dispatch) {
       if (!filename) {
         return;
       }
-      const { notebook } = store.getState();
+      const { notebook, executionState } = store.getState();
       dispatch(saveAs(filename, notebook));
+      BrowserWindow.getFocusedWindw().setTitle(`${tildify(filename)} - ${executionState}`);
     }
   );
 }
