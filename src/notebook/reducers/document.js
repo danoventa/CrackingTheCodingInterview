@@ -207,7 +207,14 @@ export default {
       notebook: notebook.setIn(['metadata', field], Immutable.fromJS(value)),
     };
   },
-  [constants.STARTED_UPLOADING]: noop,
+  [constants.STARTED_UPLOADING]: function startedUploadingGist(state) {
+    const { notificationSystem } = state;
+    notificationSystem.addNotification({
+      title: 'Uploading gist...',
+      message: 'Your notebook is being uploaded as a GitHub gist',
+      level: 'info',
+    });
+  },
   [constants.DONE_UPLOADING]: noop,
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
     const { notificationSystem } = action;
