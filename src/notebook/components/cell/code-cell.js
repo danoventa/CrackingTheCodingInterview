@@ -42,12 +42,13 @@ const CodeCell = (props) =>
         </div> : null
     }
     <LatexRenderer>
-      <Display
-        className="outputs"
-        outputs={props.cell.get('outputs')}
-        displayOrder={props.displayOrder}
-        transforms={props.transforms}
-      />
+      <div className="outputs">
+        <Display
+          outputs={props.cell.get('outputs')}
+          displayOrder={props.displayOrder}
+          transforms={props.transforms}
+        />
+      </div>
     </LatexRenderer>
   </div>;
 
