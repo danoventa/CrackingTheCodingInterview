@@ -212,8 +212,18 @@ export function focusPreviousCell(id) {
   };
 }
 
-export function executeCell(channels, id, source) {
-  return (subject) => {
+export function executeCell(channels, id, source, kernelConnected, notificationSystem) {
+  return (subject, dispatch) => {
+    if (!kernelConnected) {
+      notificationSystem.addNotification({
+        title: 'Could not execute cell',
+        message: 'The cell could not be executed because the kernel is not connected.',
+        level: 'error',
+      });
+      dispatch(updateCellExecutionCount(id, undefined));
+      return;
+    }
+
     const obs = agendas.executeCell(channels, id, source);
     obs.subscribe(action => {
       subject.next(action);

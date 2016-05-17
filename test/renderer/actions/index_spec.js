@@ -215,7 +215,7 @@ describe('executeCell', () => {
       }
     );
 
-    actions.executeCell(channels, id, source)(subject);
+    actions.executeCell(channels, id, source, true, undefined)(subject);
   });
 
   // Incomplete test setup, skipping yet providing boilerplate
@@ -239,6 +239,6 @@ describe('executeCell', () => {
       }
     );
 
-    actions.executeCell(channels, id, source)(subject);
+    actions.executeCell(channels, id, source, true, undefined)(subject);
   });
 });
