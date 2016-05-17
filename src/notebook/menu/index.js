@@ -31,7 +31,7 @@ export function triggerSaveAs(store, dispatch) {
       if (!filename) {
         return;
       }
-      const { notebook, executionState} = store.getState();
+      const { notebook, executionState } = store.getState();
       dispatch(saveAs(filename, notebook));
       BrowserWindow.getFocusedWindw().setTitle(`${tildify(filename)} - ${executionState}`);
     }
