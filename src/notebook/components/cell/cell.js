@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import CodeCell from './code-cell';
 import MarkdownCell from './markdown-cell';
@@ -22,23 +23,46 @@ class Cell extends React.Component {
 
   constructor() {
     super();
-    this.onMouseEnter = this.onMouseEnter.bind(this);
-    this.onMouseLeave = this.onMouseLeave.bind(this);
     this.selectCell = this.selectCell.bind(this);
     this.focusAboveCell = this.focusAboveCell.bind(this);
     this.focusBelowCell = this.focusBelowCell.bind(this);
+    this.setCellHoverState = this.setCellHoverState.bind(this);
+    this.setToolbarHoverState = this.setToolbarHoverState.bind(this);
   }
 
   state = {
-    showToolbar: false,
+    hoverCell: false,
+    hoverToolbar: false,
   };
 
-  onMouseEnter() {
-    this.setState({ showToolbar: true });
+  componentWillMount() {
+    // Listen to the page level mouse move event and manually check for
+    // intersection because we don't want the hover region to actually capture
+    // any mouse events.  The hover region is an invisible element that
+    // describes the "hot region" that toggles the creator buttons.
+    document.addEventListener('mousemove', this.setCellHoverState, false);
   }
 
-  onMouseLeave() {
-    this.setState({ showToolbar: false });
+  componentWillUnmount() {
+    document.removeEventListener('mousemove', this.setCellHoverState);
+  }
+
+  setCellHoverState(mouseEvent) {
+    if (this.refs.cell) {
+      const cell = ReactDOM.findDOMNode(this.refs.cell);
+      if (cell) {
+        const x = mouseEvent.clientX;
+        const y = mouseEvent.clientY;
+        const regionRect = cell.getBoundingClientRect();
+        const hoverCell = (regionRect.left < x && x < regionRect.right) &&
+                     (regionRect.top < y && y < regionRect.bottom);
+        this.setState({ hoverCell });
+      }
+    }
+  }
+
+  setToolbarHoverState(hoverToolbar) {
+    this.setState({ hoverToolbar });
   }
 
   selectCell() {
@@ -61,11 +85,14 @@ class Cell extends React.Component {
       <div
         className={`cell ${type === 'markdown' ? 'text' : 'code'} ${focused ? 'focused' : ''}`}
         onClick={this.selectCell}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
+        ref="cell"
       >
         {
-          this.state.showToolbar ? <Toolbar type={type} { ...this.props } /> : null
+          this.state.hoverCell || this.state.hoverToolbar ? <Toolbar
+            type={type}
+            setHoverState={this.setToolbarHoverState}
+            { ...this.props }
+          /> : null
         }
         {
         type === 'markdown' ?
