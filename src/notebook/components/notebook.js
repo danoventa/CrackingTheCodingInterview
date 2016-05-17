@@ -194,19 +194,12 @@ class Notebook extends React.Component {
   render() {
     if (!this.props.notebook) {
       return (
-        <div></div>
+        <div className="notebook"></div>
       );
     }
     const cellOrder = this.props.notebook.get('cellOrder');
     return (
-      <div
-        style={{
-          paddingTop: '10px',
-          paddingLeft: '10px',
-          paddingRight: '10px',
-        }}
-        ref="cells"
-      >
+      <div className="notebook" ref="cells">
         <CellCreator id={cellOrder.get(0, null)} above />
       {
         cellOrder.map(this.createCellElement)

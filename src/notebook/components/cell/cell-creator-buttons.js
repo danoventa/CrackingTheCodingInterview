@@ -51,7 +51,7 @@ export default class CellCreatorButtons extends React.Component {
         <span className="octicon octicon-arrow-up" />
       </button>);
     return (
-      <div className="creator-tool">
+      <div className="cell-creator">
         <button onClick={this.createTextCell} title="create text cell" className="add-text-cell">
           <span className="octicon octicon-markdown" />
         </button>

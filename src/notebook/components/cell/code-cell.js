@@ -11,8 +11,8 @@ import Pager from './pager';
 import Immutable from 'immutable';
 
 const CodeCell = (props) =>
-  <div className="cell_code">
-    <div className="input_area">
+  <div>
+    <div className="input-container">
       <Inputs executionCount={props.cell.get('execution_count')} running={props.running} />
       <Editor
         id={props.id}
@@ -42,12 +42,14 @@ const CodeCell = (props) =>
         </div> : null
     }
     <LatexRenderer>
-      <Display
-        className="cell_display"
-        outputs={props.cell.get('outputs')}
-        displayOrder={props.displayOrder}
-        transforms={props.transforms}
-      />
+      <div className="outputs">
+        <Display
+          className="outputs-display"
+          outputs={props.cell.get('outputs')}
+          displayOrder={props.displayOrder}
+          transforms={props.transforms}
+        />
+      </div>
     </LatexRenderer>
   </div>;
 
