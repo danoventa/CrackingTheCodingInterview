@@ -35,6 +35,8 @@ class Notebook extends React.Component {
 
   static contextTypes = {
     dispatch: React.PropTypes.func,
+    notificationSystem: React.PropTypes.any,
+    hasKernel: React.PropTypes.bool,
   };
 
   static childContextTypes = {
@@ -132,7 +134,13 @@ class Notebook extends React.Component {
 
     if (cell.get('cell_type') === 'code') {
       this.context.dispatch(
-        executeCell(this.props.channels, id, cell.get('source'))
+        executeCell(
+          this.props.channels,
+          id,
+          cell.get('source'),
+          this.context.hasKernel,
+          this.context.notificationSystem
+        )
       );
     }
   }

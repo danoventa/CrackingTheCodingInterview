@@ -14,6 +14,8 @@ class Toolbar extends React.Component {
   static contextTypes = {
     channels: React.PropTypes.object,
     dispatch: React.PropTypes.func,
+    notificationSystem: React.PropTypes.any,
+    hasKernel: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -60,7 +62,9 @@ class Toolbar extends React.Component {
   executeCell() {
     this.context.dispatch(executeCell(this.context.channels,
                                       this.props.id,
-                                      this.props.cell.get('source')));
+                                      this.props.cell.get('source'),
+                                      this.context.hasKernel,
+                                      this.context.notificationSystem));
   }
 
   render() {
