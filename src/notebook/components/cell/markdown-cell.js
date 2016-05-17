@@ -98,7 +98,7 @@ export default class MarkdownCell extends React.Component {
     return (
         (this.state && this.state.view) ?
           <div
-            className="cell_markdown rendered"
+            className="rendered"
             onDoubleClick={this.openEditor}
             onKeyDown={this.renderedKeyDown}
             ref="rendered"
@@ -112,17 +112,20 @@ export default class MarkdownCell extends React.Component {
               }
             </LatexRenderer>
           </div> :
-          <div onKeyDown={this.editorKeyDown} className="cell_markdown unrendered">
-            <Editor
-              language="markdown"
-              id={this.props.id}
-              lineWrapping
-              input={this.state.source}
-              theme={this.props.theme}
-              focusAbove={this.props.focusAbove}
-              focusBelow={this.props.focusBelow}
-              focused={this.props.focused}
-            />
+          <div onKeyDown={this.editorKeyDown}>
+            <div className="input-container">
+              <div className="prompt" />
+              <Editor
+                language="markdown"
+                id={this.props.id}
+                lineWrapping
+                input={this.state.source}
+                theme={this.props.theme}
+                focusAbove={this.props.focusAbove}
+                focusBelow={this.props.focusBelow}
+                focused={this.props.focused}
+              />
+            </div>
           </div>
     );
   }

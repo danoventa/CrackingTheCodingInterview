@@ -20,7 +20,6 @@ div#loading {
   animation-fill-mode: forwards;
 }
 
-
 /*
   Globals
  */
@@ -58,6 +57,16 @@ td {
 }
 
 /*
+  Notebook
+ */
+
+.notebook {
+    paddingTop: 10px;
+    paddingLeft: 10px;
+    paddingRight: 10px;
+}
+
+/*
   Cell
  */
 
@@ -91,20 +100,20 @@ td {
     box-shadow: 3px 3px 9px rgba(0,0,0,.12), -3px -3px 9px rgba(0,0,0,.12);
 }
 
-.cell:hover .input_area .cell_inputs,
-.cell:active .input_area .cell_inputs
+.cell:hover .prompt,
+.cell:active .prompt
 {
     background-color: var(--cell-bg-hover);
 }
 
 
-.cell:focus .input_area .cell_inputs,
-.cell.focused .input_area .cell_inputs
+.cell:focus .prompt,
+.cell.focused .prompt
 {
     background-color: var(--cell-bg-focus);
 }
 
-.cell_toolbar-mask
+.cell-toolbar-mask
 {
     position: absolute;
     top: -37px;
@@ -118,14 +127,14 @@ td {
     padding: 5px 5px 0px 50px;
 }
 
-.cell_toolbar
+.cell-toolbar
 {
     display: inline-box;
     background: var(--toolbar-bg);
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.50);
 }
 
-.cell_toolbar button
+.cell-toolbar button
 {
     display: inline-block;
 
@@ -140,7 +149,7 @@ td {
     background: none;
 }
 
-.cell_toolbar button span
+.cell-toolbar button span
 {
     font-size: 15px;
     line-height: 1;
@@ -148,19 +157,14 @@ td {
     color: var(--toolbar-button);
 }
 
-.cell_toolbar button span:hover
+.cell-toolbar button span:hover
 {
     color: var(--toolbar-button-hover);
 }
 
-.cell_markdown.rendered
+.cell.text .rendered
 {
     padding: 10px 10px 10px var(--prompt-width);
-}
-
-.cell_markdown.unrendered .CodeMirror-lines
-{
-    padding-left: var(--prompt-width);
 }
 
 .pagers
@@ -170,24 +174,24 @@ td {
     word-wrap: break-word;
 }
 
-.cell_display
+.outputs
 {
     word-wrap: break-word;
     padding: 10px 10px 10px calc(var(--prompt-width) + 10px);
 }
 
-.cell_display:empty
+.outputs:empty
 {
     display:none;
 }
 
-.cell_code .input_area
+.cell .input-container
 {
     display: flex;
     flex-direction: row;
 }
 
-.cell_code .input_area .cell_inputs
+.cell .prompt
 {
     font-family: monospace;
     font-size: 12px;
@@ -203,7 +207,7 @@ td {
     flex: 0 0 auto;
 }
 
-.cell_code .input_area .cell_editor
+.cell .input-container .input
 {
     flex: 1 1 auto;
 }
@@ -227,7 +231,7 @@ td {
   pointer-events: none;
 }
 
-.creator-tool {
+.cell-creator {
   display: inline-block;
   background: var(--main-bg-color);
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.50);
@@ -235,7 +239,7 @@ td {
   pointer-events: all;
 }
 
-.creator-tool button
+.cell-creator button
 {
   display: inline-block;
 
@@ -250,7 +254,7 @@ td {
   background: none;
 }
 
-.creator-tool button span
+.cell-creator button span
 {
   font-size: 15px;
   line-height: 1;
@@ -258,7 +262,7 @@ td {
   color: var(--toolbar-button);
 }
 
-.creator-tool button span:hover
+.cell-creator button span:hover
 {
   color: var(--toolbar-button-hover);
 }

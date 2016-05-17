@@ -193,7 +193,7 @@ export default class Editor extends React.Component {
       },
     };
     return (
-      <div className="cell_editor">
+      <div className="input">
         <CodeMirror
           value={this.state.source}
           ref="codemirror"

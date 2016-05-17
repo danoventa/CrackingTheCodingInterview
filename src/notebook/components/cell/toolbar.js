@@ -37,8 +37,8 @@ class Toolbar extends React.Component {
   render() {
     const showPlay = this.props.type !== 'markdown';
     return (
-      <div className="cell_toolbar-mask">
-        <div className="cell_toolbar">
+      <div className="cell-toolbar-mask">
+        <div className="cell-toolbar">
           {showPlay &&
             <button onClick={this.executeCell}>
               <span className="octicon octicon-triangle-right" />

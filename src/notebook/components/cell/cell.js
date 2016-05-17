@@ -59,7 +59,7 @@ class Cell extends React.Component {
     const focused = this.props.focusedCell === this.props.id;
     return (
       <div
-        className={`cell ${focused ? 'focused' : ''}`}
+        className={`cell ${type === 'markdown' ? 'text' : 'code'} ${focused ? 'focused' : ''}`}
         onClick={this.selectCell}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
