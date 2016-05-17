@@ -111,8 +111,8 @@ ipc.on('main:load', (e, launchData) => {
                 />
             }
             <NotificationSystem ref="notificationSystem" />
-            <link rel="stylesheet" href={`../static/styles/theme-${this.state.theme}.css`} />
             <link rel="stylesheet" href="../static/styles/main.css" />
+            <link rel="stylesheet" href={`../static/styles/theme-${this.state.theme}.css`} />
           </div>
         </Provider>
       );

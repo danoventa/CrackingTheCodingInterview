@@ -192,6 +192,10 @@ export const view = {
           label: 'Dark',
           click: createSender('menu:theme', 'dark'),
         },
+        {
+          label: 'Classic',
+          click: createSender('menu:theme', 'classic'),
+        },
       ],
     },
   ],
