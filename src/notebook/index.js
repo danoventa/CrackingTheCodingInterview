@@ -47,7 +47,7 @@ ipc.on('main:load', (e, launchData) => {
       cellPagers: new Immutable.Map(),
       cellStatuses: new Immutable.Map(),
       github,
-    }
+    },
   }, reducers);
 
   const { dispatch } = store;
@@ -101,9 +101,9 @@ ipc.on('main:load', (e, launchData) => {
       return (
         <Provider
           rx={{ dispatch, store }}
-          notificationSystem={this.state.notificationSystem}
-          executionState={this.state.executionState}
-          channels={this.state.channels}
+          notificationSystem={this.state.document && this.state.document.notificationSystem}
+          executionState={this.state.app && this.state.app.executionState}
+          channels={this.state.app && this.state.app.channels}
         >
           <div>
             {
@@ -115,7 +115,7 @@ ipc.on('main:load', (e, launchData) => {
                 <Notebook
                   theme={this.state.document.theme}
                   notebook={this.state.document.notebook}
-                  channels={this.state.document.channels}
+                  channels={this.state.app.channels}
                   cellPagers={this.state.document.cellPagers}
                   focusedCell={this.state.document.focusedCell}
                   cellStatuses={this.state.document.cellStatuses}

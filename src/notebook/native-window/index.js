@@ -23,7 +23,8 @@ export function tildify(p) {
 export function initNativeHandlers(store) {
   Rx.Observable.from(store)
     .map(state => {
-      const { executionState, filename } = state;
+      const { executionState } = state.app;
+      const { filename } = state.document;
       return {
         title: `${tildify(filename) || 'Untitled'} - ${executionState}`,
         path: filename,

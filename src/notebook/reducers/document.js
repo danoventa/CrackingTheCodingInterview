@@ -215,6 +215,7 @@ export default handleActions({
       message: 'Your notebook is being uploaded as a GitHub gist',
       level: 'info',
     });
+    return state;
   },
   [constants.DONE_UPLOADING]: noop,
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {

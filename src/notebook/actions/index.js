@@ -8,7 +8,7 @@ import * as agendas from '../agendas';
 import { launchKernel } from '../api/kernel';
 import * as constants from '../constants';
 
-import Rx from "rxjs/Rx";
+import Rx from 'rxjs/Rx';
 
 export function setExecutionState(executionState) {
   return {
