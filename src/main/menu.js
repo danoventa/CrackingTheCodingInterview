@@ -130,6 +130,37 @@ export const cell = {
     },
   ],
 };
+const theme_menu = [
+  {
+    label: 'Light',
+    click: createSender('menu:theme', 'light'),
+  },
+  {
+    label: 'Dark',
+    click: createSender('menu:theme', 'dark'),
+  },
+  {
+    label: 'Classic',
+    click: createSender('menu:theme', 'classic'),
+  },
+];
+
+const today = new Date();
+const day = today.getDate();
+const month = today.getMonth() + 1;
+if (month === 12) {
+  theme_menu.push(
+    {
+      label: 'Hohoho',
+      click: createSender('menu:theme', 'christmas'),
+    });
+} else if (month === 10 && day === 31) {
+  theme_menu.push({
+    label: 'Mwaaahahahhah',
+    click: createSender('menu:theme', 'halloween'),
+  });
+}
+
 
 export const view = {
   label: 'View',
@@ -183,23 +214,11 @@ export const view = {
     },
     {
       label: 'Theme',
-      submenu: [
-        {
-          label: 'Light',
-          click: createSender('menu:theme', 'light'),
-        },
-        {
-          label: 'Dark',
-          click: createSender('menu:theme', 'dark'),
-        },
-        {
-          label: 'Classic',
-          click: createSender('menu:theme', 'classic'),
-        },
-      ],
+      submenu: theme_menu,
     },
   ],
 };
+
 
 export const publish = {
   label: 'Publish',

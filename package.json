@@ -9,6 +9,7 @@
     "prepublish": "npm run build",
     "clean": "rimraf build dist",
     "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "prebuild": "rimraf build",
     "build": "babel src --out-dir build",
     "build:icon": "./scripts/make_icons.sh && cd static/icons && iconutil -c icns nteract.iconset && mv nteract.icns ../icon.icns",
