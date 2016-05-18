@@ -78,7 +78,7 @@ export function liveStore(cb, kernelName='python2') {
       kernel.connectionFile = state.app.connectionFile;
       expect(kernel.channels).to.not.be.undefined;
     })
-    .then(() => Promise.resolve(cb(kernel, dispatch, store)))
+    .then(() => Promise.resolve(cb(kernel, store.dispatch, store)))
     .then(() => dispatchQueuePromise(store.dispatch))
     .then(() => shutdownKernel(kernel).then(() => {
       expect(kernel.channels).to.be.undefined;
