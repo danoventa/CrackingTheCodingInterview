@@ -209,6 +209,7 @@ td {
 .cell .input-container .input
 {
     flex: 1 1 auto;
+    overflow: auto;
 }
 
 .creator-hover-mask {
