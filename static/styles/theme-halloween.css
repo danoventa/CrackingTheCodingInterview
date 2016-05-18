@@ -4,7 +4,7 @@
 
   --primary-border: #cbcbcb;
 
-  --cell-bg: white;
+  --cell-bg: rgba(100%,100%, 100%, 0.3);
   --cell-bg-hover: #eeedee;
   --cell-bg-focus: #E26710;
 
@@ -29,7 +29,7 @@
   --cm-number: #3a3;
   --cm-meta: #555;
   --cm-link: #3a3;
-  --cm-background: #F7D6D6;
+  --cm-background: rgba(247, 214, 214, 0.64);;
 
   --cm-activeline-bg: #e8f2ff;
   --cm-matchingbracket-outline: grey;
@@ -53,6 +53,7 @@ body{
   animation: flame-mode 15s infinite;
 }
 body::after {
+  z-index:-1;
   position:absolute;
   content: '';
   background-image: url('./halloween/pumpkin.png');
