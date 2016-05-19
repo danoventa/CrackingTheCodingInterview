@@ -9,7 +9,6 @@ import { tildify } from '../native-window';
 import {
   executeCell,
   newKernel,
-  restartKernel,
   save,
   saveAs,
   killKernel,
