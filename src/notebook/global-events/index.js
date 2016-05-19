@@ -12,9 +12,9 @@ export function unload(store) {
   // though we only use store here as shutdown is required to be an immediate action
   const state = store.getState();
   const kernel = {
-    channels: state.channels,
-    spawn: state.spawn,
-    connectionFile: state.connectionFile,
+    channels: state.app.channels,
+    spawn: state.app.spawn,
+    connectionFile: state.app.connectionFile,
   };
   forceShutdownKernel(kernel);
 }

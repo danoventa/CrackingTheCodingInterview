@@ -12,7 +12,7 @@ describe('performance', function() {
   this.timeout(5000);
   it('is within acceptable', () => {
     return liveStore((kernel, dispatch, store) => {
-      const cellId = store.getState().notebook.getIn(['cellOrder', 0]);
+      const cellId = store.getState().document.notebook.getIn(['cellOrder', 0]);
       const source = 'print("hello world")';
       dispatch(updateCellSource(cellId, source));
 

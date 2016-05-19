@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Immutable from 'immutable';
 
-import createStore from './store';
+import configureStore from './store';
 import { reducers } from './reducers';
 import Provider from './components/util/provider';
 import Notebook from './components/notebook';
@@ -37,16 +37,22 @@ if (process.env.GITHUB_TOKEN) {
 }
 
 ipc.on('main:load', (e, launchData) => {
-  const { store, dispatch } = createStore({
-    notebook: null,
-    filename: launchData.filename,
-    cellPagers: new Immutable.Map(),
-    cellStatuses: new Immutable.Map(),
-    executionState: 'not connected',
-    github,
+  const store = configureStore({
+    app: {
+      executionState: 'not connected',
+    },
+    document: {
+      notebook: null,
+      filename: launchData.filename,
+      cellPagers: new Immutable.Map(),
+      cellStatuses: new Immutable.Map(),
+      github,
+    },
   }, reducers);
 
-  store
+  const { dispatch } = store;
+
+  Rx.Observable.from(store)
     .pluck('channels')
     .distinctUntilChanged()
     .switchMap(channels => {
@@ -72,7 +78,6 @@ ipc.on('main:load', (e, launchData) => {
       this.state = {
         theme: 'light',
       };
-      store.subscribe(state => this.setState(state));
       storage.get('theme', (error, data) => {
         if (error) throw error;
         if (Object.keys(data).length === 0) return;
@@ -86,18 +91,19 @@ ipc.on('main:load', (e, launchData) => {
       });
     }
     componentDidMount() {
+      Rx.Observable.from(store).subscribe(state => this.setState(state));
       dispatch(setNotificationSystem(this.refs.notificationSystem));
       const state = store.getState();
-      const filename = (state && state.filename) || launchData.filename;
+      const filename = (state && state.app.filename) || launchData.filename;
       dispatch(setNotebook(launchData.notebook, filename));
     }
     render() {
       return (
         <Provider
           rx={{ dispatch, store }}
-          notificationSystem={this.state.notificationSystem}
-          executionState={this.state.executionState}
-          channels={this.state.channels}
+          notificationSystem={this.state.document && this.state.document.notificationSystem}
+          executionState={this.state.app && this.state.app.executionState}
+          channels={this.state.app && this.state.app.channels}
         >
           <div>
             {
@@ -105,14 +111,14 @@ ipc.on('main:load', (e, launchData) => {
                 <pre>{this.state.err.toString()}</pre>
             }
             {
-              this.state.notebook &&
+              this.state.document && this.state.document.notebook &&
                 <Notebook
-                  theme={this.state.theme}
-                  notebook={this.state.notebook}
-                  channels={this.state.channels}
-                  cellPagers={this.state.cellPagers}
-                  focusedCell={this.state.focusedCell}
-                  cellStatuses={this.state.cellStatuses}
+                  theme={this.state.document.theme}
+                  notebook={this.state.document.notebook}
+                  channels={this.state.app.channels}
+                  cellPagers={this.state.document.cellPagers}
+                  focusedCell={this.state.document.focusedCell}
+                  cellStatuses={this.state.document.cellStatuses}
                 />
             }
             <NotificationSystem ref="notificationSystem" />

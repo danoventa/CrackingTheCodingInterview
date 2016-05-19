@@ -2,12 +2,13 @@ import * as commutable from 'commutable';
 import * as uuid from 'uuid';
 
 import * as constants from '../constants';
+import { handleActions } from 'redux-actions';
 
 import Immutable from 'immutable';
 
 const noop = state => state;
 
-export default {
+export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.data;
     return {
@@ -214,6 +215,7 @@ export default {
       message: 'Your notebook is being uploaded as a GitHub gist',
       level: 'info',
     });
+    return state;
   },
   [constants.DONE_UPLOADING]: noop,
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
@@ -223,4 +225,4 @@ export default {
       notificationSystem,
     };
   },
-};
+}, {});

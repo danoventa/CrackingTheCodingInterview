@@ -200,9 +200,7 @@ describe('executeCell', () => {
     const id = '235';
     const source = 'print("hey")';
 
-    const subject = new Rx.Subject();
-
-    subject
+    actions.executeCell(channels, id, source, true, undefined)()
       .first()
       .subscribe((action) => {
         expect(action).to.deep.equal({
@@ -214,8 +212,6 @@ describe('executeCell', () => {
         expect.fail();
       }
     );
-
-    actions.executeCell(channels, id, source, true, undefined)(subject);
   });
 
   // Incomplete test setup, skipping yet providing boilerplate

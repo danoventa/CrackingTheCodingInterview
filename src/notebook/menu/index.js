@@ -21,7 +21,7 @@ import {
 
 export function dispatchSaveAs(store, dispatch, evt, filename) {
   const state = store.getState();
-  const { notebook } = state;
+  const { notebook } = state.document;
   dispatch(saveAs(filename, notebook));
 }
 
@@ -31,16 +31,17 @@ export function triggerSaveAs(store, dispatch) {
       if (!filename) {
         return;
       }
-      const { notebook, executionState } = store.getState();
+      const state = store.getState();
+      const { notebook, executionState } = state.document;
       dispatch(saveAs(filename, notebook));
-      BrowserWindow.getFocusedWindw().setTitle(`${tildify(filename)} - ${executionState}`);
+      BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
     }
   );
 }
 
 export function dispatchSave(store, dispatch) {
   const state = store.getState();
-  const { notebook, filename } = state;
+  const { notebook, filename } = state.document;
   if (!filename) {
     triggerSaveAs(store, dispatch);
   } else {
@@ -51,14 +52,15 @@ export function dispatchSave(store, dispatch) {
 export function dispatchNewkernel(store, dispatch, evt, name) {
   const state = store.getState();
   const spawnOptions = {};
-  if (state && state.filename) {
+  if (state && state.document && state.document.filename) {
     spawnOptions.cwd = path.dirname(path.resolve(state.filename));
   }
   dispatch(newKernel(name, spawnOptions));
 }
 
 export function dispatchPublishGist(store, dispatch) {
-  const { notebook, filename, github, notificationSystem } = store.getState();
+  const state = store.getState();
+  const { filename, notebook, github, notificationSystem } = state.document;
   const agenda = publish(github, notebook, filename, notificationSystem);
 
   agenda.subscribe((action) => {
@@ -91,7 +93,9 @@ export function dispatchPublishGist(store, dispatch) {
 }
 
 export function dispatchRunAll(store, dispatch) {
-  const { notebook, channels, notificationSystem, executionState } = store.getState();
+  const state = store.getState();
+  const { channels, executionState } = state.app;
+  const { notebook, notificationSystem } = state.document;
   const cells = notebook.get('cellMap');
   const kernelConnected = channels &&
     !(executionState === 'starting' || executionState === 'not connected');

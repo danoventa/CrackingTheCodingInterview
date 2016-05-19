@@ -8,6 +8,8 @@ import * as agendas from '../agendas';
 import { launchKernel } from '../api/kernel';
 import * as constants from '../constants';
 
+import Rx from 'rxjs/Rx';
+
 export function setExecutionState(executionState) {
   return {
     type: constants.SET_EXECUTION_STATE,
@@ -23,7 +25,7 @@ export function setLanguageInfo(langInfo) {
 }
 
 export function newKernel(kernelSpecName, cwd) {
-  return (subject) => {
+  return () => Rx.Observable.create((subscriber) => {
     launchKernel(kernelSpecName, { cwd })
       .then(kc => {
         const { channels, connectionFile, spawn } = kc;
@@ -32,15 +34,15 @@ export function newKernel(kernelSpecName, cwd) {
         channels.iopub
           .filter(msg => msg.header.msg_type === 'status')
           .map(msg => msg.content.execution_state)
-          .subscribe(() => subject.next(setExecutionState('idle')));
+          .subscribe(() => subscriber.next(setExecutionState('idle')));
 
         agendas.acquireKernelInfo(channels)
               .subscribe(action => {
-                subject.next(action);
-                subject.next(setExecutionState('idle'));
+                subscriber.next(action);
+                subscriber.next(setExecutionState('idle'));
               });
 
-        subject.next({
+        subscriber.next({
           type: constants.NEW_KERNEL,
           channels,
           connectionFile,
@@ -48,17 +50,17 @@ export function newKernel(kernelSpecName, cwd) {
         });
       })
       .catch((err) => console.error(err));
-  };
+  });
 }
 
 export function save(filename, notebook) {
-  return (subject) => {
+  return () => Rx.Observable.create((subscriber) => {
     // If there isn't a filename, save-as it instead
     if (!filename) {
       throw new Error('save needs a filename');
     }
 
-    subject.next({
+    subscriber.next({
       type: constants.START_SAVING,
     });
     writeFile(filename, JSON.stringify(commutable.toJS(notebook), null, 1), (err) => {
@@ -66,28 +68,28 @@ export function save(filename, notebook) {
         console.error(err);
         throw err;
       }
-      subject.next({
+      subscriber.next({
         type: constants.DONE_SAVING,
       });
     });
-  };
+  });
 }
 
 export function saveAs(filename, notebook) {
-  return (subject, dispatch) => {
-    subject.next({
+  return (actions, store) => Rx.Observable.create((subscriber) => {
+    subscriber.next({
       type: constants.CHANGE_FILENAME,
       filename,
     });
-    dispatch(save(filename, notebook));
-  };
+    store.dispatch(save(filename, notebook));
+  });
 }
 
 export function setNotebook(nbData, filename) {
   const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();
-  return (subject, dispatch) => {
+  return (actions, store) => Rx.Observable.create((subscriber) => {
     const data = Immutable.fromJS(nbData);
-    subject.next({
+    subscriber.next({
       type: constants.SET_NOTEBOOK,
       data,
     });
@@ -99,8 +101,8 @@ export function setNotebook(nbData, filename) {
     ], data.getIn([
       'metadata', 'language_info', 'name',
     ], 'python3'));
-    dispatch(newKernel(kernelName, cwd));
-  };
+    store.dispatch(newKernel(kernelName, cwd));
+  });
 }
 
 export function updateCellSource(id, source) {
@@ -213,24 +215,24 @@ export function focusPreviousCell(id) {
 }
 
 export function executeCell(channels, id, source, kernelConnected, notificationSystem) {
-  return (subject, dispatch) => {
+  return (actions, store) => Rx.Observable.create((subscriber) => {
     if (!kernelConnected) {
       notificationSystem.addNotification({
         title: 'Could not execute cell',
         message: 'The cell could not be executed because the kernel is not connected.',
         level: 'error',
       });
-      dispatch(updateCellExecutionCount(id, undefined));
+      store.dispatch(updateCellExecutionCount(id, undefined));
       return;
     }
 
     const obs = agendas.executeCell(channels, id, source);
     obs.subscribe(action => {
-      subject.next(action);
+      subscriber.next(action);
     }, (error) => {
-      subject.next({ type: constants.ERROR_KERNEL_NOT_CONNECTED, message: error });
+      subscriber.next({ type: constants.ERROR_KERNEL_NOT_CONNECTED, message: error });
     });
-  };
+  });
 }
 
 export function overwriteMetadata(field, value) {

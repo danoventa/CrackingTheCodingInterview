@@ -3,6 +3,8 @@ const { getCurrentWindow } = remote;
 import home from 'home-dir';
 import path from 'path';
 
+import Rx from 'rxjs/Rx';
+
 const HOME = home();
 
 /**
@@ -19,9 +21,10 @@ export function tildify(p) {
 }
 
 export function initNativeHandlers(store) {
-  store
+  Rx.Observable.from(store)
     .map(state => {
-      const { executionState, filename } = state;
+      const { executionState } = state.app;
+      const { filename } = state.document;
       return {
         title: `${tildify(filename) || 'Untitled'} - ${executionState}`,
         path: filename,

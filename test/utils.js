@@ -16,9 +16,7 @@ import { acquireKernelInfo } from '../src/notebook/agendas';
 
 export function dispatchQueuePromise(dispatch) {
   return new Promise(resolve => {
-    dispatch(() => {
-      resolve();
-    });
+    resolve();
   });
 }
 
@@ -37,16 +35,16 @@ function waitFor(cb) {
 
 function waitForKernel(store) {
   return waitFor(() => {
-    const language_info = store.getState().notebook.getIn(['metadata', 'language_info']);
-    const spawn = store.getState().spawn;
-    const kernelState = store.getState().executionState;
+    const language_info = store.getState().document.notebook.getIn(['metadata', 'language_info']);
+    const spawn = store.getState().app.spawn;
+    const kernelState = store.getState().app.executionState;
     return spawn && language_info && kernelState === 'idle';
   });
 }
 
 export function waitForOutputs(store, cellId) {
   return waitFor(() => {
-    const outputs = store.getState().notebook.getIn(['cellMap', cellId, 'outputs'], []);
+    const outputs = store.getState().document.notebook.getIn(['cellMap', cellId, 'outputs'], []);
     return outputs.count() > 0;
   });
 }
@@ -56,28 +54,32 @@ export function liveStore(cb, kernelName='python2') {
   const notebook = appendCell(emptyNotebook, emptyCodeCell).setIn([
     'metadata', 'kernelspec', 'name',
   ], kernelName);
-  const { store, dispatch } = createStore({
-    notebook,
-    cellPagers: new Immutable.Map(),
-    cellStatuses: new Immutable.Map(),
-    executionState: 'not connected',
-    github,
+  const store = createStore({
+    document: {
+      notebook,
+      cellPagers: new Immutable.Map(),
+      cellStatuses: new Immutable.Map(),
+      github,
+    },
+    app: {
+      executionState: 'not connected',
+    }
   }, reducers);
 
-  dispatch(actions.setNotebook(notebook, ''));
+  store.dispatch(actions.setNotebook(notebook, ''));
 
   const kernel = {};
-  return dispatchQueuePromise(dispatch)
+  return dispatchQueuePromise(store.dispatch)
     .then(() => waitForKernel(store))
     .then(() => {
       const state = store.getState();
-      kernel.channels = state.channels;
-      kernel.spawn = state.spawn;
-      kernel.connectionFile = state.connectionFile;
+      kernel.channels = state.app.channels;
+      kernel.spawn = state.app.spawn;
+      kernel.connectionFile = state.app.connectionFile;
       expect(kernel.channels).to.not.be.undefined;
     })
-    .then(() => Promise.resolve(cb(kernel, dispatch, store)))
-    .then(() => dispatchQueuePromise(dispatch))
+    .then(() => Promise.resolve(cb(kernel, store.dispatch, store)))
+    .then(() => dispatchQueuePromise(store.dispatch))
     .then(() => shutdownKernel(kernel).then(() => {
       expect(kernel.channels).to.be.undefined;
     })
