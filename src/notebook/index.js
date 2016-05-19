@@ -46,6 +46,7 @@ ipc.on('main:load', (e, launchData) => {
       filename: launchData.filename,
       cellPagers: new Immutable.Map(),
       cellStatuses: new Immutable.Map(),
+      stickyCells: new Immutable.Map(),
       github,
     },
   }, reducers);
@@ -119,6 +120,7 @@ ipc.on('main:load', (e, launchData) => {
                   cellPagers={this.state.document.cellPagers}
                   focusedCell={this.state.document.focusedCell}
                   cellStatuses={this.state.document.cellStatuses}
+                  stickyCells={this.state.document.stickyCells}
                 />
             }
             <NotificationSystem ref="notificationSystem" />

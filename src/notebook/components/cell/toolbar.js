@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { executeCell, removeCell } from '../../actions';
+import { executeCell, removeCell, toggleStickyCell } from '../../actions';
 
 class Toolbar extends React.Component {
   static propTypes = {
@@ -23,6 +23,7 @@ class Toolbar extends React.Component {
     this.removeCell = this.removeCell.bind(this);
     this.executeCell = this.executeCell.bind(this);
     this.setHoverState = this.setHoverState.bind(this);
+    this.toggleStickyCell = this.toggleStickyCell.bind(this);
   }
 
   componentWillMount() {
@@ -55,6 +56,10 @@ class Toolbar extends React.Component {
     }
   }
 
+  toggleStickyCell() {
+    this.context.dispatch(toggleStickyCell(this.props.id));
+  }
+
   removeCell() {
     this.context.dispatch(removeCell(this.props.id));
   }
@@ -78,6 +83,9 @@ class Toolbar extends React.Component {
             </button>}
           <button onClick={this.removeCell}>
             <span className="octicon octicon-trashcan" />
+          </button>
+          <button onClick={this.toggleStickyCell}>
+            <span className="octicon octicon-pin" />
           </button>
         </div>
       </div>
