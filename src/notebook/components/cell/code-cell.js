@@ -5,6 +5,7 @@ import Inputs from './inputs';
 import Editor from './editor';
 import Display from 'react-jupyter-display-area';
 import LatexRenderer from '../latex';
+import WidgetArea from './widget-area';
 
 import Pager from './pager';
 
@@ -41,6 +42,14 @@ const CodeCell = (props) =>
         }
         </div> : null
     }
+    {
+      props.widgets && !props.widgets.isEmpty() ?
+        <WidgetArea
+          id={props.id}
+          widgets={props.widgets}
+          widgetManager={props.widgetManager}
+        /> : null
+    }
     <LatexRenderer>
       <div className="outputs">
         <Display
@@ -66,6 +75,8 @@ CodeCell.propTypes = {
   running: React.PropTypes.bool,
   focusAbove: React.PropTypes.func,
   focusBelow: React.PropTypes.func,
+  widgets: React.PropTypes.instanceOf(Immutable.List),
+  widgetManager: React.PropTypes.any,
 };
 
 CodeCell.defaultProps = {
