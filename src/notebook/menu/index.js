@@ -9,6 +9,7 @@ import { tildify } from '../native-window';
 import {
   executeCell,
   newKernel,
+  restartKernel,
   save,
   saveAs,
   killKernel,
@@ -114,8 +115,27 @@ export function dispatchKillKernel(store, dispatch) {
   dispatch(killKernel);
 }
 
+export function dispatchRestartKernel(store, dispatch) {
+  const state = store.getState();
+  const spawnOptions = {};
+  if (state && state.document && state.document.filename) {
+    spawnOptions.cwd = path.dirname(path.resolve(state.filename));
+  }
+
+  dispatch(killKernel);
+  dispatch(newKernel(state.app.kernelSpecName, spawnOptions));
+
+  state.document.notificationSystem.addNotification({
+    title: 'Kernel Restarted',
+    message: `Kernel ${state.app.kernelSpecName} has been restarted.`,
+    dismissible: true,
+    position: 'tr',
+    level: 'success',
+  });
+}
+
 export function dispatchZoomIn() {
-  webFrame.setZoomLevel(webFrame.getZoomLevel() + 1);
+  webFrame.setZoomLevel(webFrame.getZoomLevel() + 2);
 }
 
 export function dispatchZoomOut() {
@@ -128,6 +148,7 @@ export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:save', dispatchSave.bind(null, store, dispatch));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
   ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store, dispatch));
+  ipc.on('menu:restart-kernel', dispatchRestartKernel.bind(null, store, dispatch));
   ipc.on('menu:publish:gist', dispatchPublishGist.bind(null, store, dispatch));
   ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store, dispatch));
   ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store, dispatch));
