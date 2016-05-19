@@ -364,6 +364,10 @@ export function loadFullMenu() {
           click: createSender('menu:kill-kernel'),
         },
         {
+          label: 'Restart Running Kernel',
+          click: createSender('menu:restart-kernel'),
+        },
+        {
           type: 'separator',
         },
         // All the available kernels
