@@ -18,6 +18,7 @@ function cleanupKernel(state) {
     channels: null,
     spawn: null,
     connectionFile: null,
+    kernelSpecName: null,
     executionState: 'not connected',
   };
   return cleanState;
@@ -25,13 +26,14 @@ function cleanupKernel(state) {
 
 export default handleActions({
   [constants.NEW_KERNEL]: function newKernel(state, action) {
-    const { channels, connectionFile, spawn } = action;
+    const { channels, connectionFile, spawn, kernelSpecName } = action;
 
     return {
       ...cleanupKernel(state),
       channels,
       connectionFile,
       spawn,
+      kernelSpecName,
       executionState: 'starting',
     };
   },

@@ -47,6 +47,7 @@ export function newKernel(kernelSpecName, cwd) {
           channels,
           connectionFile,
           spawn,
+          kernelSpecName,
         });
       })
       .catch((err) => console.error(err));
