@@ -37,6 +37,7 @@ describe('Notebook', () => {
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
         cellStatuses={new Immutable.Map()}
+        stickyCells={new Immutable.Map()}
         displayOrder={displayOrder.delete('text/html')}
         transforms={transforms.delete('text/html')}
       />
