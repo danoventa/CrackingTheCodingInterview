@@ -79,7 +79,7 @@ td {
 .cell-drag-handle
 {
     position: absolute;
-    z-index: 999;
+    z-index: 200;
     width: var(--prompt-width);
     height: 100%;
     cursor: move;
@@ -180,7 +180,7 @@ td {
 
     top: 0px;
     position: absolute;
-    z-index: 999;
+    z-index: 300;
     width: 100%;
     max-height: 50%;
 
