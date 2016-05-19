@@ -54,7 +54,7 @@ body{
 }
 body::after {
   z-index:-1;
-  position:absolute;
+  position:fixed;
   content: '';
   background-image: url('./halloween/pumpkin.png');
   bottom:0px;
