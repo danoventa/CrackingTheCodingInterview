@@ -214,6 +214,13 @@ export function focusPreviousCell(id) {
   };
 }
 
+export function toggleStickyCell(id) {
+  return {
+    type: constants.TOGGLE_STICKY_CELL,
+    id,
+  };
+}
+
 export function executeCell(channels, id, source, kernelConnected, notificationSystem) {
   return (actions, store) => Rx.Observable.create((subscriber) => {
     if (!kernelConnected) {

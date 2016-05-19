@@ -22,6 +22,11 @@ describe('Notebook', () => {
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
         cellStatuses={new Immutable.Map()}
+        stickyCells={(new Immutable.Map())
+          // Sticky the first cell of the notebook so that the sticky code gets
+          // triggered.
+          .set(dummyCommutable.getIn(['cellOrder', 0]), true)
+        }
       />
     );
     expect(component).to.not.be.null;

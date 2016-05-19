@@ -65,6 +65,20 @@ export default handleActions({
       focusedCell: cellOrder.get(nextIndex),
     };
   },
+  [constants.TOGGLE_STICKY_CELL]: function toggleStickyCell(state, action) {
+    const { id } = action;
+    const { stickyCells } = state;
+    if (stickyCells.get(id)) {
+      return {
+        ...state,
+        stickyCells: stickyCells.delete(id),
+      };
+    }
+    return {
+      ...state,
+      stickyCells: stickyCells.set(id, true),
+    };
+  },
   [constants.UPDATE_CELL_EXECUTION_COUNT]: function updateExecutionCount(state, action) {
     const { id, count } = action;
     const { notebook } = state;
