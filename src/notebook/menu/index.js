@@ -135,7 +135,7 @@ export function dispatchRestartKernel(store, dispatch) {
 }
 
 export function dispatchZoomIn() {
-  webFrame.setZoomLevel(webFrame.getZoomLevel() + 2);
+  webFrame.setZoomLevel(webFrame.getZoomLevel() + 1);
 }
 
 export function dispatchZoomOut() {
