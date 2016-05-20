@@ -50,7 +50,7 @@
   "dependencies": {
     "codemirror": "^5.13.4",
     "commander": "^2.9.0",
-    "commutable": "^0.9.0",
+    "commutable": "^0.10.0",
     "electron-json-storage": "^2.0.0",
     "electron-packager": "^7.0.0",
     "enchannel": "^1.1.3",

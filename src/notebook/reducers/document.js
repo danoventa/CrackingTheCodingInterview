@@ -173,7 +173,7 @@ export default handleActions({
     const { notebook } = state;
     return {
       ...state,
-      notebook: notebook.setIn(['cellMap', id, 'outputs'], new Immutable.List()),
+      notebook: commutable.clearCellOutput(notebook, id),
     };
   },
   [constants.UPDATE_CELL_OUTPUTS]: function updateOutputs(state, action) {
