@@ -97,7 +97,7 @@ export class BackendToRedux {
           .map(x => Rx.Observable.fromPromise(x))
           .concatAll()
           .subscribe(stateChange => {
-            this.dispatch(setWidgetState(
+            dispatch(setWidgetState(
               model.id,
               stateChange
             ));

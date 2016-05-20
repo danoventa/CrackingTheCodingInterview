@@ -6,7 +6,7 @@ export class ReduxToManager {
     Rx.Observable.from(store)
       .pluck('document')
       .pluck('widgetModels')
-      .distinctUntilChanged(undefined, (a, b) => a.equals(b))
+      .distinctUntilChanged((a, b) => a.equals(b))
       .subscribe(this.reduxStateChange.bind(this, manager));
   }
 
@@ -19,7 +19,7 @@ export class ReduxToManager {
     // Set new states
     newState.entrySeq().forEach(modelState => {
       const [model, state] = modelState;
-      manager.setModelState(model, state);
+      manager.setModelState(model, state.toJS());
     });
   }
 }

@@ -4,10 +4,10 @@ import Widget from './widget';
 
 const WidgetArea = (props) => (
   <div className="cell-widget-area">
-    {props.widgets.map(widgetId =>
+    {props.widgets.map((widgetId, index) =>
       <Widget
         id={widgetId}
-        key={widgetId}
+        key={`index: ${index}, widgetId: ${widgetId}`}
         cellId={props.id}
         widgetManager={props.widgetManager}
       />
