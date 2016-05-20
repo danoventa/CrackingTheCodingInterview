@@ -25,6 +25,86 @@ describe('setNotebook', () => {
   });
 });
 
+describe('focusCell', () => {
+  it('should set focusedCell to the appropriate cell ID', () => {
+    const originalState = {
+      document : {
+        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').last();
+
+    const action = {
+      type: constants.FOCUS_CELL,
+      id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.focusedCell).to.equal(id);
+  });
+});
+
+
+describe('focusNextCell', () => {
+  it('should focus the next cell if not the last cell', () => {
+    const originalState = {
+      document : {
+        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').first();
+
+    const action = {
+      type: constants.FOCUS_NEXT_CELL,
+      id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.focusedCell).to.not.be.null;
+  });
+  it('should create and focus a new cell if last cell', () => {
+    const originalState = {
+      document: {
+        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').last();
+
+    const action = {
+      type: constants.FOCUS_NEXT_CELL,
+      id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.focusedCell).to.not.be.null;
+    expect(state.document.notebook.get('cellOrder').size).to.equal(3);
+  });
+});
+
+describe('focusPreviousCell', () => {
+  it('should focus the previous cell', () => {
+    const originalState = {
+      document: {
+        notebook: dummyCommutable,
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').last();
+    const previousId = originalState.document.notebook.get('cellOrder').first();
+
+    const action = {
+      type: constants.FOCUS_PREVIOUS_CELL,
+      id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.focusedCell).to.equal(previousId);
+  });
+});
+
 describe('updateExecutionCount', () => {
   it('updates the execution count by id', () => {
     const originalState = {
