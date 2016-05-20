@@ -126,6 +126,29 @@ describe('updateExecutionCount', () => {
   });
 });
 
+describe('moveCell', () => {
+  it('should swap the first and last cell appropriately', () => {
+    const originalState = {
+      document: {
+        notebook: dummyCommutable
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').last();
+    const destinationId = originalState.document.notebook.get('cellOrder').first();
+
+    const action = {
+      type: constants.MOVE_CELL,
+      id,
+      destinationId,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.notebook.get('cellOrder').last()).to.equal(id);
+    expect(state.document.notebook.get('cellOrder').first()).to.equal(destinationId);
+  });
+});
+
 describe('clearCellOutput', () => {
   it('should clear outputs list', () => {
     const originalState = {
