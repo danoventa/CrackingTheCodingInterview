@@ -177,6 +177,13 @@ export function updateCellExecutionCount(id, count) {
   };
 }
 
+export function clearCellOutput(id) {
+  return {
+    type: constants.CLEAR_CELL_OUTPUT,
+    id,
+  };
+}
+
 export function updateCellPagers(id, pagers) {
   return {
     type: constants.UPDATE_CELL_PAGERS,

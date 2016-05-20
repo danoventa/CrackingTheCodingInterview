@@ -182,6 +182,14 @@ export default handleActions({
       notebook: commutable.updateSource(notebook, id, source),
     };
   },
+  [constants.CLEAR_CELL_OUTPUT]: function clearCellOutput(state, action) {
+    const { id } = action;
+    const { notebook } = state;
+    return {
+      ...state,
+      notebook: commutable.clearCellOutput(notebook, id),
+    };
+  },
   [constants.UPDATE_CELL_OUTPUTS]: function updateOutputs(state, action) {
     const { id, outputs } = action;
     const { notebook } = state;
