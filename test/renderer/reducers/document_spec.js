@@ -215,3 +215,42 @@ describe('newCellBefore', () => {
     expect(state.document.notebook.get('cellOrder').last()).to.equal(id);
   });
 });
+
+describe('mergeCellAfter', () => {
+  it('merges cells appropriately', () => {
+    const originalState = {
+      document: {
+        notebook: dummyCommutable 
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').first();
+    
+    const action = {
+      type: constants.MERGE_CELL_AFTER,
+      id,
+    }
+
+    const state = reducers(originalState, action);
+    expect(state.document.notebook.get('cellOrder').size).to.equal(1);
+    expect(state.document.notebook.get('cellOrder').first()).to.equal(id);
+  });
+});
+
+describe('newCellAppend', () => {
+  it('appends a new code cell at the end', () => {
+    const originalState = {
+      document: {
+        notebook: dummyCommutable,
+      }
+    };
+
+    const action = {
+      type: constants.NEW_CELL_APPEND,
+      cellType: 'code',
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.notebook.get('cellOrder').size).to.equal(3);
+  });
+});
