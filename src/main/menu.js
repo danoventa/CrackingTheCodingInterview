@@ -372,6 +372,10 @@ export function loadFullMenu() {
           click: createSender('menu:restart-kernel'),
         },
         {
+          label: 'Restart and Clear All Cells',
+          click: createSender('menu:restart-and-clear-all'),
+        },
+        {
           type: 'separator',
         },
         // All the available kernels
