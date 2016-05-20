@@ -54,6 +54,7 @@ ipc.on('main:load', (e, launchData) => {
   const { dispatch } = store;
 
   Rx.Observable.from(store)
+    .pluck('app')
     .pluck('channels')
     .distinctUntilChanged()
     .switchMap(channels => {
