@@ -46,12 +46,15 @@ export class WidgetManager extends ManagerBase {
   }
 
   getSerializedModelState(model) {
-    return model.constructor._deserialize_state(model.get_state(false), this);
+    return model.constructor._serialize_state(model.get_state(false), this);
   }
 
   setModelState(id, serializedState) {
-    // TODO: Synchronous
-    //
+    return this._models[id].then(model =>
+      model.constructor._deserialize_state(serializedState, this).then(state => {
+        model.set_state(state);
+      })
+    );
   }
 
   deleteModels(ids) {
