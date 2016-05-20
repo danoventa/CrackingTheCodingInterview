@@ -1,0 +1,25 @@
+import Rx from 'rxjs/Rx';
+import difference from 'lodash.difference';
+
+export class ReduxToManager {
+  constructor(store, manager) {
+    Rx.Observable.from(store)
+      .pluck('document')
+      .pluck('widgetModels')
+      .distinctUntilChanged(undefined, (a, b) => a.equals(b))
+      .subscribe(this.reduxStateChange.bind(this, manager));
+  }
+
+  reduxStateChange(manager, newState) {
+    // Delete widgets that no longer exist in the state.
+    manager.deleteModels(
+      difference(Object.keys(manager._models), newState.keySeq().toJS())
+    );
+
+    // Set new states
+    newState.entrySeq().forEach(modelState => {
+      const [model, state] = modelState;
+      manager.setModelState(model, state);
+    });
+  }
+}

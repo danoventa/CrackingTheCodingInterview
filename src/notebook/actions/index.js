@@ -273,3 +273,26 @@ export function setNotificationSystem(notificationSystem) {
     notificationSystem,
   };
 }
+
+export function setWidgetState(id, state) {
+  return {
+    type: constants.SET_WIDGET_STATE,
+    id,
+    state,
+  };
+}
+
+export function deleteWidget(id) {
+  return {
+    type: constants.DELETE_WIDGET,
+    id,
+  };
+}
+
+export function displayWidget(id, parentMsgId) {
+  return {
+    type: constants.DISPLAY_WIDGET,
+    id,
+    parentMsgId,
+  };
+}

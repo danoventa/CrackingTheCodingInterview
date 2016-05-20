@@ -1,12 +1,17 @@
-import * as commutable from 'commutable';
+import Immutable from 'immutable';
+import { handleActions } from 'redux-actions';
 import * as uuid from 'uuid';
+import * as commutable from 'commutable';
 
 import * as constants from '../constants';
+import widgets from './widgets';
 import { handleActions } from 'redux-actions';
 
 import Immutable from 'immutable';
 
-export default handleActions({
+const noop = state => state;
+
+export default handleActions(Object.assign({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.data;
     return state.set('notebook', notebook)
@@ -159,4 +164,4 @@ export default handleActions({
     const { field, value } = action;
     return state.setIn(['notebook', 'metadata', field], Immutable.fromJS(value));
   },
-}, {});
+}, widgets), {});

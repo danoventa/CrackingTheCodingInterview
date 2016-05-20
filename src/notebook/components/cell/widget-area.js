@@ -7,6 +7,7 @@ const WidgetArea = (props) => (
     {props.widgets.map(widgetId =>
       <Widget
         id={widgetId}
+        key={widgetId}
         cellId={props.id}
         widgetManager={props.widgetManager}
       />

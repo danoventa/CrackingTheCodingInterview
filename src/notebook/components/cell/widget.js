@@ -10,15 +10,16 @@ export default class Widget extends React.Component {
 
   componentDidUpdate() {
     if (this.refs.placeholder) {
-      const placholder = ReactDOM.findDOMNode(this.refs.placeholder);
-      if (placholder) {
-        this.disposeView();
-        const widget = this.props.widgetManager.createViewForModel(
+      const placeholder = ReactDOM.findDOMNode(this.refs.placeholder);
+      if (placeholder && placeholder.parentNode) {
+        this.props.widgetManager.createViewForModel(
           this.props.id,
           this.props.cellId
-        );
-        placholder.parentNode.replaceChild(placholder, widget.el);
-        this.view = widget;
+        ).then(view => {
+          this.disposeView();
+          placeholder.parentNode.replaceChild(view.el, placeholder);
+          this.view = view;
+        });
       }
     }
   }
