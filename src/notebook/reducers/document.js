@@ -169,7 +169,7 @@ export default handleActions({
     };
   },
   [constants.CLEAR_CELL_OUTPUT]: function clearCellOutput(state, action) {
-    const { id, source } = action;
+    const { id } = action;
     const { notebook } = state;
     return {
       ...state,
