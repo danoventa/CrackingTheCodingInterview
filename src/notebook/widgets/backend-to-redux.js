@@ -1,10 +1,10 @@
 import Rx from 'rxjs/Rx';
-import { deleteWidget, displayWidget } from '../actions';
+import { setWidgetState, deleteWidget, displayWidget } from '../actions';
 
 export class BackendToRedux {
-  constructor(store, dispatch, createModelCb, setStateCb) {
+  constructor(store, dispatch, createModelCb) {
     this.initCommSubscriptions(store);
-    this.initStateListeners(dispatch, createModelCb, setStateCb);
+    this.initStateListeners(dispatch, createModelCb);
   }
 
   initCommSubscriptions(store) {
@@ -73,7 +73,7 @@ export class BackendToRedux {
       });
   }
 
-  initStateListeners(dispatch, createModelCb, setStateCb) {
+  initStateListeners(dispatch, createModelCb) {
     // Use a model instance to set state on widget creation because the
     // widget instantiation logic is complex and we don't want to have to
     // duplicate it.  This is the only point in the lifespan where the widget
@@ -82,16 +82,25 @@ export class BackendToRedux {
     // external inputs, like real time collaboration, to work.
     this.newComms
       .switchMap(info => Rx.Observable.fromPromise(createModelCb(info.id, info.data)))
-      .subscribe(model => {
-        setStateCb(model);
+      .subscribe(modelInfo => {
+        const { model, stateChanges } = modelInfo;
 
         // State updates are applied to the store, not the widget directly.
         // It's not the responsibility of this code to update the widget model.
-        const subscription = this.comms[model.id]
+        // Merge incomming state update events with state changes from the
+        // widget model itself to create an all inclusive observable that can be
+        // used to update the store.
+        const commStateUpdates = this.comms[model.id]
           .filter(content => content.method === 'update')
-          .subscribe(content => {
-            // TODO: Handle binary `buffers`
-            dispatch(setStateCb(model, content.state));
+          .map(content => Promise.resolve(content.state));
+        const subscription = stateChanges.merge(commStateUpdates)
+          .map(x => Rx.Observable.fromPromise(x))
+          .concatAll()
+          .subscribe(stateChange => {
+            this.dispatch(setWidgetState(
+              model.id,
+              stateChange
+            ));
           });
 
         // Listen for display messages
