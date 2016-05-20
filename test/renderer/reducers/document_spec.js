@@ -14,6 +14,10 @@ import {
   fromJS,
 } from 'commutable';
 
+import {
+  List,
+} from 'immutable';
+
 describe('setNotebook', () => {
   it('converts a JSON notebook to our commutable notebook and puts in state', () => {
     const state = reducers({}, { type: constants.SET_NOTEBOOK, data: fromJS(dummyJSON) });
@@ -39,6 +43,28 @@ describe('updateExecutionCount', () => {
 
     const state = reducers(originalState, action);
     expect(state.document.notebook.getIn(['cellMap', id, 'execution_count'])).to.equal(42);
+  });
+});
+
+describe('clearCellOutput', () => {
+  it('should clear outputs list', () => {
+    const originalState = {
+      document: {
+        notebook: commutable.appendCell(dummyCommutable,
+                  commutable.emptyCodeCell.set('outputs', ['dummy outputs'])),
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').last();
+
+    const action = {
+      type: constants.CLEAR_CELL_OUTPUT,
+      id,
+    };
+
+    const state = reducers(originalState, action);
+    const outputs = state.document.notebook.getIn(['cellMap', id, 'outputs']);
+    expect(outputs).to.equal(List.of());
   });
 });
 
