@@ -1,26 +1,30 @@
 import Rx from 'rxjs/Rx';
 import { setWidgetState, deleteWidget, displayWidget } from '../actions';
+import { createMessage } from '../api/messaging';
 
-export class BackendToRedux {
+export class BackendSync {
   constructor(store, dispatch, createModelCb) {
     this.initCommSubscriptions(store);
-    this.initStateListeners(dispatch, createModelCb);
+    this.initStateListeners(store, dispatch, createModelCb);
+  }
+
+  getChannels(store) {
+    return Rx.Observable.from(store)
+      .pluck('app')
+      .pluck('channels')
+      .distinctUntilChanged();
   }
 
   initCommSubscriptions(store) {
-    const commMsgs = Rx.Observable.from(store)
-      .pluck('app')
-      .pluck('channels')
-      .distinctUntilChanged()
+    const commMsgs = this.getChannels(store)
       .switchMap(channels => {
         if (!(channels && channels.iopub)) {
           return Rx.Observable.empty();
         }
-        return channels.iopub
-          .filter(msg =>
-            msg && msg.header && msg.header.msg_type &&
-            msg.header.msg_type.slice(0, 5) === 'comm_'
-          );
+        return channels.iopub.filter(msg =>
+          msg && msg.header && msg.header.msg_type &&
+          msg.header.msg_type.slice(0, 5) === 'comm_'
+        );
       });
 
     const msgs = commMsgs
@@ -73,7 +77,7 @@ export class BackendToRedux {
       });
   }
 
-  initStateListeners(dispatch, createModelCb) {
+  initStateListeners(store, dispatch, createModelCb) {
     // Use a model instance to set state on widget creation because the
     // widget instantiation logic is complex and we don't want to have to
     // duplicate it.  This is the only point in the lifespan where the widget
@@ -101,6 +105,30 @@ export class BackendToRedux {
               model.id,
               stateChange
             ));
+          });
+
+        // State changes on the backbone models should be communicated to the
+        // backend.
+        stateChanges
+          .map(x => Rx.Observable.fromPromise(x))
+          .concatAll()
+          .subscribe(stateChange => {
+            const updateMsg = createMessage('comm_msg');
+            updateMsg.content = {
+              comm_id: model.id,
+              data: {
+                method: 'backbone',
+                sync_data: stateChange,
+                buffer_keys: [],
+              },
+            };
+            updateMsg.buffers = [];
+
+            const shell = store.getState().app.channels.shell;
+            const shellSubscription = shell.subscribe(() => {});
+            shell.next(updateMsg);
+            shellSubscription.unsubscribe();
+            console.log('sent', updateMsg);
           });
 
         // Listen for display messages

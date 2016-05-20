@@ -1,7 +1,7 @@
 import Rx from 'rxjs/Rx';
 import difference from 'lodash.difference';
 
-export class ReduxToManager {
+export class ModelUpdater {
   constructor(store, manager) {
     Rx.Observable.from(store)
       .pluck('document')

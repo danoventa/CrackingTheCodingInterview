@@ -16,9 +16,13 @@ export default class Widget extends React.Component {
           this.props.id,
           this.props.cellId
         ).then(view => {
-          this.disposeView();
-          placeholder.parentNode.replaceChild(view.el, placeholder);
-          this.view = view;
+          try {
+            placeholder.parentNode.replaceChild(view.el, placeholder);
+            this.disposeView();
+            this.view = view;
+          } catch (err) {
+            // NOMNOM
+          }
         });
       }
     }

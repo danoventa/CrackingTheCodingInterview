@@ -1,7 +1,7 @@
 import Rx from 'rxjs/Rx';
 import { ManagerBase } from 'jupyter-js-widgets';
-import { BackendToRedux } from './backend-to-redux';
-import { ReduxToManager } from './redux-to-manager';
+import { BackendSync } from './backend-sync';
+import { ModelUpdater } from './model-updater';
 
 export class WidgetManager extends ManagerBase {
   constructor(store, dispatch) {
@@ -11,17 +11,16 @@ export class WidgetManager extends ManagerBase {
 
     // Create the mechanisms for syncing between redux state, backbone state,
     // and the backend.
-    this.backendToRedux = new BackendToRedux(
+    this.backendToRedux = new BackendSync(
       store,
       dispatch,
       this.createModel.bind(this));
-    this.reduxToManager = new ReduxToManager(store, this);
+    this.reduxToManager = new ModelUpdater(store, this);
   }
 
   createModel(id, data) {
     let modelLoaded;
     this._internalModels[id] = new Promise(resolve => (modelLoaded = resolve));
-    console.log('MAKE MODEL', id);
 
     const modelPromise = this.new_model({
       model_name: data._model_name,
