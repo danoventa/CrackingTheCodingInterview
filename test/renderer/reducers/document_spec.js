@@ -193,3 +193,25 @@ describe('newCellAfter', () => {
     expect(cell.get('cell_type')).to.equal('markdown');
   });
 });
+
+describe('newCellBefore', () => {
+  it('creates a new cell after the given id', () => {
+    const originalState = {
+      document: {
+        notebook: dummyCommutable,
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').last();
+
+    const action = {
+      type: constants.NEW_CELL_BEFORE,
+      id,
+      cellType: 'markdown',
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.notebook.get('cellOrder').size).to.equal(3);
+    expect(state.document.notebook.get('cellOrder').last()).to.equal(id);
+  });
+});
