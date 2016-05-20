@@ -140,6 +140,11 @@ export function dispatchRestartKernel(store, dispatch) {
   });
 }
 
+export function dispatchRestartClearAll(store, dispatch) {
+  dispatchRestartKernel(store, dispatch);
+  dispatchClearAll(store, dispatch);
+}
+
 export function dispatchZoomIn() {
   webFrame.setZoomLevel(webFrame.getZoomLevel() + 1);
 }
@@ -156,6 +161,7 @@ export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
   ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store, dispatch));
   ipc.on('menu:restart-kernel', dispatchRestartKernel.bind(null, store, dispatch));
+  ipc.on('menu:restart-and-clear-all', dispatchRestartClearAll.bind(null, store, dispatch));
   ipc.on('menu:publish:gist', dispatchPublishGist.bind(null, store, dispatch));
   ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store, dispatch));
   ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store, dispatch));
