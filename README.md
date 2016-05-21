@@ -84,7 +84,7 @@ For RedHat/CentOS/Fedora based variants, you'll need `zeromq` and `zeromq-devel`
 
 #### Install `nteract` itself
 
-Requires node 5.x and npm 3.
+Requires node 6.x and npm 3.
 
 1. Fork this repo
 2. Clone it `git clone https://github.com/nteract/nteract`
