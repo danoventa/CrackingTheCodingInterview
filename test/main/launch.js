@@ -22,7 +22,7 @@ describe('launch', () => {
             resolve();
           });
           win.webContents.executeJavaScript(`
-            var ipc = require('ipc');
+            var ipc = require('electron').ipc;
             ipc.send('queryLength', document.querySelectorAll('div.cell').length);
           `);
         });
