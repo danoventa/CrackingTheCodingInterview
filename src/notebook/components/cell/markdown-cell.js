@@ -78,6 +78,13 @@ export default class MarkdownCell extends React.Component {
    * Handles when a keydown event occurs on the rendered MD cell
    */
   renderedKeyDown(e) {
+    const shift = e.shiftKey;
+    const ctrl = e.ctrlKey;
+    if ((shift || ctrl) && e.key === 'Enter') {
+      this.setState({ view: true });
+      return false;
+    }
+
     switch (e.key) {
       case 'ArrowUp':
         this.props.focusAbove();
