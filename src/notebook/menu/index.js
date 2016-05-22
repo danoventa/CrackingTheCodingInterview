@@ -64,8 +64,8 @@ export function dispatchNewkernel(store, dispatch, evt, name) {
 
 export function dispatchPublishGist(store, dispatch) {
   const state = store.getState();
-  const { filename, notebook, github } = state.document;
-  const { notificationSystem } = state.app;
+  const { filename, notebook } = state.document;
+  const { notificationSystem, github } = state.app;
 
   const agenda = publish(github, notebook, filename, notificationSystem);
 

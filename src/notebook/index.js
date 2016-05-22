@@ -40,6 +40,7 @@ ipc.on('main:load', (e, launchData) => {
   const store = configureStore({
     app: {
       executionState: 'not connected',
+      github,
     },
     document: {
       notebook: null,
@@ -47,7 +48,6 @@ ipc.on('main:load', (e, launchData) => {
       cellPagers: new Immutable.Map(),
       cellStatuses: new Immutable.Map(),
       stickyCells: new Immutable.Map(),
-      github,
     },
   }, reducers);
 
