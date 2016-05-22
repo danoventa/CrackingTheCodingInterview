@@ -14,9 +14,7 @@ describe('MarkdownCell', () => {
     );
     expect(cell).to.not.be.null;
   });
-});
 
-describe('MarkdownCell', () => {
   it('toggles view mode with key events', () => {
     const cell = mount(
       <MarkdownCell cell={commutable.emptyMarkdownCell} {...{ displayOrder, transforms }}/>
@@ -34,4 +32,13 @@ describe('MarkdownCell', () => {
     cell.simulate('keydown', { key: 'Enter', shiftKey: true })
     expect(cell.state('view')).to.be.true;
   });
+
+  it('sets the state of the text based on cell source', () => {
+    const cell = mount(
+      <MarkdownCell cell={commutable.emptyMarkdownCell} {...{ displayOrder, transforms }}/>
+    );
+
+    cell.setProps({'cell': commutable.emptyMarkdownCell.set('source', 'test')});
+    expect(cell.state('source')).to.equal('test');
+  })
 });
