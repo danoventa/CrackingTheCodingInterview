@@ -103,7 +103,7 @@ ipc.on('main:load', (e, launchData) => {
       return (
         <Provider
           rx={{ dispatch, store }}
-          notificationSystem={this.state.document && this.state.document.notificationSystem}
+          notificationSystem={this.state.app && this.state.app.notificationSystem}
           executionState={this.state.app && this.state.app.executionState}
           channels={this.state.app && this.state.app.channels}
         >

@@ -61,4 +61,11 @@ export default handleActions({
     }
     return { ...state, filename };
   },
+  [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
+    const { notificationSystem } = action;
+    return {
+      ...state,
+      notificationSystem,
+    };
+  },
 }, {});
