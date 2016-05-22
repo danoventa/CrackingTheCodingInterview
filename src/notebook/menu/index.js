@@ -14,7 +14,10 @@ import {
   saveAs,
   killKernel,
 } from '../actions';
-import { ipcRenderer as ipc, webFrame, BrowserWindow } from 'electron';
+
+
+import { ipcRenderer as ipc, webFrame, remote } from 'electron';
+const BrowserWindow = remote.BrowserWindow;
 
 import {
   publish,
