@@ -69,7 +69,7 @@ describe('focusNextCell', () => {
     const state = reducers(originalState, action);
     expect(state.document.get('focusedCell')).to.not.be.null;
   });
-  it('should create and focus a new cell if last cell', () => {
+  it('should return same state if last cell and createCellIfUndefined is false', () => {
     const originalState = {
       document: monocellDocument,
     };
@@ -84,6 +84,25 @@ describe('focusNextCell', () => {
     const state = reducers(originalState, action);
     expect(state.document.get('focusedCell')).to.not.be.null;
     expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(3);
+  });
+  it('should create and focus a new cell if last cell', () => {
+    const originalState = {
+      document: {
+        notebook: dummyCommutable,
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').last();
+
+    const action = {
+      type: constants.FOCUS_NEXT_CELL,
+      id,
+      createCellIfUndefined: true,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.focusedCell).to.not.be.null;
+    expect(state.document.notebook.get('cellOrder').size).to.equal(3);
   });
 });
 
