@@ -6,8 +6,6 @@ import { handleActions } from 'redux-actions';
 
 import Immutable from 'immutable';
 
-const noop = state => state;
-
 export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.data;
@@ -228,23 +226,6 @@ export default handleActions({
     return {
       ...state,
       notebook: notebook.setIn(['metadata', field], Immutable.fromJS(value)),
-    };
-  },
-  [constants.STARTED_UPLOADING]: function startedUploadingGist(state) {
-    const { notificationSystem } = state;
-    notificationSystem.addNotification({
-      title: 'Uploading gist...',
-      message: 'Your notebook is being uploaded as a GitHub gist',
-      level: 'info',
-    });
-    return state;
-  },
-  [constants.DONE_UPLOADING]: noop,
-  [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
-    const { notificationSystem } = action;
-    return {
-      ...state,
-      notificationSystem,
     };
   },
 }, {});

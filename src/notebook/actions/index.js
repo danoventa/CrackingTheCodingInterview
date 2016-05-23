@@ -258,14 +258,6 @@ export function overwriteMetadata(field, value) {
   };
 }
 
-export const startedUploading = {
-  type: constants.STARTED_UPLOADING,
-};
-
-export const doneUploading = {
-  type: constants.DONE_UPLOADING,
-};
-
 export const killKernel = {
   type: constants.KILL_KERNEL,
 };

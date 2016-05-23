@@ -5,8 +5,6 @@ const path = require('path');
 import { shell } from 'electron';
 
 import {
-  doneUploading,
-  startedUploading,
   overwriteMetadata,
 } from '../actions';
 
@@ -41,7 +39,6 @@ function createGistCallback(hotOffThePresses, agenda, filename, notificationSyst
     if (hotOffThePresses) {
       agenda.next(overwriteMetadata('gist_id', gistID));
     }
-    agenda.next(doneUploading);
   };
 }
 
@@ -60,7 +57,11 @@ export function publish(github, notebook, filepath, notificationSystem) {
     const files = {};
     files[filename] = { content: notebookString };
 
-    agenda.next(startedUploading);
+    notificationSystem.addNotification({
+      title: 'Uploading gist...',
+      message: 'Your notebook is being uploaded as a GitHub gist',
+      level: 'info',
+    });
 
     // Already in a gist, update the gist
     if (notebook.hasIn(['metadata', 'gist_id'])) {
