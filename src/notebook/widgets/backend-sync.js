@@ -1,10 +1,11 @@
 import Rx from 'rxjs/Rx';
 import { setWidgetState, deleteWidget, displayWidget } from '../actions';
 import { createMessage } from '../api/messaging';
+import * as uuid from 'uuid';
 
 export class BackendSync {
-  constructor(store, dispatch, createModelCb) {
-    this.initCommSubscriptions(store);
+  constructor(store, dispatch, createModelCb, commTargetName, versionCommTargetName) {
+    this.initCommSubscriptions(store, commTargetName, versionCommTargetName);
     this.initStateListeners(store, dispatch, createModelCb);
   }
 
@@ -15,7 +16,7 @@ export class BackendSync {
       .distinctUntilChanged();
   }
 
-  initCommSubscriptions(store) {
+  initCommSubscriptions(store, commTargetName, versionCommTargetName) {
     const commMsgs = this.getChannels(store)
       .switchMap(channels => {
         if (!(channels && channels.iopub)) {
@@ -52,7 +53,7 @@ export class BackendSync {
     this.newComms = commMsgs
       .filter(msg => msg.header.msg_type === 'comm_open')
       .pluck('content')
-      .filter(msg => msg.target_name === 'jupyter.widget') // TODO: name from jupyter-js-widgets
+      .filter(msg => msg.target_name === commTargetName)
       .map(msg => {
         const id = msg.comm_id;
         const data = msg.data;
@@ -63,6 +64,51 @@ export class BackendSync {
           .refCount();
         this.dummySubscriptions = this.comms[id].subscribe(() => {});
         return { id, data };
+      });
+
+    // listen for widget frontend validation
+    this.getChannels(store)
+      .map(channels => {
+        if (!(channels && channels.shell)) {
+          return Rx.Observable.empty();
+        }
+        return channels.shell;
+      })
+      .subscribe(shell => {
+        if (shell && shell.next) {
+          const versionCommId = uuid.v4();
+          const newVersionCommMsg = createMessage('comm_open');
+          newVersionCommMsg.content = {
+            comm_id: versionCommId,
+            target_name: versionCommTargetName,
+            data: {},
+          };
+
+          let shellSubscription = shell.subscribe(() => {});
+          shell.next(newVersionCommMsg);
+          shellSubscription.unsubscribe();
+
+          commMsgs
+            .filter(msg => msg.header.msg_type === 'comm_msg')
+            .filter(subMsg => subMsg.content.comm_id === versionCommId)
+            .subscribe(subMsg => {
+              const versionCommMsg = createMessage('comm_msg');
+              versionCommMsg.content = {
+                comm_id: versionCommId,
+                data: {
+                  // TODO: Instead of validating by default, make sure the frontend is
+                  // compatible with the version the backend is requesting.
+                  validated: true,
+                },
+              };
+
+              shellSubscription = shell.subscribe(() => {});
+              shell.next(versionCommMsg);
+              shellSubscription.unsubscribe();
+
+              console.log('Backend requested ipywidgets version ', subMsg.content.data); //eslint-disable-line
+            });
+        }
       });
 
     // listen for comm closing msgs

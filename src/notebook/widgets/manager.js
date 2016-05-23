@@ -14,7 +14,10 @@ export class WidgetManager extends ManagerBase {
     this.backendToRedux = new BackendSync(
       store,
       dispatch,
-      this.createModel.bind(this));
+      this.createModel.bind(this),
+      this.comm_target_name,
+      this.version_comm_target_name
+    );
     this.reduxToManager = new ModelUpdater(store, this);
   }
 
