@@ -200,6 +200,11 @@ td {
     word-wrap: break-word;
 }
 
+.cell-widget-area {
+    padding-left: var(--prompt-width);
+    padding-top: 10px;
+}
+
 .outputs>div
 {
     word-wrap: break-word;
