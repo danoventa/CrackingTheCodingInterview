@@ -217,7 +217,6 @@ describe('mergeCellAfter', () => {
     }
 
     const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
-
     const action = {
       type: constants.MERGE_CELL_AFTER,
       id,
