@@ -47,6 +47,8 @@ const DocumentRecord = new Immutable.Record({
   focusedCell: null,
   widgetViews: new Immutable.Map(),
   widgetModels: new Immutable.Map(),
+  cellMsgAssociations: new Immutable.Map(),
+  msgCellAssociations: new Immutable.Map(),
 });
 
 ipc.on('main:load', (e, launchData) => {

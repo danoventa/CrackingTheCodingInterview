@@ -15,6 +15,7 @@ import {
   updateCellPagers,
   updateCellStatus,
   setLanguageInfo,
+  associateCellToMsg,
 } from '../actions';
 
 import { mark, measure } from '../performance';
@@ -83,6 +84,7 @@ export function executeCell(channels, id, code) {
     const subscriptions = [];
 
     const executeRequest = createExecuteRequest(code);
+    subscriber.next(associateCellToMsg(id, executeRequest.header.msg_id));
 
     const shellChildren = shell.childOf(executeRequest).share();
 

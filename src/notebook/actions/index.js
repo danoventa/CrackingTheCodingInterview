@@ -296,3 +296,11 @@ export function displayWidget(id, parentMsgId) {
     parentMsgId,
   };
 }
+
+export function associateCellToMsg(cellId, msgId) {
+  return {
+    type: constants.ASSOCIATE_CELL_TO_MSG,
+    cellId,
+    msgId,
+  };
+}

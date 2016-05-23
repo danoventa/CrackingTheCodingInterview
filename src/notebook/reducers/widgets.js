@@ -23,7 +23,7 @@ export default {
 
   [constants.DISPLAY_WIDGET]: function displayWidget(state, action) {
     const { id, parentMsgId } = action;
-    const cellId = state.notebook.getIn(['cellOrder', 0]); // TODO parentMsgId -> cellId
+    const cellId = state.msgCellAssociations.get(parentMsgId);
     return {
       ...state,
       widgetViews: state.widgetViews.update(
