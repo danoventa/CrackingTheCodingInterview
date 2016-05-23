@@ -128,7 +128,6 @@ export class BackendSync {
             const shellSubscription = shell.subscribe(() => {});
             shell.next(updateMsg);
             shellSubscription.unsubscribe();
-            console.log('sent', updateMsg);
           });
 
         // Listen for display messages
