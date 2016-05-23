@@ -197,7 +197,7 @@ describe('removeCell', () => {
     const id = originalState.document.notebook.get('cellOrder').first();
 
     const action = {
-      type: constant.REMOVE_CELL,
+      type: constants.REMOVE_CELL,
       id,
     };
 
