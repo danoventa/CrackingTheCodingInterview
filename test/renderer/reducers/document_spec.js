@@ -125,6 +125,26 @@ describe('focusPreviousCell', () => {
   });
 });
 
+describe('toggleStickyCell', () => {
+  it('should stick the cell given its ID', () => {
+    const originalState = {
+      document: {
+        notebook: dummyCommutable,
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').first();
+
+    const action = {
+      type: constants.TOGGLE_STICKY_CELL,
+      id,
+    }
+
+    const state = reducers(originalState, action);
+    expect(state.document.stickyCells.get(id)).to.be.true;
+  });
+});
+
 describe('updateExecutionCount', () => {
   it('updates the execution count by id', () => {
     const originalState = {
