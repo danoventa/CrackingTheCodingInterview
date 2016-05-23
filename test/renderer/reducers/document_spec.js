@@ -186,6 +186,26 @@ describe('moveCell', () => {
   });
 });
 
+describe('removeCell', () => {
+  it('should remove a cell given an ID', () => {
+    const originalState = {
+      document: {
+        notebook: dummyCommutable,
+      }
+    };
+
+    const id = originalState.document.notebook.get('cellOrder').first();
+
+    const action = {
+      type: constant.REMOVE_CELL,
+      id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.notebook.get('cellOrder').size).to.equal(1);
+  });
+});
+
 describe('clearCellOutput', () => {
   it('should clear outputs list', () => {
     const originalState = {
