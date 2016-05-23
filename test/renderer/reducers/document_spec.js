@@ -130,6 +130,7 @@ describe('toggleStickyCell', () => {
     const originalState = {
       document: {
         notebook: dummyCommutable,
+        stickyCells: new Map(),
       }
     };
 
