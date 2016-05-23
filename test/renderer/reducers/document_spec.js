@@ -302,3 +302,22 @@ describe('newCellAppend', () => {
     expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(3);
   });
 });
+
+describe('overwriteMetadata', () => {
+  it('overwrites notebook metadata appropriately', () => {
+    const originalState = {
+      document: {
+        notebook: dummyCommutable,
+      }
+    };
+
+    const action = {
+      type: constants.OVERWRITE_METADATA_FIELD,
+      field: "name",
+      value: "javascript",
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.notebook.getIn(['metadata', 'name'])).to.equal("javascript");
+  });
+});
