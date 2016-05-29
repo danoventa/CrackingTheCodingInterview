@@ -12,6 +12,10 @@ import {
   dummyCommutable
 } from '../dummy-nb';
 
+import {
+  fromJS
+} from 'immutable';
+
 const Rx = require('rxjs/Rx');
 
 describe('setExecutionState', () => {
@@ -86,6 +90,21 @@ describe('saveAs', () => {
         done();
       }, (action) => {
         expect.fail();
+      });
+  });
+});
+
+describe('setNotebook', () => {
+  it('creates a SET_NOTEBOOK action', () => {
+    actions.setNotebook(dummyJSON, 'test-ipynb.ipynb')(actions, createStore())
+      .first()
+      .subscribe((action) => {
+        expect(action).to.deep.equal({
+          type: constants.SET_NOTEBOOK,
+          data: fromJS(dummyJSON)
+        });
+      }, (action) => {
+        expect.fail()
       });
   });
 });
