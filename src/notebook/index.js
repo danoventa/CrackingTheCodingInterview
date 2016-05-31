@@ -23,7 +23,7 @@ import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
 import { initGlobalHandlers } from './global-events';
 
-const Github = require('github4');
+const Github = require('github');
 
 const Rx = require('rxjs/Rx');
 

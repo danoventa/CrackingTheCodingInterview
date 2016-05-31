@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import Immutable from 'immutable';
-import Github from 'github4';
+import Github from 'github';
 import {
   emptyNotebook,
   emptyCodeCell,
