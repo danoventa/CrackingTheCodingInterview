@@ -16,12 +16,18 @@ import {
 
 import {
   List,
+  Map,
 } from 'immutable';
 
-describe('setNotebook', () => {
+describe.only('setNotebook', () => {
   it('converts a JSON notebook to our commutable notebook and puts in state', () => {
-    const state = reducers({}, { type: constants.SET_NOTEBOOK, data: fromJS(dummyJSON) });
-    expect(state.document.notebook.get('nbformat')).to.equal(4);
+    const initialState = {
+      app: null,
+      document: new Map(),
+    };
+    const data = fromJS(dummyJSON);
+    const state = reducers(initialState, { type: constants.SET_NOTEBOOK, data });
+    expect(state.document.getIn(['notebook', 'nbformat'])).to.equal(4);
   });
 });
 
@@ -220,12 +226,12 @@ describe('mergeCellAfter', () => {
   it('merges cells appropriately', () => {
     const originalState = {
       document: {
-        notebook: dummyCommutable 
+        notebook: dummyCommutable
       }
     };
 
     const id = originalState.document.notebook.get('cellOrder').first();
-    
+
     const action = {
       type: constants.MERGE_CELL_AFTER,
       id,
