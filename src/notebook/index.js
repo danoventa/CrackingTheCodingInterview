@@ -42,13 +42,13 @@ ipc.on('main:load', (e, launchData) => {
       executionState: 'not connected',
       github,
     },
-    document: {
+    document: Immutable.fromJS({
       notebook: null,
       filename: launchData.filename,
       cellPagers: new Immutable.Map(),
       cellStatuses: new Immutable.Map(),
       stickyCells: new Immutable.Map(),
-    },
+    }),
   }, reducers);
 
   const { dispatch } = store;
@@ -113,15 +113,15 @@ ipc.on('main:load', (e, launchData) => {
                 <pre>{this.state.err.toString()}</pre>
             }
             {
-              this.state.document && this.state.document.notebook &&
+              this.state.document &&
                 <Notebook
                   theme={this.state.document.theme}
-                  notebook={this.state.document.notebook}
+                  notebook={this.state.document.get('notebook')}
                   channels={this.state.app.channels}
-                  cellPagers={this.state.document.cellPagers}
-                  focusedCell={this.state.document.focusedCell}
-                  cellStatuses={this.state.document.cellStatuses}
-                  stickyCells={this.state.document.stickyCells}
+                  cellPagers={this.state.document.get('cellPagers')}
+                  focusedCell={this.state.document.get('focusedCell')}
+                  cellStatuses={this.state.document.get('cellStatuses')}
+                  stickyCells={this.state.document.get('stickyCells')}
                 />
             }
             <NotificationSystem ref="notificationSystem" />
