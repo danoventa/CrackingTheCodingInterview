@@ -19,11 +19,13 @@ import {
   Map,
 } from 'immutable';
 
-describe.only('setNotebook', () => {
+const initialDocument = new Map();
+
+describe('setNotebook', () => {
   it('converts a JSON notebook to our commutable notebook and puts in state', () => {
     const initialState = {
       app: null,
-      document: new Map(),
+      document: initialDocument,
     };
     const data = fromJS(dummyJSON);
     const state = reducers(initialState, { type: constants.SET_NOTEBOOK, data });
@@ -31,15 +33,13 @@ describe.only('setNotebook', () => {
   });
 });
 
-describe('focusCell', () => {
+describe.only('focusCell', () => {
   it('should set focusedCell to the appropriate cell ID', () => {
     const originalState = {
-      document : {
-        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
-      }
+      document: initialDocument.set('notebook', commutable.appendCell(dummyCommutable, commutable.emptyCodeCell)),
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.FOCUS_CELL,
@@ -47,7 +47,7 @@ describe('focusCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.focusedCell).to.equal(id);
+    expect(state.document.get('focusedCell')).to.equal(id);
   });
 });
 
