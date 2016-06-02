@@ -16,24 +16,31 @@ import {
 
 import {
   List,
+  Map,
 } from 'immutable';
+
+const initialDocument = new Map();
+const monocellDocument = initialDocument.set('notebook', commutable.appendCell(dummyCommutable, commutable.emptyCodeCell));
 
 describe('setNotebook', () => {
   it('converts a JSON notebook to our commutable notebook and puts in state', () => {
-    const state = reducers({}, { type: constants.SET_NOTEBOOK, data: fromJS(dummyJSON) });
-    expect(state.document.notebook.get('nbformat')).to.equal(4);
+    const initialState = {
+      app: null,
+      document: initialDocument,
+    };
+    const data = fromJS(dummyJSON);
+    const state = reducers(initialState, { type: constants.SET_NOTEBOOK, data });
+    expect(state.document.getIn(['notebook', 'nbformat'])).to.equal(4);
   });
 });
 
 describe('focusCell', () => {
   it('should set focusedCell to the appropriate cell ID', () => {
     const originalState = {
-      document : {
-        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
-      }
+      document: monocellDocument,
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.FOCUS_CELL,
@@ -41,7 +48,7 @@ describe('focusCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.focusedCell).to.equal(id);
+    expect(state.document.get('focusedCell')).to.equal(id);
   });
 });
 
@@ -49,12 +56,10 @@ describe('focusCell', () => {
 describe('focusNextCell', () => {
   it('should focus the next cell if not the last cell', () => {
     const originalState = {
-      document : {
-        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
-      }
+      document: monocellDocument,
     };
 
-    const id = originalState.document.notebook.get('cellOrder').first();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
 
     const action = {
       type: constants.FOCUS_NEXT_CELL,
@@ -62,16 +67,14 @@ describe('focusNextCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.focusedCell).to.not.be.null;
+    expect(state.document.get('focusedCell')).to.not.be.null;
   });
   it('should create and focus a new cell if last cell', () => {
     const originalState = {
-      document: {
-        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
-      }
+      document: monocellDocument,
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.FOCUS_NEXT_CELL,
@@ -79,21 +82,19 @@ describe('focusNextCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.focusedCell).to.not.be.null;
-    expect(state.document.notebook.get('cellOrder').size).to.equal(3);
+    expect(state.document.get('focusedCell')).to.not.be.null;
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(3);
   });
 });
 
 describe('focusPreviousCell', () => {
   it('should focus the previous cell', () => {
     const originalState = {
-      document: {
-        notebook: dummyCommutable,
-      }
+      document: initialDocument.set('notebook', dummyCommutable),
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
-    const previousId = originalState.document.notebook.get('cellOrder').first();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
+    const previousId = originalState.document.getIn(['notebook', 'cellOrder']).first();
 
     const action = {
       type: constants.FOCUS_PREVIOUS_CELL,
@@ -101,19 +102,17 @@ describe('focusPreviousCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.focusedCell).to.equal(previousId);
+    expect(state.document.get('focusedCell')).to.equal(previousId);
   });
 });
 
 describe('updateExecutionCount', () => {
   it('updates the execution count by id', () => {
     const originalState = {
-      document: {
-        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
-      }
+      document: monocellDocument,
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.UPDATE_CELL_EXECUTION_COUNT,
@@ -122,20 +121,19 @@ describe('updateExecutionCount', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.notebook.getIn(['cellMap', id, 'execution_count'])).to.equal(42);
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'execution_count'])).to.equal(42);
   });
 });
 
 describe('moveCell', () => {
   it('should swap the first and last cell appropriately', () => {
     const originalState = {
-      document: {
-        notebook: dummyCommutable
-      }
+      document: initialDocument.set('notebook', dummyCommutable),
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
-    const destinationId = originalState.document.notebook.get('cellOrder').first();
+    const cellOrder = originalState.document.getIn(['notebook', 'cellOrder']);
+    const id = cellOrder.last();
+    const destinationId = cellOrder.first();
 
     const action = {
       type: constants.MOVE_CELL,
@@ -144,21 +142,21 @@ describe('moveCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.notebook.get('cellOrder').last()).to.equal(id);
-    expect(state.document.notebook.get('cellOrder').first()).to.equal(destinationId);
+    expect(state.document.getIn(['notebook', 'cellOrder']).last()).to.equal(id);
+    expect(state.document.getIn(['notebook', 'cellOrder']).first()).to.equal(destinationId);
   });
 });
 
 describe('clearCellOutput', () => {
   it('should clear outputs list', () => {
     const originalState = {
-      document: {
-        notebook: commutable.appendCell(dummyCommutable,
-                  commutable.emptyCodeCell.set('outputs', ['dummy outputs'])),
-      }
+      document: initialDocument.set('notebook',
+        commutable.appendCell(dummyCommutable,
+          commutable.emptyCodeCell.set('outputs', ['dummy outputs']))
+      ),
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.CLEAR_CELL_OUTPUT,
@@ -166,7 +164,7 @@ describe('clearCellOutput', () => {
     };
 
     const state = reducers(originalState, action);
-    const outputs = state.document.notebook.getIn(['cellMap', id, 'outputs']);
+    const outputs = state.document.getIn(['notebook', 'cellMap', id, 'outputs']);
     expect(outputs).to.equal(List.of());
   });
 });
@@ -174,11 +172,9 @@ describe('clearCellOutput', () => {
 describe('newCellAfter', () => {
   it('creates a brand new cell after the given id', () => {
     const originalState = {
-      document: {
-        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
-      }
+      document: monocellDocument,
     };
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.NEW_CELL_AFTER,
@@ -187,9 +183,9 @@ describe('newCellAfter', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.notebook.get('cellOrder').size).to.equal(4);
-    const cellID = state.document.notebook.get('cellOrder').last();
-    const cell = state.document.notebook.getIn(['cellMap', cellID]);
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(4);
+    const cellID = state.document.getIn(['notebook', 'cellOrder']).last();
+    const cell = state.document.getIn(['notebook', 'cellMap', cellID]);
     expect(cell.get('cell_type')).to.equal('markdown');
   });
 });
@@ -197,12 +193,10 @@ describe('newCellAfter', () => {
 describe('newCellBefore', () => {
   it('creates a new cell after the given id', () => {
     const originalState = {
-      document: {
-        notebook: dummyCommutable,
-      }
+      document: initialDocument.set('notebook', dummyCommutable),
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.NEW_CELL_BEFORE,
@@ -211,38 +205,34 @@ describe('newCellBefore', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.notebook.get('cellOrder').size).to.equal(3);
-    expect(state.document.notebook.get('cellOrder').last()).to.equal(id);
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(3);
+    expect(state.document.getIn(['notebook', 'cellOrder']).last()).to.equal(id);
   });
 });
 
 describe('mergeCellAfter', () => {
   it('merges cells appropriately', () => {
     const originalState = {
-      document: {
-        notebook: dummyCommutable 
-      }
-    };
+      document: initialDocument.set('notebook', dummyCommutable),
+    }
 
-    const id = originalState.document.notebook.get('cellOrder').first();
-    
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
     const action = {
       type: constants.MERGE_CELL_AFTER,
       id,
     }
 
     const state = reducers(originalState, action);
-    expect(state.document.notebook.get('cellOrder').size).to.equal(1);
-    expect(state.document.notebook.get('cellOrder').first()).to.equal(id);
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(1);
+    expect(state.document.getIn(['notebook', 'cellOrder']).first()).to.equal(id);
   });
 });
 
 describe('newCellAppend', () => {
   it('appends a new code cell at the end', () => {
     const originalState = {
-      document: {
-        notebook: dummyCommutable,
-      }
+      document: initialDocument.set('notebook', dummyCommutable),
     };
 
     const action = {
@@ -251,6 +241,6 @@ describe('newCellAppend', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.notebook.get('cellOrder').size).to.equal(3);
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(3);
   });
 });

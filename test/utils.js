@@ -35,7 +35,7 @@ function waitFor(cb) {
 
 function waitForKernel(store) {
   return waitFor(() => {
-    const language_info = store.getState().document.notebook.getIn(['metadata', 'language_info']);
+    const language_info = store.getState().document.getIn(['notebook', 'metadata', 'language_info']);
     const spawn = store.getState().app.spawn;
     const kernelState = store.getState().app.executionState;
     return spawn && language_info && kernelState === 'idle';
@@ -44,7 +44,7 @@ function waitForKernel(store) {
 
 export function waitForOutputs(store, cellId) {
   return waitFor(() => {
-    const outputs = store.getState().document.notebook.getIn(['cellMap', cellId, 'outputs'], []);
+    const outputs = store.getState().document.getIn(['notebook', 'cellMap', cellId, 'outputs'], []);
     return outputs.count() > 0;
   });
 }
@@ -55,14 +55,14 @@ export function liveStore(cb, kernelName='python2') {
     'metadata', 'kernelspec', 'name',
   ], kernelName);
   const store = createStore({
-    document: {
+    document: Immutable.Map({
       notebook,
       cellPagers: new Immutable.Map(),
       cellStatuses: new Immutable.Map(),
-      github,
-    },
+    }),
     app: {
       executionState: 'not connected',
+      github,
     }
   }, reducers);
 
