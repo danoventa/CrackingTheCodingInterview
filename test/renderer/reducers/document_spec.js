@@ -125,7 +125,7 @@ describe('updateExecutionCount', () => {
   });
 });
 
-describe.only('moveCell', () => {
+describe('moveCell', () => {
   it('should swap the first and last cell appropriately', () => {
     const originalState = {
       document: initialDocument.set('notebook', dummyCommutable),
@@ -147,16 +147,16 @@ describe.only('moveCell', () => {
   });
 });
 
-describe('clearCellOutput', () => {
+describe.only('clearCellOutput', () => {
   it('should clear outputs list', () => {
     const originalState = {
-      document: {
-        notebook: commutable.appendCell(dummyCommutable,
-                  commutable.emptyCodeCell.set('outputs', ['dummy outputs'])),
-      }
+      document: initialDocument.set('notebook',
+        commutable.appendCell(dummyCommutable,
+          commutable.emptyCodeCell.set('outputs', ['dummy outputs']))
+      ),
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.CLEAR_CELL_OUTPUT,
@@ -164,7 +164,7 @@ describe('clearCellOutput', () => {
     };
 
     const state = reducers(originalState, action);
-    const outputs = state.document.notebook.getIn(['cellMap', id, 'outputs']);
+    const outputs = state.document.getIn(['notebook', 'cellMap', id, 'outputs']);
     expect(outputs).to.equal(List.of());
   });
 });
