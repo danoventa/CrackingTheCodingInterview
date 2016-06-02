@@ -109,12 +109,10 @@ describe('focusPreviousCell', () => {
 describe('updateExecutionCount', () => {
   it('updates the execution count by id', () => {
     const originalState = {
-      document: {
-        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
-      }
+      document: monocellDocument,
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.UPDATE_CELL_EXECUTION_COUNT,
@@ -123,7 +121,7 @@ describe('updateExecutionCount', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.notebook.getIn(['cellMap', id, 'execution_count'])).to.equal(42);
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'execution_count'])).to.equal(42);
   });
 });
 
