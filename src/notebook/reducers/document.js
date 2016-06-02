@@ -75,9 +75,10 @@ export default handleActions({
     );
   },
   [constants.REMOVE_CELL]: function removeCell(state, action) {
-    const notebook = state.get('notebook');
     const { id } = action;
-    return state.set('notebook', commutable.removeCell(notebook, id));
+    return state.update('notebook',
+      (notebook) => commutable.removeCell(notebook, id)
+    );
   },
   [constants.NEW_CELL_AFTER]: function newCellAfter(state, action) {
     // Draft API
