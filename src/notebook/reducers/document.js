@@ -81,26 +81,25 @@ export default handleActions({
     );
   },
   [constants.NEW_CELL_AFTER]: function newCellAfter(state, action) {
-    // Draft API
     const { cellType, id, source } = action;
-    const notebook = state.get('notebook');
     const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
                                            commutable.emptyCodeCell;
-    const index = notebook.get('cellOrder').indexOf(id) + 1;
     const cellID = uuid.v4();
-    return state.set('notebook',
-      commutable.insertCellAt(notebook, cell.set('source', source), cellID, index)
-    );
+    return state.update('notebook', (notebook) => {
+      const index = notebook.get('cellOrder').indexOf(id) + 1;
+      return commutable.insertCellAt(notebook, cell.set('source', source), cellID, index);
+    });
   },
   [constants.NEW_CELL_BEFORE]: function newCellBefore(state, action) {
     // Draft API
     const { cellType, id } = action;
-    const notebook = state.get('notebook');
     const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
                                            commutable.emptyCodeCell;
-    const index = notebook.get('cellOrder').indexOf(id);
     const cellID = uuid.v4();
-    return state.set('notebook', commutable.insertCellAt(notebook, cell, cellID, index));
+    return state.update('notebook', (notebook) => {
+      const index = notebook.get('cellOrder').indexOf(id);
+      return commutable.insertCellAt(notebook, cell, cellID, index);
+    });
   },
   [constants.MERGE_CELL_AFTER]: function mergeCellAfter(state, action) {
     const { id } = action;
