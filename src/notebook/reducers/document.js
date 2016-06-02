@@ -47,6 +47,7 @@ export default handleActions({
   },
   [constants.TOGGLE_STICKY_CELL]: function toggleStickyCell(state, action) {
     const { id } = action;
+    // TODO: Switch this structure to an Immutable.Set
     const stickyCells = state.get('stickyCells');
     if (stickyCells.get(id)) {
       return state.set('stickyCells', stickyCells.delete(id));
@@ -59,9 +60,8 @@ export default handleActions({
     return state.set('notebook', commutable.updateExecutionCount(notebook, id, count));
   },
   [constants.MOVE_CELL]: function moveCell(state, action) {
-    const notebook = state.get('notebook');
-    return state.set('notebook',
-      notebook.update('cellOrder', cellOrder => {
+    return state.updateIn(['notebook', 'cellOrder'],
+      cellOrder => {
         const oldIndex = cellOrder.findIndex(id => id === action.id);
         const newIndex = cellOrder.findIndex(id => id === action.destinationId)
                           + (action.above ? 0 : 1);
@@ -71,7 +71,7 @@ export default handleActions({
         return cellOrder
           .splice(oldIndex, 1)
           .splice(newIndex - (oldIndex < newIndex ? 1 : 0), 0, action.id);
-      })
+      }
     );
   },
   [constants.REMOVE_CELL]: function removeCell(state, action) {
