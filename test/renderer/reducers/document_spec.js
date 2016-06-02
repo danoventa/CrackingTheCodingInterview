@@ -53,7 +53,7 @@ describe('focusCell', () => {
 });
 
 
-describe.only('focusNextCell', () => {
+describe('focusNextCell', () => {
   it('should focus the next cell if not the last cell', () => {
     const originalState = {
       document: monocellDocument,
@@ -90,13 +90,11 @@ describe.only('focusNextCell', () => {
 describe('focusPreviousCell', () => {
   it('should focus the previous cell', () => {
     const originalState = {
-      document: {
-        notebook: dummyCommutable,
-      }
+      document: initialDocument.set('notebook', dummyCommutable),
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
-    const previousId = originalState.document.notebook.get('cellOrder').first();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
+    const previousId = originalState.document.getIn(['notebook', 'cellOrder']).first();
 
     const action = {
       type: constants.FOCUS_PREVIOUS_CELL,
@@ -104,7 +102,7 @@ describe('focusPreviousCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.focusedCell).to.equal(previousId);
+    expect(state.document.get('focusedCell')).to.equal(previousId);
   });
 });
 

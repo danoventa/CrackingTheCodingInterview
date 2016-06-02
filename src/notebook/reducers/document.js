@@ -39,8 +39,7 @@ export default handleActions({
     return state.set('focusedCell', cellOrder.get(nextIndex));
   },
   [constants.FOCUS_PREVIOUS_CELL]: function focusPreviousCell(state, action) {
-    const notebook = state;
-    const cellOrder = notebook.get('cellOrder');
+    const cellOrder = state.getIn(['notebook', 'cellOrder']);
     const curIndex = cellOrder.findIndex(id => id === action.id);
     const nextIndex = Math.max(0, curIndex - 1);
 
