@@ -147,7 +147,7 @@ describe('moveCell', () => {
   });
 });
 
-describe.only('clearCellOutput', () => {
+describe('clearCellOutput', () => {
   it('should clear outputs list', () => {
     const originalState = {
       document: initialDocument.set('notebook',
@@ -172,11 +172,9 @@ describe.only('clearCellOutput', () => {
 describe('newCellAfter', () => {
   it('creates a brand new cell after the given id', () => {
     const originalState = {
-      document: {
-        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
-      }
+      document: monocellDocument,
     };
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.NEW_CELL_AFTER,
@@ -185,9 +183,9 @@ describe('newCellAfter', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.notebook.get('cellOrder').size).to.equal(4);
-    const cellID = state.document.notebook.get('cellOrder').last();
-    const cell = state.document.notebook.getIn(['cellMap', cellID]);
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(4);
+    const cellID = state.document.getIn(['notebook', 'cellOrder']).last();
+    const cell = state.document.getIn(['notebook', 'cellMap', cellID]);
     expect(cell.get('cell_type')).to.equal('markdown');
   });
 });
