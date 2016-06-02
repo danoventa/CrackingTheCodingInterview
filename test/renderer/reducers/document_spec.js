@@ -125,16 +125,15 @@ describe('updateExecutionCount', () => {
   });
 });
 
-describe('moveCell', () => {
+describe.only('moveCell', () => {
   it('should swap the first and last cell appropriately', () => {
     const originalState = {
-      document: {
-        notebook: dummyCommutable
-      }
+      document: initialDocument.set('notebook', dummyCommutable),
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
-    const destinationId = originalState.document.notebook.get('cellOrder').first();
+    const cellOrder = originalState.document.getIn(['notebook', 'cellOrder']);
+    const id = cellOrder.last();
+    const destinationId = cellOrder.first();
 
     const action = {
       type: constants.MOVE_CELL,
@@ -143,8 +142,8 @@ describe('moveCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.notebook.get('cellOrder').last()).to.equal(id);
-    expect(state.document.notebook.get('cellOrder').first()).to.equal(destinationId);
+    expect(state.document.getIn(['notebook', 'cellOrder']).last()).to.equal(id);
+    expect(state.document.getIn(['notebook', 'cellOrder']).first()).to.equal(destinationId);
   });
 });
 
