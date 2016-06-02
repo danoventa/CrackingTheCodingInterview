@@ -3,8 +3,7 @@ import { expect } from 'chai';
 import { updateCellSource, executeCell } from '../../../src/notebook/actions';
 import { liveStore, dispatchQueuePromise, waitForOutputs } from '../../utils';
 
-describe('agendas', function() {
-describe('executeCell', function() {
+describe('agendas.executeCell', function() {
   this.timeout(5000);
   it('produces the right output', () => {
     return liveStore((kernel, dispatch, store) => {
@@ -27,5 +26,4 @@ describe('executeCell', function() {
         });
     });
   });
-});
 });
