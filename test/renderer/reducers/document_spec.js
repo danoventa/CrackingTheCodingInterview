@@ -20,6 +20,7 @@ import {
 } from 'immutable';
 
 const initialDocument = new Map();
+const monocellDocument = initialDocument.set('notebook', commutable.appendCell(dummyCommutable, commutable.emptyCodeCell));
 
 describe('setNotebook', () => {
   it('converts a JSON notebook to our commutable notebook and puts in state', () => {
@@ -33,10 +34,10 @@ describe('setNotebook', () => {
   });
 });
 
-describe.only('focusCell', () => {
+describe('focusCell', () => {
   it('should set focusedCell to the appropriate cell ID', () => {
     const originalState = {
-      document: initialDocument.set('notebook', commutable.appendCell(dummyCommutable, commutable.emptyCodeCell)),
+      document: monocellDocument,
     };
 
     const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
@@ -52,15 +53,13 @@ describe.only('focusCell', () => {
 });
 
 
-describe('focusNextCell', () => {
+describe.only('focusNextCell', () => {
   it('should focus the next cell if not the last cell', () => {
     const originalState = {
-      document : {
-        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
-      }
+      document: monocellDocument,
     };
 
-    const id = originalState.document.notebook.get('cellOrder').first();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
 
     const action = {
       type: constants.FOCUS_NEXT_CELL,
@@ -68,16 +67,14 @@ describe('focusNextCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.focusedCell).to.not.be.null;
+    expect(state.document.get('focusedCell')).to.not.be.null;
   });
   it('should create and focus a new cell if last cell', () => {
     const originalState = {
-      document: {
-        notebook: commutable.appendCell(dummyCommutable, commutable.emptyCodeCell),
-      }
+      document: monocellDocument,
     };
 
-    const id = originalState.document.notebook.get('cellOrder').last();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.FOCUS_NEXT_CELL,
@@ -85,8 +82,8 @@ describe('focusNextCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.focusedCell).to.not.be.null;
-    expect(state.document.notebook.get('cellOrder').size).to.equal(3);
+    expect(state.document.get('focusedCell')).to.not.be.null;
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(3);
   });
 });
 
