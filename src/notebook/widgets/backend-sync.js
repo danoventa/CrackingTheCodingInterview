@@ -34,7 +34,7 @@ export class BackendSync {
 
     // Keep a separate queue for display msgs to avoid asynchronous problems
     // because it takes a while to initiate the widget model.  Cache display
-    // calls so they are available when the widgets are constructed.
+    // msgs so they are available when the widgets are constructed.
     this.displayMsgs = commMsgs
       .filter(msg => msg.header.msg_type === 'comm_msg')
       .filter(msg => msg.content.data.method === 'display')
@@ -46,6 +46,21 @@ export class BackendSync {
       .refCount();
     // TODO: Dispose me on app cleanup
     this.displayMsgs.subscribe(() => {});
+
+    // Keep a separate queue for custom msgs to avoid asynchronous problems
+    // because it takes a while to initiate the widget model.  Cache custom
+    // msgs so they are available when the widgets are constructed.
+    this.customMsgs = commMsgs
+      .filter(msg => msg.header.msg_type === 'comm_msg')
+      .filter(msg => msg.content.data.method === 'custom')
+      .map(msg => ({
+        msg,
+        id: msg.content.comm_id,
+      }))
+      .publishReplay(1000) // Remember a max of 1k msgs
+      .refCount();
+    // TODO: Dispose me on app cleanup
+    this.customMsgs.subscribe(() => {});
 
     // new comm observable
     this.comms = {};
@@ -181,7 +196,10 @@ export class BackendSync {
           .filter(info => info.id === model.id)
           .subscribe(info => dispatch(displayWidget(info.id, info.parentMsgId)));
 
-        // TODO: Handle custom msgs
+        // Listen for custom messages, pass them directly into the widget model
+        const customMsgSubscription = this.customMsgs
+          .filter(info => info.id === model.id)
+          .subscribe(info => model._handle_comm_msg(info.msg));
 
         // Handle cleanup time
         const deleteSubscription = this.deleteComms
@@ -190,6 +208,7 @@ export class BackendSync {
             subscription.unsubscribe();
             displaySubscription.unsubscribe();
             deleteSubscription.unsubscribe();
+            customMsgSubscription.unsubscribe();
             deleteWidget(model.id);
           });
       });
