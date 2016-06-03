@@ -243,7 +243,7 @@ export function executeCell(channels, id, source, kernelConnected, notificationS
       return;
     }
 
-    const obs = agendas.executeCell(channels, id, source).takeUntil(
+    const obs = agendas.executeCell(store, channels, id, source).takeUntil(
       actions.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id)
     );
 

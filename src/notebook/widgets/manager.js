@@ -3,11 +3,13 @@ import { ManagerBase } from 'jupyter-js-widgets';
 import { BackendSync } from './backend-sync';
 import { ModelUpdater } from './model-updater';
 import { createMessage } from '../api/messaging';
+import { associateCellToMsg } from '../actions';
 
 class PhonyComm {
-  constructor(store, id) {
+  constructor(store, dispatch, id) {
     this.id = id;
     this.store = store;
+    this.dispatch = dispatch;
   }
 
   send(data, callbacks, metadata, buffers) {
@@ -25,6 +27,9 @@ class PhonyComm {
     };
     msg.metadata = metadata || msg.metadata;
     msg.buffers = buffers || msg.buffers; // TODO: Make sure this works
+
+    // Associate the cell of the widget view to the message
+    this.dispatch(associateCellToMsg(callbacks.cellId, msg.header.msg_id));
 
     // Subscribe, send msg, unsubscribe
     const shell = this.store.getState().app.channels.shell;
@@ -69,7 +74,7 @@ export class WidgetManager extends ManagerBase {
     // Create an observable from the current model state, and from the model
     // change event.  Merge them and use that observable to update the store.
     const modelInfoPromise = modelPromise.then(model => {
-      model.comm = new PhonyComm(this.store, id);
+      model.comm = new PhonyComm(this.store, this.dispatch, id); // eslint-disable-line
       modelLoaded(model);
       const initialState = Rx.Observable
         .of(this.getSerializedModelState(model));
@@ -110,5 +115,13 @@ export class WidgetManager extends ManagerBase {
         model._handle_comm_closed();
       });
     });
+  }
+
+  callbacks(view) {
+    const callbacks = super.callbacks(view);
+    return {
+      ...callbacks,
+      cellId: view.options.cellId,
+    };
   }
 }
