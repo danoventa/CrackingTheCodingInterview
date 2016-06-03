@@ -2,10 +2,44 @@ import Rx from 'rxjs/Rx';
 import { ManagerBase } from 'jupyter-js-widgets';
 import { BackendSync } from './backend-sync';
 import { ModelUpdater } from './model-updater';
+import { createMessage } from '../api/messaging';
+
+class PhonyComm {
+  constructor(store, id) {
+    this.id = id;
+    this.store = store;
+  }
+
+  send(data, callbacks, metadata, buffers) {
+    // Only allow custom messages to be sent to the backend.  This prevents
+    // the widget machinery from sending state updates directly to the backend.
+    // Instead, the redux widget state management system should send the
+    // updates.  See backend-sync.js for the state logic.
+    if (!data || data.method !== 'custom') return;
+
+    //  Construct comm msg
+    const msg = createMessage('comm_msg');
+    msg.content = {
+      comm_id: this.id,
+      data: data || {},
+    };
+    msg.metadata = metadata || msg.metadata;
+    msg.buffers = buffers || msg.buffers; // TODO: Make sure this works
+
+    // Subscribe, send msg, unsubscribe
+    const shell = this.store.getState().app.channels.shell;
+    const shellSubscription = shell.subscribe(() => {});
+    shell.next(msg);
+    shellSubscription.unsubscribe();
+  }
+
+  close() { }
+}
 
 export class WidgetManager extends ManagerBase {
   constructor(store, dispatch) {
     super();
+    this.store = store;
     this.dispatch = dispatch;
     this._internalModels = {};
 
@@ -35,6 +69,7 @@ export class WidgetManager extends ManagerBase {
     // Create an observable from the current model state, and from the model
     // change event.  Merge them and use that observable to update the store.
     const modelInfoPromise = modelPromise.then(model => {
+      model.comm = new PhonyComm(this.store, id);
       modelLoaded(model);
       const initialState = Rx.Observable
         .of(this.getSerializedModelState(model));
