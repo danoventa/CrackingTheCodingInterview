@@ -100,8 +100,8 @@ export function dispatchPublishGist(store, dispatch) {
 
 export function dispatchRunAll(store, dispatch) {
   const state = store.getState();
-  const { channels, executionState } = state.app;
-  const { notebook, notificationSystem } = state.document;
+  const { channels, executionState, notificationSystem } = state.app;
+  const notebook = state.document.get('notebook');
   const cells = notebook.get('cellMap');
   const kernelConnected = channels &&
     !(executionState === 'starting' || executionState === 'not connected');
