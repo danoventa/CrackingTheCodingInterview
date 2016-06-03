@@ -25,7 +25,7 @@ import {
 
 export function dispatchSaveAs(store, dispatch, evt, filename) {
   const state = store.getState();
-  const { notebook } = state.document;
+  const notebook = state.document.get('notebook');
   dispatch(saveAs(filename, notebook));
 }
 
@@ -36,7 +36,8 @@ export function triggerSaveAs(store, dispatch) {
         return;
       }
       const state = store.getState();
-      const { notebook, executionState } = state.document;
+      const { executionState } = state.document;
+      const notebook = state.document.get('notebook');
       dispatch(saveAs(filename, notebook));
       BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
     }
@@ -45,7 +46,8 @@ export function triggerSaveAs(store, dispatch) {
 
 export function dispatchSave(store, dispatch) {
   const state = store.getState();
-  const { notebook, filename } = state.document;
+  const notebook = state.document.get('notebook');
+  const filename = state.document.get('filename');
   if (!filename) {
     triggerSaveAs(store, dispatch);
   } else {
@@ -56,7 +58,7 @@ export function dispatchSave(store, dispatch) {
 export function dispatchNewkernel(store, dispatch, evt, name) {
   const state = store.getState();
   const spawnOptions = {};
-  if (state && state.document && state.document.filename) {
+  if (state && state.document && state.document.get('filename')) {
     spawnOptions.cwd = path.dirname(path.resolve(state.filename));
   }
   dispatch(newKernel(name, spawnOptions));
@@ -64,7 +66,8 @@ export function dispatchNewkernel(store, dispatch, evt, name) {
 
 export function dispatchPublishGist(store, dispatch) {
   const state = store.getState();
-  const { filename, notebook } = state.document;
+  const filename = state.document.get('filename');
+  const notebook = state.document.get('notebook');
   const { notificationSystem, github } = state.app;
 
   const agenda = publish(github, notebook, filename, notificationSystem);
@@ -118,7 +121,7 @@ export function dispatchRunAll(store, dispatch) {
 
 export function dispatchClearAll(store, dispatch) {
   const state = store.getState();
-  const { notebook } = state.document;
+  const notebook = state.document.get('notebook');
   notebook.get('cellOrder').map((value) => dispatch(clearCellOutput(value)));
 }
 
@@ -129,7 +132,7 @@ export function dispatchKillKernel(store, dispatch) {
 export function dispatchRestartKernel(store, dispatch) {
   const state = store.getState();
   const spawnOptions = {};
-  if (state && state.document && state.document.filename) {
+  if (state && state.document && state.document.get('filename')) {
     spawnOptions.cwd = path.dirname(path.resolve(state.filename));
   }
 
