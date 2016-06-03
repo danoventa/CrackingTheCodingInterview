@@ -13,7 +13,7 @@ export class ModelUpdater {
   reduxStateChange(manager, newState) {
     // Delete widgets that no longer exist in the state.
     manager.deleteModels(
-      difference(Object.keys(manager._models), newState.keySeq().toJS())
+      difference(Object.keys(manager.modelPromises), newState.keySeq().toJS())
     );
 
     // Set new states

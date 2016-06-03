@@ -10,10 +10,15 @@ export class BackendSync {
   }
 
   getChannels(store) {
-    return Rx.Observable.from(store)
+    const channels = Rx.Observable.from(store)
       .pluck('app')
       .pluck('channels')
-      .distinctUntilChanged();
+      .distinctUntilChanged()
+      .publishReplay()
+      .refCount();
+    // TODO: Unsubscribe me up on app cleanup
+    channels.subscribe(() => {});
+    return channels;
   }
 
   initCommSubscriptions(store, commTargetName, versionCommTargetName) {
@@ -146,7 +151,8 @@ export class BackendSync {
     // state that lives in the state store is the source of truth.  This allows
     // external inputs, like real time collaboration, to work.
     this.newComms
-      .switchMap(info => Rx.Observable.fromPromise(createModelCb(info.id, info.data)))
+      .map(info => Rx.Observable.fromPromise(createModelCb(info.id, info.data)))
+      .mergeAll()
       .subscribe(modelInfo => {
         const { model, stateChanges } = modelInfo;
 
@@ -193,13 +199,13 @@ export class BackendSync {
 
         // Listen for display messages
         const displaySubscription = this.displayMsgs
-          .filter(info => info.id === model.id)
-          .subscribe(info => dispatch(displayWidget(info.id, info.parentMsgId)));
+          .filter(displayInfo => displayInfo.id === model.id)
+          .subscribe(displayInfo => dispatch(displayWidget(model.id, displayInfo.parentMsgId)));
 
         // Listen for custom messages, pass them directly into the widget model
         const customMsgSubscription = this.customMsgs
-          .filter(info => info.id === model.id)
-          .subscribe(info => model._handle_comm_msg(info.msg));
+          .filter(customInfo => customInfo.id === model.id)
+          .subscribe(customInfo => model._handle_comm_msg(customInfo.msg));
 
         // Handle cleanup time
         const deleteSubscription = this.deleteComms

@@ -3,7 +3,7 @@ import { ManagerBase } from 'jupyter-js-widgets';
 import { BackendSync } from './backend-sync';
 import { ModelUpdater } from './model-updater';
 import { createMessage } from '../api/messaging';
-import { associateCellToMsg } from '../actions';
+import { associateCellToMsg, setWidgetState } from '../actions';
 
 class PhonyComm {
   constructor(store, dispatch, id) {
@@ -46,7 +46,7 @@ export class WidgetManager extends ManagerBase {
     super();
     this.store = store;
     this.dispatch = dispatch;
-    this._internalModels = {};
+    this.modelPromises = {};
 
     // Create the mechanisms for syncing between redux state, backbone state,
     // and the backend.
@@ -62,7 +62,10 @@ export class WidgetManager extends ManagerBase {
 
   createModel(id, data) {
     let modelLoaded;
-    this._internalModels[id] = new Promise(resolve => (modelLoaded = resolve));
+    this.modelPromises[id] = new Promise(resolve => (modelLoaded = resolve));
+    // Immediately set an initial dummy state of the widget so that the widget
+    // deletion code in model-updater.js doesn't delete the widget.
+    this.dispatch(setWidgetState(id, { id }));
 
     const modelPromise = this.new_model({
       model_name: data._model_name,
@@ -89,7 +92,7 @@ export class WidgetManager extends ManagerBase {
   }
 
   createViewForModel(id, cellId) {
-    return this._models[id].then(model => this.create_view(model, { cellId }));
+    return this.modelPromises[id].then(model => this.create_view(model, { cellId }));
   }
 
   getSerializedModelState(model) {
@@ -101,7 +104,7 @@ export class WidgetManager extends ManagerBase {
   }
 
   setModelState(id, serializedState) {
-    return this._internalModels[id].then(model => {
+    return this.modelPromises[id].then(model => {
       const statePromise = model.constructor._deserialize_state(serializedState, this);
       return statePromise.then(state => model.set_state(state));
     });
@@ -111,8 +114,9 @@ export class WidgetManager extends ManagerBase {
     // To delete widgets make their "comms close" which will trigger the
     // natural cleanup subroutines of the widgets.
     ids.forEach(deletedId => {
-      this._models[deletedId].then(model => {
+      this.modelPromises[deletedId].then(model => {
         model._handle_comm_closed();
+        delete this.modelPromises[deletedId];
       });
     });
   }
