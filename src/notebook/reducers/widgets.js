@@ -33,4 +33,12 @@ export default {
       ),
     };
   },
+
+  [constants.CLEAR_WIDGETS]: function clearWidgets(state, action) {
+    const { id } = action;
+    return {
+      ...state,
+      widgetViews: state.widgetViews.set(id, new Immutable.List()),
+    };
+  },
 };

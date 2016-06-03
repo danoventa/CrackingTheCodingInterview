@@ -297,6 +297,13 @@ export function displayWidget(id, parentMsgId) {
   };
 }
 
+export function clearWidgets(id) {
+  return {
+    type: constants.CLEAR_WIDGETS,
+    id,
+  };
+}
+
 export function associateCellToMsg(cellId, msgId) {
   return {
     type: constants.ASSOCIATE_CELL_TO_MSG,
