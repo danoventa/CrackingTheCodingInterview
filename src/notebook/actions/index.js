@@ -231,6 +231,8 @@ export function toggleStickyCell(id) {
 
 export function executeCell(channels, id, source, kernelConnected, notificationSystem) {
   return (actions, store) => Rx.Observable.create((subscriber) => {
+    store.dispatch({ type: 'ABORT_EXECUTION', id });
+
     if (!kernelConnected) {
       notificationSystem.addNotification({
         title: 'Could not execute cell',
@@ -241,7 +243,10 @@ export function executeCell(channels, id, source, kernelConnected, notificationS
       return;
     }
 
-    const obs = agendas.executeCell(channels, id, source);
+    const obs = agendas.executeCell(channels, id, source).takeUntil(
+      actions.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id)
+    );
+
     obs.subscribe(action => {
       subscriber.next(action);
     }, (error) => {

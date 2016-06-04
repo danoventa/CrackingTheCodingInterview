@@ -194,7 +194,7 @@ describe('overwriteMetadata', () => {
 });
 
 describe('executeCell', () => {
-  it('creates an ERROR_KERNEL_NOT_CONNECTED action with channels not setup', (done) => {
+  it.skip('creates an ERROR_KERNEL_NOT_CONNECTED action with channels not setup', (done) => {
     const channels = {
     };
     const id = '235';
