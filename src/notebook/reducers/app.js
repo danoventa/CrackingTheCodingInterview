@@ -60,4 +60,18 @@ export default handleActions({
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
     return state.set('notificationSystem', action.notificationSystem);
   },
+  [constants.SET_FORWARD_CHECKPOINT]: function setForwardCheckpoint(state, action) {
+    const { documentState } = action;
+    return {
+      ...state,
+      future: future.insert(documentState),
+    };
+  },
+  [constants.SET_BACKWARD_CHECKPOINT]: function setBackwardCheckpoint(state, action) {
+    const {documentState } = action;
+    return {
+      ...state,
+      past: past.insert(documentState),
+    };
+  },
 }, {});
