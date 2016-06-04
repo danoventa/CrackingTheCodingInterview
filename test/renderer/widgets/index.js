@@ -12,7 +12,7 @@ import {
 function sanityTestWidget(name) {
   it(name, function() {
     this.timeout(2000);
-    this.retries(3);
+    this.retries(10);
     return liveStore((kernel, dispatch, store, widgetManager) => {
       const cellId = store.getState().document.getIn(['notebook', 'cellOrder', 0]);
       const source = `
@@ -47,7 +47,7 @@ print("executed")
 describe('widgets', function() {
   it('version validated', function() {
     this.timeout(2000);
-    this.retries(3);
+    this.retries(10);
     return liveStore((kernel, dispatch, store, widgetManager) => {
       return widgetManager.versionValidated;
     });

@@ -113,7 +113,7 @@ export class BackendSync {
           commMsgs
             .filter(msg => msg.header.msg_type === 'comm_msg')
             .filter(subMsg => subMsg.content.comm_id === versionCommId)
-            .subscribe(subMsg => {
+            .subscribe(subMsg => { //eslint-disable-line
               const versionCommMsg = createMessage('comm_msg');
               versionCommMsg.content = {
                 comm_id: versionCommId,
@@ -128,7 +128,7 @@ export class BackendSync {
               shell.next(versionCommMsg);
               shellSubscription.unsubscribe();
 
-              console.info('Backend requested ipywidgets version ', subMsg.content.data); //eslint-disable-line
+              // console.info('Backend requested ipywidgets version ', subMsg.content.data);
               validate();
             });
         }
