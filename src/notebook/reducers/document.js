@@ -5,11 +5,6 @@ import * as commutable from 'commutable';
 
 import * as constants from '../constants';
 import widgets from './widgets';
-import { handleActions } from 'redux-actions';
-
-import Immutable from 'immutable';
-
-const noop = state => state;
 
 export default handleActions(Object.assign({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
@@ -169,16 +164,14 @@ export default handleActions(Object.assign({
 
     // Keep a forward and backward mapping of cell and msg ids so we can make
     // sure only one mapping per cell exists at any given time.
-    const oldMsgId = state.cellMsgAssociations.get(cellId);
-    const cellMsgAssociations = state.cellMsgAssociations.set(cellId, msgId);
-    let msgCellAssociations = state.msgCellAssociations.set(msgId, cellId);
+    const oldMsgId = state.getIn(['cellMsgAssociations', cellId]);
+    const cellMsgAssociations = state.get('cellMsgAssociations').set(cellId, msgId);
+    let msgCellAssociations = state.get('msgCellAssociations').set(msgId, cellId);
     if (oldMsgId) {
       msgCellAssociations = msgCellAssociations.delete(oldMsgId);
     }
-    return {
-      ...state,
-      cellMsgAssociations,
-      msgCellAssociations,
-    };
+    return state
+      .set('cellMsgAssociations', cellMsgAssociations)
+      .set('msgCellAssociations', msgCellAssociations);
   },
 }, widgets), {});

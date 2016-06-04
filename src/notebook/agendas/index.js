@@ -132,7 +132,7 @@ export function executeCell(store, channels, id, code) {
       .filter(msg => {
         const state = store.getState();
         return executeRequest.header.msg_id === msg.parent_header.msg_id || // child msg
-          state.document.cellMsgAssociations.get(id) === msg.parent_header.msg_id; // mapped
+          state.document.getIn(['cellMsgAssociations', id]) === msg.parent_header.msg_id; // mapped
       })
       .share();
 

@@ -15,7 +15,7 @@ const WidgetArea = (props) => (
   </div>
 );
 
-WidgetArea.prototype.propTypes = {
+WidgetArea.propTypes = {
   id: React.PropTypes.string,
   widgets: React.PropTypes.instanceOf(Immutable.List),
   widgetManager: React.PropTypes.any,
