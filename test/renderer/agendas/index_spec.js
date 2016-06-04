@@ -5,7 +5,8 @@ import { liveStore, dispatchQueuePromise, waitForOutputs } from '../../utils';
 
 describe('agendas.executeCell', function() {
   this.timeout(5000);
-  it('produces the right output', () => {
+  it('produces the right output', (done) => {
+    setTimeout(done, 5000);
     return liveStore((kernel, dispatch, store) => {
       const cellId = store.getState().document.getIn(['notebook', 'cellOrder', 0]);
       const source = 'print("a")';
