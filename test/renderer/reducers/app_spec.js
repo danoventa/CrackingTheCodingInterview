@@ -23,3 +23,28 @@ describe('cleanupKernel', () => {
     expect(newState.app.connectionFile).to.be.null;
   });
 });
+
+describe('changeFilename', () => {
+  it('returns the same state if filename is undefined', () => {
+    const state = {
+      app: {
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+      }
+    };
+    const newState = reducers(state, {type: constants.CHANGE_FILENAME});
+    expect(newState.app.filename).to.be.undefined;
+  });
+  it('sets the filename if given a valid one', () => {
+    const state = {
+      app: {
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+     }
+    };
+    const newState = reducers(state, {type: constants.CHANGE_FILENAME, filename: 'test.ipynb'});
+    expect(newState.app.filename).to.equal('test.ipynb');
+  });
+});
