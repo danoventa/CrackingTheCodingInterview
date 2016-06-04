@@ -60,6 +60,10 @@ export class WidgetManager extends ManagerBase {
     this.reduxToManager = new ModelUpdater(store, this);
   }
 
+  get versionValidated() {
+    return this.backendToRedux.versionValidated;
+  }
+
   createModel(id, data) {
     let modelLoaded;
     this.modelPromises[id] = new Promise(resolve => (modelLoaded = resolve));

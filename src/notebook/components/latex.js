@@ -10,11 +10,11 @@ export default class LatexRenderer extends React.Component {
   };
 
   componentDidMount() {
-    mathProcessor(this.refs.rendered);
+    if (!window.disableMathJax) mathProcessor(this.refs.rendered);
   }
 
   componentDidUpdate() {
-    mathProcessor(this.refs.rendered);
+    if (!window.disableMathJax) mathProcessor(this.refs.rendered);
   }
 
   render() {

@@ -87,6 +87,8 @@ export class BackendSync {
       });
 
     // listen for widget frontend validation
+    let validate = null;
+    this.versionValidated = new Promise(resolve => validate = resolve); // eslint-disable-line
     this.getChannels(store)
       .map(channels => {
         if (!(channels && channels.shell)) {
@@ -126,7 +128,8 @@ export class BackendSync {
               shell.next(versionCommMsg);
               shellSubscription.unsubscribe();
 
-              console.log('Backend requested ipywidgets version ', subMsg.content.data); //eslint-disable-line
+              console.info('Backend requested ipywidgets version ', subMsg.content.data); //eslint-disable-line
+              validate();
             });
         }
       });
