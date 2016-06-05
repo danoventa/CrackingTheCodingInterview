@@ -47,6 +47,7 @@ export class WidgetManager extends ManagerBase {
     this.store = store;
     this.dispatch = dispatch;
     this.modelPromises = {};
+    this.lastTouchView = null;
 
     // Create the mechanisms for syncing between redux state, backbone state,
     // and the backend.
@@ -55,7 +56,8 @@ export class WidgetManager extends ManagerBase {
       dispatch,
       this.createModel.bind(this),
       this.comm_target_name,
-      this.version_comm_target_name
+      this.version_comm_target_name,
+      () => this.lastTouchView
     );
     this.reduxToManager = new ModelUpdater(store, this);
   }
@@ -127,6 +129,7 @@ export class WidgetManager extends ManagerBase {
 
   callbacks(view) {
     const callbacks = super.callbacks(view);
+    this.lastTouchView = view || this.lastTouchView;
     return {
       ...callbacks,
       cellId: view.options.cellId,

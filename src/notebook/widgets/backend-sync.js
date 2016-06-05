@@ -1,12 +1,17 @@
 import Rx from 'rxjs/Rx';
-import { setWidgetState, deleteWidget, displayWidget } from '../actions';
+import {
+  setWidgetState,
+  deleteWidget,
+  displayWidget,
+  associateCellToMsg,
+} from '../actions';
 import { createMessage } from '../api/messaging';
 import * as uuid from 'uuid';
 
 export class BackendSync {
-  constructor(store, dispatch, createModelCb, commTargetName, versionCommTargetName) {
+  constructor(store, dispatch, createModelCb, commTargetName, versionCommTargetName, lastViewCb) {
     this.initCommSubscriptions(store, commTargetName, versionCommTargetName);
-    this.initStateListeners(store, dispatch, createModelCb);
+    this.initStateListeners(store, dispatch, createModelCb, lastViewCb);
   }
 
   getChannels(store) {
@@ -146,7 +151,7 @@ export class BackendSync {
       });
   }
 
-  initStateListeners(store, dispatch, createModelCb) {
+  initStateListeners(store, dispatch, createModelCb, lastViewCb) {
     // Use a model instance to set state on widget creation because the
     // widget instantiation logic is complex and we don't want to have to
     // duplicate it.  This is the only point in the lifespan where the widget
@@ -194,6 +199,14 @@ export class BackendSync {
             };
             updateMsg.buffers = [];
 
+            // Associate this state update with the last known view to have
+            // triggered state change.
+            const lastView = lastViewCb();
+            if (lastView && lastView.options && lastView.options.cellId) {
+              dispatch(associateCellToMsg(lastView.options.cellId, updateMsg.header.msg_id));
+            }
+
+            // Send the state update message to the backend.
             const shell = store.getState().app.channels.shell;
             const shellSubscription = shell.subscribe(() => {});
             shell.next(updateMsg);
