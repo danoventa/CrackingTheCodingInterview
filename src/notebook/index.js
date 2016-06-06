@@ -85,7 +85,7 @@ ipc.on('main:load', (e, launchData) => {
   initMenuHandlers(store, dispatch);
   initGlobalHandlers(store, dispatch);
 
-  const widgetManager = new WidgetManager(store, dispatch);
+  const widgetManager = new WidgetManager(store);
 
   class App extends React.Component {
     constructor(props) {

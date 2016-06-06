@@ -5,234 +5,186 @@ import {
   displayWidget,
   associateCellToMsg,
 } from '../actions';
-import { createMessage } from '../api/messaging';
-import * as uuid from 'uuid';
 
+import {
+  commMessages,
+  commOpenMessages,
+  commCloseMessages,
+  openComm,
+  commIdFilter,
+  sendCommMessage,
+  getCommTargetName,
+  getCommId,
+  getMessageData,
+} from './comms';
+
+/**
+ * Make a predicate for msgs by widget message "method"
+ * @param  {string} method
+ * @return {function} predicate (filter)
+ */
+function methodFilter(method) {
+  return msg => getMessageData(msg).method === method;
+}
+
+/**
+ * Manages communications from the backend with the redux store and widget manager.
+ */
 export class BackendSync {
-  constructor(store, dispatch, createModelCb, commTargetName, versionCommTargetName, lastViewCb) {
-    this.initCommSubscriptions(store, commTargetName, versionCommTargetName);
-    this.initStateListeners(store, dispatch, createModelCb, lastViewCb);
+
+  /**
+   * Public constructor
+   * @param  {Redux.store} store
+   * @param  {(modelId, msgData) => Promise<{model, stateChanges}>} createModelCb -
+   *                             callback used to create widgets.
+   * @param  {string} commTargetName - widget comm target name
+   * @param  {string} versionCommTargetName - version validation comm target name
+   * @param  {() => widgets.WidgetView} lastViewCb - gets the last active widget view
+   * @return {BackendSync}
+   */
+  constructor(store, createModelCb, commTargetName, versionCommTargetName, lastViewCb) {
+    this.validateWidgetVersion(store, versionCommTargetName);
+    this.makeWidgetObservables(store, commTargetName);
+    this.makeWidgets(store, createModelCb, lastViewCb);
   }
 
-  getChannels(store) {
-    const channels = Rx.Observable.from(store)
-      .pluck('app')
-      .pluck('channels')
-      .distinctUntilChanged()
-      .publishReplay()
-      .refCount();
-    // TODO: Unsubscribe me up on app cleanup
-    channels.subscribe(() => {});
-    return channels;
-  }
-
-  initCommSubscriptions(store, commTargetName, versionCommTargetName) {
-    const commMsgs = this.getChannels(store)
-      .switchMap(channels => {
-        if (!(channels && channels.iopub)) {
-          return Rx.Observable.empty();
-        }
-        return channels.iopub.filter(msg =>
-          msg && msg.header && msg.header.msg_type &&
-          msg.header.msg_type.slice(0, 5) === 'comm_'
-        );
-      });
-
-    const msgs = commMsgs
-      .filter(msg => msg.header.msg_type === 'comm_msg')
-      .pluck('content');
-
-    // Keep a separate queue for display msgs to avoid asynchronous problems
-    // because it takes a while to initiate the widget model.  Cache display
-    // msgs so they are available when the widgets are constructed.
-    this.displayMsgs = commMsgs
-      .filter(msg => msg.header.msg_type === 'comm_msg')
-      .filter(msg => msg.content.data.method === 'display')
-      .map(msg => ({
-        parentMsgId: msg.parent_header.msg_id,
-        id: msg.content.comm_id,
-      }))
-      .publishReplay(1000) // Remember a max of 1k msgs
-      .refCount();
-    // TODO: Dispose me on app cleanup
-    this.displayMsgs.subscribe(() => {});
-
-    // Keep a separate queue for custom msgs to avoid asynchronous problems
-    // because it takes a while to initiate the widget model.  Cache custom
-    // msgs so they are available when the widgets are constructed.
-    this.customMsgs = commMsgs
-      .filter(msg => msg.header.msg_type === 'comm_msg')
-      .filter(msg => msg.content.data.method === 'custom')
-      .map(msg => ({
-        msg,
-        id: msg.content.comm_id,
-      }))
-      .publishReplay(1000) // Remember a max of 1k msgs
-      .refCount();
-    // TODO: Dispose me on app cleanup
-    this.customMsgs.subscribe(() => {});
-
-    // new comm observable
-    this.comms = {};
-    this.dummySubscriptions = {};
-    this.newComms = commMsgs
-      .filter(msg => msg.header.msg_type === 'comm_open')
-      .pluck('content')
-      .filter(msg => msg.target_name === commTargetName)
-      .map(msg => {
-        const id = msg.comm_id;
-        const data = msg.data;
-        this.comms[id] = msgs
-          .filter(subMsg => subMsg.comm_id === id)
-          .pluck('data')
-          .publishReplay(1000) // Remember a max of 1k msgs
-          .refCount();
-        this.dummySubscriptions = this.comms[id].subscribe(() => {});
-        return { id, data };
-      });
-
+  /**
+   * Valid the widget framework version
+   * @param  {Redux.store} store
+   * @param  {string} versionCommTargetName - version validation comm target name
+   */
+  validateWidgetVersion(store, versionCommTargetName) {
     // listen for widget frontend validation
     let validate = null;
     this.versionValidated = new Promise(resolve => validate = resolve); // eslint-disable-line
-    this.getChannels(store)
-      .map(channels => {
-        if (!(channels && channels.shell)) {
-          return Rx.Observable.empty();
-        }
-        return channels.shell;
-      })
-      .subscribe(shell => {
-        if (shell && shell.next) {
-          const versionCommId = uuid.v4();
-          const newVersionCommMsg = createMessage('comm_open');
-          newVersionCommMsg.content = {
-            comm_id: versionCommId,
-            target_name: versionCommTargetName,
-            data: {},
-          };
+    openComm(store, versionCommTargetName).then(info => {
+      const { commId } = info;
+      commMessages(store)
+        .filter(commIdFilter(commId))
+        .subscribe(msg => {
+          sendCommMessage(store, commId, {
+            // TODO: Instead of validating by default, make sure the frontend is
+            // compatible with the version the backend is requesting.
+            validated: true,
+          }, msg.header);
 
-          let shellSubscription = shell.subscribe(() => {});
-          shell.next(newVersionCommMsg);
-          shellSubscription.unsubscribe();
-
-          commMsgs
-            .filter(msg => msg.header.msg_type === 'comm_msg')
-            .filter(subMsg => subMsg.content.comm_id === versionCommId)
-            .subscribe(subMsg => { //eslint-disable-line
-              const versionCommMsg = createMessage('comm_msg');
-              versionCommMsg.content = {
-                comm_id: versionCommId,
-                data: {
-                  // TODO: Instead of validating by default, make sure the frontend is
-                  // compatible with the version the backend is requesting.
-                  validated: true,
-                },
-              };
-
-              shellSubscription = shell.subscribe(() => {});
-              shell.next(versionCommMsg);
-              shellSubscription.unsubscribe();
-
-              // console.info('Backend requested ipywidgets version ', subMsg.content.data);
-              validate();
-            });
-        }
-      });
-
-    // listen for comm closing msgs
-    this.deleteComms = commMsgs
-      .filter(msg => msg.header.msg_type === 'comm_close')
-      .pluck('content')
-      .map(id => {
-        delete this.comms[id];
-        this.dummySubscriptions[id].unsubscribe();
-        delete this.dummySubscriptions[id];
-        return id;
-      });
+          // console.info('Backend requested ipywidgets version ', getMessageData(msg));
+          validate();
+        });
+    });
   }
 
-  initStateListeners(store, dispatch, createModelCb, lastViewCb) {
+  /**
+   * Make widget message observables.
+   * @param  {Redux.store} store
+   * @param  {string} commTargetName - widget comm target name
+   */
+  makeWidgetObservables(store, commTargetName) {
+    this.displayMessages = commMessages(store)
+      .filter(methodFilter('display'));
+    this.customMessages = commMessages(store)
+      .filter(methodFilter('custom'));
+    this.updateMessages = commMessages(store)
+      .filter(methodFilter('update'));
+    this.newWidgets = commOpenMessages(store)
+      .filter(msg => getCommTargetName(msg) === commTargetName);
+    this.deleteWidgets = commCloseMessages(store);
+  }
+
+  /**
+   * Make widgets using the widget observables
+   * @param  {Redux.store} store
+   * @param  {(modelId, msgData) => Promise<{model, stateChanges}>} createModelCb -
+   *                             callback used to create widgets.
+   * @param  {() => widgets.WidgetView} lastViewCb - gets the last active widget view
+   */
+  makeWidgets(store, createModelCb, lastViewCb) {
     // Use a model instance to set state on widget creation because the
     // widget instantiation logic is complex and we don't want to have to
     // duplicate it.  This is the only point in the lifespan where the widget
     // model is the source of truth.  After it is created, the application
     // state that lives in the state store is the source of truth.  This allows
     // external inputs, like real time collaboration, to work.
-    this.newComms
-      .map(info => Rx.Observable.fromPromise(createModelCb(info.id, info.data)))
+    this.newWidgets
+      .map(msg => Rx.Observable.fromPromise(
+        createModelCb(getCommId(msg), getMessageData(msg)))
+      )
       .mergeAll()
       .subscribe(modelInfo => {
         const { model, stateChanges } = modelInfo;
+        this.makeWidget(store, lastViewCb, model, stateChanges);
+      });
+  }
 
-        // State updates are applied to the store, not the widget directly.
-        // It's not the responsibility of this code to update the widget model.
-        // Merge incomming state update events with state changes from the
-        // widget model itself to create an all inclusive observable that can be
-        // used to update the store.
-        const commStateUpdates = this.comms[model.id]
-          .filter(content => content.method === 'update')
-          .map(content => Promise.resolve(content.state));
-        const subscription = stateChanges.merge(commStateUpdates)
-          .map(x => Rx.Observable.fromPromise(x))
-          .concatAll()
-          .subscribe(stateChange => {
-            dispatch(setWidgetState(
-              model.id,
-              stateChange
-            ));
-          });
+  /**
+   * Make a widget
+   * @param  {Redux.store} store
+   * @param  {() => widgets.WidgetView} lastViewCb - gets the last active widget view
+   * @param  {widgets.WidgetModel} model - instance created by WidgetManager
+   * @param  {Observable} stateChanges - observable for the model instance state
+   */
+  makeWidget(store, lastViewCb, model, stateChanges) {
+    const thisWidget = commIdFilter(model.id);
 
-        // State changes on the backbone models should be communicated to the
-        // backend.
-        stateChanges
-          .map(x => Rx.Observable.fromPromise(x))
-          .concatAll()
-          .subscribe(stateChange => {
-            const updateMsg = createMessage('comm_msg');
-            updateMsg.content = {
-              comm_id: model.id,
-              data: {
-                method: 'backbone',
-                sync_data: stateChange,
-                buffer_keys: [],
-              },
-            };
-            updateMsg.buffers = [];
+    // Handle state updates.
+    // State updates are applied to the store, not the widget directly.
+    // It's not the responsibility of this code to update the widget model.
+    // Merge incomming state update events with state changes from the
+    // widget model itself to create an all inclusive observable that can be
+    // used to update the store.
+    const commStateUpdates = this.updateMessages
+      .filter(thisWidget)
+      .map(msg => Promise.resolve(getMessageData(msg).state));
+    const backendStateSubscription = stateChanges.merge(commStateUpdates)
+      .map(x => Rx.Observable.fromPromise(x))
+      .concatAll()
+      .subscribe(stateChange => {
+        store.dispatch(setWidgetState(
+          model.id,
+          stateChange
+        ));
+      });
 
-            // Associate this state update with the last known view to have
-            // triggered state change.
-            const lastView = lastViewCb();
-            if (lastView && lastView.options && lastView.options.cellId) {
-              dispatch(associateCellToMsg(lastView.options.cellId, updateMsg.header.msg_id));
-            }
+    // Communicate state changes of the backbone models to the backend.
+    const frontendStateSubscription = stateChanges
+      .map(x => Rx.Observable.fromPromise(x))
+      .concatAll()
+      .subscribe(stateChange => {
+        // Send state change message to the backend
+        sendCommMessage(store, model.id, {
+          method: 'backbone',
+          sync_data: stateChange,
+          buffer_keys: [],
+        }).then(msgId => {
+          // Associate this state update with the last known view to have
+          // triggered state change.
+          const lastView = lastViewCb();
+          if (lastView && lastView.options && lastView.options.cellId) {
+            store.dispatch(associateCellToMsg(lastView.options.cellId, msgId));
+          }
+        });
+      });
 
-            // Send the state update message to the backend.
-            const shell = store.getState().app.channels.shell;
-            const shellSubscription = shell.subscribe(() => {});
-            shell.next(updateMsg);
-            shellSubscription.unsubscribe();
-          });
+    // Display messages
+    const displaySubscription = this.displayMessages
+      .filter(thisWidget)
+      .subscribe(msg => store.dispatch(displayWidget(model.id, msg.parent_header.msg_id)));
 
-        // Listen for display messages
-        const displaySubscription = this.displayMsgs
-          .filter(displayInfo => displayInfo.id === model.id)
-          .subscribe(displayInfo => dispatch(displayWidget(model.id, displayInfo.parentMsgId)));
+    // Custom messages, pass them directly into the widget model
+    const customMsgSubscription = this.customMessages
+      .filter(thisWidget)
+      .subscribe(msg => model._handle_comm_msg(msg));
 
-        // Listen for custom messages, pass them directly into the widget model
-        const customMsgSubscription = this.customMsgs
-          .filter(customInfo => customInfo.id === model.id)
-          .subscribe(customInfo => model._handle_comm_msg(customInfo.msg));
-
-        // Handle cleanup time
-        const deleteSubscription = this.deleteComms
-          .filter(id => id === model.id)
-          .subscribe(() => {
-            subscription.unsubscribe();
-            displaySubscription.unsubscribe();
-            deleteSubscription.unsubscribe();
-            customMsgSubscription.unsubscribe();
-            deleteWidget(model.id);
-          });
+    // Comm close messages, clean-up time!
+    const deleteSubscription = this.deleteWidgets
+      .filter(thisWidget)
+      .subscribe(() => {
+        backendStateSubscription.unsubscribe();
+        frontendStateSubscription.unsubscribe();
+        displaySubscription.unsubscribe();
+        customMsgSubscription.unsubscribe();
+        deleteSubscription.unsubscribe();
+        deleteWidget(model.id);
       });
   }
 }

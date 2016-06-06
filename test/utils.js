@@ -142,7 +142,7 @@ export function liveStore(cb, kernelName='python2') {
     }
   }, reducers);
 
-  const widgetManager = new WidgetManager(store, store.dispatch);
+  const widgetManager = new WidgetManager(store);
   const kernel = {};
   return launchKernel(store, notebook)
     .then(() => {
