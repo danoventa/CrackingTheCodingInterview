@@ -1,10 +1,20 @@
 import { expect } from 'chai';
+import path from 'path';
 
 import * as actions from '../../../src/notebook/actions';
 
 import * as constants from '../../../src/notebook/constants';
 
 import createStore from '../../../src/notebook/store';
+
+import {
+  dummyJSON,
+  dummyCommutable
+} from '../dummy-nb';
+
+import {
+  fromJS
+} from 'immutable';
 
 const Rx = require('rxjs/Rx');
 
@@ -37,6 +47,66 @@ describe('setLanguageInfo', () => {
       langInfo: langInfo,
     });
   })
+});
+
+describe('newKernel', () => {
+  it('creates a NEW_KERNEL action', (done) => {
+    actions.newKernel('python2', '.')()
+      .first()
+      .subscribe((action) => {
+        expect(action.type).to.equal(constants.NEW_KERNEL);
+        expect(action.kernelSpecName).to.equal('python2');
+        done();
+      }, (action) => {
+        expect.fail();
+      });
+  });
+});
+
+describe('save', () => {
+  it('creates a START_SAVING action', (done) => {
+    actions.save('test-save.ipynb', dummyCommutable)()
+      .first()
+      .subscribe((action) => {
+        expect(action).to.deep.equal({
+          type: constants.START_SAVING,
+        });
+        done();
+      }, (action) => {
+        expect.fail();
+      });
+  });
+});
+
+describe('saveAs', () => {
+  it('creates a CHANGE_FILENAME action', (done) => {
+    actions.saveAs('test-ipynb-saveas.ipynb', dummyCommutable)(actions, createStore())
+      .first()
+      .subscribe((action) => {
+        expect(action).to.deep.equal({
+          type: constants.CHANGE_FILENAME,
+          filename: 'test-ipynb-saveas.ipynb'
+        });
+        done();
+      }, (action) => {
+        expect.fail();
+      });
+  });
+});
+
+describe('setNotebook', () => {
+  it('creates a SET_NOTEBOOK action', () => {
+    actions.setNotebook(dummyJSON, 'test-ipynb.ipynb')(actions, createStore())
+      .first()
+      .subscribe((action) => {
+        expect(action).to.deep.equal({
+          type: constants.SET_NOTEBOOK,
+          data: fromJS(dummyJSON)
+        });
+      }, (action) => {
+        expect.fail()
+      });
+  });
 });
 
 describe('updateCellSource', () => {
@@ -165,6 +235,15 @@ describe('createCellBefore', () => {
   });
 });
 
+describe('toggleStickyCell', () => {
+  it('creates a TOGGLE_STICKY_CELL action', () => {
+    expect(actions.toggleStickyCell('1234')).to.deep.equal({
+      type: constants.TOGGLE_STICKY_CELL,
+      id: '1234',
+    });
+  });
+});
+
 describe('createCellAppend', () => {
   it('creates a NEW_CELL_APPEND action', () => {
     expect(actions.createCellAppend('markdown')).to.deep.equal({
@@ -179,6 +258,15 @@ describe('mergeCellAfter', () => {
     expect(actions.mergeCellAfter('0121')).to.deep.equal({
       type: constants.MERGE_CELL_AFTER,
       id: '0121',
+    });
+  });
+});
+
+describe('setNotificationSystem', () => {
+  it('creates a SET_NOTIFICATION_SYSTEM action', () => {
+    expect(actions.setNotificationSystem(null)).to.deep.equal({
+      type: constants.SET_NOTIFICATION_SYSTEM,
+      notificationSystem: null,
     });
   });
 });

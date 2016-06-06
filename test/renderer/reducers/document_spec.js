@@ -69,7 +69,7 @@ describe('focusNextCell', () => {
     const state = reducers(originalState, action);
     expect(state.document.get('focusedCell')).to.not.be.null;
   });
-  it('should create and focus a new cell if last cell', () => {
+  it('should return same state if last cell and createCellIfUndefined is false', () => {
     const originalState = {
       document: monocellDocument,
     };
@@ -84,6 +84,23 @@ describe('focusNextCell', () => {
     const state = reducers(originalState, action);
     expect(state.document.get('focusedCell')).to.not.be.null;
     expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(3);
+  });
+  it('should create and focus a new cell if last cell', () => {
+    const originalState = {
+      document: monocellDocument
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
+
+    const action = {
+      type: constants.FOCUS_NEXT_CELL,
+      id,
+      createCellIfUndefined: true,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.focusedCell).to.not.be.null;
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(4);
   });
 });
 
@@ -103,6 +120,26 @@ describe('focusPreviousCell', () => {
 
     const state = reducers(originalState, action);
     expect(state.document.get('focusedCell')).to.equal(previousId);
+  });
+});
+
+describe('toggleStickyCell', () => {
+  it('should stick the cell given its ID', () => {
+    const doc = initialDocument.set('notebook', dummyCommutable)
+                                    .set('stickyCells', new Map());
+    const originalState = {
+      document: doc,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.TOGGLE_STICKY_CELL,
+      id,
+    }
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['stickyCells', id])).to.be.true;
   });
 });
 
@@ -144,6 +181,24 @@ describe('moveCell', () => {
     const state = reducers(originalState, action);
     expect(state.document.getIn(['notebook', 'cellOrder']).last()).to.equal(id);
     expect(state.document.getIn(['notebook', 'cellOrder']).first()).to.equal(destinationId);
+  });
+});
+
+describe('removeCell', () => {
+  it('should remove a cell given an ID', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.REMOVE_CELL,
+      id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(2);
   });
 });
 
@@ -217,7 +272,6 @@ describe('mergeCellAfter', () => {
     }
 
     const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
-
     const action = {
       type: constants.MERGE_CELL_AFTER,
       id,
@@ -242,5 +296,22 @@ describe('newCellAppend', () => {
 
     const state = reducers(originalState, action);
     expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(3);
+  });
+});
+
+describe('overwriteMetadata', () => {
+  it('overwrites notebook metadata appropriately', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const action = {
+      type: constants.OVERWRITE_METADATA_FIELD,
+      field: "name",
+      value: "javascript",
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'metadata', 'name'])).to.equal("javascript");
   });
 });

@@ -5,16 +5,14 @@ import { liveStore, dispatchQueuePromise, waitForOutputs } from '../../utils';
 
 describe('agendas.executeCell', function() {
   this.timeout(5000);
+  this.retries(5);
   it('produces the right output', () => {
     return liveStore((kernel, dispatch, store) => {
       const cellId = store.getState().document.getIn(['notebook', 'cellOrder', 0]);
       const source = 'print("a")';
       dispatch(updateCellSource(cellId, source));
 
-      // TODO: Remove hack
-      // HACK: Wait 100ms before executing a cell because kernel ready and idle
-      // aren't enough.  There must be another signal that we need to listen to.
-      return (new Promise(resolve => setTimeout(resolve, 100)))
+      return Promise.resolve()
         .then(() => dispatch(executeCell(kernel.channels, cellId, source, true, undefined)))
         .then(() => dispatchQueuePromise(dispatch))
         .then(() => waitForOutputs(store, cellId))
