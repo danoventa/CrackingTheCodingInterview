@@ -2,50 +2,13 @@ import Rx from 'rxjs/Rx';
 import { ManagerBase } from 'jupyter-js-widgets';
 import { BackendSync } from './backend-sync';
 import { ModelUpdater } from './model-updater';
-import { createMessage } from '../api/messaging';
 import { associateCellToMsg, setWidgetState } from '../actions';
-
-class PhonyComm {
-  constructor(store, dispatch, id) {
-    this.id = id;
-    this.store = store;
-    this.dispatch = dispatch;
-  }
-
-  send(data, callbacks, metadata, buffers) {
-    // Only allow custom messages to be sent to the backend.  This prevents
-    // the widget machinery from sending state updates directly to the backend.
-    // Instead, the redux widget state management system should send the
-    // updates.  See backend-sync.js for the state logic.
-    if (!data || data.method !== 'custom') return;
-
-    //  Construct comm msg
-    const msg = createMessage('comm_msg');
-    msg.content = {
-      comm_id: this.id,
-      data: data || {},
-    };
-    msg.metadata = metadata || msg.metadata;
-    msg.buffers = buffers || msg.buffers; // TODO: Make sure this works
-
-    // Associate the cell of the widget view to the message
-    this.dispatch(associateCellToMsg(callbacks.cellId, msg.header.msg_id));
-
-    // Subscribe, send msg, unsubscribe
-    const shell = this.store.getState().app.channels.shell;
-    const shellSubscription = shell.subscribe(() => {});
-    shell.next(msg);
-    shellSubscription.unsubscribe();
-  }
-
-  close() { }
-}
+import { sendCommMessage } from './comms';
 
 export class WidgetManager extends ManagerBase {
-  constructor(store, dispatch) {
+  constructor(store) {
     super();
     this.store = store;
-    this.dispatch = dispatch;
     this.modelPromises = {};
     this.lastTouchView = null;
 
@@ -53,7 +16,6 @@ export class WidgetManager extends ManagerBase {
     // and the backend.
     this.backendToRedux = new BackendSync(
       store,
-      dispatch,
       this.createModel.bind(this),
       this.comm_target_name,
       this.version_comm_target_name,
@@ -71,7 +33,7 @@ export class WidgetManager extends ManagerBase {
     this.modelPromises[id] = new Promise(resolve => (modelLoaded = resolve));
     // Immediately set an initial dummy state of the widget so that the widget
     // deletion code in model-updater.js doesn't delete the widget.
-    this.dispatch(setWidgetState(id, { id }));
+    this.store.dispatch(setWidgetState(id, { id }));
 
     const modelPromise = this.new_model({
       model_name: data._model_name,
@@ -83,7 +45,7 @@ export class WidgetManager extends ManagerBase {
     // Create an observable from the current model state, and from the model
     // change event.  Merge them and use that observable to update the store.
     const modelInfoPromise = modelPromise.then(model => {
-      model.comm = new PhonyComm(this.store, this.dispatch, id); // eslint-disable-line
+      model.comm = new PhonyComm(this.store, id); // eslint-disable-line
       modelLoaded(model);
       const initialState = Rx.Observable
         .of(this.getSerializedModelState(model));
@@ -135,4 +97,26 @@ export class WidgetManager extends ManagerBase {
       cellId: view.options.cellId,
     };
   }
+}
+
+class PhonyComm {
+  constructor(store, id) {
+    this.id = id;
+    this.store = store;
+  }
+
+  send(data, callbacks) {
+    // Only allow custom messages to be sent to the backend.  This prevents
+    // the widget machinery from sending state updates directly to the backend.
+    // Instead, the redux widget state management system should send the
+    // updates.  See backend-sync.js for the state logic.
+    if (!data || data.method !== 'custom') return;
+
+    sendCommMessage(this.store, this.id, data || {}).then(msgId => {
+      // Associate the cell of the widget view to the message
+      this.store.dispatch(associateCellToMsg(callbacks.cellId, msgId));
+    });
+  }
+
+  close() { }
 }
