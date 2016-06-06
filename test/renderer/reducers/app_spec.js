@@ -48,3 +48,28 @@ describe('changeFilename', () => {
     expect(newState.app.filename).to.equal('test.ipynb');
   });
 });
+
+describe('setNotificationSystem', () => {
+  it('returns the same state if notificationSystem is undefined', () => {
+    const state = {
+      app: {
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+     }
+    };
+    const newState = reducers(state, {type: constants.SET_NOTIFICATION_SYSTEM}); 
+    expect(newState.app.notificationSystem).to.be.undefined;
+  });
+  it('sets the notificationSystem if given', () => {
+    const state = {
+      app: {
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+     }
+    };
+    const newState = reducers(state, {type: constants.SET_NOTIFICATION_SYSTEM, notificationSystem: ""});
+    expect(newState.app.notificationSystem).to.equal("");
+  });
+});
