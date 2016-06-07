@@ -1,4 +1,5 @@
 import React from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import Inputs from './inputs';
 
@@ -11,77 +12,88 @@ import Pager from './pager';
 
 import Immutable from 'immutable';
 
-const CodeCell = (props) =>
-  <div>
-    <div className="input-container">
-      <Inputs executionCount={props.cell.get('execution_count')} running={props.running} />
-      <Editor
-        id={props.id}
-        input={props.cell.get('source')}
-        language={props.language}
-        focused={props.focused}
-        getCompletions={props.getCompletions}
-        theme={props.theme}
-        focusAbove={props.focusAbove}
-        focusBelow={props.focusBelow}
-      />
-    </div>
-    {
-      props.pagers && !props.pagers.isEmpty() ?
-        <div className="pagers">
-        {
-          props.pagers.map((pager, key) =>
-            <Pager
-              className="pager"
-              displayOrder={props.displayOrder}
-              transforms={props.transforms}
-              pager={pager}
-              key={key}
-            />
-          )
-        }
-        </div> : null
-    }
-    {
-      props.widgets && !props.widgets.isEmpty() ?
-        <WidgetArea
-          id={props.id}
-          widgets={props.widgets}
-          widgetManager={props.widgetManager}
-        /> : null
-    }
-    <LatexRenderer>
-      <div className="outputs">
-        <Display
-          className="outputs-display"
-          outputs={props.cell.get('outputs')}
-          displayOrder={props.displayOrder}
-          transforms={props.transforms}
+class CodeCell extends React.Component {
+  static propTypes = {
+    cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
+    displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
+    getCompletions: React.PropTypes.any,
+    id: React.PropTypes.string,
+    language: React.PropTypes.string,
+    theme: React.PropTypes.string,
+    transforms: React.PropTypes.instanceOf(Immutable.Map),
+    focused: React.PropTypes.bool,
+    pagers: React.PropTypes.instanceOf(Immutable.List),
+    running: React.PropTypes.bool,
+    focusAbove: React.PropTypes.func,
+    focusBelow: React.PropTypes.func,
+    widgets: React.PropTypes.instanceOf(Immutable.List),
+    widgetManager: React.PropTypes.any,
+  };
+
+  static defaultProps = {
+    pagers: new Immutable.List(),
+    running: false,
+  };
+
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
+  render() {
+    return (<div>
+      <div className="input-container">
+        <Inputs
+          executionCount={this.props.cell.get('execution_count')}
+          running={this.props.running}
+        />
+        <Editor
+          id={this.props.id}
+          input={this.props.cell.get('source')}
+          language={this.props.language}
+          focused={this.props.focused}
+          getCompletions={this.props.getCompletions}
+          theme={this.props.theme}
+          focusAbove={this.props.focusAbove}
+          focusBelow={this.props.focusBelow}
         />
       </div>
-    </LatexRenderer>
-  </div>;
-
-CodeCell.propTypes = {
-  cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-  displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
-  getCompletions: React.PropTypes.any,
-  id: React.PropTypes.string,
-  language: React.PropTypes.string,
-  theme: React.PropTypes.string,
-  transforms: React.PropTypes.instanceOf(Immutable.Map),
-  focused: React.PropTypes.bool,
-  pagers: React.PropTypes.instanceOf(Immutable.List),
-  running: React.PropTypes.bool,
-  focusAbove: React.PropTypes.func,
-  focusBelow: React.PropTypes.func,
-  widgets: React.PropTypes.instanceOf(Immutable.List),
-  widgetManager: React.PropTypes.any,
-};
-
-CodeCell.defaultProps = {
-  pagers: new Immutable.List(),
-  running: false,
-};
+      {
+        this.props.pagers && !this.props.pagers.isEmpty() ?
+          <div className="pagers">
+          {
+            this.props.pagers.map((pager, key) =>
+              <Pager
+                className="pager"
+                displayOrder={this.props.displayOrder}
+                transforms={this.props.transforms}
+                pager={pager}
+                key={key}
+              />
+            )
+          }
+          </div> : null
+      }
+      {
+        this.props.widgets && !this.props.widgets.isEmpty() ?
+          <WidgetArea
+            id={this.props.id}
+            widgets={this.props.widgets}
+            widgetManager={this.props.widgetManager}
+          /> : null
+      }
+      <LatexRenderer>
+        <div className="outputs">
+          <Display
+            className="outputs-display"
+            outputs={this.props.cell.get('outputs')}
+            displayOrder={this.props.displayOrder}
+            transforms={this.props.transforms}
+          />
+        </div>
+      </LatexRenderer>
+    </div>);
+  }
+}
 
 export default CodeCell;

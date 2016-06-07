@@ -1,4 +1,5 @@
 import React from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { DragSource, DropTarget } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
 
@@ -71,6 +72,7 @@ class DraggableCell extends React.Component {
 
   constructor() {
     super();
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.selectCell = this.selectCell.bind(this);
   }
 

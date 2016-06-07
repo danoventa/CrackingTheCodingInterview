@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
@@ -63,6 +64,7 @@ class Notebook extends React.Component {
 
   constructor() {
     super();
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.languageCache = {};
     this.createCellElement = this.createCellElement.bind(this);
     this.createStickyCellElement = this.createStickyCellElement.bind(this);

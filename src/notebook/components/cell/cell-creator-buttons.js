@@ -7,7 +7,7 @@ import {
   createCellAppend,
   mergeCellAfter } from '../../actions';
 
-export class CellCreatorButtons extends React.Component {
+export default class CellCreatorButtons extends React.Component {
   static propTypes = {
     above: React.PropTypes.bool,
     id: React.PropTypes.string,
@@ -16,6 +16,7 @@ export class CellCreatorButtons extends React.Component {
 
   constructor() {
     super();
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.createCodeCell = this.createCell.bind(this, 'code');
     this.createTextCell = this.createCell.bind(this, 'markdown');
     this.createCell = this.createCell.bind(this);

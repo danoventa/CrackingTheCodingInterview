@@ -1,4 +1,5 @@
 import React from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import remark from 'remark';
 import reactRenderer from 'remark-react';
@@ -28,6 +29,7 @@ export default class MarkdownCell extends React.Component {
 
   constructor(props) {
     super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.state = {
       view: true,
       // HACK: We'll need to handle props and state change better here

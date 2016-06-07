@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import CodeCell from './code-cell';
 import MarkdownCell from './markdown-cell';
@@ -23,6 +24,7 @@ class Cell extends React.Component {
 
   constructor() {
     super();
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.selectCell = this.selectCell.bind(this);
     this.focusAboveCell = this.focusAboveCell.bind(this);
     this.focusBelowCell = this.focusBelowCell.bind(this);

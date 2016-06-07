@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import { executeCell, removeCell, toggleStickyCell } from '../../actions';
 
@@ -29,6 +30,7 @@ export class Toolbar extends React.Component {
 
   constructor(props) {
     super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.removeCell = this.removeCell.bind(this);
     this.executeCell = this.executeCell.bind(this);
     this.setHoverState = this.setHoverState.bind(this);

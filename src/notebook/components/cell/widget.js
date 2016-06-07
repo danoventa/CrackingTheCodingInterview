@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 export default class Widget extends React.Component {
   static propTypes = {
@@ -8,7 +9,12 @@ export default class Widget extends React.Component {
     widgetManager: React.PropTypes.any,
   };
 
-  componentDidUpdate() {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
+  componentDidMount() {
     if (this.refs.placeholder) {
       const placeholder = ReactDOM.findDOMNode(this.refs.placeholder);
       if (placeholder && placeholder.parentNode) {
@@ -40,6 +46,9 @@ export default class Widget extends React.Component {
   }
 
   render() {
-    return <div className="widget-placeholder" ref="placeholder" />;
+    return (<div
+      className={`widget-placeholder widget-${this.props.id}`}
+      ref="placeholder"
+    />);
   }
 }

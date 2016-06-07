@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import Immutable from 'immutable';
 
@@ -90,6 +91,7 @@ ipc.on('main:load', (e, launchData) => {
   class App extends React.Component {
     constructor(props) {
       super(props);
+      this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
       this.state = {
         theme: 'light',
       };
