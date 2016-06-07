@@ -16,7 +16,7 @@ export class ModelUpdater {
     // Listen for changes to the redux store widgets
     Rx.Observable.from(store)
       .pluck('document')
-      .pluck('widgetModels')
+      .map(document => document.get('widgetModels'))
       .distinctUntilChanged((a, b) => !a || a.equals(b))
       .subscribe(this.reduxStateChange.bind(this, manager));
   }

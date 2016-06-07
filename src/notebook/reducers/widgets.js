@@ -5,7 +5,7 @@ export default {
   [constants.SET_WIDGET_STATE]: function setWidgetState(documentState, action) {
     const { id, state } = action;
     return documentState.updateIn(['widgetModels', id], new Immutable.Map(),
-      oldWidgetState => oldWidgetState.merge(state));
+      oldWidgetState => oldWidgetState.merge(Immutable.fromJS(state)));
   },
 
   [constants.DELETE_WIDGET]: function deleteWidget(state, action) {

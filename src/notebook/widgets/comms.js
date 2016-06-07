@@ -82,9 +82,7 @@ function commRelatedMessages(store) {
  */
 export function commOpenMessages(store) {
   return commRelatedMessages(store)
-    .filter(msg => msg.header.msg_type === 'comm_open')
-    .publishReplay()
-    .refCount();
+    .filter(msg => msg.header.msg_type === 'comm_open');
 }
 
 /**
@@ -94,9 +92,7 @@ export function commOpenMessages(store) {
  */
 export function commCloseMessages(store) {
   return commRelatedMessages(store)
-    .filter(msg => msg.header.msg_type === 'comm_close')
-    .publishReplay()
-    .refCount();
+    .filter(msg => msg.header.msg_type === 'comm_close');
 }
 
 /**
@@ -106,9 +102,7 @@ export function commCloseMessages(store) {
  */
 export function commMessages(store) {
   return commRelatedMessages(store)
-    .filter(msg => msg.header.msg_type === 'comm_msg')
-    .publishReplay()
-    .refCount();
+    .filter(msg => msg.header.msg_type === 'comm_msg');
 }
 
 /**

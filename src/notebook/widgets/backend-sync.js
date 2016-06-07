@@ -91,6 +91,11 @@ export class BackendSync {
     .distinctUntilChanged()
     .publishReplay(1) // Only remember the last state
     .refCount();
+
+    // Subscribe to the overservable to trigger it to process messages and send
+    // the validation to the backend.  For convience, store the results on the
+    // instance.
+    this.versionValidated.subscribe(valid => this.isValid = valid); // eslint-disable-line
   }
 
   /**
@@ -100,14 +105,29 @@ export class BackendSync {
    */
   makeWidgetObservables(store, commTargetName) {
     this.displayMessages = commMessages(store)
-      .filter(methodFilter('display'));
+      .filter(methodFilter('display'))
+      .publishReplay()
+      .refCount();
     this.customMessages = commMessages(store)
-      .filter(methodFilter('custom'));
+      .filter(methodFilter('custom'))
+      .publishReplay()
+      .refCount();
     this.updateMessages = commMessages(store)
-      .filter(methodFilter('update'));
+      .filter(methodFilter('update'))
+      .publishReplay()
+      .refCount();
+    this.deleteWidgets = commCloseMessages(store)
+      .publishReplay()
+      .refCount();
     this.newWidgets = commOpenMessages(store)
       .filter(msg => getCommTargetName(msg) === commTargetName);
-    this.deleteWidgets = commCloseMessages(store);
+
+    // Subscribe to comm close and open messages.  This will cause them to be
+    // cached for when a widget is constructed.
+    this.displayMessagesSubscription = this.displayMessages.subscribe(() => {});
+    this.customMessagesSubscription = this.customMessages.subscribe(() => {});
+    this.updateMessagesSubscription = this.updateMessages.subscribe(() => {});
+    this.deleteWidgetsSubscription = this.deleteWidgets.subscribe(() => {});
   }
 
   /**
@@ -124,7 +144,7 @@ export class BackendSync {
     // model is the source of truth.  After it is created, the application
     // state that lives in the state store is the source of truth.  This allows
     // external inputs, like real time collaboration, to work.
-    this.newWidgets
+    this.newWidgetsSubscription = this.newWidgets
       .map(msg => Rx.Observable.fromPromise(
         createModelCb(getCommId(msg), getMessageData(msg)))
       )
