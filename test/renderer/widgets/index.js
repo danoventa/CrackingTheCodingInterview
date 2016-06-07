@@ -22,7 +22,7 @@ display(ipywidgets.${name}())
 print("executed")
 `;
       dispatch(updateCellSource(cellId, source));
-      return widgetManager.versionValidated
+      return widgetManager.versionValidated.filter(Boolean).first().toPromise()
         .then(() => dispatchQueuePromise(dispatch))
         .then(() => dispatch(executeCell(kernel.channels, cellId, source, true, undefined)))
         .then(() => dispatchQueuePromise(dispatch))
@@ -49,7 +49,7 @@ describe('widgets', function() {
     this.timeout(2000);
     this.retries(10);
     return liveStore((kernel, dispatch, store, widgetManager) => {
-      return widgetManager.versionValidated;
+      return widgetManager.versionValidated.filter(Boolean).first().toPromise();
     });
   });
 
