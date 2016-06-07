@@ -16,6 +16,7 @@ import {
   getCommTargetName,
   getCommId,
   getMessageData,
+  getChannels,
 } from './comms';
 
 /**
@@ -50,28 +51,46 @@ export class BackendSync {
 
   /**
    * Valid the widget framework version
+   *
+   * To check if the widgets have been validated, third parties can use the
+   * `.versionValided` attribute of this instance.  This attribute is an observable
+   * of the validation flag.  For example, to create a promise for the first
+   * successful validation, one would use
+   * `versionValidated.filter(Boolean).first().toPromise()`
    * @param  {Redux.store} store
    * @param  {string} versionCommTargetName - version validation comm target name
    */
   validateWidgetVersion(store, versionCommTargetName) {
-    // listen for widget frontend validation
-    let validate = null;
-    this.versionValidated = new Promise(resolve => validate = resolve); // eslint-disable-line
-    openComm(store, versionCommTargetName).then(info => {
-      const { commId } = info;
-      commMessages(store)
-        .filter(commIdFilter(commId))
-        .subscribe(msg => {
-          sendCommMessage(store, commId, {
-            // TODO: Instead of validating by default, make sure the frontend is
-            // compatible with the version the backend is requesting.
-            validated: true,
-          }, msg.header);
-
-          // console.info('Backend requested ipywidgets version ', getMessageData(msg));
-          validate();
+    // Validate frontend version on each new kernel, and create a
+    // versionValidated Observable that allows third parties to see if the
+    // frontend widget framework is compatible with the backend one.
+    this.versionValidated = getChannels(store).switchMap(() => {
+      // Create a promise that resolves to true when validation is successful.
+      const validationPromise = openComm(store, versionCommTargetName).then(info => {
+        const { commId } = info;
+        return new Promise(resolve => {
+          commMessages(store)
+            .filter(commIdFilter(commId))
+            .subscribe(msg => {
+              sendCommMessage(store, commId, {
+                // TODO: Instead of validating by default, make sure the frontend is
+                // compatible with the version the backend is requesting.
+                validated: true,
+              }, msg.header);
+              // console.info('Backend requested ipywidgets version ', getMessageData(msg));
+              resolve(true);
+            });
         });
-    });
+      });
+
+      // The observable should emit false initially and then true when the
+      // widget framework version is validated.
+      return Rx.Observable.of(false)
+        .merge(Rx.Observable.fromPromise(validationPromise));
+    })
+    .distinctUntilChanged()
+    .publishReplay(1) // Only remember the last state
+    .refCount();
   }
 
   /**

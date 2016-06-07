@@ -11,7 +11,7 @@ import * as uuid from 'uuid';
  * @param  {Redux.store} store
  * @return {Observable} observable of the kernel channels object
  */
-function getChannels(store) {
+export function getChannels(store) {
   // For a proof of concept, see the following JSBin:
   // http://jsbin.com/tujapaciwo/5/edit?js,console
 
@@ -166,7 +166,7 @@ export function openComm(store, commTargetName, data, originalHeader) {
   };
   openMsg.parent_header = originalHeader || openMsg.parent_header;
 
-  sendMsg(store, 'shell', openMsg).then(() => ({
+  return sendMsg(store, 'shell', openMsg).then(() => ({
     commId,
     msgId: openMsg.header.msg_id,
   }));
@@ -188,5 +188,5 @@ export function sendCommMessage(store, commId, data, originalHeader) {
   };
   msg.parent_header = originalHeader || msg.parent_header;
 
-  sendMsg(store, 'shell', msg).then(() => msg.header.msg_id);
+  return sendMsg(store, 'shell', msg).then(() => msg.header.msg_id);
 }
