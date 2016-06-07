@@ -14,11 +14,12 @@ export class ModelUpdater {
    */
   constructor(store, manager) {
     // Listen for changes to the redux store widgets
+    this.widgetSubscriptions = {};
     Rx.Observable.from(store)
       .pluck('document')
       .map(document => document.get('widgetModels'))
       .distinctUntilChanged((a, b) => !a || a.equals(b))
-      .subscribe(this.reduxStateChange.bind(this, manager));
+      .subscribe(this.reduxStateChange.bind(this, store, manager));
   }
 
   /**
@@ -26,18 +27,33 @@ export class ModelUpdater {
    * @param  {widgets.WidgetManager} manager
    * @param  {object} newState - state of the widgets key
    */
-  reduxStateChange(manager, newState) {
+  reduxStateChange(store, manager, newState) {
     if (!newState) return;
 
     // Delete widgets that no longer exist in the state.
-    manager.deleteModels(
-      difference(Object.keys(manager.modelPromises), newState.keySeq().toJS())
+    const deleted = difference(
+      Object.keys(manager.modelPromises),
+      newState.keySeq().toJS()
     );
+    manager.deleteModels(deleted);
+    deleted.forEach(id => {
+      this.widgetSubscriptions[id].unsubscribe();
+      delete this.widgetSubscriptions[id];
+    });
 
-    // Set new states
-    newState.entrySeq().forEach(modelState => {
-      const [model, state] = modelState;
-      manager.setModelState(model, state.toJS());
+    // Create missing state subscriptions.
+    const created = difference(
+      newState.keySeq().toJS(),
+      Object.keys(this.widgetSubscriptions)
+    );
+    created.forEach(id => {
+      this.widgetSubscriptions[id] = Rx.Observable.from(store)
+        .pluck('document')
+        .map(document => document.getIn(['widgetModels', id]))
+        .distinctUntilChanged((a, b) => !a || a.equals(b))
+        .subscribe(state => {
+          manager.setModelState(id, state.toJS());
+        });
     });
   }
 }
