@@ -11,6 +11,7 @@ export class CellCreatorButtons extends React.Component {
   static propTypes = {
     above: React.PropTypes.bool,
     id: React.PropTypes.string,
+    dispatch: React.PropTypes.func,
   };
 
   constructor() {
