@@ -33,3 +33,5 @@ node_modules
 # Ignore compiled output
 build/
 dist/
+
+test/*.ipynb

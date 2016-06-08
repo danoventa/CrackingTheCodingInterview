@@ -65,7 +65,7 @@ describe('newKernel', () => {
 
 describe('save', () => {
   it('creates a START_SAVING action', (done) => {
-    actions.save('test-save.ipynb', dummyCommutable)()
+    actions.save('test/test-save.ipynb', dummyCommutable)()
       .first()
       .subscribe((action) => {
         expect(action).to.deep.equal({
@@ -80,12 +80,12 @@ describe('save', () => {
 
 describe('saveAs', () => {
   it('creates a CHANGE_FILENAME action', (done) => {
-    actions.saveAs('test-ipynb-saveas.ipynb', dummyCommutable)(actions, createStore())
+    actions.saveAs('test/test-ipynb-saveas.ipynb', dummyCommutable)(actions, createStore())
       .first()
       .subscribe((action) => {
         expect(action).to.deep.equal({
           type: constants.CHANGE_FILENAME,
-          filename: 'test-ipynb-saveas.ipynb'
+          filename: 'test/test-ipynb-saveas.ipynb'
         });
         done();
       }, (action) => {
@@ -96,7 +96,7 @@ describe('saveAs', () => {
 
 describe('setNotebook', () => {
   it('creates a SET_NOTEBOOK action', () => {
-    actions.setNotebook(dummyJSON, 'test-ipynb.ipynb')(actions, createStore())
+    actions.setNotebook(dummyJSON, 'test/test-ipynb.ipynb')(actions, createStore())
       .first()
       .subscribe((action) => {
         expect(action).to.deep.equal({
