@@ -1,21 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 
 import { executeCell, removeCell, toggleStickyCell } from '../../actions';
 
-class Toolbar extends React.Component {
+const mapStateToProps = (state) => ({
+  channels: state.app.channels,
+  notificationSystem: state.app.notificationSystem,
+  kernelConnected: state.app.channels &&
+    !(state.app.executionState === 'starting' ||
+      state.app.executionState === 'not connected'),
+});
+
+export class Toolbar extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
+    channels: React.PropTypes.object,
     id: React.PropTypes.string,
+    kernelConnected: React.PropTypes.bool,
+    notificationSystem: React.PropTypes.any,
     type: React.PropTypes.string,
     setHoverState: React.PropTypes.func,
   };
 
   static contextTypes = {
-    channels: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    notificationSystem: React.PropTypes.any,
-    kernelConnected: React.PropTypes.bool,
+    store: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -57,19 +66,19 @@ class Toolbar extends React.Component {
   }
 
   toggleStickyCell() {
-    this.context.dispatch(toggleStickyCell(this.props.id));
+    this.context.store.dispatch(toggleStickyCell(this.props.id));
   }
 
   removeCell() {
-    this.context.dispatch(removeCell(this.props.id));
+    this.context.store.dispatch(removeCell(this.props.id));
   }
 
   executeCell() {
-    this.context.dispatch(executeCell(this.context.channels,
+    this.context.store.dispatch(executeCell(this.props.channels,
                                       this.props.id,
                                       this.props.cell.get('source'),
-                                      this.context.kernelConnected,
-                                      this.context.notificationSystem));
+                                      this.props.kernelConnected,
+                                      this.props.notificationSystem));
   }
 
   render() {
@@ -93,4 +102,4 @@ class Toolbar extends React.Component {
   }
 }
 
-export default Toolbar;
+export default connect(mapStateToProps)(Toolbar);

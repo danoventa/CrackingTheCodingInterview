@@ -3,7 +3,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import {expect} from 'chai';
 
-import Toolbar from '../../../../src/notebook/components/cell/toolbar';
+import { Toolbar } from '../../../../src/notebook/components/cell/toolbar';
 
 describe('Toolbar', () => {
   it('should be able to render a toolbar', () => {

@@ -12,13 +12,13 @@ import {
   dummyCommutable,
 } from '../dummy-nb';
 
-import Notebook from '../../../src/notebook/components/notebook';
+import { ConnectedNotebook } from '../../../src/notebook/components/notebook';
 
 // Boilerplate test to make sure the testing setup is configured
 describe('Notebook', () => {
   it('accepts an Immutable.List of cells', () => {
     const component = shallow(
-      <Notebook
+      <ConnectedNotebook
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
         cellStatuses={new Immutable.Map()}
@@ -33,7 +33,7 @@ describe('Notebook', () => {
   });
   it('implements the correct css spec', () => {
     const component = mount(
-      <Notebook
+      <ConnectedNotebook
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
         cellStatuses={new Immutable.Map()}

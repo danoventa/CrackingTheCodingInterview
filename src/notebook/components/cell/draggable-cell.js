@@ -66,7 +66,7 @@ class DraggableCell extends React.Component {
   };
 
   static contextTypes = {
-    dispatch: React.PropTypes.func,
+    store: React.PropTypes.object,
   };
 
   constructor() {
@@ -108,7 +108,7 @@ class DraggableCell extends React.Component {
   }
 
   selectCell() {
-    this.context.dispatch(focusCell(this.props.id));
+    this.context.store.dispatch(focusCell(this.props.id));
   }
 
   render() {

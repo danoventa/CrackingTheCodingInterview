@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { connect } from 'react-redux';
 
 import Cell from './cell/cell';
 import DraggableCell from './cell/draggable-cell';
@@ -17,9 +18,24 @@ import { displayOrder, transforms } from 'transformime-react';
 // Always set up the markdown mode
 require('codemirror/mode/markdown/markdown');
 
+const mapStateToProps = (state) => ({
+  theme: state.document.theme,
+  notebook: state.document.get('notebook'),
+  channels: state.app.channels,
+  cellPagers: state.document.get('cellPagers'),
+  focusedCell: state.document.get('focusedCell'),
+  cellStatuses: state.document.get('cellStatuses'),
+  stickyCells: state.document.get('stickyCells'),
+  notificationSystem: state.app.notificationSystem,
+  kernelConnected: state.app.channels &&
+    !(state.app.executionState === 'starting' ||
+      state.app.executionState === 'not connected'),
+});
+
 class Notebook extends React.Component {
   static propTypes = {
     channels: React.PropTypes.any,
+    dispatch: React.PropTypes.func,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
     notebook: React.PropTypes.any,
     transforms: React.PropTypes.instanceOf(Immutable.Map),
@@ -28,6 +44,8 @@ class Notebook extends React.Component {
     stickyCells: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
     theme: React.PropTypes.string,
+    kernelConnected: React.PropTypes.bool,
+    notificationSystem: React.PropTypes.any,
   };
 
   static defaultProps = {
@@ -35,14 +53,10 @@ class Notebook extends React.Component {
     transforms,
   };
 
-  static contextTypes = {
+  static propsTypes = {
     dispatch: React.PropTypes.func,
     notificationSystem: React.PropTypes.any,
     kernelConnected: React.PropTypes.bool,
-  };
-
-  static childContextTypes = {
-    channels: React.PropTypes.object,
   };
 
   constructor() {
@@ -53,12 +67,6 @@ class Notebook extends React.Component {
     this.keyDown = this.keyDown.bind(this);
     this.moveCell = this.moveCell.bind(this);
     this.getCompletions = this.getCompletions.bind(this);
-  }
-
-  getChildContext() {
-    return {
-      channels: this.props.channels,
-    };
   }
 
   componentDidMount() {
@@ -115,7 +123,7 @@ class Notebook extends React.Component {
   }
 
   moveCell(sourceId, destinationId, above) {
-    this.context.dispatch(moveCell(sourceId, destinationId, above));
+    this.props.dispatch(moveCell(sourceId, destinationId, above));
   }
 
 
@@ -140,17 +148,17 @@ class Notebook extends React.Component {
     const cell = cellMap.get(id);
 
     if (e.shiftKey) {
-      this.context.dispatch(focusNextCell(this.props.focusedCell, true));
+      this.props.dispatch(focusNextCell(this.props.focusedCell, true));
     }
 
     if (cell.get('cell_type') === 'code') {
-      this.context.dispatch(
+      this.props.dispatch(
         executeCell(
           this.props.channels,
           id,
           cell.get('source'),
-          this.context.kernelConnected,
-          this.context.notificationSystem
+          this.props.kernelConnected,
+          this.props.notificationSystem
         )
       );
     }
@@ -248,4 +256,5 @@ class Notebook extends React.Component {
   }
 }
 
-export default dragDropContext(HTML5Backend)(Notebook);
+export const ConnectedNotebook = dragDropContext(HTML5Backend)(Notebook);
+export default connect(mapStateToProps)(ConnectedNotebook);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import {
   createCellAfter,
@@ -6,13 +7,10 @@ import {
   createCellAppend,
   mergeCellAfter } from '../../actions';
 
-export default class CellCreatorButtons extends React.Component {
+export class CellCreatorButtons extends React.Component {
   static propTypes = {
     above: React.PropTypes.bool,
     id: React.PropTypes.string,
-  };
-
-  static contextTypes = {
     dispatch: React.PropTypes.func,
   };
 
@@ -30,19 +28,19 @@ export default class CellCreatorButtons extends React.Component {
 
   createCell(type) {
     if (!this.props.id) {
-      this.context.dispatch(createCellAppend(type));
+      this.props.dispatch(createCellAppend(type));
       return;
     }
 
     if (this.props.above) {
-      this.context.dispatch(createCellBefore(type, this.props.id));
+      this.props.dispatch(createCellBefore(type, this.props.id));
     } else {
-      this.context.dispatch(createCellAfter(type, this.props.id));
+      this.props.dispatch(createCellAfter(type, this.props.id));
     }
   }
 
   mergeCell() {
-    this.context.dispatch(mergeCellAfter(this.props.id));
+    this.props.dispatch(mergeCellAfter(this.props.id));
   }
 
   render() {
@@ -64,3 +62,5 @@ export default class CellCreatorButtons extends React.Component {
   }
 
 }
+
+export default connect()(CellCreatorButtons);

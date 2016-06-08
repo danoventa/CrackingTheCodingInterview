@@ -7,7 +7,7 @@ import { shallow } from 'enzyme';
 import Immutable from 'immutable';
 
 import { NEW_CELL_AFTER } from '../../../../src/notebook/constants';
-import CellCreatorButtons from '../../../../src/notebook/components/cell/cell-creator-buttons';
+import { CellCreatorButtons } from '../../../../src/notebook/components/cell/cell-creator-buttons';
 
 describe('CellCreatorButtons', () => {
   it('can be constructed', () => {
@@ -30,32 +30,28 @@ describe('CellCreatorButtons', () => {
   });
   it('can create text cell', () => {
     return new Promise(resolve => {
-      const context = {
-        dispatch: action => {
-          expect(action.id).to.equal('test');
-          expect(action.cellType).to.equal('markdown');
-          expect(action.type).to.equal(NEW_CELL_AFTER);
-          resolve();
-        }
+      const dispatch = action => {
+        expect(action.id).to.equal('test');
+        expect(action.cellType).to.equal('markdown');
+        expect(action.type).to.equal(NEW_CELL_AFTER);
+        resolve();
       };
       const component = shallow(
-        <CellCreatorButtons above={false} id='test' />
+        <CellCreatorButtons above={false} id='test' dispatch={dispatch} />
       , { context });
       component.find('button.add-text-cell').simulate('click');
     });
   });
   it('can create code cell', () => {
     return new Promise(resolve => {
-      const context = {
-        dispatch: action => {
-          expect(action.id).to.equal('test');
-          expect(action.cellType).to.equal('code');
-          expect(action.type).to.equal(NEW_CELL_AFTER);
-          resolve();
-        }
+      const dispatch = action => {
+        expect(action.id).to.equal('test');
+        expect(action.cellType).to.equal('code');
+        expect(action.type).to.equal(NEW_CELL_AFTER);
+        resolve();
       };
       const component = shallow(
-        <CellCreatorButtons above={false} id='test' />
+        <CellCreatorButtons above={false} id='test' dispatch={dispatch} />
       , { context });
       component.find('button.add-code-cell').simulate('click');
     });
