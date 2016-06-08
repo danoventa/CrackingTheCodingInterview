@@ -243,7 +243,7 @@ export function executeCell(channels, id, source, kernelConnected, notificationS
       return;
     }
 
-    const obs = agendas.executeCell(channels, id, source).takeUntil(
+    const obs = agendas.executeCell(store, channels, id, source).takeUntil(
       actions.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id)
     );
 
@@ -271,5 +271,13 @@ export function setNotificationSystem(notificationSystem) {
   return {
     type: constants.SET_NOTIFICATION_SYSTEM,
     notificationSystem,
+  };
+}
+
+export function associateCellToMsg(cellId, msgId) {
+  return {
+    type: constants.ASSOCIATE_CELL_TO_MSG,
+    cellId,
+    msgId,
   };
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import CellCreatorButtons from './cell-creator-buttons';
 
@@ -10,6 +11,7 @@ export default class CellCreator extends React.Component {
 
   constructor() {
     super();
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.setHoverElement = this.setHoverElement.bind(this);
     this.updateVisibility = this.updateVisibility.bind(this);
   }

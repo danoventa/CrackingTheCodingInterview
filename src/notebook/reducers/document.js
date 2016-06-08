@@ -1,10 +1,9 @@
-import * as commutable from 'commutable';
+import Immutable from 'immutable';
+import { handleActions } from 'redux-actions';
 import * as uuid from 'uuid';
+import * as commutable from 'commutable';
 
 import * as constants from '../constants';
-import { handleActions } from 'redux-actions';
-
-import Immutable from 'immutable';
 
 export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
@@ -158,5 +157,20 @@ export default handleActions({
   [constants.OVERWRITE_METADATA_FIELD]: function overwriteMetadata(state, action) {
     const { field, value } = action;
     return state.setIn(['notebook', 'metadata', field], Immutable.fromJS(value));
+  },
+  [constants.ASSOCIATE_CELL_TO_MSG]: function associateCellToMsg(state, action) {
+    const { cellId, msgId } = action;
+
+    // Keep a forward and backward mapping of cell and msg ids so we can make
+    // sure only one mapping per cell exists at any given time.
+    const oldMsgId = state.getIn(['cellMsgAssociations', cellId]);
+    const cellMsgAssociations = state.get('cellMsgAssociations').set(cellId, msgId);
+    let msgCellAssociations = state.get('msgCellAssociations').set(msgId, cellId);
+    if (oldMsgId) {
+      msgCellAssociations = msgCellAssociations.delete(oldMsgId);
+    }
+    return state
+      .set('cellMsgAssociations', cellMsgAssociations)
+      .set('msgCellAssociations', msgCellAssociations);
   },
 }, {});

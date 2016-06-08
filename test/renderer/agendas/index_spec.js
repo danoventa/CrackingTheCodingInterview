@@ -3,10 +3,10 @@ import { expect } from 'chai';
 import { updateCellSource, executeCell } from '../../../src/notebook/actions';
 import { liveStore, dispatchQueuePromise, waitForOutputs } from '../../utils';
 
-describe('agendas.executeCell', function() {
-  this.timeout(5000);
-  this.retries(5);
-  it('produces the right output', () => {
+describe('agendas.executeCell', () => {
+  it('produces the right output', function() {
+    this.timeout(4000);
+    this.retries(10);
     return liveStore((kernel, dispatch, store) => {
       const cellId = store.getState().document.getIn(['notebook', 'cellOrder', 0]);
       const source = 'print("a")';

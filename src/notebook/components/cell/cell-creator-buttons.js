@@ -1,4 +1,5 @@
 import React from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 
 import {
@@ -16,6 +17,7 @@ export class CellCreatorButtons extends React.Component {
 
   constructor() {
     super();
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.createCodeCell = this.createCell.bind(this, 'code');
     this.createTextCell = this.createCell.bind(this, 'markdown');
     this.createCell = this.createCell.bind(this);

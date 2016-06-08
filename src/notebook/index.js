@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import Immutable from 'immutable';
 
@@ -43,6 +44,8 @@ const DocumentRecord = new Immutable.Record({
   cellStatuses: new Immutable.Map(),
   stickyCells: new Immutable.Map(),
   focusedCell: null,
+  cellMsgAssociations: new Immutable.Map(),
+  msgCellAssociations: new Immutable.Map(),
 });
 
 ipc.on('main:load', (e, launchData) => {
@@ -82,6 +85,7 @@ ipc.on('main:load', (e, launchData) => {
   class App extends React.Component {
     constructor(props) {
       super(props);
+      this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
       this.state = {
         theme: 'light',
       };

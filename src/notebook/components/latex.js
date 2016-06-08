@@ -1,4 +1,5 @@
 import React from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { loadMathJax, mathProcessor } from 'mathjax-electron';
 
 // Initialize the mathjax renderer.
@@ -9,12 +10,17 @@ export default class LatexRenderer extends React.Component {
     children: React.PropTypes.any,
   };
 
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
   componentDidMount() {
-    mathProcessor(this.refs.rendered);
+    if (!window.disableMathJax) mathProcessor(this.refs.rendered);
   }
 
   componentDidUpdate() {
-    mathProcessor(this.refs.rendered);
+    if (!window.disableMathJax) mathProcessor(this.refs.rendered);
   }
 
   render() {
