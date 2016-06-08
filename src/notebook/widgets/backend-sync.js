@@ -92,8 +92,8 @@ export class BackendSync {
     .publishReplay(1) // Only remember the last state
     .refCount();
 
-    // Subscribe to the overservable to trigger it to process messages and send
-    // the validation to the backend.  For convience, store the results on the
+    // Subscribe to the observable to trigger it to process messages and send
+    // the validation to the backend.  For convenience, store the results on the
     // instance.
     this.versionValidated.subscribe(valid => this.isValid = valid); // eslint-disable-line
   }

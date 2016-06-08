@@ -16,7 +16,9 @@ export function getChannels(store) {
   // http://jsbin.com/tujapaciwo/5/edit?js,console
 
   // Defer the initial value till the channels are subscribed to.  This will
-  // make it so the subscribe event.
+  // make it so the action of a subscription will cause the current channels to
+  // be emitted, regardless of whether or not they were set long before when
+  // the subscriber subscribes.
   return Rx.Observable.defer(() => {
     let currentChannels;
     if (store.app) {
