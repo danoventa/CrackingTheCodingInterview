@@ -4,9 +4,8 @@ import * as uuid from 'uuid';
 import * as commutable from 'commutable';
 
 import * as constants from '../constants';
-import widgets from './widgets';
 
-export default handleActions(Object.assign({
+export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.data;
     return state.set('notebook', notebook)
@@ -174,4 +173,4 @@ export default handleActions(Object.assign({
       .set('cellMsgAssociations', cellMsgAssociations)
       .set('msgCellAssociations', msgCellAssociations);
   },
-}, widgets), {});
+}, {});

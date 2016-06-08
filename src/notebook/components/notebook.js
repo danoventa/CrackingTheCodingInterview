@@ -27,7 +27,6 @@ const mapStateToProps = (state) => ({
   focusedCell: state.document.get('focusedCell'),
   cellStatuses: state.document.get('cellStatuses'),
   stickyCells: state.document.get('stickyCells'),
-  widgets: state.document.get('widgets'),
   notificationSystem: state.app.notificationSystem,
   kernelConnected: state.app.channels &&
     !(state.app.executionState === 'starting' ||
@@ -43,8 +42,6 @@ class Notebook extends React.Component {
     transforms: React.PropTypes.instanceOf(Immutable.Map),
     cellPagers: React.PropTypes.instanceOf(Immutable.Map),
     cellStatuses: React.PropTypes.instanceOf(Immutable.Map),
-    widgets: React.PropTypes.instanceOf(Immutable.Map),
-    widgetManager: React.PropTypes.any,
     stickyCells: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
     theme: React.PropTypes.string,
@@ -212,8 +209,6 @@ class Notebook extends React.Component {
       focusedCell: this.props.focusedCell,
       running: this.props.cellStatuses.get(id) === 'busy',
       theme: this.props.theme,
-      widgets: this.props.widgets.getIn(['widgetViews', id], new Immutable.List()),
-      widgetManager: this.props.widgetManager,
     };
   }
 

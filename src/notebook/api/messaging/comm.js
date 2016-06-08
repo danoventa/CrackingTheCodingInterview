@@ -1,5 +1,5 @@
 import Rx from 'rxjs/Rx';
-import { createMessage } from '../api/messaging';
+import { createMessage } from './messaging';
 import * as uuid from 'uuid';
 
 /** TODO: Move to more generic location

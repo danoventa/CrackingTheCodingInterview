@@ -24,8 +24,6 @@ import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
 import { initGlobalHandlers } from './global-events';
 
-import { WidgetManager } from './widgets/manager';
-
 const Github = require('github');
 
 const Rx = require('rxjs/Rx');
@@ -39,11 +37,6 @@ if (process.env.GITHUB_TOKEN) {
   }, (x) => console.error(x));
 }
 
-const WidgetsRecord = new Immutable.Record({
-  widgetViews: new Immutable.Map(),
-  widgetModels: new Immutable.Map(),
-});
-
 const DocumentRecord = new Immutable.Record({
   notebook: null,
   filename: '',
@@ -51,7 +44,6 @@ const DocumentRecord = new Immutable.Record({
   cellStatuses: new Immutable.Map(),
   stickyCells: new Immutable.Map(),
   focusedCell: null,
-  widgets: new WidgetsRecord(),
   cellMsgAssociations: new Immutable.Map(),
   msgCellAssociations: new Immutable.Map(),
 });
@@ -90,8 +82,6 @@ ipc.on('main:load', (e, launchData) => {
   initMenuHandlers(store, dispatch);
   initGlobalHandlers(store, dispatch);
 
-  const widgetManager = new WidgetManager(store);
-
   class App extends React.Component {
     constructor(props) {
       super(props);
@@ -125,7 +115,7 @@ ipc.on('main:load', (e, launchData) => {
               this.state.err &&
                 <pre>{this.state.err.toString()}</pre>
             }
-            <Notebook widgetManager={widgetManager} />
+            <Notebook />
             <NotificationSystem ref="notificationSystem" />
             <link rel="stylesheet" href="../static/styles/main.css" />
             <link rel="stylesheet" href={`../static/styles/theme-${this.state.theme}.css`} />

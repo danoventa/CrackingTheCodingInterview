@@ -57,7 +57,6 @@
     "github": "^1.1.0",
     "home-dir": "^1.0.0",
     "immutable": "^3.7.6",
-    "jupyter-js-widgets": "^1.1.1",
     "kernelspecs": "^1.0.1",
     "lodash.difference": "^4.3.0",
     "mathjax-electron": "^0.2.0",

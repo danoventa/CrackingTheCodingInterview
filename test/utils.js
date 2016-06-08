@@ -13,7 +13,6 @@ import { getEntries } from '../src/notebook/performance';
 import createStore from '../src/notebook/store';
 import { reducers } from '../src/notebook/reducers';
 import { acquireKernelInfo } from '../src/notebook/agendas';
-import { WidgetManager } from '../src/notebook/widgets/manager';
 
 import {
   createExecuteRequest,
@@ -131,10 +130,6 @@ export function liveStore(cb, kernelName='python2') {
       cellPagers: new Immutable.Map(),
       cellStatuses: new Immutable.Map(),
       stickyCells: new Immutable.Map(),
-      widgets: new Immutable.Map({
-        widgetViews: new Immutable.Map(),
-        widgetModels: new Immutable.Map(),
-      }),
       cellMsgAssociations: new Immutable.Map(),
       msgCellAssociations: new Immutable.Map(),
     }),
@@ -144,7 +139,6 @@ export function liveStore(cb, kernelName='python2') {
     }
   }, reducers);
 
-  const widgetManager = new WidgetManager(store);
   const kernel = {};
   return launchKernel(store, notebook)
     .then(() => {
@@ -154,7 +148,7 @@ export function liveStore(cb, kernelName='python2') {
       kernel.connectionFile = state.app.connectionFile;
       expect(kernel.channels).to.not.be.undefined;
     })
-    .then(() => Promise.resolve(cb(kernel, store.dispatch, store, widgetManager)))
+    .then(() => Promise.resolve(cb(kernel, store.dispatch, store)))
     .then(() => dispatchQueuePromise(store.dispatch))
     .then(() => shutdownKernel(kernel).then(() => {
       expect(kernel.channels).to.be.undefined;
