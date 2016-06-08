@@ -18,7 +18,7 @@ import { ConnectedNotebook } from '../../../src/notebook/components/notebook';
 describe('Notebook', () => {
   it('accepts an Immutable.List of cells', () => {
     const component = shallow(
-      <Notebook
+      <ConnectedNotebook
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
         cellStatuses={new Immutable.Map()}
@@ -33,7 +33,7 @@ describe('Notebook', () => {
   });
   it('implements the correct css spec', () => {
     const component = mount(
-      <Notebook
+      <ConnectedNotebook
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
         cellStatuses={new Immutable.Map()}
