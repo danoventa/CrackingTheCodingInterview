@@ -19,7 +19,7 @@ export default class MarkdownCell extends React.Component {
   };
 
   static contextTypes = {
-    dispatch: React.PropTypes.func,
+    store: React.PropTypes.object,
   };
 
   static defaultProps = {

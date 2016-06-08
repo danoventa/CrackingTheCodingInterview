@@ -57,7 +57,7 @@ export default class Editor extends React.Component {
   };
 
   static contextTypes = {
-    dispatch: React.PropTypes.func,
+    store: React.PropTypes.object,
   };
 
   static defaultProps = {
@@ -153,7 +153,7 @@ export default class Editor extends React.Component {
       this.setState({
         source: text,
       });
-      this.context.dispatch(updateCellSource(this.props.id, text));
+      this.context.store.dispatch(updateCellSource(this.props.id, text));
     }
   }
 

@@ -18,7 +18,7 @@ class Cell extends React.Component {
   };
 
   static contextTypes = {
-    dispatch: React.PropTypes.func,
+    store: React.PropTypes.object,
   };
 
   constructor() {
@@ -66,15 +66,15 @@ class Cell extends React.Component {
   }
 
   selectCell() {
-    this.context.dispatch(focusCell(this.props.id));
+    this.context.store.dispatch(focusCell(this.props.id));
   }
 
   focusAboveCell() {
-    this.context.dispatch(focusPreviousCell(this.props.id));
+    this.context.store.dispatch(focusPreviousCell(this.props.id));
   }
 
   focusBelowCell() {
-    this.context.dispatch(focusNextCell(this.props.id));
+    this.context.store.dispatch(focusNextCell(this.props.id));
   }
 
   render() {

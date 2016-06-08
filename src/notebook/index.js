@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 
 import configureStore from './store';
 import { reducers } from './reducers';
-import Provider from './components/util/provider';
+import { Provider } from 'react-redux';
 import Notebook from './components/notebook';
 
 import NotificationSystem from 'react-notification-system';
@@ -93,7 +93,6 @@ ipc.on('main:load', (e, launchData) => {
       });
     }
     componentDidMount() {
-      Rx.Observable.from(store).subscribe(state => this.setState(state));
       dispatch(setNotificationSystem(this.refs.notificationSystem));
       const state = store.getState();
       const filename = (state && state.app.filename) || launchData.filename;
@@ -101,29 +100,13 @@ ipc.on('main:load', (e, launchData) => {
     }
     render() {
       return (
-        <Provider
-          rx={{ dispatch, store }}
-          notificationSystem={this.state.app && this.state.app.notificationSystem}
-          executionState={this.state.app && this.state.app.executionState}
-          channels={this.state.app && this.state.app.channels}
-        >
+        <Provider store={store}>
           <div>
             {
               this.state.err &&
                 <pre>{this.state.err.toString()}</pre>
             }
-            {
-              this.state.document &&
-                <Notebook
-                  theme={this.state.document.theme}
-                  notebook={this.state.document.get('notebook')}
-                  channels={this.state.app.channels}
-                  cellPagers={this.state.document.get('cellPagers')}
-                  focusedCell={this.state.document.get('focusedCell')}
-                  cellStatuses={this.state.document.get('cellStatuses')}
-                  stickyCells={this.state.document.get('stickyCells')}
-                />
-            }
+            <Notebook />
             <NotificationSystem ref="notificationSystem" />
             <link rel="stylesheet" href="../static/styles/main.css" />
             <link rel="stylesheet" href={`../static/styles/theme-${this.state.theme}.css`} />
