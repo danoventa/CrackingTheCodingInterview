@@ -32,7 +32,7 @@ const mapStateToProps = (state) => ({
       state.app.executionState === 'not connected'),
 });
 
-export class Notebook extends React.Component {
+class Notebook extends React.Component {
   static propTypes = {
     channels: React.PropTypes.any,
     dispatch: React.PropTypes.func,
@@ -256,5 +256,5 @@ export class Notebook extends React.Component {
   }
 }
 
-const ConnectedNotebook = dragDropContext(HTML5Backend)(Notebook);
+export const ConnectedNotebook = dragDropContext(HTML5Backend)(Notebook);
 export default connect(mapStateToProps)(ConnectedNotebook);
