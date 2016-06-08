@@ -1,4 +1,5 @@
 import React from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 
 import {
@@ -7,7 +8,7 @@ import {
   createCellAppend,
   mergeCellAfter } from '../../actions';
 
-export default class CellCreatorButtons extends React.Component {
+export class CellCreatorButtons extends React.Component {
   static propTypes = {
     above: React.PropTypes.bool,
     id: React.PropTypes.string,

@@ -125,7 +125,7 @@ ipc.on('main:load', (e, launchData) => {
               this.state.err &&
                 <pre>{this.state.err.toString()}</pre>
             }
-            <Notebook />
+            <Notebook widgetManager={widgetManager} />
             <NotificationSystem ref="notificationSystem" />
             <link rel="stylesheet" href="../static/styles/main.css" />
             <link rel="stylesheet" href={`../static/styles/theme-${this.state.theme}.css`} />

@@ -27,6 +27,7 @@ const mapStateToProps = (state) => ({
   focusedCell: state.document.get('focusedCell'),
   cellStatuses: state.document.get('cellStatuses'),
   stickyCells: state.document.get('stickyCells'),
+  widgets: state.document.get('widgets'),
   notificationSystem: state.app.notificationSystem,
   kernelConnected: state.app.channels &&
     !(state.app.executionState === 'starting' ||
