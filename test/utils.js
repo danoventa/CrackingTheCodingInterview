@@ -131,8 +131,10 @@ export function liveStore(cb, kernelName='python2') {
       cellPagers: new Immutable.Map(),
       cellStatuses: new Immutable.Map(),
       stickyCells: new Immutable.Map(),
-      widgetViews: new Immutable.Map(),
-      widgetModels: new Immutable.Map(),
+      widgets: new Immutable.Map({
+        widgetViews: new Immutable.Map(),
+        widgetModels: new Immutable.Map(),
+      }),
       cellMsgAssociations: new Immutable.Map(),
       msgCellAssociations: new Immutable.Map(),
     }),

@@ -39,6 +39,11 @@ if (process.env.GITHUB_TOKEN) {
   }, (x) => console.error(x));
 }
 
+const WidgetsRecord = new Immutable.Record({
+  widgetViews: new Immutable.Map(),
+  widgetModels: new Immutable.Map(),
+});
+
 const DocumentRecord = new Immutable.Record({
   notebook: null,
   filename: '',
@@ -46,8 +51,7 @@ const DocumentRecord = new Immutable.Record({
   cellStatuses: new Immutable.Map(),
   stickyCells: new Immutable.Map(),
   focusedCell: null,
-  widgetViews: new Immutable.Map(),
-  widgetModels: new Immutable.Map(),
+  widgets: new WidgetsRecord(),
   cellMsgAssociations: new Immutable.Map(),
   msgCellAssociations: new Immutable.Map(),
 });

@@ -17,7 +17,7 @@ export class ModelUpdater {
     this.widgetSubscriptions = {};
     Rx.Observable.from(store)
       .pluck('document')
-      .map(document => document.get('widgetModels'))
+      .map(document => document.getIn(['widgets', 'widgetModels']))
       .distinctUntilChanged((a, b) => !a || a.equals(b))
       .subscribe(this.reduxStateChange.bind(this, store, manager));
   }
@@ -49,7 +49,7 @@ export class ModelUpdater {
     created.forEach(id => {
       this.widgetSubscriptions[id] = Rx.Observable.from(store)
         .pluck('document')
-        .map(document => document.getIn(['widgetModels', id]))
+        .map(document => document.getIn(['widgets', 'widgetModels', id]))
         .distinctUntilChanged((a, b) => !a || a.equals(b))
         .subscribe(state => {
           manager.setModelState(id, state.toJS());

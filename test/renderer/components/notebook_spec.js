@@ -21,7 +21,7 @@ describe('Notebook', () => {
       <ConnectedNotebook
         notebook={dummyCommutable}
         widgetManager={null}
-        widgetViews={new Immutable.Map()}
+        widgets={new Immutable.Map()}
         cellPagers={new Immutable.Map()}
         cellStatuses={new Immutable.Map()}
         stickyCells={(new Immutable.Map())
@@ -38,7 +38,7 @@ describe('Notebook', () => {
       <ConnectedNotebook
         notebook={dummyCommutable}
         widgetManager={null}
-        widgetViews={new Immutable.Map()}
+        widgets={new Immutable.Map()}
         cellPagers={new Immutable.Map()}
         cellStatuses={new Immutable.Map()}
         stickyCells={new Immutable.Map()}

@@ -38,7 +38,7 @@ print("executed")
         })
         .then(() => waitFor(() => {
           // Wait for the widget to be rendered
-          return store.getState().document.getIn(['widgetViews', cellId]).count() > 0;
+          return store.getState().document.getIn(['widgets', 'widgetViews', cellId]).count() > 0;
         }));
     });
   });
