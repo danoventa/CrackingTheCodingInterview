@@ -36,18 +36,23 @@ if (process.env.GITHUB_TOKEN) {
   }, (x) => console.error(x));
 }
 
+const DocumentRecord = new Immutable.Record({
+  notebook: null,
+  filename: '',
+  cellPagers: new Immutable.Map(),
+  cellStatuses: new Immutable.Map(),
+  stickyCells: new Immutable.Map(),
+  focusedCell: null,
+});
+
 ipc.on('main:load', (e, launchData) => {
   const store = configureStore({
     app: {
       executionState: 'not connected',
       github,
     },
-    document: Immutable.fromJS({
-      notebook: null,
+    document: new DocumentRecord({
       filename: launchData.filename,
-      cellPagers: new Immutable.Map(),
-      cellStatuses: new Immutable.Map(),
-      stickyCells: new Immutable.Map(),
     }),
   }, reducers);
 
