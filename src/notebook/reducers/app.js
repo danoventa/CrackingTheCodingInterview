@@ -91,7 +91,14 @@ export default handleActions({
   [constants.CLEAR_FUTURE]: clearFuture,
   [constants.UNDO]: function undo(state) {
     if (state.past.size == 0) {
-      return state;
+      return false;
+    } else {
+      const undone = state.past.last();
+      return {
+        ...state,
+        undone,
+        past: state.past.pop(),
+      };
     }
   },
 }, {});

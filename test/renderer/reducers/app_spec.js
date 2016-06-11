@@ -166,4 +166,19 @@ describe('undo', () => {
     const newState = reducers(state, {type: constants.UNDO});
     expect(newState.document).to.deep.equal(state.document);
   });
+  it('should trim the past stack and return the undone value', () => {
+    const state = {
+      app: {
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+        past: new List([monocellDocument]),
+        future: new List(),
+      }
+    };
+
+    const newState = reducers(state, {type: constants.UNDO});
+    expect(newState.app.past.size).to.equal(0);
+    expect(newState.app.undone).to.deep.equal(monocellDocument);
+  });
 });
