@@ -149,3 +149,21 @@ describe('clearFuture', () => {
     expect(clearedState.app.future.size).to.equal(0);
   });
 });
+
+describe('undo', () => {
+  it('should do nothing if there is nothing in the past stack', () => {
+    const state = {
+      app: {
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+        past: new List(),
+        future: new List(),
+      },
+      document: monocellDocument
+    };
+
+    const newState = reducers(state, {type: constants.UNDO});
+    expect(newState.document).to.deep.equal(state.document);
+  });
+});
