@@ -22,6 +22,13 @@ function cleanupKernel(state) {
   );
 }
 
+function clearFuture(state) {
+  return {
+    ...state,
+    future: state.future.clear(),
+  };
+}
+
 export default handleActions({
   [constants.NEW_KERNEL]: function newKernel(state, action) {
     return cleanupKernel(state)
@@ -68,16 +75,18 @@ export default handleActions({
     };
   },
   [constants.SET_BACKWARD_CHECKPOINT]: function setBackwardCheckpoint(state, action) {
-    const {documentState } = action;
-    return {
-      ...state,
-      past: state.past.push(documentState),
-    };
+    const {documentState, clearFutureStack} = action;
+    if (clearFutureStack) {
+      return clearFuture({
+        ...state,
+        past: state.past.push(documentState),
+      });
+    } else {
+      return {
+        ...state,
+        past: state.past.push(documentState),
+      };
+    }
   },
-  [constants.CLEAR_FUTURE]: function clearFuture(state) {
-    return {
-      ...state,
-      future: state.future.clear(),
-    };
-  },
+  [constants.CLEAR_FUTURE]: clearFuture,
 }, {});
