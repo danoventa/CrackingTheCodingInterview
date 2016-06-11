@@ -173,4 +173,8 @@ export default handleActions({
       .set('cellMsgAssociations', cellMsgAssociations)
       .set('msgCellAssociations', msgCellAssociations);
   },
+  [constants.UPDATE_DOCUMENT]: function updateDocument(state, action) {
+    const { newDocument } = action;
+    return newDocument;
+  },
 }, {});
