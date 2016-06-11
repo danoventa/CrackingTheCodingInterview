@@ -69,9 +69,6 @@ export default handleActions({
   },
   [constants.SET_BACKWARD_CHECKPOINT]: function setBackwardCheckpoint(state, action) {
     const {documentState } = action;
-    console.log(state.past);
-    console.log(documentState);
-    console.log(state.past.insert(documentState));
     return {
       ...state,
       past: state.past.insert(documentState),
