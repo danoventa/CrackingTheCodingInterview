@@ -74,4 +74,10 @@ export default handleActions({
       past: state.past.push(documentState),
     };
   },
+  [constants.CLEAR_FUTURE]: function clearFuture(state) {
+    return {
+      ...state,
+      future: state.future.clear(),
+    };
+  },
 }, {});

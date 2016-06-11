@@ -113,3 +113,22 @@ describe('setBackwardCheckpoint', () => {
     expect(newState.app.past.first()).to.deep.equal(monocellDocument);
   });
 });
+
+describe('clearFuture', () => {
+  it('clears the future stack in the document state', () => {
+    const state = {
+      app: {
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+        past: new List(),
+        future: new List(),
+      }
+    };
+
+    const newState = reducers(state, {type: constants.SET_FORWARD_CHECKPOINT, documentState: monocellDocument});
+    expect(newState.app.future.size).to.equal(1);
+    const clearedState = reducers(state, {type: constants.CLEAR_FUTURE});
+    expect(clearedState.app.future.size).to.equal(0);
+  });
+});
