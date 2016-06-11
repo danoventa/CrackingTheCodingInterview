@@ -64,14 +64,17 @@ export default handleActions({
     const { documentState } = action;
     return {
       ...state,
-      future: future.insert(documentState),
+      future: state.future.insert(documentState),
     };
   },
   [constants.SET_BACKWARD_CHECKPOINT]: function setBackwardCheckpoint(state, action) {
     const {documentState } = action;
+    console.log(state.past);
+    console.log(documentState);
+    console.log(state.past.insert(documentState));
     return {
       ...state,
-      past: past.insert(documentState),
+      past: state.past.insert(documentState),
     };
   },
 }, {});
