@@ -79,8 +79,8 @@ describe('setNotificationSystem', () => {
 });
 
 describe('setForwardCheckpoint', () => {
-  it('adds the current document state to the future', () => {
-    const state = {
+  it('adds the current document originalState to the future', () => {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
@@ -90,15 +90,20 @@ describe('setForwardCheckpoint', () => {
       }
     };
 
-    const newState = reducers(state, {type: constants.SET_FORWARD_CHECKPOINT, documentState: monocellDocument});
-    expect(newState.app.future.size).to.equal(1);
-    expect(newState.app.future.first()).to.deep.equal(monocellDocument);
+    const action = {
+      type: constants.SET_FORWARD_CHECKPOINT,
+      documentState: monocellDocument,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.future.size).to.equal(1);
+    expect(state.app.future.first()).to.deep.equal(monocellDocument);
   });
 });
 
 describe('setBackwardCheckpoint', () => {
-  it('adds the current document state to the past', () => {
-    const state = {
+  it('adds the current document originalState to the past', () => {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
@@ -108,12 +113,17 @@ describe('setBackwardCheckpoint', () => {
       }
     };
 
-    const newState = reducers(state, {type: constants.SET_BACKWARD_CHECKPOINT, documentState: monocellDocument});
-    expect(newState.app.past.size).to.equal(1);
-    expect(newState.app.past.first()).to.deep.equal(monocellDocument);
+    const action = {
+      type: constants.SET_BACKWARD_CHECKPOINT,
+      documentState: monocellDocument,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.past.size).to.equal(1);
+    expect(state.app.past.first()).to.deep.equal(monocellDocument);
   });
   it('should clear the future if clearFuture is true', () => {
-    const state = {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
@@ -123,17 +133,21 @@ describe('setBackwardCheckpoint', () => {
       }
     };
 
-    const newState = reducers(state, {type: constants.SET_BACKWARD_CHECKPOINT,
-                                      documentState: monocellDocument,
-                                      clearFutureStack: true});
-    expect(newState.app.past.size).to.equal(1);
-    expect(newState.app.future.size).to.equal(0);
+    const action = {
+      type: constants.SET_BACKWARD_CHECKPOINT,
+      documentState: monocellDocument,
+      clearFutureStack: true,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.past.size).to.equal(1);
+    expect(state.app.future.size).to.equal(0);
   });
 });
 
 describe('clearFuture', () => {
-  it('clears the future stack in the document state', () => {
-    const state = {
+  it('clears the future stack in the document originalState', () => {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
@@ -143,16 +157,21 @@ describe('clearFuture', () => {
       }
     };
 
-    const newState = reducers(state, {type: constants.SET_FORWARD_CHECKPOINT, documentState: monocellDocument});
-    expect(newState.app.future.size).to.equal(1);
-    const clearedState = reducers(state, {type: constants.CLEAR_FUTURE});
+    const action = {
+      type: constants.SET_FORWARD_CHECKPOINT,
+      documentState: monocellDocument,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.future.size).to.equal(1);
+    const clearedState = reducers(originalState, {type: constants.CLEAR_FUTURE});
     expect(clearedState.app.future.size).to.equal(0);
   });
 });
 
 describe('undo', () => {
   it('should do nothing if there is nothing in the past stack', () => {
-    const state = {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
@@ -163,11 +182,15 @@ describe('undo', () => {
       document: monocellDocument
     };
 
-    const newState = reducers(state, {type: constants.UNDO});
-    expect(newState.document).to.deep.equal(state.document);
+    const action = {
+      type: constants.UNDO,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document).to.deep.equal(originalState.document);
   });
   it('should trim the past stack and return the undone value', () => {
-    const state = {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
@@ -177,8 +200,12 @@ describe('undo', () => {
       }
     };
 
-    const newState = reducers(state, {type: constants.UNDO});
-    expect(newState.app.past.size).to.equal(0);
-    expect(newState.app.undone).to.deep.equal(monocellDocument);
+    const action = {
+      type: constants.UNDO,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.past.size).to.equal(0);
+    expect(state.app.undone).to.deep.equal(monocellDocument);
   });
 });
