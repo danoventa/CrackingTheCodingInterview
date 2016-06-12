@@ -9,67 +9,94 @@ const updateExecutionCount = reducers[constants.UPDATE_CELL_EXECUTION_COUNT];
 const newCellAfter = reducers[constants.NEW_CELL_AFTER];
 
 describe('cleanupKernel', () => {
-  it('nullifies entries for the kernel in state', () => {
-    const state = {
+  it('nullifies entries for the kernel in originalState', () => {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
         connectionFile: false,
       }
     };
-    const newState = reducers(state, { type: constants.KILL_KERNEL});
-    expect(newState.app.channels).to.be.null;
-    expect(newState.app.spawn).to.be.null;
-    expect(newState.app.connectionFile).to.be.null;
+
+    const action = {
+      type: constants.KILL_KERNEL,
+    };
+
+    const state = reducers(originalState, action); 
+    expect(state.app.channels).to.be.null;
+    expect(state.app.spawn).to.be.null;
+    expect(state.app.connectionFile).to.be.null;
   });
 });
 
 describe('changeFilename', () => {
-  it('returns the same state if filename is undefined', () => {
-    const state = {
+  it('returns the same originalState if filename is undefined', () => {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
         connectionFile: false,
       }
     };
-    const newState = reducers(state, {type: constants.CHANGE_FILENAME});
-    expect(newState.app.filename).to.be.undefined;
+
+    const action = {
+      type: constants.CHANGE_FILENAME,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.filename).to.be.undefined;
   });
   it('sets the filename if given a valid one', () => {
-    const state = {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
         connectionFile: false,
      }
     };
-    const newState = reducers(state, {type: constants.CHANGE_FILENAME, filename: 'test.ipynb'});
-    expect(newState.app.filename).to.equal('test.ipynb');
+
+    const action = {
+      type: constants.CHANGE_FILENAME,
+      filename: 'test.ipynb',
+    };
+
+    const state = reducers(originalState, action); 
+    expect(state.app.filename).to.equal('test.ipynb');
   });
 });
 
 describe('setNotificationSystem', () => {
-  it('returns the same state if notificationSystem is undefined', () => {
-    const state = {
+  it('returns the same originalState if notificationSystem is undefined', () => {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
         connectionFile: false,
      }
     };
-    const newState = reducers(state, {type: constants.SET_NOTIFICATION_SYSTEM}); 
-    expect(newState.app.notificationSystem).to.be.undefined;
+
+    const action = {
+      type: constants.SET_NOTIFICATION_SYSTEM
+    };
+
+    const state = reducers(originalState, action); 
+    expect(state.app.notificationSystem).to.be.undefined;
   });
   it('sets the notificationSystem if given', () => {
-    const state = {
+    const originalState = {
       app: {
         channels: false,
         spawn: false,
         connectionFile: false,
      }
     };
-    const newState = reducers(state, {type: constants.SET_NOTIFICATION_SYSTEM, notificationSystem: ""});
-    expect(newState.app.notificationSystem).to.equal("");
+
+    const action = {
+      type: constants.SET_NOTIFICATION_SYSTEM,
+      notificationSystem: "",
+    };
+
+    const state = reducers(originalState, action); 
+    expect(state.app.notificationSystem).to.equal("");
   });
 });
