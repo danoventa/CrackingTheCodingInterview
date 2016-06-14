@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import Immutable from 'immutable';
-
 import configureStore from './store';
 import { reducers } from './reducers';
 import { Provider } from 'react-redux';

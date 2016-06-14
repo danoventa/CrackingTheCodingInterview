@@ -5,7 +5,7 @@ import * as actions from '../../../src/notebook/actions';
 
 import * as constants from '../../../src/notebook/constants';
 
-import createStore from '../../../src/notebook/store';
+import { dummyStore } from '../../utils';
 
 import {
   dummyJSON,
@@ -79,8 +79,8 @@ describe('save', () => {
 });
 
 describe('saveAs', () => {
-  it.only('creates a CHANGE_FILENAME action', (done) => {
-    actions.saveAs('test/test-ipynb-saveas.ipynb', dummyCommutable)(actions, createStore())
+  it('creates a CHANGE_FILENAME action', (done) => {
+    actions.saveAs('test/test-ipynb-saveas.ipynb', dummyCommutable)(actions, dummyStore())
       .first()
       .subscribe((action) => {
         expect(action).to.deep.equal({
@@ -96,7 +96,7 @@ describe('saveAs', () => {
 
 describe('setNotebook', () => {
   it('creates a SET_NOTEBOOK action', () => {
-    actions.setNotebook(dummyJSON, 'test/test-ipynb.ipynb')(actions, createStore())
+    actions.setNotebook(dummyJSON, 'test/test-ipynb.ipynb')(actions, dummyStore())
       .first()
       .subscribe((action) => {
         expect(action).to.deep.equal({

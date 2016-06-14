@@ -9,6 +9,7 @@ export const AppRecord = new Immutable.Record({
   notificationSystem: null,
   kernelSpecName: null,
   filename: null,
+  isSaving: false,
 });
 
 export const DocumentRecord = new Immutable.Record({
