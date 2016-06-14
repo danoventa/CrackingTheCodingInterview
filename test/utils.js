@@ -14,6 +14,8 @@ import createStore from '../src/notebook/store';
 import { reducers } from '../src/notebook/reducers';
 import { acquireKernelInfo } from '../src/notebook/agendas';
 
+import { AppRecord, DocumentRecord } from '../src/notebook/records';
+
 import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
@@ -125,7 +127,7 @@ export function liveStore(cb, kernelName='python2') {
     'metadata', 'kernelspec', 'name',
   ], kernelName);
   const store = createStore({
-    document: Immutable.Map({
+    document: DocumentRecord({
       notebook,
       cellPagers: new Immutable.Map(),
       cellStatuses: new Immutable.Map(),
@@ -133,10 +135,10 @@ export function liveStore(cb, kernelName='python2') {
       cellMsgAssociations: new Immutable.Map(),
       msgCellAssociations: new Immutable.Map(),
     }),
-    app: {
+    app: AppRecord({
       executionState: 'not connected',
       github,
-    }
+    })
   }, reducers);
 
   const kernel = {};

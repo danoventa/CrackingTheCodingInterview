@@ -79,7 +79,7 @@ describe('save', () => {
 });
 
 describe('saveAs', () => {
-  it('creates a CHANGE_FILENAME action', (done) => {
+  it.only('creates a CHANGE_FILENAME action', (done) => {
     actions.saveAs('test/test-ipynb-saveas.ipynb', dummyCommutable)(actions, createStore())
       .first()
       .subscribe((action) => {

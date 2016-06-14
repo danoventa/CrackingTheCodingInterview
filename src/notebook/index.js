@@ -24,6 +24,8 @@ import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
 import { initGlobalHandlers } from './global-events';
 
+import { AppRecord, DocumentRecord } from './records';
+
 const Github = require('github');
 
 const Rx = require('rxjs/Rx');
@@ -36,27 +38,6 @@ if (process.env.GITHUB_TOKEN) {
     token: process.env.GITHUB_TOKEN,
   }, (x) => console.error(x));
 }
-
-const AppRecord = new Immutable.Record({
-  executionState: 'not connected',
-  github: null,
-  channels: false,
-  spawn: false,
-  connectionFile: false,
-  notificationSystem: null,
-  kernelSpecName: null,
-});
-
-const DocumentRecord = new Immutable.Record({
-  notebook: null,
-  filename: '',
-  cellPagers: new Immutable.Map(),
-  cellStatuses: new Immutable.Map(),
-  stickyCells: new Immutable.Map(),
-  focusedCell: null,
-  cellMsgAssociations: new Immutable.Map(),
-  msgCellAssociations: new Immutable.Map(),
-});
 
 ipc.on('main:load', (e, launchData) => {
   const store = configureStore({

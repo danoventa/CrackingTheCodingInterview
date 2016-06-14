@@ -14,10 +14,10 @@ function cleanupKernel(state) {
   shutdownKernel(kernel);
 
   return state.withMutations(ctx =>
-    ctx.delete('channels')
-       .delete('spawn')
-       .delete('connectionFile')
-       .delete('kernelSpecName')
+    ctx.set('channels', null)
+       .set('spawn', null)
+       .set('connectionFile', null)
+       .set('kernelSpecName', null)
        .set('executionState', 'not connected')
   );
 }
