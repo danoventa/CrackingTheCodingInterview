@@ -319,7 +319,7 @@ describe('overwriteMetadata', () => {
 });
 
 describe('changeFilename', () => {
-  it.only('returns the same originalState if filename is undefined', () => {
+  it('returns the same originalState if filename is undefined', () => {
     const originalState = {
       document: new DocumentRecord({
         filename: 'original',
