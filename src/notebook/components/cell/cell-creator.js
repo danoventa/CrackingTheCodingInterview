@@ -53,7 +53,7 @@ export default class CellCreator extends React.Component {
       <div className="creator-hover-mask">
         <div className="creator-hover-region" ref={this.setHoverElement}>
           {this.state.show || this.props.id === null ?
-            (<CellCreatorButtons {...this.props} />) :
+            (<CellCreatorButtons above={this.props.above} id={this.props.id} />) :
             ''}
         </div>
       </div>);
