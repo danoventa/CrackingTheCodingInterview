@@ -25,7 +25,32 @@
     <script>
       window.onload = function deferredLoad() {
         setTimeout(function timeoutCallback() {
-          require('../build/notebook/index');
+          try {
+            require('../build/notebook/index');
+          } catch(err) {
+            const el = document.querySelector('body');
+            el.innerHTML = '';
+
+            const headerEl = document.createElement('h3');
+            const msgContainer = document.createElement('div');
+
+            headerEl.textContent = err.message;
+
+            switch(err.code) {
+              case 'MODULE_NOT_FOUND':
+                const msgEl = document.createElement('pre');
+                msgEl.textContent = 'Do you need to npm install any new packages?';
+                msgContainer.appendChild(msgEl);
+                break;
+              default:
+                if(/Module version mismatch/.test(err.message)) {
+                  msgContainer.innerHTML = '<pre>nteract <a href="https://github.com/nteract/nteract#dependencies">requires node 6 for dev install</a></pre>';
+                }
+            }
+            el.appendChild(headerEl);
+            el.appendChild(msgContainer);
+            console.dir(err);
+          }
         }, 1);
       };
     </script>
