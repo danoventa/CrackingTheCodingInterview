@@ -43,6 +43,8 @@ const AppRecord = new Immutable.Record({
   channels: false,
   spawn: false,
   connectionFile: false,
+  notificationSystem: null,
+  kernelSpecName: null,
 });
 
 const DocumentRecord = new Immutable.Record({
