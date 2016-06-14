@@ -92,7 +92,7 @@ ipc.on('main:load', (e, launchData) => {
     componentDidMount() {
       dispatch(setNotificationSystem(this.refs.notificationSystem));
       const state = store.getState();
-      const filename = (state && state.app.filename) || launchData.filename;
+      const filename = (state && state.document.filename) || launchData.filename;
       dispatch(setNotebook(launchData.notebook, filename));
     }
     render() {
