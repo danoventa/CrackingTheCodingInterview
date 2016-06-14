@@ -37,6 +37,14 @@ if (process.env.GITHUB_TOKEN) {
   }, (x) => console.error(x));
 }
 
+const AppRecord = new Immutable.Record({
+  executionState: 'not connected',
+  github: null,
+  channels: false,
+  spawn: false,
+  connectionFile: false,
+});
+
 const DocumentRecord = new Immutable.Record({
   notebook: null,
   filename: '',
@@ -50,10 +58,9 @@ const DocumentRecord = new Immutable.Record({
 
 ipc.on('main:load', (e, launchData) => {
   const store = configureStore({
-    app: {
-      executionState: 'not connected',
+    app: new AppRecord({
       github,
-    },
+    }),
     document: new DocumentRecord({
       filename: launchData.filename,
     }),
