@@ -43,8 +43,8 @@ ipc.on('main:load', (e, launchData) => {
       github,
     }),
     metadata: new MetadataRecord({
-      past: new List(),
-      future: new List(),
+      past: new Immutable.List(),
+      future: new Immutable.List(),
       filename: launchData.filename,
     }),
     document: new DocumentRecord(),
