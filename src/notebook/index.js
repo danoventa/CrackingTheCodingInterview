@@ -47,7 +47,6 @@ const AppRecord = new Immutable.Record({
 
 const DocumentRecord = new Immutable.Record({
   notebook: null,
-  filename: '',
   cellPagers: new Immutable.Map(),
   cellStatuses: new Immutable.Map(),
   stickyCells: new Immutable.Map(),
@@ -56,12 +55,19 @@ const DocumentRecord = new Immutable.Record({
   msgCellAssociations: new Immutable.Map(),
 });
 
+const DocumentMetadataRecord = new Immutable.Record({
+  past: new Immutable.List(),
+  future: new Immutable.List(),
+  filename: '',
+  document: new DocumentRecord(),
+});
+
 ipc.on('main:load', (e, launchData) => {
   const store = configureStore({
     app: new AppRecord({
       github,
     }),
-    document: new DocumentRecord({
+    documentMetadata: new DocumentMetadataRecord({
       filename: launchData.filename,
     }),
   }, reducers);
@@ -111,7 +117,7 @@ ipc.on('main:load', (e, launchData) => {
     componentDidMount() {
       dispatch(setNotificationSystem(this.refs.notificationSystem));
       const state = store.getState();
-      const filename = (state && state.app.filename) || launchData.filename;
+      const filename = (state && state.documentMetadata.filename) || launchData.filename;
       dispatch(setNotebook(launchData.notebook, filename));
     }
     render() {
