@@ -3,12 +3,11 @@ import Immutable from 'immutable';
 export const AppRecord = new Immutable.Record({
   executionState: 'not connected',
   github: null,
-  channels: false,
-  spawn: false,
-  connectionFile: false,
+  channels: null,
+  spawn: null,
+  connectionFile: null,
   notificationSystem: null,
   kernelSpecName: null,
-  filename: null,
   isSaving: false,
 });
 
