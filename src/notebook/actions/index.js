@@ -307,6 +307,12 @@ export function undo() {
   };
 }
 
+export function redo() {
+  return {
+    type: constants.REDO,
+  };
+}
+
 export function updateDocument(newDocument) {
   return {
     type: constants.UPDATE_DOCUMENT,

@@ -101,4 +101,16 @@ export default handleActions({
       };
     }
   },
+  [constants.REDO]: function redo(state) {
+    if (state.future.size == 0) {
+      return false;
+    } else {
+      const redone = state.future.last();
+      return {
+        ...state,
+        redone,
+        future: state.future.pop(),
+      };
+    }
+  },
 }, {});
