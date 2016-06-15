@@ -318,18 +318,3 @@ describe('overwriteMetadata', () => {
   });
 });
 
-describe('updateDocument', () => {
-  it('should update document with the document in action', () => {
-    const originalState = {
-      document: monocellDocument,
-    };
-
-    const action = {
-      type: constants.UPDATE_DOCUMENT,
-      newDocument: (new Map()).set('notebook', dummyCommutable),
-    };
-
-    const state = reducers(originalState, action);
-    expect(state.document).to.deep.equal((new Map()).set('notebook', dummyCommutable));
-  });
-});

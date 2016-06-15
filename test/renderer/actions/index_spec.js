@@ -308,15 +308,6 @@ describe('undo', () => {
   });
 });
 
-describe('updateDocument', () => {
-  it('creates an UPDATE_DOCUMENT', () => {
-    expect(actions.updateDocument(dummyCommutable)).to.deep.equal({
-      type: constants.UPDATE_DOCUMENT,
-      newDocument: dummyCommutable,
-    });
-  });
-});
-
 describe('executeCell', () => {
   it.skip('creates an ERROR_KERNEL_NOT_CONNECTED action with channels not setup', (done) => {
     const channels = {

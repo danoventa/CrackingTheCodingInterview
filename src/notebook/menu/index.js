@@ -16,7 +16,6 @@ import {
   interruptKernel,
   undo,
   redo,
-  updateDocument,
 } from '../actions';
 
 
