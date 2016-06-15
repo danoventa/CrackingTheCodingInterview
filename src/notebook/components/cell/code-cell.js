@@ -15,7 +15,7 @@ class CodeCell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    getCompletions: React.PropTypes.any,
+    getCompletions: React.PropTypes.func,
     id: React.PropTypes.string,
     language: React.PropTypes.string,
     theme: React.PropTypes.string,

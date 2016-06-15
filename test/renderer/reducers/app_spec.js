@@ -33,42 +33,6 @@ describe('cleanupKernel', () => {
   });
 });
 
-describe('changeFilename', () => {
-  it('returns the same originalState if filename is undefined', () => {
-    const originalState = {
-      app: new AppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false,
-      })
-    };
-
-    const action = {
-      type: constants.CHANGE_FILENAME,
-    };
-
-    const state = reducers(originalState, action);
-    expect(state.app.filename).to.be.undefined;
-  });
-  it('sets the filename if given a valid one', () => {
-    const originalState = {
-      app: new AppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false,
-     })
-    };
-
-    const action = {
-      type: constants.CHANGE_FILENAME,
-      filename: 'test.ipynb',
-    };
-
-    const state = reducers(originalState, action);
-    expect(state.app.filename).to.equal('test.ipynb');
-  });
-});
-
 describe('setNotificationSystem', () => {
   it('returns the same originalState if notificationSystem is undefined', () => {
     const originalState = {

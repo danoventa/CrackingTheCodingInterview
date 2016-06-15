@@ -158,6 +158,9 @@ export default handleActions({
     const { field, value } = action;
     return state.setIn(['notebook', 'metadata', field], Immutable.fromJS(value));
   },
+  [constants.CHANGE_FILENAME]: function changeFilename(state, action) {
+    return action.filename ? state.set('filename', action.filename) : state;
+  },
   [constants.ASSOCIATE_CELL_TO_MSG]: function associateCellToMsg(state, action) {
     const { cellId, msgId } = action;
 

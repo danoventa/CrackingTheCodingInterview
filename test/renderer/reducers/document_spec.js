@@ -3,6 +3,8 @@ import { expect } from 'chai';
 import * as commutable from 'commutable';
 import * as constants from '../../../src/notebook/constants';
 
+import { DocumentRecord } from '../../../src/notebook/records';
+
 import reducers from '../../../src/notebook/reducers';
 
 import {
@@ -313,5 +315,37 @@ describe('overwriteMetadata', () => {
 
     const state = reducers(originalState, action);
     expect(state.document.getIn(['notebook', 'metadata', 'name'])).to.equal("javascript");
+  });
+});
+
+describe('changeFilename', () => {
+  it('returns the same originalState if filename is undefined', () => {
+    const originalState = {
+      document: new DocumentRecord({
+        filename: 'original',
+      })
+    };
+
+    const action = {
+      type: constants.CHANGE_FILENAME,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.filename).to.equal('original');
+  });
+  it('sets the filename if given a valid one', () => {
+    const originalState = {
+      document: new DocumentRecord({
+        filename: 'original',
+      })
+    };
+
+    const action = {
+      type: constants.CHANGE_FILENAME,
+      filename: 'test.ipynb',
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.filename).to.equal('test.ipynb');
   });
 });

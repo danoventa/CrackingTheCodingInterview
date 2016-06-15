@@ -49,9 +49,6 @@ export default handleActions({
   [constants.DONE_SAVING]: function doneSaving(state) {
     return state.set('isSaving', false);
   },
-  [constants.CHANGE_FILENAME]: function changeFilename(state, action) {
-    return state.set('filename', action.filename);
-  },
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
     return state.set('notificationSystem', action.notificationSystem);
   },
