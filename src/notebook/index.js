@@ -22,7 +22,7 @@ import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
 import { initGlobalHandlers } from './global-events';
 
-import { AppRecord, DocumentRecord } from './records';
+import { AppRecord, DocumentMetadataRecord } from './records';
 
 const Github = require('github');
 
