@@ -22,7 +22,7 @@ import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
 import { initGlobalHandlers } from './global-events';
 
-import { AppRecord, DocumentRecord } from './records';
+import { AppRecord, DocumentRecord, MetadataRecord } from './records';
 
 const Github = require('github');
 
@@ -42,9 +42,10 @@ ipc.on('main:load', (e, launchData) => {
     app: new AppRecord({
       github,
     }),
-    document: new DocumentRecord({
+    metadata: new MetadataRecord({
       filename: launchData.filename,
     }),
+    document: new DocumentRecord(),
   }, reducers);
 
   const { dispatch } = store;
@@ -65,6 +66,8 @@ ipc.on('main:load', (e, launchData) => {
     .subscribe(st => {
       dispatch(setExecutionState(st));
     });
+
+  window.store = store;
 
   initNativeHandlers(store);
   initMenuHandlers(store, dispatch);
@@ -92,7 +95,7 @@ ipc.on('main:load', (e, launchData) => {
     componentDidMount() {
       dispatch(setNotificationSystem(this.refs.notificationSystem));
       const state = store.getState();
-      const filename = (state && state.document.filename) || launchData.filename;
+      const filename = (state && state.metadata.filename) || launchData.filename;
       dispatch(setNotebook(launchData.notebook, filename));
     }
     render() {

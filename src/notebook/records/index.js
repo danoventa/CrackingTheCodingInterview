@@ -13,11 +13,16 @@ export const AppRecord = new Immutable.Record({
 
 export const DocumentRecord = new Immutable.Record({
   notebook: null,
-  filename: '',
   cellPagers: new Immutable.Map(),
   cellStatuses: new Immutable.Map(),
   stickyCells: new Immutable.Map(),
   focusedCell: null,
   cellMsgAssociations: new Immutable.Map(),
   msgCellAssociations: new Immutable.Map(),
+});
+
+export const MetadataRecord = new Immutable.Record({
+  past: new Immutable.List(),
+  future: new Immutable.List(),
+  filename: '',
 });
