@@ -21,11 +21,8 @@ export const DocumentRecord = new Immutable.Record({
   msgCellAssociations: new Immutable.Map(),
 });
 
-export const DocumentMetadataRecord = new Immutable.Record({
-  metadata: new Immutable.Map({
-    past: new Immutable.List(),
-    future: new Immutable.List(),
-    filename: '',
-  }),
-  document: new DocumentRecord(),
+export const MetadataRecord = new Immutable.Record({
+  past: new Immutable.List(),
+  future: new Immutable.List(),
+  filename: '',
 });

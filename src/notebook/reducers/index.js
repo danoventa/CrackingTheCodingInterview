@@ -5,8 +5,6 @@ import { combineReducers } from 'redux';
 
 export default combineReducers({
   app,
-  documentMetadata: combineReducers({
-    metadata,
-    document,
-  }),
+  metadata,
+  document,
 });
