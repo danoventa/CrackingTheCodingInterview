@@ -22,8 +22,10 @@ export const DocumentRecord = new Immutable.Record({
 });
 
 export const DocumentMetadataRecord = new Immutable.Record({
-  past: new Immutable.List(),
-  future: new Immutable.List(),
-  filename: '',
+  metadata: new Immutable.Map({
+    past: new Immutable.List(),
+    future: new Immutable.List(),
+    filename: '',
+  }),
   document: new DocumentRecord(),
 });

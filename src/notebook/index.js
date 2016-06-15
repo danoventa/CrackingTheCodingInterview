@@ -43,7 +43,9 @@ ipc.on('main:load', (e, launchData) => {
       github,
     }),
     documentMetadata: new DocumentMetadataRecord({
-      filename: launchData.filename,
+      metadata: {
+        filename: launchData.filename,
+      },
     }),
   }, reducers);
 
