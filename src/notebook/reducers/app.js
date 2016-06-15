@@ -22,13 +22,6 @@ function cleanupKernel(state) {
   );
 }
 
-function clearFuture(state) {
-  return {
-    ...state,
-    future: state.future.clear(),
-  };
-}
-
 export default handleActions({
   [constants.NEW_KERNEL]: function newKernel(state, action) {
     return cleanupKernel(state)
@@ -66,51 +59,5 @@ export default handleActions({
   },
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
     return state.set('notificationSystem', action.notificationSystem);
-  },
-  [constants.SET_FORWARD_CHECKPOINT]: function setForwardCheckpoint(state, action) {
-    const { documentState } = action;
-    return {
-      ...state,
-      future: state.future.push(documentState),
-    };
-  },
-  [constants.SET_BACKWARD_CHECKPOINT]: function setBackwardCheckpoint(state, action) {
-    const {documentState, clearFutureStack} = action;
-    if (clearFutureStack) {
-      return clearFuture({
-        ...state,
-        past: state.past.push(documentState),
-      });
-    } else {
-      return {
-        ...state,
-        past: state.past.push(documentState),
-      };
-    }
-  },
-  [constants.CLEAR_FUTURE]: clearFuture,
-  [constants.UNDO]: function undo(state) {
-    if (state.past.size == 0) {
-      return false;
-    } else {
-      const undone = state.past.last();
-      return {
-        ...state,
-        undone,
-        past: state.past.pop(),
-      };
-    }
-  },
-  [constants.REDO]: function redo(state) {
-    if (state.future.size == 0) {
-      return false;
-    } else {
-      const redone = state.future.last();
-      return {
-        ...state,
-        redone,
-        future: state.future.pop(),
-      };
-    }
   },
 }, {});
