@@ -5,6 +5,9 @@ import * as constants from '../constants';
 
 export default handleActions({
   [constants.CHANGE_FILENAME]: function changeFilename(state, action) {
-    return state.set('filename', action.filename);
+    if (action.filename) {
+      return state.set('filename', action.filename);
+    }
+    return state;
   },
 }, {});
