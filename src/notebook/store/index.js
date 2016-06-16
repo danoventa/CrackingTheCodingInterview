@@ -1,20 +1,22 @@
 import { createStore, applyMiddleware } from 'redux';
 import { reduxObservable } from 'redux-observable';
-// import createLogger from 'redux-logger';
 import rootReducer from '../reducers';
 
-// const logger = createLogger();
+import * as constants from '../constants';
+import { setBackwardCheckpoint } from '../actions';
 
-const exposeState = store => next => action => {
-  return next(Object.assign({}, action, {
-    getState: store.getState,
-  }));
+const triggerUndo = store => next => action => {
+  console.log('triggerUndo');
+  if (action.type === constants.REMOVE_CELL) {
+    store.dispatch(setBackwardCheckpoint(store.getState().document));
+  }
+  return next(action);
 };
 
 export default function configureStore(initialState) {
   return createStore(
     rootReducer,
     initialState,
-    applyMiddleware(reduxObservable(), exposeState)
+    applyMiddleware(reduxObservable(), triggerUndo)
   );
 }
