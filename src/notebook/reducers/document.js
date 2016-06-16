@@ -173,8 +173,11 @@ export default handleActions({
       .set('cellMsgAssociations', cellMsgAssociations)
       .set('msgCellAssociations', msgCellAssociations);
   },
-  [constants.UNDO]: function undo(state, action) {
-  },
-  [constants.REDO]: function redo(state, action) {
+  [constants.UPDATE_DOCUMENT]: function undo(state, action) {
+    const { newDocument } = action;
+    if (newDocument) {
+      return newDocument;
+    }
+    return state;
   },
 }, {});

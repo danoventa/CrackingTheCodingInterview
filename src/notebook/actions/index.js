@@ -312,3 +312,10 @@ export function redo() {
     type: constants.REDO,
   };
 }
+
+export function updateDocument(newDocument) {
+  return {
+    type: constants.UPDATE_DOCUMENT,
+    newDocument,
+  };
+}

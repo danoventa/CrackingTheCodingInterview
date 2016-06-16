@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import * as commutable from 'commutable';
 import * as constants from '../../../src/notebook/constants';
 
-import { DocumentRecord } from '../../../src/notebook/records';
+import { DocumentRecord, MetadataRecord } from '../../../src/notebook/records';
 
 import reducers from '../../../src/notebook/reducers';
 
@@ -318,3 +318,18 @@ describe('overwriteMetadata', () => {
   });
 });
 
+describe('updateDocument', () => {
+  it('overwrites the document state with a new document state', () => {
+    const originalState = {
+      document: initialDocument.set('notebook', dummyCommutable),
+    };
+
+    const action = {
+      type: constants.UPDATE_DOCUMENT,
+      newDocument: monocellDocument,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document).to.equal(monocellDocument);
+  }); 
+});

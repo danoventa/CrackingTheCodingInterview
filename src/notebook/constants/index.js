@@ -56,5 +56,6 @@ export const SET_BACKWARD_CHECKPOINT = 'SET_BACKWARD_CHECKPOINT';
 export const CLEAR_FUTURE = 'CLEAR_FUTURE';
 export const UNDO = 'UNDO';
 export const REDO = 'REDO';
+export const UPDATE_DOCUMENT = 'UPDATE_DOCUMENT';
 
 export const ASSOCIATE_CELL_TO_MSG = 'ASSOCIATE_CELL_TO_MSG';
