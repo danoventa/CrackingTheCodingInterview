@@ -9,6 +9,8 @@ import Notebook from './components/notebook';
 
 import NotificationSystem from 'react-notification-system';
 
+import Immutable from 'immutable';
+
 import {
   setNotebook,
   setNotificationSystem,
