@@ -38,7 +38,11 @@ export default handleActions({
   },
   [constants.KILL_KERNEL]: cleanupKernel,
   [constants.INTERRUPT_KERNEL]: function interruptKernel(state) {
-    state.spawn.kill('SIGINT');
+    if (process.platform === 'win32') {
+      console.error('Windows support for kernel interrupt not avaiable yet.');
+    } else {
+      state.spawn.kill('SIGINT');
+    }
     return state;
   },
   [constants.START_SAVING]: function startSaving(state) {
