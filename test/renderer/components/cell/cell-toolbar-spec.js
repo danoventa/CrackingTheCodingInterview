@@ -3,6 +3,8 @@ import React from 'react';
 import { mount } from 'enzyme';
 import {expect} from 'chai';
 
+import { dummyStore } from '../../../utils';
+
 import { Toolbar } from '../../../../src/notebook/components/cell/toolbar';
 
 describe('Toolbar', () => {
@@ -21,5 +23,11 @@ describe('Toolbar', () => {
       clientX: 0,
       clientY: 0,
     })).to.not.throw(Error);
+  });
+  it('clearCellOutput does not throw error', () => {
+    const toolbar = mount(
+      <Toolbar />, { context: { store: dummyStore() }}
+    );
+    expect(() => {toolbar.instance().clearCellOutput()}).to.not.throw(Error);
   });
 });
