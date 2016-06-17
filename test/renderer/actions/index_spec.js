@@ -300,14 +300,6 @@ describe('setBackwardCheckpoint', () => {
   });
 });
 
-describe('undo', () => {
-  it('creates an undo', () => {
-    expect(actions.undo()).to.deep.equal({
-      type: constants.UNDO,
-    });
-  });
-});
-
 describe('executeCell', () => {
   it.skip('creates an ERROR_KERNEL_NOT_CONNECTED action with channels not setup', (done) => {
     const channels = {
