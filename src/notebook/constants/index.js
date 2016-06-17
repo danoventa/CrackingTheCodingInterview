@@ -7,6 +7,7 @@ export const ERROR_KERNEL_NOT_CONNECTED = 'ERROR_KERNEL_NOT_CONNECTED';
 
 export const NEW_KERNEL = 'NEW_KERNEL';
 export const KILL_KERNEL = 'KILL_KERNEL';
+export const INTERRUPT_KERNEL = 'INTERRUPT_KERNEL';
 
 export const EXIT = 'EXIT';
 

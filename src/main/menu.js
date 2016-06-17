@@ -368,6 +368,10 @@ export function loadFullMenu() {
           click: createSender('menu:kill-kernel'),
         },
         {
+          label: '&Interrupt Running Kernel',
+          click: createSender('menu:interrupt-kernel'),
+        },
+        {
           label: 'Restart Running Kernel',
           click: createSender('menu:restart-kernel'),
         },
