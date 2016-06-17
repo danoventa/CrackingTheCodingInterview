@@ -6,7 +6,6 @@ import * as constants from '../constants';
 import { setBackwardCheckpoint } from '../actions';
 
 const triggerUndo = store => next => action => {
-  console.log('triggerUndo');
   if (action.type === constants.REMOVE_CELL) {
     store.dispatch(setBackwardCheckpoint(store.getState().document));
   }
