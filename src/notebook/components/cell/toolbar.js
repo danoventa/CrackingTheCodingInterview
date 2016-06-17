@@ -89,9 +89,14 @@ export class Toolbar extends React.Component {
       <div className="cell-toolbar-mask" ref="mask">
         <div className="cell-toolbar">
           {showPlay &&
-            <button onClick={this.executeCell}>
-              <span className="octicon octicon-triangle-right" />
-            </button>}
+            <span>
+              <button onClick={this.executeCell}>
+                <span className="octicon octicon-triangle-right" />
+              </button>
+              <button onClick={this.clearCell}>
+                <span className="octicon octicon-zap" />
+              </button>
+            </span>}
           <button onClick={this.removeCell}>
             <span className="octicon octicon-trashcan" />
           </button>
