@@ -37,6 +37,10 @@ export default handleActions({
     return cleanupKernel(state);
   },
   [constants.KILL_KERNEL]: cleanupKernel,
+  [constants.INTERRUPT_KERNEL]: function interruptKernel(state) {
+    state.spawn.kill('SIGINT');
+    return state;
+  },
   [constants.START_SAVING]: function startSaving(state) {
     return state.set('isSaving', true);
   },

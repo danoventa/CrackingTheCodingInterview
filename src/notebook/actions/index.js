@@ -267,6 +267,10 @@ export const killKernel = {
   type: constants.KILL_KERNEL,
 };
 
+export const interruptKernel = {
+  type: constants.INTERRUPT_KERNEL,
+};
+
 export function setNotificationSystem(notificationSystem) {
   return {
     type: constants.SET_NOTIFICATION_SYSTEM,
