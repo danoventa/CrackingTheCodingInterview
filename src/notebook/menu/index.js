@@ -17,6 +17,7 @@ import {
   undo,
   redo,
   updateDocument,
+  setForwardCheckpoint,
 } from '../actions';
 
 
@@ -164,6 +165,7 @@ export function dispatchRestartClearAll(store, dispatch) {
 export function dispatchUndo(store, dispatch) {
   const state = store.getState();
   dispatch(updateDocument(state.metadata.past.last()));
+  dispatch(setForwardCheckpoint(state.document));
   dispatch(undo);
 }
 
