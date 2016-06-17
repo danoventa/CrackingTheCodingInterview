@@ -131,7 +131,17 @@ export function dispatchKillKernel(store, dispatch) {
 }
 
 export function dispatchInterruptKernel(store, dispatch) {
-  dispatch(interruptKernel);
+  const state = store.getState();
+  const { notificationSystem } = state.app;
+  if (process.platform === 'win32') {
+    notificationSystem.addNotification({
+      title: 'Not supported in Windows',
+      message: 'Kernel interruption is currently not supported in Windows.',
+      level: 'error',
+    });
+  } else {
+    dispatch(interruptKernel);
+  }
 }
 
 export function dispatchRestartKernel(store, dispatch) {
