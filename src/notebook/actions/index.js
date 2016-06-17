@@ -301,17 +301,13 @@ export function setBackwardCheckpoint(documentState, clearFutureStack) {
   };
 }
 
-export function undo() {
-  return {
-    type: constants.UNDO,
-  };
-}
+export const undo = {
+  type: constants.UNDO,
+};
 
-export function redo() {
-  return {
-    type: constants.REDO,
-  };
-}
+export const redo = {
+  type: constants.REDO,
+};
 
 export function updateDocument(newDocument) {
   return {
