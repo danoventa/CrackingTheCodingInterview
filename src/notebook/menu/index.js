@@ -13,6 +13,7 @@ import {
   save,
   saveAs,
   killKernel,
+  interruptKernel,
 } from '../actions';
 
 
@@ -129,6 +130,10 @@ export function dispatchKillKernel(store, dispatch) {
   dispatch(killKernel);
 }
 
+export function dispatchInterruptKernel(store, dispatch) {
+  dispatch(interruptKernel);
+}
+
 export function dispatchRestartKernel(store, dispatch) {
   const state = store.getState();
   const spawnOptions = {};
@@ -168,6 +173,7 @@ export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:save', dispatchSave.bind(null, store, dispatch));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
   ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store, dispatch));
+  ipc.on('menu:interrupt-kernel', dispatchInterruptKernel.bind(null, store, dispatch));
   ipc.on('menu:restart-kernel', dispatchRestartKernel.bind(null, store, dispatch));
   ipc.on('menu:restart-and-clear-all', dispatchRestartClearAll.bind(null, store, dispatch));
   ipc.on('menu:publish:gist', dispatchPublishGist.bind(null, store, dispatch));
