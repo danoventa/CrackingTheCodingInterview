@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import { executeCell, removeCell, toggleStickyCell } from '../../actions';
+import { executeCell, removeCell, toggleStickyCell, clearCellOutput } from '../../actions';
 
 const mapStateToProps = (state) => ({
   channels: state.app.channels,
@@ -33,6 +33,7 @@ export class Toolbar extends React.Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.removeCell = this.removeCell.bind(this);
     this.executeCell = this.executeCell.bind(this);
+    this.clearCellOutput = this.clearCellOutput.bind(this);
     this.setHoverState = this.setHoverState.bind(this);
     this.toggleStickyCell = this.toggleStickyCell.bind(this);
   }
@@ -83,15 +84,24 @@ export class Toolbar extends React.Component {
                                       this.props.notificationSystem));
   }
 
+  clearCellOutput() {
+    this.context.store.dispatch(clearCellOutput(this.props.id));
+  }
+
   render() {
     const showPlay = this.props.type !== 'markdown';
     return (
       <div className="cell-toolbar-mask" ref="mask">
         <div className="cell-toolbar">
           {showPlay &&
-            <button onClick={this.executeCell}>
-              <span className="octicon octicon-triangle-right" />
-            </button>}
+            <span>
+              <button onClick={this.executeCell}>
+                <span className="octicon octicon-triangle-right" />
+              </button>
+              <button onClick={this.clearCellOutput}>
+                <span className="octicon octicon-zap" />
+              </button>
+            </span>}
           <button onClick={this.removeCell}>
             <span className="octicon octicon-trashcan" />
           </button>
