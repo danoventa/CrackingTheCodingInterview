@@ -24,7 +24,7 @@ export function initNativeHandlers(store) {
   Rx.Observable.from(store)
     .map(state => {
       const { executionState } = state.app;
-      const { filename } = state.document;
+      const { filename } = state.metadata;
       return {
         title: `${tildify(filename) || 'Untitled'} - ${executionState}`,
         path: filename,
