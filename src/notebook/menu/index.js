@@ -37,7 +37,7 @@ export function triggerSaveAs(store, dispatch) {
         return;
       }
       const state = store.getState();
-      const { executionState } = state.document;
+      const { executionState } = state.app;
       const notebook = state.document.get('notebook');
       dispatch(saveAs(filename, notebook));
       BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
@@ -136,15 +136,16 @@ export function dispatchInterruptKernel(store, dispatch) {
 
 export function dispatchRestartKernel(store, dispatch) {
   const state = store.getState();
+  const { notificationSystem } = state.app;
   const spawnOptions = {};
-  if (state && state.document && state.document.get('filename')) {
+  if (state && state.document && state.metadata.get('filename')) {
     spawnOptions.cwd = path.dirname(path.resolve(state.filename));
   }
 
   dispatch(killKernel);
   dispatch(newKernel(state.app.kernelSpecName, spawnOptions));
 
-  state.document.notificationSystem.addNotification({
+  notificationSystem.addNotification({
     title: 'Kernel Restarted',
     message: `Kernel ${state.app.kernelSpecName} has been restarted.`,
     dismissible: true,
