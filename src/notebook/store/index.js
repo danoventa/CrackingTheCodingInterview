@@ -1,14 +1,12 @@
 import { createStore, applyMiddleware } from 'redux';
 import { reduxObservable } from 'redux-observable';
-// import createLogger from 'redux-logger';
+import { triggerUndo } from '../middlewares';
 import rootReducer from '../reducers';
-
-// const logger = createLogger();
 
 export default function configureStore(initialState) {
   return createStore(
     rootReducer,
     initialState,
-    applyMiddleware(reduxObservable()/* , logger */)
+    applyMiddleware(reduxObservable(), triggerUndo)
   );
 }

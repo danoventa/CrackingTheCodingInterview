@@ -14,6 +14,10 @@ import {
   saveAs,
   killKernel,
   interruptKernel,
+  undo,
+  redo,
+  updateDocument,
+  setForwardCheckpoint,
 } from '../actions';
 
 
@@ -169,6 +173,19 @@ export function dispatchRestartClearAll(store, dispatch) {
   dispatchClearAll(store, dispatch);
 }
 
+export function dispatchUndo(store, dispatch) {
+  const state = store.getState();
+  dispatch(updateDocument(state.metadata.past.last()));
+  dispatch(setForwardCheckpoint(state.document));
+  dispatch(undo);
+}
+
+export function dispatchRedo(store, dispatch) {
+  const state = store.getState();
+  dispatch(updateDocument(state.metadata.future.last()));
+  dispatch(redo);
+}
+
 export function dispatchZoomIn() {
   webFrame.setZoomLevel(webFrame.getZoomLevel() + 1);
 }
@@ -178,6 +195,8 @@ export function dispatchZoomOut() {
 }
 
 export function initMenuHandlers(store, dispatch) {
+  ipc.on('menu:undo', dispatchUndo.bind(null, store, dispatch));
+  ipc.on('menu:redo', dispatchRedo.bind(null, store, dispatch));
   ipc.on('menu:new-kernel', dispatchNewkernel.bind(null, store, dispatch));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store, dispatch));
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store, dispatch));

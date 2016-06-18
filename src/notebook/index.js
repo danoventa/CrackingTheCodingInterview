@@ -9,6 +9,8 @@ import Notebook from './components/notebook';
 
 import NotificationSystem from 'react-notification-system';
 
+import Immutable from 'immutable';
+
 import {
   setNotebook,
   setNotificationSystem,
@@ -43,6 +45,8 @@ ipc.on('main:load', (e, launchData) => {
       github,
     }),
     metadata: new MetadataRecord({
+      past: new Immutable.List(),
+      future: new Immutable.List(),
       filename: launchData.filename,
     }),
     document: new DocumentRecord(),

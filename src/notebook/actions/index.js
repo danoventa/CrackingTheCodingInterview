@@ -285,3 +285,33 @@ export function associateCellToMsg(cellId, msgId) {
     msgId,
   };
 }
+
+export function setForwardCheckpoint(documentState) {
+  return {
+    type: constants.SET_FORWARD_CHECKPOINT,
+    documentState,
+  };
+}
+
+export function setBackwardCheckpoint(documentState, clearFutureStack) {
+  return {
+    type: constants.SET_BACKWARD_CHECKPOINT,
+    documentState,
+    clearFutureStack,
+  };
+}
+
+export const undo = {
+  type: constants.UNDO,
+};
+
+export const redo = {
+  type: constants.REDO,
+};
+
+export function updateDocument(newDocument) {
+  return {
+    type: constants.UPDATE_DOCUMENT,
+    newDocument,
+  };
+}

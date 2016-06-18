@@ -281,6 +281,25 @@ describe('overwriteMetadata', () => {
   });
 });
 
+describe('setForwardCheckpoint', () => {
+  it('creates a SET_FORWARD_CHECKPOINT', () => {
+    expect(actions.setForwardCheckpoint(dummyCommutable)).to.deep.equal({
+      type: constants.SET_FORWARD_CHECKPOINT,
+      documentState: dummyCommutable,
+    });
+  });
+});
+
+describe('setBackwardCheckpoint', () => {
+  it('creates a SET_BACKWARD_CHECKPOINT', () => {
+    expect(actions.setBackwardCheckpoint(dummyCommutable, true)).to.deep.equal({
+      type: constants.SET_BACKWARD_CHECKPOINT,
+      documentState: dummyCommutable,
+      clearFutureStack: true,
+    });
+  });
+});
+
 describe('executeCell', () => {
   it.skip('creates an ERROR_KERNEL_NOT_CONNECTED action with channels not setup', (done) => {
     const channels = {

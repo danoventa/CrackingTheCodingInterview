@@ -4,6 +4,8 @@ import * as constants from '../../../src/notebook/constants';
 
 import reducers from '../../../src/notebook/reducers';
 
+import { Map, List } from 'immutable';
+
 const setNotebook = reducers[constants.SET_NOTEBOOK];
 const updateExecutionCount = reducers[constants.UPDATE_CELL_EXECUTION_COUNT];
 const newCellAfter = reducers[constants.NEW_CELL_AFTER];
