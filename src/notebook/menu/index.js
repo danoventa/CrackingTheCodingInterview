@@ -195,7 +195,7 @@ export function dispatchZoomOut() {
   webFrame.setZoomLevel(webFrame.getZoomLevel() - 1);
 }
 
-export function dispatchDuplicate(store, dispatch) {
+export function dispatchDuplicate(store) {
   const state = store.getState();
   const { notificationSystem } = state.app;
   const filename = state.metadata.get('filename');
@@ -222,7 +222,7 @@ export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store, dispatch));
   ipc.on('menu:save', dispatchSave.bind(null, store, dispatch));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
-  ipc.on('menu:duplicate-notebook', dispatchDuplicate.bind(null, store, dispatch));
+  ipc.on('menu:duplicate-notebook', dispatchDuplicate.bind(null, store));
   ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store, dispatch));
   ipc.on('menu:interrupt-kernel', dispatchInterruptKernel.bind(null, store, dispatch));
   ipc.on('menu:restart-kernel', dispatchRestartKernel.bind(null, store, dispatch));

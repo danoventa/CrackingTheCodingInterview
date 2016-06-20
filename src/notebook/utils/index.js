@@ -4,20 +4,20 @@ import path from 'path';
 function fileExists(filename) {
   if (!filename) {
     return false;
-  } else {
-    try {
-      return fs.statSync(filename).isFile();
-    } catch (e) {
-      return false;
-    }
+  }
+
+  try {
+    return fs.statSync(filename).isFile();
+  } catch (e) {
+    return false;
   }
 }
 
 function getCopiedFilename(filename) {
   const base = path.basename(filename, '.ipynb');
   const dir = path.dirname(filename);
-  var index = 1;
-  var newFilename = `${dir}/${base}-Copy${index}.ipynb`;
+  let index = 1;
+  let newFilename = `${dir}/${base}-Copy${index}.ipynb`;
   while (fileExists(newFilename)) {
     index = index + 1;
     newFilename = `${dir}/${base}-Copy${index}.ipynb`;
@@ -26,7 +26,7 @@ function getCopiedFilename(filename) {
 }
 
 export function copyNotebook(filename) {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     const readStream = fs.createReadStream(filename);
     readStream.on('error', reject);
 

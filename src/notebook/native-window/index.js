@@ -5,6 +5,8 @@ import fs from 'fs';
 import path from 'path';
 import { fromJS } from 'commutable';
 
+import { deferURL } from '../../main/launch';
+
 import Rx from 'rxjs/Rx';
 
 const HOME = home();
