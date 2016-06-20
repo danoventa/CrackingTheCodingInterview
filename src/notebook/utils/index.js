@@ -1,10 +1,28 @@
 import fs from 'fs';
 import path from 'path';
 
+function fileExists(filename) {
+  if (!filename) {
+    return false;
+  } else {
+    try {
+      return fs.statSync(filename).isFile();
+    } catch (e) {
+      return false;
+    }
+  }
+}
+
 function getCopiedFilename(filename) {
   const base = path.basename(filename, '.ipynb');
   const dir = path.dirname(filename);
-  return dir + '/' +  base + ' Copy.ipynb';
+  var index = 1;
+  var newFilename = `${dir}/${base}-Copy${index}.ipynb`;
+  while (fileExists(newFilename)) {
+    index = index + 1;
+    newFilename = `${dir}/${base}-Copy${index}.ipynb`;
+  }
+  return newFilename;
 }
 
 export function copyNotebook(filename) {
