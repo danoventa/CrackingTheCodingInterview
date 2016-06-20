@@ -4,7 +4,7 @@ import {
   showSaveAsDialog,
 } from '../api/save';
 
-import { tildify } from '../native-window';
+import { tildify, launchFilename } from '../native-window';
 
 import {
   executeCell,
@@ -21,7 +21,6 @@ import {
 } from '../actions';
 
 import { copyNotebook } from '../utils';
-import { launchFilename } from '../../main/launch';
 
 import { ipcRenderer as ipc, webFrame, remote } from 'electron';
 const BrowserWindow = remote.BrowserWindow;
