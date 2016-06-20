@@ -14,7 +14,7 @@ import createStore from '../src/notebook/store';
 import { reducers } from '../src/notebook/reducers';
 import { acquireKernelInfo } from '../src/notebook/agendas';
 
-import { AppRecord, DocumentRecord } from '../src/notebook/records';
+import { AppRecord, DocumentRecord, MetadataRecord } from '../src/notebook/records';
 
 import {
   createExecuteRequest,
@@ -134,7 +134,12 @@ export function dummyStore() {
     }),
     app: AppRecord({
       executionState: 'not connected',
-    })
+    }),
+    metadata: MetadataRecord({
+      filename: 'dummy-store-nb.ipynb',
+      past: new Immutable.List(),
+      future: new Immutable.List(),
+    }),
   }, reducers);
 }
 
