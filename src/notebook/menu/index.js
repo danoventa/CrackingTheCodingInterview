@@ -20,6 +20,7 @@ import {
   setForwardCheckpoint,
 } from '../actions';
 
+import { launch } from '../../main/launch';
 
 import { ipcRenderer as ipc, webFrame, remote } from 'electron';
 const BrowserWindow = remote.BrowserWindow;
@@ -194,7 +195,19 @@ export function dispatchZoomOut() {
   webFrame.setZoomLevel(webFrame.getZoomLevel() - 1);
 }
 
-export function dispatchDuplidate(store, dispath) {
+export function dispatchDuplicate(store, dispatch) {
+  const state = store.getState();
+  const { notificationSystem } = state.app;
+  if (state.metadata.get('filename')) {
+  } else {
+    notificationSystem.addNotification({
+      title: 'Can\'t Duplicate Unsaved Notebook',
+      message: 'A notebook must be saved before it can be duplicated.',
+      dismissble: true,
+      position: 'tr',
+      level: 'warning',
+    });
+  }
 }
 
 export function initMenuHandlers(store, dispatch) {
