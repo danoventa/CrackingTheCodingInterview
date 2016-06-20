@@ -20,7 +20,8 @@ import {
   setForwardCheckpoint,
 } from '../actions';
 
-import { launch } from '../../main/launch';
+import { copyNotebook } from '../utils';
+import { launchFilename } from '../../main/launch';
 
 import { ipcRenderer as ipc, webFrame, remote } from 'electron';
 const BrowserWindow = remote.BrowserWindow;
@@ -198,7 +199,11 @@ export function dispatchZoomOut() {
 export function dispatchDuplicate(store, dispatch) {
   const state = store.getState();
   const { notificationSystem } = state.app;
-  if (state.metadata.get('filename')) {
+  const filename = state.metadata.get('filename');
+  if (filename) {
+    copyNotebook(filename).then((value) => {
+      launchFilename(value);
+    });
   } else {
     notificationSystem.addNotification({
       title: 'Can\'t Duplicate Unsaved Notebook',
