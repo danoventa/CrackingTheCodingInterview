@@ -184,6 +184,20 @@ export function clearCellOutput(id) {
   };
 }
 
+export function hideCellOutput(id) {
+  return {
+    type: constants.HIDE_CELL_OUTPUT,
+    id,
+  };
+}
+
+export function showCellOutput(id) {
+  return {
+    type: constants.SHOW_CELL_OUTPUT,
+    id,
+  };
+}
+
 export function updateCellPagers(id, pagers) {
   return {
     type: constants.UPDATE_CELL_PAGERS,
