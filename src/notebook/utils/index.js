@@ -9,16 +9,16 @@ export function copyNotebook(filename) {
 
     const base = path.basename(filename, '.ipynb');
 
-    tmp.tmpName({ prefix: `${base}-Copy` , postfix: '.ipynb' }, (err, path) => {
+    tmp.tmpName({ prefix: `${base}-Copy`, postfix: '.ipynb' }, (err, newFilename) => {
       if (err) {
         reject(err);
       }
 
-      const writeStream = fs.createWriteStream(path);
+      const writeStream = fs.createWriteStream(newFilename);
       writeStream.on('error', reject);
 
       readStream.pipe(writeStream);
-      writeStream.on('close', resolve(path));
+      writeStream.on('close', resolve(newFilename));
     });
   });
 }
