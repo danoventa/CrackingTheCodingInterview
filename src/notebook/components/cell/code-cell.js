@@ -15,7 +15,7 @@ class CodeCell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    outputStatuses: React.PropTypes.instanceOf(Immutble.Map).isRequired,
+    outputStatus: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     getCompletions: React.PropTypes.func,
     id: React.PropTypes.string,
     language: React.PropTypes.string,
@@ -39,7 +39,7 @@ class CodeCell extends React.Component {
   }
 
   isHidden() {
-    return this.props.outputStatuses.getIn([this.props.id, 'isHidden']);
+    return this.props.outputStatus.getIn([this.props.id, 'isHidden']);
   }
 
   render() {
@@ -81,7 +81,7 @@ class CodeCell extends React.Component {
           <Display
             className="outputs-display"
             outputs={this.props.cell.get('outputs')}
-            isHidden={this.isHidden}
+            isHidden={this.isHidden()}
             displayOrder={this.props.displayOrder}
             transforms={this.props.transforms}
           />

@@ -26,6 +26,7 @@ const mapStateToProps = (state) => ({
   cellPagers: state.document.get('cellPagers'),
   focusedCell: state.document.get('focusedCell'),
   cellStatuses: state.document.get('cellStatuses'),
+  outputStatuses: state.document.get('outputStatuses'),
   stickyCells: state.document.get('stickyCells'),
   notificationSystem: state.app.notificationSystem,
   kernelConnected: state.app.channels &&
@@ -42,6 +43,7 @@ class Notebook extends React.Component {
     transforms: React.PropTypes.instanceOf(Immutable.Map),
     cellPagers: React.PropTypes.instanceOf(Immutable.Map),
     cellStatuses: React.PropTypes.instanceOf(Immutable.Map),
+    outputStatuses: React.PropTypes.instanceOf(Immutable.Map),
     stickyCells: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
     theme: React.PropTypes.string,
@@ -203,6 +205,7 @@ class Notebook extends React.Component {
       key: id,
       ref: id,
       displayOrder: this.props.displayOrder,
+      outputStatus: this.props.outputStatuses.get(id),
       transforms: this.props.transforms,
       moveCell: this.moveCell,
       pagers: this.props.cellPagers.get(id),
