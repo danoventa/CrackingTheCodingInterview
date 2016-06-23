@@ -8,9 +8,15 @@ import * as constants from '../constants';
 export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.data;
+    let outputStatuses = new Immutable.Map();
+    notebook.get('cellOrder').map((cellID) => {
+      console.log(cellID);
+      outputStatuses = outputStatuses.setIn([cellID, 'isHidden'], false);
+    });
+
     return state.set('notebook', notebook)
                 .set('focusedCell', notebook.getIn(['cellOrder', 0]))
-                .setIn(['outputStatuses', notebook.getIn(['cellOrder', 0]), 'isHidden'], false);
+                .set('outputStatuses', outputStatuses);
   },
   [constants.FOCUS_CELL]: function focusCell(state, action) {
     return state.set('focusedCell', action.id);
