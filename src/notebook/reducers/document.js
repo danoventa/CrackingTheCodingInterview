@@ -10,7 +10,6 @@ export default handleActions({
     const notebook = action.data;
     let outputStatuses = new Immutable.Map();
     notebook.get('cellOrder').map((cellID) => {
-      console.log(cellID);
       outputStatuses = outputStatuses.setIn([cellID, 'isHidden'], false);
     });
 
@@ -136,7 +135,7 @@ export default handleActions({
                                            commutable.emptyCodeCell;
     const index = notebook.get('cellOrder').count();
     const cellID = uuid.v4();
-    return state.set('notebook',commutable.insertCellAt(notebook, cell, cellID, index))
+    return state.set('notebook', commutable.insertCellAt(notebook, cell, cellID, index))
                 .setIn(['outputStatuses', cellID, 'isHidden'], false);
   },
   [constants.UPDATE_CELL_SOURCE]: function updateSource(state, action) {
