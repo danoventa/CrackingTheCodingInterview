@@ -184,16 +184,9 @@ export function clearCellOutput(id) {
   };
 }
 
-export function hideCellOutput(id) {
+export function changeOutputVisibility(id) {
   return {
-    type: constants.HIDE_CELL_OUTPUT,
-    id,
-  };
-}
-
-export function showCellOutput(id) {
-  return {
-    type: constants.SHOW_CELL_OUTPUT,
+    type: constants.CHANGE_OUTPUT_VISIBILITY,
     id,
   };
 }

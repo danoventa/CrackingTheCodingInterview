@@ -38,7 +38,8 @@ export default handleActions({
       const cell = commutable.emptyCodeCell;
       return state.set('focusedCell', cellID)
                   .update('notebook',
-                    (notebook) => commutable.insertCellAt(notebook, cell, cellID, nextIndex));
+                    (notebook) => commutable.insertCellAt(notebook, cell, cellID, nextIndex))
+                  .setIn(['outputStatuses', cellID, 'isHidden'], false);
     }
 
     // When in the middle of the notebook document, move to the next cell
@@ -149,6 +150,11 @@ export default handleActions({
   [constants.SPLIT_CELL]: function splitCell(state, action) {
     const { id, position } = action;
     return state.update('notebook', (notebook) => commutable.splitCell(notebook, id, position));
+  },
+  [constants.CHANGE_OUTPUT_VISIBILITY]: function changeOutputVisibility(state, action) {
+    const { id } = action;
+    return state.update('outputStatuses', (outputStatuses) => outputStatuses.setIn([id, 'isHidden'],
+          !outputStatuses.getIn([id, 'isHidden'])));
   },
   [constants.UPDATE_CELL_OUTPUTS]: function updateOutputs(state, action) {
     const { id, outputs } = action;
