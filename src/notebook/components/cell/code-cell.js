@@ -39,7 +39,7 @@ class CodeCell extends React.Component {
   }
 
   isHidden() {
-    return this.props.outputStatus.getIn([this.props.id, 'isHidden']);
+    return this.props.outputStatus.get('isHidden');
   }
 
   render() {
