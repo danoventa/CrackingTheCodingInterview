@@ -138,6 +138,10 @@ export default handleActions({
     const { id } = action;
     return state.update('notebook', (notebook) => commutable.clearCellOutput(notebook, id));
   },
+  [constants.SPLIT_CELL]: function splitCell(state, action) {
+    const { id, position } = action;
+    return state.update('notebook', (notebook) => commutable.splitCell(notebook, id, position));
+  },
   [constants.UPDATE_CELL_OUTPUTS]: function updateOutputs(state, action) {
     const { id, outputs } = action;
     return state.update('notebook', (notebook) => commutable.updateOutputs(notebook, id, outputs));
