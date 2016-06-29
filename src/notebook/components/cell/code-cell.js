@@ -4,7 +4,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Inputs from './inputs';
 
 import Editor from './editor';
-import ToggleableDisplay from 'react-jupyter-display-area';
+import { TogglableDisplay } from 'react-jupyter-display-area';
 import LatexRenderer from '../latex';
 
 import Pager from './pager';
@@ -78,7 +78,7 @@ class CodeCell extends React.Component {
       }
       <LatexRenderer>
         <div className="outputs">
-          <ToggleableDisplay
+          <TogglableDisplay
             className="outputs-display"
             outputs={this.props.cell.get('outputs')}
             isHidden={this.isHidden()}
