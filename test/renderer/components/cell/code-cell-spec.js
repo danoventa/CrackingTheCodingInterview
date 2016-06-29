@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { shallow, mount } from 'enzyme';
+import Immutable from 'immutable';
 import {expect} from 'chai';
 
 import CodeCell from '../../../../src/notebook/components/cell/code-cell';
@@ -11,13 +12,13 @@ const sharedProps = { displayOrder, transforms };
 describe('CodeCell', () => {
   it('can be rendered', () => {
     const cell = shallow(
-      <CodeCell cell={commutable.emptyCodeCell} {...sharedProps}/>
+      <CodeCell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>
     );
     expect(cell).to.not.be.null;
   });
   it('creates an editor', () => {
     const cell = mount(
-      <CodeCell cell={commutable.emptyCodeCell} {...sharedProps}/>
+      <CodeCell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>
     );
     expect(cell.find('.input').length).to.be.greaterThan(0);
   });

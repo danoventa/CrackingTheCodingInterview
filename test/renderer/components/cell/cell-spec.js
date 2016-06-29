@@ -1,4 +1,5 @@
 import React from 'react';
+import Immutable from 'immutable';
 
 import { mount } from 'enzyme';
 import {expect} from 'chai';
@@ -20,14 +21,14 @@ describe('Cell', () => {
   });
   it('should be able to render a code cell', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>
     );
     expect(cell).to.not.be.null;
     expect(cell.find('div.code.cell').length).to.be.greaterThan(0);
   });
   it('setCellHoverState does not error', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>
     );
 
     expect(() => cell.instance().setCellHoverState({
