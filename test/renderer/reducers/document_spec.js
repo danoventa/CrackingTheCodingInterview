@@ -333,3 +333,22 @@ describe('updateDocument', () => {
     expect(state.document).to.equal(monocellDocument);
   }); 
 });
+
+describe('splitCell', () => {
+  it('splits a notebook cell into two', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.SPLIT_CELL,
+      id: id,
+      position: 0,
+    };
+    
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(4);
+  });
+});
