@@ -27,11 +27,17 @@ describe('Notebook', () => {
           // triggered.
           .set(dummyCommutable.getIn(['cellOrder', 0]), true)
         }
+        outputStatuses={new Immutable.Map()}
       />
     );
     expect(component).to.not.be.null;
   });
-  it('implements the correct css spec', () => {
+  it.only('implements the correct css spec', () => {
+    let outputStatuses = new Immutable.Map();
+    dummyCommutable.get('cellOrder').map((cellID) => {
+      outputStatuses = outputStatuses.setIn([cellID, 'isHidden'], false);
+    });
+    console.log(outputStatuses);
     const component = mount(
       <ConnectedNotebook
         notebook={dummyCommutable}
@@ -40,6 +46,7 @@ describe('Notebook', () => {
         stickyCells={new Immutable.Map()}
         displayOrder={displayOrder.delete('text/html')}
         transforms={transforms.delete('text/html')}
+        outputStatuses={outputStatuses}
       />
     );
     expect(component.find('.notebook').length).to.be.above(0, '.notebook');
