@@ -9,7 +9,9 @@
   "rules": {
       "camelcase": [0],
       "no-console": [2, { allow: ["warn", "error"] }],
-      import/no-unresolved: [0],
-      "no-underscore-dangle": [0],
+      "no-underscore-dangle": [0]
+  },
+  "settings": {
+      "import/core-modules": ["electron"]
   }
 }
