@@ -70,6 +70,10 @@ export const fileSubMenus = {
     },
     accelerator: 'CmdOrCtrl+Shift+S',
   },
+  duplicate: {
+    label: '&Duplicate Notebook',
+    click: createSender('menu:duplicate-notebook'),
+  },
 };
 
 export const file = {
@@ -404,6 +408,7 @@ export function loadFullMenu() {
         fileSubMenus.open,
         fileSubMenus.save,
         fileSubMenus.saveAs,
+        fileSubMenus.duplicate,
       ],
     };
 

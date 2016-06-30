@@ -1,7 +1,11 @@
 import { remote } from 'electron';
-const { getCurrentWindow } = remote;
+const { BrowserWindow, getCurrentWindow } = remote;
 import home from 'home-dir';
+import fs from 'fs';
 import path from 'path';
+import { fromJS } from 'commutable';
+
+import { deferURL } from '../../main/launch';
 
 import Rx from 'rxjs/Rx';
 
@@ -41,4 +45,39 @@ export function initNativeHandlers(store) {
       }
       win.setTitle(res.title);
     });
+}
+
+function launch(notebook, filename) {
+  let win = new BrowserWindow({
+    width: 800,
+    height: 1000,
+    title: !filename ? 'Untitled' : path.relative('.', filename.replace(/.ipynb$/, '')),
+  });
+
+  const index = path.join(__dirname, '..', '..', '..', 'static', 'index.html');
+  win.loadURL(`file://${index}`);
+
+  win.webContents.on('did-finish-load', () => {
+    win.webContents.send('main:load', { notebook: notebook.toJS(), filename });
+  });
+
+  win.webContents.on('will-navigate', deferURL);
+
+  win.on('closed', () => {
+    win = null;
+  });
+
+  return win;
+}
+
+export function launchFilename(filename) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filename, {}, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(launch(fromJS(JSON.parse(data)), filename));
+      }
+    });
+  });
 }

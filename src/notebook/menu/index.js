@@ -4,7 +4,7 @@ import {
   showSaveAsDialog,
 } from '../api/save';
 
-import { tildify } from '../native-window';
+import { tildify, launchFilename } from '../native-window';
 
 import {
   executeCell,
@@ -20,6 +20,7 @@ import {
   setForwardCheckpoint,
 } from '../actions';
 
+import { copyNotebook } from '../utils';
 
 import { ipcRenderer as ipc, webFrame, remote } from 'electron';
 const BrowserWindow = remote.BrowserWindow;
@@ -194,6 +195,25 @@ export function dispatchZoomOut() {
   webFrame.setZoomLevel(webFrame.getZoomLevel() - 1);
 }
 
+export function dispatchDuplicate(store) {
+  const state = store.getState();
+  const { notificationSystem } = state.app;
+  const filename = state.metadata.get('filename');
+  if (filename) {
+    copyNotebook(filename).then((value) => {
+      launchFilename(value);
+    });
+  } else {
+    notificationSystem.addNotification({
+      title: 'Can\'t Duplicate Unsaved Notebook',
+      message: 'A notebook must be saved before it can be duplicated.',
+      dismissble: true,
+      position: 'tr',
+      level: 'warning',
+    });
+  }
+}
+
 export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:undo', dispatchUndo.bind(null, store, dispatch));
   ipc.on('menu:redo', dispatchRedo.bind(null, store, dispatch));
@@ -202,6 +222,7 @@ export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store, dispatch));
   ipc.on('menu:save', dispatchSave.bind(null, store, dispatch));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
+  ipc.on('menu:duplicate-notebook', dispatchDuplicate.bind(null, store));
   ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store, dispatch));
   ipc.on('menu:interrupt-kernel', dispatchInterruptKernel.bind(null, store, dispatch));
   ipc.on('menu:restart-kernel', dispatchRestartKernel.bind(null, store, dispatch));
