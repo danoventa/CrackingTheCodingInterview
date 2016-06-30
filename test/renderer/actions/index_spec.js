@@ -345,3 +345,13 @@ describe('executeCell', () => {
     actions.executeCell(channels, id, source, true, undefined)(subject);
   });
 });
+
+describe('splitCell', () => {
+  it('creates a SPLIT_CELL action', () => {
+    expect(actions.splitCell('235', 0)).to.deep.equal({
+      type: constants.SPLIT_CELL,
+      id: '235',
+      position: 0,
+    });
+  });
+});

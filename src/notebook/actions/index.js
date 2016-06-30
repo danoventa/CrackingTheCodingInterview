@@ -255,6 +255,14 @@ export function executeCell(channels, id, source, kernelConnected, notificationS
   });
 }
 
+export function splitCell(id, position) {
+  return {
+    type: constants.SPLIT_CELL,
+    id,
+    position,
+  };
+}
+
 export function overwriteMetadata(field, value) {
   return {
     type: constants.OVERWRITE_METADATA_FIELD,
