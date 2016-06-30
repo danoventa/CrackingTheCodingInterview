@@ -82,7 +82,7 @@ class DraggableCell extends React.Component {
 
   componentDidMount() {
     const connectDragPreview = this.props.connectDragPreview;
-    const img = new Image();
+    const img = new window.Image();
     img.src = [
       'data:image/png;base64,',
       'iVBORw0KGgoAAAANSUhEUgAAADsAAAAzCAYAAAApdnDeAAAAAXNSR0IArs4c6QAA',
