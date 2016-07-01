@@ -136,4 +136,6 @@ class Cell extends React.Component {
   }
 }
 
-export default ContextMenuLayer("cell-context-menu")(Cell);
+export default ContextMenuLayer("cell-context-menu", (props) => ({
+  id: props.id,
+}))(Cell);
