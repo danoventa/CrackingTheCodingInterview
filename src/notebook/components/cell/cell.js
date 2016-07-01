@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { ContextMenuLayer } from 'react-contextmenu';
+import { ContextMenuLayer as contextMenuLayer } from 'react-contextmenu';
 
 import Immutable from 'immutable';
 
@@ -136,6 +136,6 @@ class Cell extends React.Component {
   }
 }
 
-export default ContextMenuLayer("cell-context-menu", (props) => ({
+export default contextMenuLayer('cell-context-menu', (props) => ({
   id: props.id,
 }))(Cell);

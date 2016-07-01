@@ -5,6 +5,10 @@ import { clearCellOutput } from '../../actions';
 
 
 class CellContextMenu extends React.Component {
+  static propTypes = {
+    id: React.PropTypes.string,
+  };
+
   static contextTypes = {
     store: React.PropTypes.object,
   };
@@ -21,7 +25,12 @@ class CellContextMenu extends React.Component {
   render() {
     return (
       <ContextMenu identifier="cell-context-menu">
-        <MenuItem onClick={this.clearCellOutput} data={{id: this.props.id}}>Clear Cell Output</MenuItem>
+        <MenuItem
+          onClick={this.clearCellOutput}
+          data={{ id: this.props.id }}
+        >
+          Clear Cell Output
+        </MenuItem>
       </ContextMenu>
     );
   }
