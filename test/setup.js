@@ -13,6 +13,9 @@ Object.keys(document.defaultView).forEach((property) => {
   }
 });
 
+// For some reason, this property does not get set above.
+global.Image = global.window.Image;
+
 global.navigator = {
   userAgent: 'node.js'
 };
