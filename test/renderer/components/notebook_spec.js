@@ -32,7 +32,7 @@ describe('Notebook', () => {
     );
     expect(component).to.not.be.null;
   });
-  it.only('implements the correct css spec', () => {
+  it('implements the correct css spec', () => {
     let outputStatuses = new Immutable.Map();
     dummyCommutable.get('cellOrder').map((cellID) => {
       outputStatuses = outputStatuses.setIn([cellID, 'isHidden'], false);
