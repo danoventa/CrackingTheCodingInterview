@@ -136,7 +136,7 @@ class DraggableCell extends React.Component {
         }
         <div>
           <Cell {...this.props} />
-          <CellContextMenu {...this.props} />
+          <CellContextMenu id={this.props.id} />
         </div>
       </div>
     );
