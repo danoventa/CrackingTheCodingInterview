@@ -8,7 +8,12 @@ import CodeCell from './code-cell';
 import MarkdownCell from './markdown-cell';
 import Toolbar from './toolbar';
 
-import { focusCell, focusPreviousCell, focusNextCell } from '../../actions';
+import {
+  focusCell,
+  focusPreviousCell,
+  focusNextCell,
+  copyCell,
+} from '../../actions';
 
 class Cell extends React.Component {
   static propTypes = {
@@ -37,11 +42,15 @@ class Cell extends React.Component {
     this.focusBelowCell = this.focusBelowCell.bind(this);
     this.setCellHoverState = this.setCellHoverState.bind(this);
     this.setToolbarHoverState = this.setToolbarHoverState.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.copyCcell = this.copyCell.bind(this);
   }
 
   state = {
     hoverCell: false,
     hoverToolbar: false,
+    ctrlDown: false,
   };
 
   componentWillMount() {
@@ -54,6 +63,24 @@ class Cell extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('mousemove', this.setCellHoverState);
+  }
+
+  handleKeyDown(event) {
+    if (event.ctrlKey || event.keyCode === 91) {
+      this.setState({ctrlDown: true});
+    }
+  }
+
+  handleKeyUp(event) {
+    console.log(event.keyCode);
+    if (this.state.ctrlDown) {
+      if (event.keyCode === 86) {
+        this.setState({ctrlDown: false});
+      } else if (event.keyCode === 67) {
+        this.setState({ctrlDown: false});
+        this.copyCell();
+      }
+    }
   }
 
   setCellHoverState(mouseEvent) {
@@ -86,6 +113,10 @@ class Cell extends React.Component {
     this.context.store.dispatch(focusNextCell(this.props.id));
   }
 
+  copyCell() {
+    this.context.store.dispatch(copyCell(this.props.id));
+  }
+
   render() {
     const cell = this.props.cell;
     const type = cell.get('cell_type');
@@ -94,6 +125,8 @@ class Cell extends React.Component {
       <div
         className={`cell ${type === 'markdown' ? 'text' : 'code'} ${focused ? 'focused' : ''}`}
         onClick={this.selectCell}
+        onKeyDown={this.handleKeyDown}
+        onKeyUp={this.handleKeyUp}
         ref="cell"
       >
         {
