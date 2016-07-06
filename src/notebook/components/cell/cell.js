@@ -13,6 +13,7 @@ import {
   focusPreviousCell,
   focusNextCell,
   copyCell,
+  pasteCell,
 } from '../../actions';
 
 class Cell extends React.Component {
@@ -44,7 +45,8 @@ class Cell extends React.Component {
     this.setToolbarHoverState = this.setToolbarHoverState.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
-    this.copyCcell = this.copyCell.bind(this);
+    this.copyCell = this.copyCell.bind(this);
+    this.pasteCell = this.pasteCell.bind(this);
   }
 
   state = {
@@ -72,10 +74,10 @@ class Cell extends React.Component {
   }
 
   handleKeyUp(event) {
-    console.log(event.keyCode);
     if (this.state.ctrlDown) {
       if (event.keyCode === 86) {
         this.setState({ctrlDown: false});
+        this.pasteCell();
       } else if (event.keyCode === 67) {
         this.setState({ctrlDown: false});
         this.copyCell();
@@ -115,6 +117,10 @@ class Cell extends React.Component {
 
   copyCell() {
     this.context.store.dispatch(copyCell(this.props.id));
+  }
+
+  pasteCell() {
+    this.context.store.dispatch(pasteCell());
   }
 
   render() {
