@@ -330,3 +330,9 @@ export function copyCell(id) {
     id,
   };
 }
+
+export function pasteCell() {
+  return {
+    type: constants.PASTE_CELL,
+  };
+}
