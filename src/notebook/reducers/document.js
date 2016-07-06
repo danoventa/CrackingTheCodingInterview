@@ -184,4 +184,10 @@ export default handleActions({
     }
     return state;
   },
+  [constants.COPY_CELL]: function copyCell(state, action) {
+    const { id } = action;
+    const cellMap = state.getIn(['notebook', 'cellMap']);
+    const cell = cellMap.get(id);
+    return state.set('copiedCell', cell);
+  },
 }, {});

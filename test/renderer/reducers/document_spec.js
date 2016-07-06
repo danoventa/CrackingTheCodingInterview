@@ -352,3 +352,22 @@ describe('splitCell', () => {
     expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(4);
   });
 });
+
+describe('copyCell', () => {
+  it('copies a cell', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+    const cell = originalState.document.getIn(['notebook', 'cellMap', id]);
+
+    const action = {
+      type: constants.COPY_CELL,
+      id: id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.get('copiedCell')).to.equal(cell);
+  });
+});

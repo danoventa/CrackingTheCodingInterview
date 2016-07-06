@@ -58,3 +58,5 @@ export const CLEAR_FUTURE = 'CLEAR_FUTURE';
 export const UNDO = 'UNDO';
 export const REDO = 'REDO';
 export const UPDATE_DOCUMENT = 'UPDATE_DOCUMENT';
+
+export const COPY_CELL = 'COPY_CELL';

@@ -323,3 +323,10 @@ export function updateDocument(newDocument) {
     newDocument,
   };
 }
+
+export function copyCell(id) {
+  return {
+    type: constants.COPY_CELL,
+    id,
+  };
+}
