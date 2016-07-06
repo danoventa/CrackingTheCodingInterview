@@ -364,3 +364,11 @@ describe('copyCell', () => {
     });
   });
 });
+
+describe('pasteCell', () => {
+  it('creates a PASTE_CELL action', () => {
+    expect(actions.pasteCell()).to.deep.equal({
+      type:constants.PASTE_CELL,
+    });
+  });
+});
