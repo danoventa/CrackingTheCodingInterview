@@ -32,4 +32,23 @@ describe('Cell', () => {
       clientY: 0,
     })).to.not.throw(Error);
   });
+  it.only('handleKeyDown sets ctrlDown properly', () => {
+    const cell = mount(
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
+    );
+
+    expect(cell.state('ctrlDown')).to.be.false;
+    cell.simulate('keydown', { key: 'Ctrl' });
+    expect(cell.state('ctrlDown')).to.be.true;
+  });
+  it('handleKeyUp responds properly to Ctrl + C', () => {
+    const cell = mount(
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
+    );
+
+    cell.simulate('keydown', { key: 'Ctrl' });
+    cell.simulate('keydown', { key: 'C' });
+    expect(cell.state('ctrlDown')).to.be.false;
+    expect(cell.copyCell).to.be.called();
+  });
 });
