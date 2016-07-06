@@ -67,24 +67,6 @@ class Cell extends React.Component {
     document.removeEventListener('mousemove', this.setCellHoverState);
   }
 
-  handleKeyDown(event) {
-    if (event.ctrlKey || event.keyCode === 91) {
-      this.setState({ctrlDown: true});
-    }
-  }
-
-  handleKeyUp(event) {
-    if (this.state.ctrlDown) {
-      if (event.keyCode === 86) {
-        this.setState({ctrlDown: false});
-        this.pasteCell();
-      } else if (event.keyCode === 67) {
-        this.setState({ctrlDown: false});
-        this.copyCell();
-      }
-    }
-  }
-
   setCellHoverState(mouseEvent) {
     if (this.refs.cell) {
       const cell = ReactDOM.findDOMNode(this.refs.cell);
@@ -101,6 +83,24 @@ class Cell extends React.Component {
 
   setToolbarHoverState(hoverToolbar) {
     this.setState({ hoverToolbar });
+  }
+
+  handleKeyDown(event) {
+    if (event.ctrlKey || event.keyCode === 91) {
+      this.setState({ ctrlDown: true });
+    }
+  }
+
+  handleKeyUp(event) {
+    if (this.state.ctrlDown) {
+      if (event.keyCode === 86) {
+        this.setState({ ctrlDown: false });
+        this.pasteCell();
+      } else if (event.keyCode === 67) {
+        this.setState({ ctrlDown: false });
+        this.copyCell();
+      }
+    }
   }
 
   selectCell() {
