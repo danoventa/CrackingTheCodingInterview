@@ -49,6 +49,5 @@ describe('Cell', () => {
     cell.simulate('keydown', { key: 'Ctrl' });
     cell.simulate('keydown', { key: 'C' });
     expect(cell.state('ctrlDown')).to.be.false;
-    expect(cell.copyCell).to.be.called();
   });
 });
