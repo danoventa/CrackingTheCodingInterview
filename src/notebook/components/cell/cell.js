@@ -11,7 +11,7 @@ import Toolbar from './toolbar';
 
 import { focusCell, focusPreviousCell, focusNextCell } from '../../actions';
 
-class Cell extends React.Component {
+export class Cell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
