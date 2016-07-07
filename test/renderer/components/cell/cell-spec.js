@@ -2,6 +2,7 @@ import React from 'react';
 
 import { mount } from 'enzyme';
 import {expect} from 'chai';
+import { dummyStore } from '../../../utils'
 
 import Cell from '../../../../src/notebook/components/cell/cell';
 import * as commutable from 'commutable';
@@ -32,22 +33,23 @@ describe('Cell', () => {
       clientY: 0,
     })).to.not.throw(Error);
   });
-  it.only('handleKeyDown sets ctrlDown properly', () => {
+  it('handleKeyDown sets ctrlDown properly', () => {
     const cell = mount(
       <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
     );
 
     expect(cell.state('ctrlDown')).to.be.false;
-    cell.simulate('keydown', { key: 'Ctrl' });
+    cell.simulate('keydown', { key: 'Ctrl', ctrlKey: true });
     expect(cell.state('ctrlDown')).to.be.true;
   });
   it('handleKeyUp responds properly to Ctrl + C', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>,
+      { context: { store: dummyStore() } }
     );
 
-    cell.simulate('keydown', { key: 'Ctrl' });
-    cell.simulate('keydown', { key: 'C' });
+    cell.simulate('keydown', { key: 'Ctrl', ctrlKey: true});
+    cell.simulate('keyup', { keyCode: 67 });
     expect(cell.state('ctrlDown')).to.be.false;
   });
 });
