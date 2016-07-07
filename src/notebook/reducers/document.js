@@ -11,6 +11,7 @@ export default handleActions({
     let outputStatuses = new Immutable.Map();
     notebook.get('cellOrder').map((cellID) => {
       outputStatuses = outputStatuses.setIn([cellID, 'isHidden'], false);
+      return outputStatuses;
     });
 
     return state.set('notebook', notebook)
