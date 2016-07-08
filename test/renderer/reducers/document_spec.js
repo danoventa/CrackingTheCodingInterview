@@ -22,7 +22,8 @@ import {
 } from 'immutable';
 
 const initialDocument = new Map();
-const monocellDocument = initialDocument.set('notebook', commutable.appendCell(dummyCommutable, commutable.emptyCodeCell));
+const monocellDocument = initialDocument
+  .set('notebook', commutable.appendCell(dummyCommutable, commutable.emptyCodeCell));
 
 describe('setNotebook', () => {
   it('converts a JSON notebook to our commutable notebook and puts in state', () => {
@@ -353,6 +354,31 @@ describe('splitCell', () => {
   });
 });
 
+describe('changeOutputVisibility', () => {
+  it('changes the visibility on a single cell', () => {
+    let outputStatuses = new Map();
+    monocellDocument.getIn(['notebook', 'cellOrder']).map((cellID) => {
+      outputStatuses = outputStatuses.setIn([cellID, 'isHidden'], false);
+      return outputStatuses;
+    });
+    const docWithOutputStatuses = monocellDocument.set('outputStatuses', outputStatuses);
+
+    const originalState = {
+      document: docWithOutputStatuses,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.CHANGE_OUTPUT_VISIBILITY,
+      id: id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['outputStatuses', id, 'isHidden'])).to.be.true;
+  });
+});
+
 describe('copyCell', () => {
   it('copies a cell', () => {
     const originalState = {
@@ -367,7 +393,6 @@ describe('copyCell', () => {
       id: id,
     };
 
-    const state = reducers(originalState, action);
     expect(state.document.getIn(['copied', 'cell'])).to.equal(cell);
     expect(state.document.getIn(['copied', 'id'])).to.equal(id);
   });
@@ -393,5 +418,6 @@ describe('pasteCell', () => {
     expect(copiedId).to.not.equal(id);
     expect(state.document.getIn(['notebook', 'cellMap', copiedId, 'source']))
       .to.equal(cell.get('source'));
+    expect(state.document.getIn(['outputStatuses', id, 'isHidden'])).to.be.true;
   });
 });

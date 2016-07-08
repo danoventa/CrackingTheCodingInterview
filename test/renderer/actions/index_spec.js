@@ -356,14 +356,22 @@ describe('splitCell', () => {
   });
 });
 
+<<<<<<< HEAD
 describe('copyCell', () => {
   it('creates a COPY_CELL action', () => {
     expect(actions.copyCell('235')).to.deep.equal({
       type: constants.COPY_CELL,
+=======
+describe('changeOutputVisibility', () => {
+  it('creates a CHANGE_OUTPUT_VISIBILITY', () => {
+    expect(actions.changeOutputVisibility('235')).to.deep.equal({
+      type: constants.CHANGE_OUTPUT_VISIBILITY,
+>>>>>>> 3bcdff8... Add output visibility tests
       id: '235',
     });
   });
 });
+<<<<<<< HEAD
 
 describe('pasteCell', () => {
   it('creates a PASTE_CELL action', () => {
@@ -372,3 +380,5 @@ describe('pasteCell', () => {
     });
   });
 });
+=======
+>>>>>>> 3bcdff8... Add output visibility tests

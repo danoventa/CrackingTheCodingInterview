@@ -131,6 +131,7 @@ export function dummyStore() {
       stickyCells: new Immutable.Map(),
       cellMsgAssociations: new Immutable.Map(),
       msgCellAssociations: new Immutable.Map(),
+      outputStatuses: new Immutable.Map(),
     }),
     app: AppRecord({
       executionState: 'not connected',
@@ -158,6 +159,7 @@ export function liveStore(cb, kernelName='python2') {
       stickyCells: new Immutable.Map(),
       cellMsgAssociations: new Immutable.Map(),
       msgCellAssociations: new Immutable.Map(),
+      outputStatuses: new Immutable.Map(),
     }),
     app: AppRecord({
       executionState: 'not connected',
