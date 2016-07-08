@@ -5,7 +5,7 @@ import {expect} from 'chai';
 import { dummyStore } from '../../../utils'
 import sinon from 'sinon';
 
-import Cell from '../../../../src/notebook/components/cell/cell';
+import { Cell } from '../../../../src/notebook/components/cell/cell';
 import * as commutable from 'commutable';
 import { displayOrder, transforms } from 'transformime-react';
 
@@ -29,6 +29,7 @@ describe('Cell', () => {
     const cell = mount(
       <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
     );
+
     expect(() => cell.instance().setCellHoverState({
       clientX: 0,
       clientY: 0,

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { ContextMenuLayer as contextMenuLayer } from 'react-contextmenu';
 
 import Immutable from 'immutable';
 
@@ -16,7 +17,7 @@ import {
   pasteCell,
 } from '../../actions';
 
-class Cell extends React.Component {
+export class Cell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
@@ -134,6 +135,7 @@ class Cell extends React.Component {
         onKeyDown={this.handleKeyDown}
         onKeyUp={this.handleKeyUp}
         ref="cell"
+        onContextMenu={this.contextMenu}
       >
         {
           this.state.hoverCell || this.state.hoverToolbar ? <Toolbar
@@ -173,4 +175,6 @@ class Cell extends React.Component {
   }
 }
 
-export default Cell;
+export default contextMenuLayer('cell-context-menu', (props) => ({
+  id: props.id,
+}))(Cell);
