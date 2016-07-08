@@ -184,4 +184,18 @@ export default handleActions({
     }
     return state;
   },
+  [constants.COPY_CELL]: function copyCell(state, action) {
+    const { id } = action;
+    const cellMap = state.getIn(['notebook', 'cellMap']);
+    const cell = cellMap.get(id);
+    return state.set('copied', new Immutable.Map({ id, cell }));
+  },
+  [constants.PASTE_CELL]: function copyCell(state) {
+    const copiedCell = state.getIn(['copied', 'cell']);
+    const copiedId = state.getIn(['copied', 'id']);
+    const id = uuid.v4();
+
+    return state.update('notebook', (notebook) =>
+        commutable.insertCellAfter(notebook, copiedCell, id, copiedId));
+  },
 }, {});

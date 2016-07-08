@@ -2,6 +2,8 @@ import React from 'react';
 
 import { mount } from 'enzyme';
 import {expect} from 'chai';
+import { dummyStore } from '../../../utils'
+import sinon from 'sinon';
 
 import Cell from '../../../../src/notebook/components/cell/cell';
 import * as commutable from 'commutable';
@@ -31,5 +33,40 @@ describe('Cell', () => {
       clientX: 0,
       clientY: 0,
     })).to.not.throw(Error);
+  });
+  it('handleKeyDown sets ctrlDown properly', () => {
+    const cell = mount(
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
+    );
+
+    expect(cell.state('ctrlDown')).to.be.false;
+    cell.simulate('keydown', { key: 'Ctrl', ctrlKey: true });
+    expect(cell.state('ctrlDown')).to.be.true;
+  });
+  it('handleKeyUp responds properly to Ctrl + C', () => {
+    const cell = mount(
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>,
+      { context: { store: dummyStore() } }
+    );
+
+    const spy = sinon.spy(cell.instance(), "copyCell"); 
+
+    cell.simulate('keydown', { key: 'Ctrl', ctrlKey: true});
+    cell.simulate('keyup', { keyCode: 67 });
+    expect(cell.state('ctrlDown')).to.be.false;
+    expect(spy.called).to.be.true;
+  });
+  it('handleKeyUp responds properly to Ctrl + V', () => {
+    const cell = mount(
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>,
+      { context: { store: dummyStore() } }
+    );
+
+    const spy = sinon.spy(cell.instance(), "pasteCell"); 
+
+    cell.simulate('keydown', { key: 'Ctrl', ctrlKey: true});
+    cell.simulate('keyup', { keyCode: 86 });
+    expect(cell.state('ctrlDown')).to.be.false;
+    expect(spy.called).to.be.true;
   });
 });

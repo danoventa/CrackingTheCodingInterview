@@ -352,3 +352,46 @@ describe('splitCell', () => {
     expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(4);
   });
 });
+
+describe('copyCell', () => {
+  it('copies a cell', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+    const cell = originalState.document.getIn(['notebook', 'cellMap', id]);
+
+    const action = {
+      type: constants.COPY_CELL,
+      id: id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['copied', 'cell'])).to.equal(cell);
+    expect(state.document.getIn(['copied', 'id'])).to.equal(id);
+  });
+});
+
+describe('pasteCell', () => {
+  it('pastes a cell', () => {
+    const id = monocellDocument.getIn(['notebook', 'cellOrder']).first();
+    const cell = monocellDocument.getIn(['notebook', 'cellMap', id]);
+
+    const originalState = {
+      document: monocellDocument.set('copied', new Map({cell, id})),
+    };
+
+    const action = {
+      type: constants.PASTE_CELL,
+    };
+
+    const state = reducers(originalState, action);
+    const copiedId = state.document.getIn(['notebook', 'cellOrder', 1]);
+
+    expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(4);
+    expect(copiedId).to.not.equal(id);
+    expect(state.document.getIn(['notebook', 'cellMap', copiedId, 'source']))
+      .to.equal(cell.get('source'));
+  });
+});

@@ -8,7 +8,13 @@ import CodeCell from './code-cell';
 import MarkdownCell from './markdown-cell';
 import Toolbar from './toolbar';
 
-import { focusCell, focusPreviousCell, focusNextCell } from '../../actions';
+import {
+  focusCell,
+  focusPreviousCell,
+  focusNextCell,
+  copyCell,
+  pasteCell,
+} from '../../actions';
 
 class Cell extends React.Component {
   static propTypes = {
@@ -37,11 +43,16 @@ class Cell extends React.Component {
     this.focusBelowCell = this.focusBelowCell.bind(this);
     this.setCellHoverState = this.setCellHoverState.bind(this);
     this.setToolbarHoverState = this.setToolbarHoverState.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.copyCell = this.copyCell.bind(this);
+    this.pasteCell = this.pasteCell.bind(this);
   }
 
   state = {
     hoverCell: false,
     hoverToolbar: false,
+    ctrlDown: false,
   };
 
   componentWillMount() {
@@ -74,6 +85,24 @@ class Cell extends React.Component {
     this.setState({ hoverToolbar });
   }
 
+  handleKeyDown(event) {
+    if (event.ctrlKey || event.keyCode === 91) {
+      this.setState({ ctrlDown: true });
+    }
+  }
+
+  handleKeyUp(event) {
+    if (this.state.ctrlDown) {
+      if (event.keyCode === 86) {
+        this.setState({ ctrlDown: false });
+        this.pasteCell();
+      } else if (event.keyCode === 67) {
+        this.setState({ ctrlDown: false });
+        this.copyCell();
+      }
+    }
+  }
+
   selectCell() {
     this.context.store.dispatch(focusCell(this.props.id));
   }
@@ -86,6 +115,14 @@ class Cell extends React.Component {
     this.context.store.dispatch(focusNextCell(this.props.id));
   }
 
+  copyCell() {
+    this.context.store.dispatch(copyCell(this.props.id));
+  }
+
+  pasteCell() {
+    this.context.store.dispatch(pasteCell());
+  }
+
   render() {
     const cell = this.props.cell;
     const type = cell.get('cell_type');
@@ -94,6 +131,8 @@ class Cell extends React.Component {
       <div
         className={`cell ${type === 'markdown' ? 'text' : 'code'} ${focused ? 'focused' : ''}`}
         onClick={this.selectCell}
+        onKeyDown={this.handleKeyDown}
+        onKeyUp={this.handleKeyUp}
         ref="cell"
       >
         {

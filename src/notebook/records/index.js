@@ -19,6 +19,7 @@ export const DocumentRecord = new Immutable.Record({
   focusedCell: null,
   cellMsgAssociations: new Immutable.Map(),
   msgCellAssociations: new Immutable.Map(),
+  copied: new Immutable.Map(),
 });
 
 export const MetadataRecord = new Immutable.Record({

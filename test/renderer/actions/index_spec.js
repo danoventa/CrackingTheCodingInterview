@@ -355,3 +355,20 @@ describe('splitCell', () => {
     });
   });
 });
+
+describe('copyCell', () => {
+  it('creates a COPY_CELL action', () => {
+    expect(actions.copyCell('235')).to.deep.equal({
+      type: constants.COPY_CELL,
+      id: '235',
+    });
+  });
+});
+
+describe('pasteCell', () => {
+  it('creates a PASTE_CELL action', () => {
+    expect(actions.pasteCell()).to.deep.equal({
+      type:constants.PASTE_CELL,
+    });
+  });
+});
