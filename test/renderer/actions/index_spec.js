@@ -365,6 +365,15 @@ describe('copyCell', () => {
   });
 });
 
+describe('changeOutputVisibility', () => {
+  it('creates a CHANGE_OUTPUT_VISIBILITY', () => {
+    expect(actions.changeOutputVisibility('235')).to.deep.equal({
+      type: constants.CHANGE_OUTPUT_VISIBILITY,
+      id: '235',
+    });
+  });
+});
+
 describe('pasteCell', () => {
   it('creates a PASTE_CELL action', () => {
     expect(actions.pasteCell()).to.deep.equal({

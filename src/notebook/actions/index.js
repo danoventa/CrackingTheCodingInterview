@@ -184,6 +184,13 @@ export function clearCellOutput(id) {
   };
 }
 
+export function changeOutputVisibility(id) {
+  return {
+    type: constants.CHANGE_OUTPUT_VISIBILITY,
+    id,
+  };
+}
+
 export function updateCellPagers(id, pagers) {
   return {
     type: constants.UPDATE_CELL_PAGERS,

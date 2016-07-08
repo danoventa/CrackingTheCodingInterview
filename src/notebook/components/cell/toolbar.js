@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import {
-  executeCell,
+import { executeCell,
   removeCell,
   toggleStickyCell,
   clearCellOutput,
   splitCell,
+  changeOutputVisibility,
 } from '../../actions';
 
 const mapStateToProps = (state) => ({
@@ -43,6 +43,7 @@ export class Toolbar extends React.Component {
     this.splitCell = this.splitCell.bind(this);
     this.setHoverState = this.setHoverState.bind(this);
     this.toggleStickyCell = this.toggleStickyCell.bind(this);
+    this.changeOutputVisibility = this.changeOutputVisibility.bind(this);
   }
 
   componentWillMount() {
@@ -99,6 +100,10 @@ export class Toolbar extends React.Component {
     this.context.store.dispatch(splitCell(this.props.id, 0));
   }
 
+  changeOutputVisibility() {
+    this.context.store.dispatch(changeOutputVisibility(this.props.id));
+  }
+
   render() {
     const showPlay = this.props.type !== 'markdown';
     return (
@@ -111,6 +116,9 @@ export class Toolbar extends React.Component {
               </button>
               <button onClick={this.clearCellOutput}>
                 <span className="octicon octicon-zap" />
+              </button>
+              <button onClick={this.changeOutputVisibility}>
+                <span className="octicon octicon-eye" />
               </button>
             </span>}
           <button onClick={this.removeCell}>

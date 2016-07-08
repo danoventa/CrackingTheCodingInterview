@@ -8,8 +8,15 @@ import * as constants from '../constants';
 export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.data;
+    let outputStatuses = new Immutable.Map();
+    notebook.get('cellOrder').map((cellID) => {
+      outputStatuses = outputStatuses.setIn([cellID, 'isHidden'], false);
+      return outputStatuses;
+    });
+
     return state.set('notebook', notebook)
-                .set('focusedCell', notebook.getIn(['cellOrder', 0]));
+                .set('focusedCell', notebook.getIn(['cellOrder', 0]))
+                .set('outputStatuses', outputStatuses);
   },
   [constants.FOCUS_CELL]: function focusCell(state, action) {
     return state.set('focusedCell', action.id);
@@ -31,7 +38,8 @@ export default handleActions({
       const cell = commutable.emptyCodeCell;
       return state.set('focusedCell', cellID)
                   .update('notebook',
-                    (notebook) => commutable.insertCellAt(notebook, cell, cellID, nextIndex));
+                    (notebook) => commutable.insertCellAt(notebook, cell, cellID, nextIndex))
+                  .setIn(['outputStatuses', cellID, 'isHidden'], false);
     }
 
     // When in the middle of the notebook document, move to the next cell
@@ -87,7 +95,8 @@ export default handleActions({
     return state.update('notebook', (notebook) => {
       const index = notebook.get('cellOrder').indexOf(id) + 1;
       return commutable.insertCellAt(notebook, cell.set('source', source), cellID, index);
-    });
+    })
+    .setIn(['outputStatuses', cellID, 'isHidden'], false);
   },
   [constants.NEW_CELL_BEFORE]: function newCellBefore(state, action) {
     // Draft API
@@ -98,7 +107,8 @@ export default handleActions({
     return state.update('notebook', (notebook) => {
       const index = notebook.get('cellOrder').indexOf(id);
       return commutable.insertCellAt(notebook, cell, cellID, index);
-    });
+    })
+    .setIn(['outputStatuses', cellID, 'isHidden'], false);
   },
   [constants.MERGE_CELL_AFTER]: function mergeCellAfter(state, action) {
     const { id } = action;
@@ -126,9 +136,8 @@ export default handleActions({
                                            commutable.emptyCodeCell;
     const index = notebook.get('cellOrder').count();
     const cellID = uuid.v4();
-    return state.set('notebook',
-      commutable.insertCellAt(notebook, cell, cellID, index)
-    );
+    return state.set('notebook', commutable.insertCellAt(notebook, cell, cellID, index))
+                .setIn(['outputStatuses', cellID, 'isHidden'], false);
   },
   [constants.UPDATE_CELL_SOURCE]: function updateSource(state, action) {
     const { id, source } = action;
@@ -141,6 +150,11 @@ export default handleActions({
   [constants.SPLIT_CELL]: function splitCell(state, action) {
     const { id, position } = action;
     return state.update('notebook', (notebook) => commutable.splitCell(notebook, id, position));
+  },
+  [constants.CHANGE_OUTPUT_VISIBILITY]: function changeOutputVisibility(state, action) {
+    const { id } = action;
+    return state.update('outputStatuses', (outputStatuses) => outputStatuses.setIn([id, 'isHidden'],
+          !outputStatuses.getIn([id, 'isHidden'])));
   },
   [constants.UPDATE_CELL_OUTPUTS]: function updateOutputs(state, action) {
     const { id, outputs } = action;
