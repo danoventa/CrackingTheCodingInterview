@@ -393,6 +393,7 @@ describe('copyCell', () => {
       id: id,
     };
 
+    const state = reducers(originalState, action);
     expect(state.document.getIn(['copied', 'cell'])).to.equal(cell);
     expect(state.document.getIn(['copied', 'id'])).to.equal(id);
   });
@@ -418,6 +419,5 @@ describe('pasteCell', () => {
     expect(copiedId).to.not.equal(id);
     expect(state.document.getIn(['notebook', 'cellMap', copiedId, 'source']))
       .to.equal(cell.get('source'));
-    expect(state.document.getIn(['outputStatuses', id, 'isHidden'])).to.be.true;
   });
 });

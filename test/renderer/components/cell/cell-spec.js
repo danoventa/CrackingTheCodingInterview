@@ -38,7 +38,7 @@ describe('Cell', () => {
   });
   it('handleKeyDown sets ctrlDown properly', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>
     );
 
     expect(cell.state('ctrlDown')).to.be.false;
@@ -47,7 +47,7 @@ describe('Cell', () => {
   });
   it('handleKeyUp responds properly to Ctrl + C', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>,
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>,
       { context: { store: dummyStore() } }
     );
 
@@ -60,7 +60,7 @@ describe('Cell', () => {
   });
   it('handleKeyUp responds properly to Ctrl + V', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps}/>,
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>,
       { context: { store: dummyStore() } }
     );
 
