@@ -53,7 +53,7 @@ export function triggerSaveAs(store, dispatch) {
 export function dispatchSave(store, dispatch) {
   const state = store.getState();
   const notebook = state.document.get('notebook');
-  const filename = state.document.get('filename');
+  const filename = state.metadata.get('filename');
   if (!filename) {
     triggerSaveAs(store, dispatch);
   } else {
@@ -72,7 +72,7 @@ export function dispatchNewkernel(store, dispatch, evt, name) {
 
 export function dispatchPublishGist(store, dispatch) {
   const state = store.getState();
-  const filename = state.document.get('filename');
+  const filename = state.metadata.get('filename');
   const notebook = state.document.get('notebook');
   const { notificationSystem, github } = state.app;
 
