@@ -212,4 +212,9 @@ export default handleActions({
     return state.update('notebook', (notebook) =>
         commutable.insertCellAfter(notebook, copiedCell, id, copiedId));
   },
+  [constants.CHANGE_TYPE]: function changeType(state, action) {
+    const { id, to } = action;
+
+    return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to);
+  },
 }, {});
