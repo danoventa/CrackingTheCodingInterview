@@ -218,7 +218,7 @@ export default handleActions({
     if (state.getIn(['notebook', 'cellMap', id, 'cell_type']) === 'markdown') {
       return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
                   .setIn(['notebook', 'cellMap', id, 'execution_count'], null)
-                  .setIn(['notebook', 'cellMap', id, 'outputs'], []);
+                  .setIn(['notebook', 'cellMap', id, 'outputs'], new Immutable.List());
     }
 
     return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to);
