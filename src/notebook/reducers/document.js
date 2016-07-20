@@ -218,14 +218,14 @@ export default handleActions({
 
     if (from === to) {
       return state;
-    } else if  (from === 'markdown') {
+    } else if (from === 'markdown') {
       return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
                   .setIn(['notebook', 'cellMap', id, 'execution_count'], null)
                   .setIn(['notebook', 'cellMap', id, 'outputs'], new Immutable.List());
-    } else {
-      return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
-                  .delete(['notebook', 'cellMap', id, 'execution_count'])
-                  .delete(['notebook', 'cellMap', id, 'outputs']);
     }
+
+    return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
+                .delete(['notebook', 'cellMap', id, 'execution_count'])
+                .delete(['notebook', 'cellMap', id, 'outputs']);
   },
 }, {});
