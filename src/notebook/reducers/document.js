@@ -219,8 +219,8 @@ export default handleActions({
       return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
                   .setIn(['notebook', 'cellMap', id, 'execution_count'], null)
                   .setIn(['notebook', 'cellMap', id, 'outputs'], []);
-    } else {
-      return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to);
     }
+
+    return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to);
   },
 }, {});
