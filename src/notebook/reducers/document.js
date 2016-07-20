@@ -215,6 +215,12 @@ export default handleActions({
   [constants.CHANGE_TYPE]: function changeType(state, action) {
     const { id, to } = action;
 
-    return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to);
+    if (state.getIn(['notebook', 'cellMap', id, 'cell_type']) === 'markdown') {
+      return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
+                  .setIn(['notebook', 'cellMap', id, 'execution_count'], null)
+                  .setIn(['notebook', 'cellMap', id, 'outputs'], []);
+    } else {
+      return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to);
+    }
   },
 }, {});
