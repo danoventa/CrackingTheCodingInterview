@@ -343,3 +343,11 @@ export function pasteCell() {
     type: constants.PASTE_CELL,
   };
 }
+
+export function changeCellType(id, to) {
+  return {
+    type: constants.CHANGE_CELL_TYPE,
+    id,
+    to,
+  };
+}

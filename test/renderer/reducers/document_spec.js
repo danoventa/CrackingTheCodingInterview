@@ -421,3 +421,44 @@ describe('pasteCell', () => {
       .to.equal(cell.get('source'));
   });
 });
+
+describe('changeCellType', () => {
+  it('converts code cell to markdown cell', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = monocellDocument.getIn(['notebook', 'cellOrder']).last();
+
+    const action = {
+      type: constants.CHANGE_CELL_TYPE,
+      id: id,
+      to: 'markdown',
+    };
+
+    const state = reducers(originalState, action);
+
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'cell_type']))
+      .to.equal('markdown');
+  });
+  it('converts markdown cell to code cell', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = monocellDocument.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.CHANGE_CELL_TYPE,
+      id: id,
+      to: 'code',
+    };
+
+    const state = reducers(originalState, action);
+
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'cell_type']))
+      .to.equal('code');
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'outputs']))
+      .to.not.be.undefined;
+  });
+});

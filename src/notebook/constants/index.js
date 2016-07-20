@@ -64,3 +64,5 @@ export const UPDATE_DOCUMENT = 'UPDATE_DOCUMENT';
 
 export const COPY_CELL = 'COPY_CELL';
 export const PASTE_CELL = 'PASTE_CELL';
+
+export const CHANGE_CELL_TYPE = 'CHANGE_CELL_TYPE';

@@ -212,4 +212,20 @@ export default handleActions({
     return state.update('notebook', (notebook) =>
         commutable.insertCellAfter(notebook, copiedCell, id, copiedId));
   },
+  [constants.CHANGE_CELL_TYPE]: function changeCellType(state, action) {
+    const { id, to } = action;
+    const from = state.getIn(['notebook', 'cellMap', id, 'cell_type']);
+
+    if (from === to) {
+      return state;
+    } else if (from === 'markdown') {
+      return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
+                  .setIn(['notebook', 'cellMap', id, 'execution_count'], null)
+                  .setIn(['notebook', 'cellMap', id, 'outputs'], new Immutable.List());
+    }
+
+    return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
+                .delete(['notebook', 'cellMap', id, 'execution_count'])
+                .delete(['notebook', 'cellMap', id, 'outputs']);
+  },
 }, {});
