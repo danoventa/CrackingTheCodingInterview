@@ -422,7 +422,7 @@ describe('pasteCell', () => {
   });
 });
 
-describe('changeType', () => {
+describe('changeCellType', () => {
   it('converts code cell to markdown cell', () => {
     const originalState = {
       document: monocellDocument,
@@ -431,7 +431,7 @@ describe('changeType', () => {
     const id = monocellDocument.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
-      type: constants.CHANGE_TYPE,
+      type: constants.CHANGE_CELL_TYPE,
       id: id,
       to: 'markdown',
     };
@@ -449,7 +449,7 @@ describe('changeType', () => {
     const id = monocellDocument.getIn(['notebook', 'cellOrder']).first();
 
     const action = {
-      type: constants.CHANGE_TYPE,
+      type: constants.CHANGE_CELL_TYPE,
       id: id,
       to: 'code',
     };

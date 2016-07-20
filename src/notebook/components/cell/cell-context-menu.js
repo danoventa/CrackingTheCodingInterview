@@ -1,7 +1,7 @@
 import React from 'react';
 import { ContextMenu, MenuItem, connect } from 'react-contextmenu';
 
-import { clearCellOutput, changeType } from '../../actions';
+import { clearCellOutput, changeCellType } from '../../actions';
 
 
 class CellContextMenu extends React.Component {
@@ -17,16 +17,16 @@ class CellContextMenu extends React.Component {
   constructor() {
     super();
     this.clearCellOutput = this.clearCellOutput.bind(this);
-    this.changeType = this.changeType.bind(this);
+    this.changeCellType = this.changeCellType.bind(this);
   }
 
   clearCellOutput(event, data) {
     this.context.store.dispatch(clearCellOutput(data.id));
   }
 
-  changeType(event, data) {
+  changeCellType(event, data) {
     const to = data.type === 'markdown' ? 'code' : 'markdown';
-    this.context.store.dispatch(changeType(data.id, to));
+    this.context.store.dispatch(changeCellType(data.id, to));
   }
 
   render() {
@@ -39,7 +39,7 @@ class CellContextMenu extends React.Component {
           Clear Cell Output
         </MenuItem>
         <MenuItem
-          onClick={this.changeType}
+          onClick={this.changeCellType}
           data={{ id: this.props.id, type: this.props.type }}
         >
             Convert to {this.props.type === 'markdown' ? 'Code' : 'Markdown'} Cell

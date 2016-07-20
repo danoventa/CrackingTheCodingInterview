@@ -212,7 +212,7 @@ export default handleActions({
     return state.update('notebook', (notebook) =>
         commutable.insertCellAfter(notebook, copiedCell, id, copiedId));
   },
-  [constants.CHANGE_TYPE]: function changeType(state, action) {
+  [constants.CHANGE_CELL_TYPE]: function changeCellType(state, action) {
     const { id, to } = action;
 
     if (state.getIn(['notebook', 'cellMap', id, 'cell_type']) === 'markdown') {

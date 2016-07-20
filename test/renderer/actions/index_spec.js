@@ -382,10 +382,10 @@ describe('pasteCell', () => {
   });
 });
 
-describe('changeType', () => {
-  it('creates a CHANGE_TYPE action', () => {
-    expect(actions.changeType('235', 'markdown')).to.deep.equal({
-      type: constants.CHANGE_TYPE,
+describe('changeCellType', () => {
+  it('creates a CHANGE_CELL_TYPE action', () => {
+    expect(actions.changeCellType('235', 'markdown')).to.deep.equal({
+      type: constants.CHANGE_CELL_TYPE,
       id: '235',
       to: 'markdown',
     });
