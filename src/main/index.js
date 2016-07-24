@@ -15,9 +15,7 @@ var argv = require('yargs')
               .parse(process.argv.slice(1));
 
 var notebooks = argv._;
-notebooks.filter(function(n){})
-console.log(argv)
-console.log(notebooks)
+
 app.on('window-all-closed', () => {
   // On OS X, we want to keep the app and menu bar active
   if (process.platform !== 'darwin') {
