@@ -9,12 +9,15 @@ import { resolve } from 'path';
 
 const version = require('../../package.json').version;
 
-const argv = require('yargs')
+
+var argv = require('yargs')
               .version(version)
-              .argv;
+              .parse(process.argv.slice(1));
 
-const notebooks = argv._;
-
+var notebooks = argv._;
+notebooks.filter(function(n){})
+console.log(argv)
+console.log(notebooks)
 app.on('window-all-closed', () => {
   // On OS X, we want to keep the app and menu bar active
   if (process.platform !== 'darwin') {
