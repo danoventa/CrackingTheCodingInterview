@@ -11,7 +11,7 @@ const program = require('commander');
 const version = require('../../package.json').version;
 
 program._name = 'nteract';
-process.argv.splice(1,0,'')
+process.argv.splice(1, 0, '');
 
 program
   .version(version)
