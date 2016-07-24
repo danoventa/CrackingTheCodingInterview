@@ -7,18 +7,13 @@ import { Menu, app } from 'electron';
 import { defaultMenu, loadFullMenu } from './menu';
 import { resolve } from 'path';
 
-const program = require('commander');
 const version = require('../../package.json').version;
 
-program._name = 'nteract';
-process.argv.splice(1, 0, '');
+const argv = require('yargs')
+              .version(version)
+              .argv;
 
-program
-  .version(version)
-  .option('-k, --kernel [kernel]', 'kernel')
-  .parse(process.argv);
-
-const notebooks = program.args;
+const notebooks = argv._;
 
 app.on('window-all-closed', () => {
   // On OS X, we want to keep the app and menu bar active
@@ -37,7 +32,7 @@ app.on('ready', () => {
   Menu.setApplicationMenu(defaultMenu);
   // Let the kernels/languages come in after
   loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
-  if (notebooks <= 0) {
+  if (notebooks.length <= 0) {
     launchNewNotebook('python3');
   } else {
     notebooks.filter(Boolean).forEach(f => launchFilename(resolve(f)));
