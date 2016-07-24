@@ -10,11 +10,11 @@ import { resolve } from 'path';
 const version = require('../../package.json').version;
 
 
-var argv = require('yargs')
+const argv = require('yargs')
               .version(version)
               .parse(process.argv.slice(1));
 
-var notebooks = argv._;
+const notebooks = argv._;
 
 app.on('window-all-closed', () => {
   // On OS X, we want to keep the app and menu bar active
