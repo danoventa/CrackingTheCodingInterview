@@ -10,21 +10,20 @@ export function deferURL(event, url) {
   event.preventDefault();
   shell.openExternal(url);
 }
-var iconName = '';
-if(process.platform == 'win32')
-{
-    iconName = './static/icon.ico'
+let iconName = '';
+
+if (process.platform === 'win32') {
+  iconName = './static/icon.ico';
+} else if (process.platform === 'linux') {
+  iconName = './static/icon.png';
 }
-else if(process.platform == 'linux'){
-    iconName = './static/icon.png'
-};
 
 export function launch(notebook, filename) {
   let win = new BrowserWindow({
     width: 800,
     height: 1000,
     title: !filename ? 'Untitled' : path.relative('.', filename.replace(/.ipynb$/, '')),
-    icon: iconName
+    icon: iconName,
   });
 
   const index = path.join(__dirname, '..', '..', 'static', 'index.html');
