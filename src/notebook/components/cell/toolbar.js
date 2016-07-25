@@ -114,12 +114,6 @@ export class Toolbar extends React.Component {
               <button onClick={this.executeCell}>
                 <span className="octicon octicon-triangle-right" />
               </button>
-              <button onClick={this.clearCellOutput}>
-                <span className="octicon octicon-zap" />
-              </button>
-              <button onClick={this.changeOutputVisibility}>
-                <span className="octicon octicon-eye" />
-              </button>
             </span>}
           <button onClick={this.removeCell}>
             <span className="octicon octicon-trashcan" />

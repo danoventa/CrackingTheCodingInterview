@@ -5,6 +5,7 @@ import {
   clearCellOutput,
   changeCellType,
   changeInputVisibility,
+  changeOutputVisibility,
 } from '../../actions';
 
 
@@ -23,6 +24,7 @@ class CellContextMenu extends React.Component {
     this.clearCellOutput = this.clearCellOutput.bind(this);
     this.changeCellType = this.changeCellType.bind(this);
     this.changeInputVisibility = this.changeInputVisibility.bind(this);
+    this.changeOutputVisibility = this.changeOutputVisibility.bind(this);
   }
 
   clearCellOutput(event, data) {
@@ -36,6 +38,10 @@ class CellContextMenu extends React.Component {
 
   changeInputVisibility(event, data) {
     this.context.store.dispatch(changeInputVisibility(data.id));
+  }
+
+  changeOutputVisibility(event, data) {
+    this.context.store.dispatch(changeOutputVisibility(data.id));
   }
 
   render() {
@@ -52,6 +58,12 @@ class CellContextMenu extends React.Component {
           data={{ id: this.props.id }}
         >
           Toggle Input Visibility
+        </MenuItem>
+        <MenuItem
+          onClick={this.changeOutputVisibility}
+          data={{ id: this.props.id }}
+        >
+          Toggle Cell Output
         </MenuItem>
         <MenuItem
           onClick={this.changeCellType}
