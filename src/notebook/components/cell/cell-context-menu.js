@@ -63,7 +63,7 @@ class CellContextMenu extends React.Component {
           onClick={this.changeOutputVisibility}
           data={{ id: this.props.id }}
         >
-          Toggle Cell Output
+          Toggle Output Visibility
         </MenuItem>
         <MenuItem
           onClick={this.changeCellType}
