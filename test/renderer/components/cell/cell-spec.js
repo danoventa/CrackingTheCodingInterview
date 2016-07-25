@@ -21,14 +21,16 @@ describe('Cell', () => {
   });
   it('should be able to render a code cell', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}
+      cellStatus={Immutable.Map({'outputHidden': false, 'inputHidden': false})}/>
     );
     expect(cell).to.not.be.null;
     expect(cell.find('div.code.cell').length).to.be.greaterThan(0);
   });
   it('setCellHoverState does not error', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}
+      cellStatus={Immutable.Map({'outputHidden': false, 'inputHidden': false})}/>
     );
 
     expect(() => cell.instance().setCellHoverState({
@@ -38,7 +40,8 @@ describe('Cell', () => {
   });
   it('handleKeyDown sets ctrlDown properly', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}
+      cellStatus={Immutable.Map({'outputHidden': false, 'inputHidden': false})}/>
     );
 
     expect(cell.state('ctrlDown')).to.be.false;
@@ -47,7 +50,8 @@ describe('Cell', () => {
   });
   it('handleKeyUp responds properly to Ctrl + C', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>,
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}
+      cellStatus={Immutable.Map({'outputHidden': false, 'inputHidden': false})}/>,
       { context: { store: dummyStore() } }
     );
 
@@ -60,7 +64,8 @@ describe('Cell', () => {
   });
   it('handleKeyUp responds properly to Ctrl + V', () => {
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps} outputStatus={Immutable.Map({'isHidden': false})}/>,
+      <Cell cell={commutable.emptyCodeCell} {...sharedProps}
+      cellStatus={Immutable.Map({'outputHidden': false, 'inputHidden': false})}/>,
       { context: { store: dummyStore() } }
     );
 
