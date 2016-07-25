@@ -1,7 +1,11 @@
 import React from 'react';
 import { ContextMenu, MenuItem, connect } from 'react-contextmenu';
 
-import { clearCellOutput, changeCellType } from '../../actions';
+import {
+  clearCellOutput,
+  changeCellType,
+  changeInputVisibility,
+} from '../../actions';
 
 
 class CellContextMenu extends React.Component {
@@ -18,6 +22,7 @@ class CellContextMenu extends React.Component {
     super();
     this.clearCellOutput = this.clearCellOutput.bind(this);
     this.changeCellType = this.changeCellType.bind(this);
+    this.changeInputVisibility = this.changeInputVisibility.bind(this);
   }
 
   clearCellOutput(event, data) {
@@ -29,6 +34,10 @@ class CellContextMenu extends React.Component {
     this.context.store.dispatch(changeCellType(data.id, to));
   }
 
+  changeInputVisibility(event, data) {
+    this.context.store.dispatch(changeInputVisibility(data.id));
+  }
+
   render() {
     return (
       <ContextMenu identifier="cell-context-menu">
@@ -37,6 +46,12 @@ class CellContextMenu extends React.Component {
           data={{ id: this.props.id }}
         >
           Clear Cell Output
+        </MenuItem>
+        <MenuItem
+          onClick={this.changeInputVisibility}
+          data={{ id: this.props.id }}
+        >
+          Toggle Input Visibility
         </MenuItem>
         <MenuItem
           onClick={this.changeCellType}
