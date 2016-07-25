@@ -11,7 +11,7 @@ import * as constants from '../../../src/notebook/constants';
 import { AppRecord } from '../../../src/notebook/records';
 
 describe('the circle of life', () => {
-  it('is available for creating and destroying kernels', () => {
+  it.skip('is available for creating and destroying kernels', () => {
     const kernelPromise = launchKernel('python2');
 
     return kernelPromise.then(kernel => {
