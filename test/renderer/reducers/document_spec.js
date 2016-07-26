@@ -379,6 +379,32 @@ describe('changeOutputVisibility', () => {
   });
 });
 
+describe('changeInputVisibility', () => {
+  it('changes the input visibility on a single cell', () => {
+    let cellStatuses = new Map();
+    monocellDocument.getIn(['notebook', 'cellOrder']).map((cellID) => {
+      cellStatuses = cellStatuses.setIn([cellID, 'outputHidden'], false)
+                                .setIn([cellID, 'inputHidden'], false);
+      return cellStatuses;
+    });
+    const docWithStatuses = monocellDocument.set('cellStatuses', cellStatuses);
+
+    const originalState = {
+      document: docWithStatuses,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.CHANGE_INPUT_VISIBILITY,
+      id: id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['cellStatuses', id, 'inputHidden'])).to.be.true;
+  });
+});
+
 describe('copyCell', () => {
   it('copies a cell', () => {
     const originalState = {
