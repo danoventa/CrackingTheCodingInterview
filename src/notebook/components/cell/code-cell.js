@@ -49,23 +49,23 @@ class CodeCell extends React.Component {
   render() {
     return (<div>
       {
-      !this.isInputHidden() ?
-      <div className="input-container">
-        <Inputs
-          executionCount={this.props.cell.get('execution_count')}
-          running={this.props.running}
-        />
-        <Editor
-          id={this.props.id}
-          input={this.props.cell.get('source')}
-          language={this.props.language}
-          focused={this.props.focused}
-          getCompletions={this.props.getCompletions}
-          theme={this.props.theme}
-          focusAbove={this.props.focusAbove}
-          focusBelow={this.props.focusBelow}
-        />
-      </div> : null
+        !this.isInputHidden() ?
+          <div className="input-container">
+            <Inputs
+              executionCount={this.props.cell.get('execution_count')}
+              running={this.props.running}
+            />
+            <Editor
+              id={this.props.id}
+              input={this.props.cell.get('source')}
+              language={this.props.language}
+              focused={this.props.focused}
+              getCompletions={this.props.getCompletions}
+              theme={this.props.theme}
+              focusAbove={this.props.focusAbove}
+              focusBelow={this.props.focusBelow}
+            />
+          </div> : null
       }
       {
         this.props.pagers && !this.props.pagers.isEmpty() ?
