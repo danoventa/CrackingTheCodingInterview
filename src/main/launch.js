@@ -62,6 +62,8 @@ export function launchFilename(filename) {
     fs.readFile(filename, {}, (err, data) => {
       if (err) {
         reject(err);
+        console.warn('Filename not resolved, launching an empty Notebook.');
+        launchNewNotebook('python3');
       } else {
         resolve(launch(fromJS(JSON.parse(data)), filename));
       }
