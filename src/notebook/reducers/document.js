@@ -8,15 +8,16 @@ import * as constants from '../constants';
 export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.data;
-    let outputStatuses = new Immutable.Map();
+    let cellStatuses = new Immutable.Map();
     notebook.get('cellOrder').map((cellID) => {
-      outputStatuses = outputStatuses.setIn([cellID, 'isHidden'], false);
-      return outputStatuses;
+      cellStatuses = cellStatuses.setIn([cellID, 'outputHidden'], false)
+                                .setIn([cellID, 'inputHidden'], false);
+      return cellStatuses;
     });
 
     return state.set('notebook', notebook)
                 .set('focusedCell', notebook.getIn(['cellOrder', 0]))
-                .set('outputStatuses', outputStatuses);
+                .set('cellStatuses', cellStatuses);
   },
   [constants.FOCUS_CELL]: function focusCell(state, action) {
     return state.set('focusedCell', action.id);
@@ -39,7 +40,8 @@ export default handleActions({
       return state.set('focusedCell', cellID)
                   .update('notebook',
                     (notebook) => commutable.insertCellAt(notebook, cell, cellID, nextIndex))
-                  .setIn(['outputStatuses', cellID, 'isHidden'], false);
+                  .setIn(['cellStatuses', cellID, 'outputHidden'], false)
+                  .setIn(['cellStatuses', cellID, 'inputHidden'], false);
     }
 
     // When in the middle of the notebook document, move to the next cell
@@ -96,7 +98,8 @@ export default handleActions({
       const index = notebook.get('cellOrder').indexOf(id) + 1;
       return commutable.insertCellAt(notebook, cell.set('source', source), cellID, index);
     })
-    .setIn(['outputStatuses', cellID, 'isHidden'], false);
+    .setIn(['cellStatuses', cellID, 'outputHidden'], false)
+    .setIn(['cellStatuses', cellID, 'inputHidden'], false);
   },
   [constants.NEW_CELL_BEFORE]: function newCellBefore(state, action) {
     // Draft API
@@ -108,7 +111,8 @@ export default handleActions({
       const index = notebook.get('cellOrder').indexOf(id);
       return commutable.insertCellAt(notebook, cell, cellID, index);
     })
-    .setIn(['outputStatuses', cellID, 'isHidden'], false);
+    .setIn(['cellStatuses', cellID, 'outputHidden'], false)
+    .setIn(['cellStatuses', cellID, 'inputHidden'], false);
   },
   [constants.MERGE_CELL_AFTER]: function mergeCellAfter(state, action) {
     const { id } = action;
@@ -137,7 +141,8 @@ export default handleActions({
     const index = notebook.get('cellOrder').count();
     const cellID = uuid.v4();
     return state.set('notebook', commutable.insertCellAt(notebook, cell, cellID, index))
-                .setIn(['outputStatuses', cellID, 'isHidden'], false);
+                .setIn(['cellStatuses', cellID, 'outputHidden'], false)
+                .setIn(['cellStatuses', cellID, 'inputHidden'], false);
   },
   [constants.UPDATE_CELL_SOURCE]: function updateSource(state, action) {
     const { id, source } = action;
@@ -153,8 +158,13 @@ export default handleActions({
   },
   [constants.CHANGE_OUTPUT_VISIBILITY]: function changeOutputVisibility(state, action) {
     const { id } = action;
-    return state.update('outputStatuses', (outputStatuses) => outputStatuses.setIn([id, 'isHidden'],
-          !outputStatuses.getIn([id, 'isHidden'])));
+    return state.update('cellStatuses', (cellStatuses) => cellStatuses.setIn([id, 'outputHidden'],
+          !cellStatuses.getIn([id, 'outputHidden'])));
+  },
+  [constants.CHANGE_INPUT_VISIBILITY]: function changeInputVisibility(state, action) {
+    const { id } = action;
+    return state.update('cellStatuses', (cellStatuses) => cellStatuses.setIn([id, 'inputHidden'],
+          !cellStatuses.getIn([id, 'inputHidden'])));
   },
   [constants.UPDATE_CELL_OUTPUTS]: function updateOutputs(state, action) {
     const { id, outputs } = action;
@@ -166,7 +176,7 @@ export default handleActions({
   },
   [constants.UPDATE_CELL_STATUS]: function updateCellStatus(state, action) {
     const { id, status } = action;
-    return state.setIn(['cellStatuses', id], status);
+    return state.setIn(['cellStatuses', id, 'status'], status);
   },
   [constants.SET_LANGUAGE_INFO]: function setLanguageInfo(state, action) {
     const langInfo = Immutable.fromJS(action.langInfo);

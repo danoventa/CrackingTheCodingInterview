@@ -21,7 +21,7 @@ export class Cell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
-    outputStatus: React.PropTypes.instanceOf(Immutable.Map),
+    cellStatus: React.PropTypes.instanceOf(Immutable.Map),
     id: React.PropTypes.string,
     getCompletions: React.PropTypes.func,
     focusedCell: React.PropTypes.string,
@@ -165,7 +165,7 @@ export class Cell extends React.Component {
             theme={this.props.theme}
             language={this.props.language}
             displayOrder={this.props.displayOrder}
-            outputStatus={this.props.outputStatus}
+            cellStatus={this.props.cellStatus}
             transforms={this.props.transforms}
             pagers={this.props.pagers}
             running={this.props.running}

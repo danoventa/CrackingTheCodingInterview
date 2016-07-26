@@ -33,20 +33,19 @@ describe('Notebook', () => {
     expect(component).to.not.be.null;
   });
   it('implements the correct css spec', () => {
-    let outputStatuses = new Immutable.Map();
+    let cellStatuses = new Immutable.Map();
     dummyCommutable.get('cellOrder').map((cellID) => {
-      outputStatuses = outputStatuses.setIn([cellID, 'isHidden'], false);
+      cellStatuses = cellStatuses.setIn([cellID, 'outputHidden'], false)
+                                .setIn([cellID, 'inputHidden'], false);
     });
-    console.log(outputStatuses);
     const component = mount(
       <ConnectedNotebook
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
-        cellStatuses={new Immutable.Map()}
+        cellStatuses={cellStatuses}
         stickyCells={new Immutable.Map()}
         displayOrder={displayOrder.delete('text/html')}
         transforms={transforms.delete('text/html')}
-        outputStatuses={outputStatuses}
       />
     );
     expect(component.find('.notebook').length).to.be.above(0, '.notebook');
@@ -54,17 +53,10 @@ describe('Notebook', () => {
     expect(component.find('.notebook .cell.text').length).to.be.above(0, '.notebook .cell.text');
     expect(component.find('.notebook .cell.code').length).to.be.above(0, '.notebook .cell.code');
     expect(component.find('.notebook .cell.unknown').length).to.equal(0, '.notebook .cell.unknown does not exist');
-    // expect(component.find('.notebook .cell.text .cell-toolbar').length).to.be.above(0, '.notebook .cell.text .cell-toolbar');
-    // expect(component.find('.notebook .cell.text .input-container').length).to.be.above(0, '.notebook .cell.text .input-container');
-    // expect(component.find('.notebook .cell.text .input-container .prompt').length).to.be.above(0, '.notebook .cell.text .input-container .prompt');
-    // expect(component.find('.notebook .cell.text .input-container .input').length).to.be.above(0, '.notebook .cell.text .input-container .input');
     expect(component.find('.notebook .cell.text .rendered').length).to.be.above(0, '.notebook .cell.text .rendered');
     expect(component.find('.notebook .cell.code .input-container').length).to.be.above(0, '.notebook .cell.code .input-container');
     expect(component.find('.notebook .cell.code .input-container .prompt').length).to.be.above(0, '.notebook .cell.code .input-container .prompt');
     expect(component.find('.notebook .cell.code .input-container .input').length).to.be.above(0, '.notebook .cell.code .input-container .input');
-    // expect(component.find('.notebook .cell.code .pagers').length).to.be.above(0, '.notebook .cell.code .pagers');
-    // expect(component.find('.notebook .cell.code .pagers .pager').length).to.be.above(0, '.notebook .cell.code .pagers .pager');
     expect(component.find('.notebook .cell.code .outputs').length).to.be.above(0, '.notebook .cell.code .outputs');
-    // expect(component.find('.notebook .cell-creator').length).to.be.above(0, '.notebook .cell-creator');
   });
 });

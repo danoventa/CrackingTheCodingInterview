@@ -366,9 +366,18 @@ describe('copyCell', () => {
 });
 
 describe('changeOutputVisibility', () => {
-  it('creates a CHANGE_OUTPUT_VISIBILITY', () => {
+  it('creates a CHANGE_OUTPUT_VISIBILITY action', () => {
     expect(actions.changeOutputVisibility('235')).to.deep.equal({
       type: constants.CHANGE_OUTPUT_VISIBILITY,
+      id: '235',
+    });
+  });
+});
+
+describe('changeInputVisibility', () => {
+  it('creates a CHANGE_INPUT_VISIBILITY action', () => {
+    expect(actions.changeInputVisibility('235')).to.deep.equal({
+      type: constants.CHANGE_INPUT_VISIBILITY,
       id: '235',
     });
   });

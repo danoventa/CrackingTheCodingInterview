@@ -15,7 +15,7 @@ class CodeCell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    outputStatus: React.PropTypes.instanceOf(Immutable.Map).isRequired,
+    cellStatus: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     getCompletions: React.PropTypes.func,
     id: React.PropTypes.string,
     language: React.PropTypes.string,
@@ -38,28 +38,35 @@ class CodeCell extends React.Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
-  isHidden() {
-    return this.props.outputStatus.get('isHidden');
+  isOutputHidden() {
+    return this.props.cellStatus.get('outputHidden');
+  }
+
+  isInputHidden() {
+    return this.props.cellStatus.get('inputHidden');
   }
 
   render() {
     return (<div>
-      <div className="input-container">
-        <Inputs
-          executionCount={this.props.cell.get('execution_count')}
-          running={this.props.running}
-        />
-        <Editor
-          id={this.props.id}
-          input={this.props.cell.get('source')}
-          language={this.props.language}
-          focused={this.props.focused}
-          getCompletions={this.props.getCompletions}
-          theme={this.props.theme}
-          focusAbove={this.props.focusAbove}
-          focusBelow={this.props.focusBelow}
-        />
-      </div>
+      {
+        !this.isInputHidden() ?
+          <div className="input-container">
+            <Inputs
+              executionCount={this.props.cell.get('execution_count')}
+              running={this.props.running}
+            />
+            <Editor
+              id={this.props.id}
+              input={this.props.cell.get('source')}
+              language={this.props.language}
+              focused={this.props.focused}
+              getCompletions={this.props.getCompletions}
+              theme={this.props.theme}
+              focusAbove={this.props.focusAbove}
+              focusBelow={this.props.focusBelow}
+            />
+          </div> : null
+      }
       {
         this.props.pagers && !this.props.pagers.isEmpty() ?
           <div className="pagers">
@@ -81,7 +88,7 @@ class CodeCell extends React.Component {
           <TogglableDisplay
             className="outputs-display"
             outputs={this.props.cell.get('outputs')}
-            isHidden={this.isHidden()}
+            isHidden={this.isOutputHidden()}
             displayOrder={this.props.displayOrder}
             transforms={this.props.transforms}
           />

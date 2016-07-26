@@ -356,12 +356,12 @@ describe('splitCell', () => {
 
 describe('changeOutputVisibility', () => {
   it('changes the visibility on a single cell', () => {
-    let outputStatuses = new Map();
+    let cellStatuses = new Map();
     monocellDocument.getIn(['notebook', 'cellOrder']).map((cellID) => {
-      outputStatuses = outputStatuses.setIn([cellID, 'isHidden'], false);
-      return outputStatuses;
+      cellStatuses = cellStatuses.setIn([cellID, 'isHidden'], false);
+      return cellStatuses;
     });
-    const docWithOutputStatuses = monocellDocument.set('outputStatuses', outputStatuses);
+    const docWithOutputStatuses = monocellDocument.set('cellStatuses', cellStatuses);
 
     const originalState = {
       document: docWithOutputStatuses,
@@ -375,7 +375,33 @@ describe('changeOutputVisibility', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn(['outputStatuses', id, 'isHidden'])).to.be.true;
+    expect(state.document.getIn(['cellStatuses', id, 'outputHidden'])).to.be.true;
+  });
+});
+
+describe('changeInputVisibility', () => {
+  it('changes the input visibility on a single cell', () => {
+    let cellStatuses = new Map();
+    monocellDocument.getIn(['notebook', 'cellOrder']).map((cellID) => {
+      cellStatuses = cellStatuses.setIn([cellID, 'outputHidden'], false)
+                                .setIn([cellID, 'inputHidden'], false);
+      return cellStatuses;
+    });
+    const docWithStatuses = monocellDocument.set('cellStatuses', cellStatuses);
+
+    const originalState = {
+      document: docWithStatuses,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.CHANGE_INPUT_VISIBILITY,
+      id: id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['cellStatuses', id, 'inputHidden'])).to.be.true;
   });
 });
 

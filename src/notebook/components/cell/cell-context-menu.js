@@ -4,6 +4,7 @@ import { ContextMenu, MenuItem, connect } from 'react-contextmenu';
 import {
   clearCellOutput,
   changeCellType,
+  changeInputVisibility,
   changeOutputVisibility,
 } from '../../actions';
 
@@ -22,6 +23,7 @@ class CellContextMenu extends React.Component {
     super();
     this.clearCellOutput = this.clearCellOutput.bind(this);
     this.changeCellType = this.changeCellType.bind(this);
+    this.changeInputVisibility = this.changeInputVisibility.bind(this);
     this.changeOutputVisibility = this.changeOutputVisibility.bind(this);
   }
 
@@ -32,6 +34,10 @@ class CellContextMenu extends React.Component {
   changeCellType(event, data) {
     const to = data.type === 'markdown' ? 'code' : 'markdown';
     this.context.store.dispatch(changeCellType(data.id, to));
+  }
+
+  changeInputVisibility(event, data) {
+    this.context.store.dispatch(changeInputVisibility(data.id));
   }
 
   changeOutputVisibility(event, data) {
@@ -48,10 +54,16 @@ class CellContextMenu extends React.Component {
           Clear Cell Output
         </MenuItem>
         <MenuItem
+          onClick={this.changeInputVisibility}
+          data={{ id: this.props.id }}
+        >
+          Toggle Input Visibility
+        </MenuItem>
+        <MenuItem
           onClick={this.changeOutputVisibility}
           data={{ id: this.props.id }}
         >
-          Toggle Cell Output
+          Toggle Output Visibility
         </MenuItem>
         <MenuItem
           onClick={this.changeCellType}
