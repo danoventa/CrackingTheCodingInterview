@@ -11,10 +11,9 @@ export function deferURL(event, url) {
   shell.openExternal(url);
 }
 let iconName = '';
-
-if (process.platform == 'win32') {
+if (process.platform === 'win32') {
   iconName = './static/icon.ico';
-} else if (process.platform == 'linux') {
+} else if (process.platform === 'linux') {
   iconName = './static/icon.png';
 }
 
