@@ -375,7 +375,7 @@ describe('changeOutputVisibility', () => {
 });
 
 describe('changeInputVisibility', () => {
-  it('creates a CHANGE_INPUT_VISIBILITY', () => {
+  it('creates a CHANGE_INPUT_VISIBILITY action', () => {
     expect(actions.changeInputVisibility('235')).to.deep.equal({
       type: constants.CHANGE_INPUT_VISIBILITY,
       id: '235',
