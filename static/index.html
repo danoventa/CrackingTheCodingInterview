@@ -52,6 +52,9 @@
             console.dir(err);
           }
         }, 1);
+        if (process.env.NODE_ENV !== 'production') {
+            require('electron-react-devtools').inject()
+        }
       };
     </script>
   </body>
