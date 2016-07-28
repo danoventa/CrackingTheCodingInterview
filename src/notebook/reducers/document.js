@@ -157,7 +157,7 @@ export default handleActions({
     const index = state.getIn(['notebook', 'cellOrder']).indexOf(id);
     const updatedState = state.update('notebook',
         (notebook) => commutable.splitCell(notebook, id, position));
-    const newCell = state.getIn(['notebook', 'cellOrder', index + 1]);
+    const newCell = updatedState.getIn(['notebook', 'cellOrder', index + 1]);
     return updatedState
               .setIn(['cellStatuses', newCell, 'outputHidden'], false)
               .setIn(['cellStatuses', newCell, 'inputHidden'], false);
