@@ -154,7 +154,13 @@ export default handleActions({
   },
   [constants.SPLIT_CELL]: function splitCell(state, action) {
     const { id, position } = action;
-    return state.update('notebook', (notebook) => commutable.splitCell(notebook, id, position));
+    const index = state.getIn(['notebook', 'cellOrder']).indexOf(id);
+    const updatedState = state.update('notebook',
+        (notebook) => commutable.splitCell(notebook, id, position));
+    const newCell = updatedState.getIn(['notebook', 'cellOrder', index + 1]);
+    return updatedState
+              .setIn(['cellStatuses', newCell, 'outputHidden'], false)
+              .setIn(['cellStatuses', newCell, 'inputHidden'], false);
   },
   [constants.CHANGE_OUTPUT_VISIBILITY]: function changeOutputVisibility(state, action) {
     const { id } = action;
