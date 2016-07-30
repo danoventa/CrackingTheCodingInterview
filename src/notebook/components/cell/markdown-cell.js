@@ -1,13 +1,17 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import remark from 'remark';
-import reactRenderer from 'remark-react';
 
 import Editor from './editor';
 import LatexRenderer from '../latex';
 
-const markdownRenderer = remark().use(reactRenderer);
+const CommonMark = require('commonmark');
+const MarkdownRenderer = require('commonmark-react-renderer');
+
+const parser = new CommonMark.Parser();
+const renderer = new MarkdownRenderer();
+
+const mdRender = (input) => renderer.render(parser.parse(input));
 
 export default class MarkdownCell extends React.Component {
   static propTypes = {
@@ -114,7 +118,7 @@ export default class MarkdownCell extends React.Component {
             tabIndex="0"
           >
             <LatexRenderer>
-              {markdownRenderer.process(
+              {mdRender(
                 this.state.source ?
                   this.state.source :
                   '*Empty markdown cell, double click me to add content.*')
