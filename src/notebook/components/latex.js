@@ -4,8 +4,15 @@ import { loadMathJax, typesetMath } from 'mathjax-electron';
 
 // Initialize the mathjax renderer.
 // TODO: When MathJax is loaded, all components should likely re-render
-// TODO: Alternate - include MathJax in the page ahead of time (app startup)
+// WARNING: Tech debt here. MathJax should likely be included on the page ahead
+//          of time.
 loadMathJax(document);
+
+function isMathJaxOkYet() {
+  return !window.disableMathJax && typeof MathJax !== "undefined"
+                                && window.MathJax
+                                && window.MathJax.Hub.Queue;
+}
 
 export default class LatexRenderer extends React.Component {
   static propTypes = {
@@ -18,11 +25,11 @@ export default class LatexRenderer extends React.Component {
   }
 
   componentDidMount() {
-    if (!window.disableMathJax && window.MathJax) typesetMath(this.refs.rendered);
+    if (isMathJaxOkYet()) typesetMath(this.refs.rendered);
   }
 
   componentDidUpdate() {
-    if (!window.disableMathJax && window.MathJax) typesetMath(this.refs.rendered);
+    if (isMathJaxOkYet()) typesetMath(this.refs.rendered);
   }
 
   render() {
