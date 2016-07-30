@@ -15,9 +15,7 @@ const MarkdownRenderer = require('commonmark-react-renderer');
 const parser = new CommonMark.Parser();
 const renderer = new MarkdownRenderer();
 
-const mdRender = (input) => {
-  return renderer.render(parser.parse(input));
-}
+const mdRender = (input) => renderer.render(parser.parse(input));
 
 export default class MarkdownCell extends React.Component {
   static propTypes = {
