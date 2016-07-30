@@ -15,10 +15,10 @@ function cleanupKernel(state) {
 
   return state.withMutations(ctx =>
     ctx.set('channels', null)
-       .set('spawn', null)
-       .set('connectionFile', null)
-       .set('kernelSpecName', null)
-       .set('executionState', 'not connected')
+      .set('spawn', null)
+      .set('connectionFile', null)
+      .set('kernelSpecName', null)
+      .set('executionState', 'not connected')
   );
 }
 
@@ -27,10 +27,10 @@ export default handleActions({
     return cleanupKernel(state)
       .withMutations(ctx =>
         ctx.set('channels', action.channels)
-           .set('connectionFile', action.connectionFile)
-           .set('spawn', action.spawn)
-           .set('kernelSpecName', action.kernelSpecName)
-           .set('executionState', 'starting')
+          .set('connectionFile', action.connectionFile)
+          .set('spawn', action.spawn)
+          .set('kernelSpecName', action.kernelSpecName)
+          .set('executionState', 'starting')
     );
   },
   [constants.EXIT]: function exit(state) {

@@ -11,8 +11,8 @@ const version = require('../../package.json').version;
 
 
 const argv = require('yargs')
-              .version(version)
-              .parse(process.argv.slice(1));
+  .version(version)
+  .parse(process.argv.slice(1));
 
 const notebooks = argv._;
 

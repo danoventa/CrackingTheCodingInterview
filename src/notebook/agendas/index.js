@@ -140,26 +140,26 @@ export function executeCell(store, channels, id, code) {
     // Update the input numbering: `[ ]`
     subscriptions.push(
       cellMessages.ofMessageType(['execute_input'])
-                 .pluck('content', 'execution_count')
-                 .first()
-                 .subscribe((ct) => {
-                   subscriber.next(updateCellExecutionCount(id, ct));
-                 })
+        .pluck('content', 'execution_count')
+        .first()
+        .subscribe((ct) => {
+          subscriber.next(updateCellExecutionCount(id, ct));
+        })
     );
 
     // Handle all nbformattable messages, clearing output first
     subscriber.next(updateCellOutputs(id, new Immutable.List()));
     subscriptions.push(cellMessages
-         .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
-         .map(msgSpecToNotebookFormat)
-         // Iteratively reduce on the outputs
-         .scan(reduceOutputs, emptyOutputs)
-         // Update the outputs with each change
-         .subscribe(outputs => {
-           mark('executeCell:output');
-           measure('executeCell:roundtrip', 'executeCell:enter', 'executeCell:output');
-           subscriber.next(updateCellOutputs(id, outputs));
-         })
+      .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
+      .map(msgSpecToNotebookFormat)
+      // Iteratively reduce on the outputs
+      .scan(reduceOutputs, emptyOutputs)
+      // Update the outputs with each change
+      .subscribe(outputs => {
+        mark('executeCell:output');
+        measure('executeCell:roundtrip', 'executeCell:enter', 'executeCell:output');
+        subscriber.next(updateCellOutputs(id, outputs));
+      })
     );
 
     shell.next(executeRequest);
