@@ -58,7 +58,7 @@
     "home-dir": "^1.0.0",
     "immutable": "^3.7.6",
     "kernelspecs": "^1.0.1",
-    "mathjax-electron": "^0.2.0",
+    "mathjax-electron": "^1.0.0",
     "normalize.css": "^4.2.0",
     "nteract-assets": "^2.0.0",
     "react": "^15.1.0",

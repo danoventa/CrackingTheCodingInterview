@@ -1,6 +1,6 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { loadMathJax, mathProcessor } from 'mathjax-electron';
+import { loadMathJax, typesetMath } from 'mathjax-electron';
 
 // Initialize the mathjax renderer.
 loadMathJax(document);
@@ -16,11 +16,11 @@ export default class LatexRenderer extends React.Component {
   }
 
   componentDidMount() {
-    if (!window.disableMathJax) mathProcessor(this.refs.rendered);
+    if (!window.disableMathJax) typesetMath(this.refs.rendered);
   }
 
   componentDidUpdate() {
-    if (!window.disableMathJax) mathProcessor(this.refs.rendered);
+    if (!window.disableMathJax) typesetMath(this.refs.rendered);
   }
 
   render() {
