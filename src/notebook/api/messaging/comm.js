@@ -27,18 +27,18 @@ export function getChannels(store) {
     return currentChannels;
   })
 
-  // Listen to channel change events.
-  .merge(Rx.Observable.from(store)
-    .pluck('app')
-    .pluck('channels')
-  )
+    // Listen to channel change events.
+    .merge(Rx.Observable.from(store)
+      .pluck('app')
+      .pluck('channels')
+    )
 
-  // Don't emit null or undefined values, only emit changes, and remember the
-  // last state for delayed subscriptions.
-  .filter(Boolean)
-  .distinctUntilChanged()
-  .publishReplay(1) // Only remember the last state
-  .refCount();
+    // Don't emit null or undefined values, only emit changes, and remember the
+    // last state for delayed subscriptions.
+    .filter(Boolean)
+    .distinctUntilChanged()
+    .publishReplay(1) // Only remember the last state
+    .refCount();
 }
 
 /** TODO: Move to more generic location

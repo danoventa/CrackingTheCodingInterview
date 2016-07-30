@@ -37,10 +37,10 @@ export function newKernel(kernelSpecName, cwd) {
           .subscribe(() => subscriber.next(setExecutionState('idle')));
 
         agendas.acquireKernelInfo(channels)
-              .subscribe(action => {
-                subscriber.next(action);
-                subscriber.next(setExecutionState('idle'));
-              });
+          .subscribe(action => {
+            subscriber.next(action);
+            subscriber.next(setExecutionState('idle'));
+          });
 
         subscriber.next({
           type: constants.NEW_KERNEL,

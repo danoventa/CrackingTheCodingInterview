@@ -13,23 +13,23 @@ import { launch } from 'spawnteract';
 
 export function launchKernel(kernelSpecName, spawnOptions) {
   return launch(kernelSpecName, spawnOptions)
-      .then(c => {
-        const kernelConfig = c.config;
-        const spawn = c.spawn;
-        const connectionFile = c.connectionFile;
-        const identity = uuid.v4();
-        const channels = {
-          shell: createShellSubject(identity, kernelConfig),
-          iopub: createIOPubSubject(identity, kernelConfig),
-          control: createControlSubject(identity, kernelConfig),
-          stdin: createStdinSubject(identity, kernelConfig),
-        };
-        return {
-          channels,
-          connectionFile,
-          spawn,
-        };
-      });
+    .then(c => {
+      const kernelConfig = c.config;
+      const spawn = c.spawn;
+      const connectionFile = c.connectionFile;
+      const identity = uuid.v4();
+      const channels = {
+        shell: createShellSubject(identity, kernelConfig),
+        iopub: createIOPubSubject(identity, kernelConfig),
+        control: createControlSubject(identity, kernelConfig),
+        stdin: createStdinSubject(identity, kernelConfig),
+      };
+      return {
+        channels,
+        connectionFile,
+        spawn,
+      };
+    });
 }
 
 function cleanupKernel(kernel, closeChannels) {
