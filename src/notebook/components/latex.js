@@ -9,7 +9,7 @@ import { loadMathJax, typesetMath } from 'mathjax-electron';
 loadMathJax(document);
 
 function isMathJaxOkYet() {
-  return !window.disableMathJax && typeof MathJax !== "undefined"
+  return !window.disableMathJax && typeof MathJax !== 'undefined'
                                 && window.MathJax
                                 && window.MathJax.Hub.Queue;
 }
