@@ -108,7 +108,6 @@
     "nyc": "^6.4.2",
     "react-addons-test-utils": "^15.1.0",
     "react-dom": "^15.1.0",
-    "redux-logger": "^2.6.1",
     "rimraf": "^2.5.2",
     "sinon": "^1.17.4",
     "watch": "^0.18.0"
