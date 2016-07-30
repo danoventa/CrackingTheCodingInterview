@@ -5,10 +5,6 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Editor from './editor';
 import LatexRenderer from '../latex';
 
-// import remark from 'remark';
-// import reactRenderer from 'remark-react';
-// const mdRender = remark().use(reactRenderer).process;
-
 const CommonMark = require('commonmark');
 const MarkdownRenderer = require('commonmark-react-renderer');
 
