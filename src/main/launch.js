@@ -11,11 +11,20 @@ export function deferURL(event, url) {
   shell.openExternal(url);
 }
 
+
 export function launch(notebook, filename) {
+  let iconPath = '';
+  if (process.argv[0].match(/electron/i)) {
+    iconPath = './static/icon.png';
+  } else {
+    iconPath = '.cd/resources/app/static/icon.png';
+  }
+
   let win = new BrowserWindow({
     width: 800,
     height: 1000,
     title: !filename ? 'Untitled' : path.relative('.', filename.replace(/.ipynb$/, '')),
+    icon: iconPath,
   });
 
   const index = path.join(__dirname, '..', '..', 'static', 'index.html');
