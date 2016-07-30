@@ -27,6 +27,9 @@ global.window.document.createRange = function createRange() {
     setStart: () => {},
     getBoundingClientRect: () => {
       return { right: 0 };
+    },
+    getClientRects: () => {
+      return []
     }
   }
 };
