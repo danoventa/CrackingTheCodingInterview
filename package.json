@@ -28,7 +28,8 @@
     "dist:linux64": "npm run dist -- --platform=linux --arch=x64",
     "dist:linux32": "npm run dist -- --platform=linux --arch=ia32",
     "dist:osx": "npm run dist -- --platform=darwin --arch=x64 --icon ./static/icon.icns --extend-info=./static/extend.plist --app-category-type=public.app-category.developer-tools --app-bundle-id=io.nteract.nteract --osx-sign",
-    "postdist": "npm install"
+    "postdist": "npm install",
+    "postinstall": "electron-rebuild"
   },
   "repository": {
     "type": "git",
@@ -92,8 +93,9 @@
     "electron-mocha": "^2.2.1",
     "electron-osx-sign": "^0.3.1",
     "electron-packager": "^7.1.0",
-    "electron-prebuilt": "1.1.1",
+    "electron-prebuilt": "1.2.8",
     "electron-react-devtools": "^0.3.1",
+    "electron-rebuild": "^1.1.5",
     "enzyme": "^2.2.0",
     "eslint": "^3.2.0",
     "eslint-config-airbnb": "^9.0.1",
