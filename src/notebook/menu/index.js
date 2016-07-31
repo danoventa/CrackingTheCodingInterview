@@ -54,10 +54,24 @@ export function dispatchSave(store, dispatch) {
   const state = store.getState();
   const notebook = state.document.get('notebook');
   const filename = state.metadata.get('filename');
-  if (!filename) {
-    triggerSaveAs(store, dispatch);
-  } else {
-    dispatch(save(filename, notebook));
+  const notificationSystem = state.app.get('notificationSystem');
+  try {
+    if (!filename) {
+      triggerSaveAs(store, dispatch);
+    } else {
+        dispatch(save(filename, notebook));
+    }
+    notificationSystem.addNotification({
+      title: 'Save successful!',
+      autoDismiss: 2,
+      level: 'success',
+    });
+  } catch (err) {
+    notificationSystem.addNotification({
+      title: 'Save failed!',
+      message: err.message,
+      level: 'error',
+    });
   }
 }
 
