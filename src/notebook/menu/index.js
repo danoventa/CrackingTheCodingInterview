@@ -59,7 +59,7 @@ export function dispatchSave(store, dispatch) {
     if (!filename) {
       triggerSaveAs(store, dispatch);
     } else {
-        dispatch(save(filename, notebook));
+      dispatch(save(filename, notebook));
     }
     notificationSystem.addNotification({
       title: 'Save successful!',
