@@ -56,4 +56,8 @@ export default handleActions({
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
     return state.set('notificationSystem', action.notificationSystem);
   },
+  [constants.SET_MODIFIED]: function setModified(state, action) {
+    const { value } = action;
+    return state.set('modified', value);
+  }
 }, {});
