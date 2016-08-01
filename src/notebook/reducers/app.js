@@ -59,5 +59,5 @@ export default handleActions({
   [constants.SET_MODIFIED]: function setModified(state, action) {
     const { value } = action;
     return state.set('modified', value);
-  }
+  },
 }, {});
