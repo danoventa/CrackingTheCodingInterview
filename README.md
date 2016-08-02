@@ -106,6 +106,10 @@ Assets are compiled via electron-compile directly, no build steps until we make 
 
 - Try `$ npm install electron-prebuilt`
 
+> I upgraded my developer installation and things are broken!
+
+- Try `$ rm -rf node_modules` then `$ npm install`
+
 ### Frontend background
 
 As much as possible, we'd like to get people speaking a common language for
