@@ -80,9 +80,9 @@ export const fileSubMenus = {
       {
         label: '&To Gist',
         click: createSender('menu:publish:gist'),
-      }
+      },
     ],
-  }
+  },
 };
 
 export const file = {
