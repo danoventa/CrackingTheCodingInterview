@@ -358,3 +358,10 @@ export function changeCellType(id, to) {
     to,
   };
 }
+
+export function setModified(value) {
+  return {
+    type: constants.SET_MODIFIED,
+    value,
+  };
+}
