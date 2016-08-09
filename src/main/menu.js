@@ -390,6 +390,7 @@ export function loadFullMenu() {
         ...kernelMenuItems,
       ],
     };
+
     const template = [];
 
     if (process.platform === 'darwin') {
@@ -401,15 +402,13 @@ export function loadFullMenu() {
       submenu: [
         {
           label: '&New',
-          submenu: [
-            ...newNotebookItems,
-          ],
+          submenu: newNotebookItems,
         },
         fileSubMenus.open,
         fileSubMenus.save,
         fileSubMenus.saveAs,
         fileSubMenus.duplicate,
-        file.SubMenus.publish,
+        fileSubMenus.publish,
       ],
     };
 
