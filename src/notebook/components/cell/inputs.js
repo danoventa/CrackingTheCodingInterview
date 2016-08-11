@@ -14,7 +14,7 @@ export default class Inputs extends React.Component {
 
   render() {
     const { executionCount, running } = this.props;
-    const count = ! executionCount ? ' ' : executionCount;
+    const count = !executionCount ? ' ' : executionCount;
     const input = running ? '*' : count;
     return (
       <div className="prompt">

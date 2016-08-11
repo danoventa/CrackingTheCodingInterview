@@ -50,6 +50,7 @@
   "homepage": "https://github.com/nteract/nteract",
   "dependencies": {
     "codemirror": "^5.16.0",
+    "commonmark": "^0.24.0",
     "commonmark-react-renderer": "^4.2.4",
     "commutable": "^1.1.2",
     "electron-json-storage": "^2.0.0",

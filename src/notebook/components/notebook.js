@@ -5,16 +5,16 @@ import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
 
+import Immutable from 'immutable';
+
+import { displayOrder, transforms } from 'transformime-react';
+
 import Cell from './cell/cell';
 import DraggableCell from './cell/draggable-cell';
 import CellCreator from './cell/cell-creator';
 import { executeCell, focusNextCell, moveCell } from '../actions';
 
 import complete from '../api/messaging/completion';
-
-import Immutable from 'immutable';
-
-import { displayOrder, transforms } from 'transformime-react';
 
 // Always set up the markdown mode
 require('codemirror/mode/markdown/markdown');
@@ -240,7 +240,7 @@ class Notebook extends React.Component {
   render() {
     if (!this.props.notebook) {
       return (
-        <div className="notebook"></div>
+        <div className="notebook" />
       );
     }
     const cellOrder = this.props.notebook.get('cellOrder');

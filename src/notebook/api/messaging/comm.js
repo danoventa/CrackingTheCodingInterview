@@ -1,6 +1,6 @@
+import * as uuid from 'uuid';
 import Rx from 'rxjs/Rx';
 import { createMessage } from './';
-import * as uuid from 'uuid';
 
 /** TODO: Move to more generic location
  * Get an Observable for kernel channels.

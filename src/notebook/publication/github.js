@@ -1,12 +1,12 @@
-const Rx = require('rxjs/Rx');
-const commutable = require('commutable');
-const path = require('path');
-
 import { shell } from 'electron';
 
 import {
   overwriteMetadata,
 } from '../actions';
+
+const Rx = require('rxjs/Rx');
+const commutable = require('commutable');
+const path = require('path');
 
 function notifyUser(filename, gistURL, gistID, notificationSystem) {
   notificationSystem.addNotification({
@@ -42,7 +42,7 @@ function createGistCallback(hotOffThePresses, agenda, filename, notificationSyst
   };
 }
 
-export function publish(github, notebook, filepath, notificationSystem) {
+export default function publish(github, notebook, filepath, notificationSystem) {
   return Rx.Observable.create((agenda) => {
     const notebookString = JSON.stringify(commutable.toJS(notebook), undefined, 1);
 

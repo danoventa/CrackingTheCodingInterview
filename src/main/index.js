@@ -1,11 +1,12 @@
+import { Menu, app } from 'electron';
+import { resolve } from 'path';
+
 import {
   launchFilename,
   launchNewNotebook,
 } from './launch';
 
-import { Menu, app } from 'electron';
 import { defaultMenu, loadFullMenu } from './menu';
-import { resolve } from 'path';
 
 const version = require('../../package.json').version;
 

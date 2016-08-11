@@ -1,4 +1,8 @@
-const path = require('path');
+import {
+  ipcRenderer as ipc,
+  webFrame,
+  remote,
+} from 'electron';
 
 import {
   showSaveAsDialog,
@@ -22,12 +26,11 @@ import {
 
 import { copyNotebook } from '../utils';
 
-import { ipcRenderer as ipc, webFrame, remote } from 'electron';
+import publish from '../publication/github';
+
 const BrowserWindow = remote.BrowserWindow;
 
-import {
-  publish,
-} from '../publication/github';
+const path = require('path');
 
 export function dispatchSaveAs(store, dispatch, evt, filename) {
   const state = store.getState();

@@ -1,14 +1,15 @@
-const path = require('path');
-
 import Immutable from 'immutable';
 import * as commutable from 'commutable';
 import { writeFile } from 'fs';
+
+import Rx from 'rxjs/Rx';
 
 import * as agendas from '../agendas';
 import { launchKernel } from '../api/kernel';
 import * as constants from '../constants';
 
-import Rx from 'rxjs/Rx';
+
+const path = require('path');
 
 export function setExecutionState(executionState) {
   return {

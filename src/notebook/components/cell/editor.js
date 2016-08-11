@@ -4,12 +4,12 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
 
-const Rx = require('rxjs/Rx');
-
-import { updateCellSource } from '../../actions';
+import Rx from 'rxjs/Rx';
 
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/anyword-hint';
+
+import { updateCellSource } from '../../actions';
 
 // Hint picker
 const pick = (cm, handle) => handle.pick();
@@ -111,8 +111,8 @@ export default class Editor extends React.Component {
       .debounceTime(20)
       // Pass through changes that aren't newlines
       .filter(event => event.change.text.length === 1 ||
-                       event.change.text.length === 2 &&
-                       !(event.change.text[0] === '' && event.change.text[1] === '')
+                       (event.change.text.length === 2 &&
+                       !(event.change.text[0] === '' && event.change.text[1] === ''))
       )
       // Pass through only partial tokens that are composed of words
       .filter(event => {

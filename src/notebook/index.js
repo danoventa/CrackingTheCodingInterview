@@ -2,23 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import configureStore from './store';
-import { reducers } from './reducers';
 import { Provider } from 'react-redux';
-import Notebook from './components/notebook';
 
 import NotificationSystem from 'react-notification-system';
 
 import Immutable from 'immutable';
+
+import { ipcRenderer as ipc } from 'electron';
+import storage from 'electron-json-storage';
+
+import configureStore from './store';
+import { reducers } from './reducers';
+import Notebook from './components/notebook';
 
 import {
   setNotebook,
   setNotificationSystem,
   setExecutionState,
 } from './actions';
-
-import { ipcRenderer as ipc } from 'electron';
-import storage from 'electron-json-storage';
 
 import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
