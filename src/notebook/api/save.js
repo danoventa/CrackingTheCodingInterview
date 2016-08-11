@@ -1,6 +1,7 @@
 import * as path from 'path';
 
 const electron = require('electron');
+
 const { remote } = electron;
 
 const remoteElectron = remote.require('electron');

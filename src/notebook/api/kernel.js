@@ -1,15 +1,16 @@
+import * as fs from 'fs';
+import * as uuid from 'uuid';
+import { launch } from 'spawnteract';
+
 import {
   createControlSubject,
   createStdinSubject,
   createIOPubSubject,
   createShellSubject,
 } from 'enchannel-zmq-backend';
+
 import { shutdownRequest } from 'enchannel';
 import { getUsername, session } from './messaging/index';
-
-import * as fs from 'fs';
-import * as uuid from 'uuid';
-import { launch } from 'spawnteract';
 
 export function launchKernel(kernelSpecName, spawnOptions) {
   return launch(kernelSpecName, spawnOptions)

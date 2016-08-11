@@ -1,10 +1,9 @@
 import { dialog, app, shell, Menu } from 'electron';
-
-const kernelspecs = require('kernelspecs');
+import * as path from 'path';
 
 import { launchFilename, launchNewNotebook } from './launch';
 
-import * as path from 'path';
+const kernelspecs = require('kernelspecs');
 
 function send(focusedWindow, eventName, obj) {
   if (!focusedWindow) {

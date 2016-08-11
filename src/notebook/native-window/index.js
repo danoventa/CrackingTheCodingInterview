@@ -1,15 +1,17 @@
 import { remote } from 'electron';
-const { BrowserWindow, getCurrentWindow } = remote;
+
 import home from 'home-dir';
 import fs from 'fs';
 import path from 'path';
 import { fromJS } from 'commutable';
 
-import { deferURL } from '../../main/launch';
-
 import Rx from 'rxjs/Rx';
 
+import { deferURL } from '../../main/launch';
+
+
 const HOME = home();
+const { BrowserWindow, getCurrentWindow } = remote;
 
 /**
  * Turn a path like /Users/n/mine.ipynb to ~/mine.ipynb

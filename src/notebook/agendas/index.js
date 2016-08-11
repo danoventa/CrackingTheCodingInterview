@@ -1,6 +1,3 @@
-const Rx = require('rxjs/Rx');
-const Immutable = require('immutable');
-
 import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
@@ -19,6 +16,9 @@ import {
 } from '../actions';
 
 import { mark, measure } from '../performance';
+
+const Rx = require('rxjs/Rx');
+const Immutable = require('immutable');
 
 export function acquireKernelInfo(channels) {
   mark('acquireKernelInfo:enter');

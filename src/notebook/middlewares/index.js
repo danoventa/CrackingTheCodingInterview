@@ -1,6 +1,7 @@
+import { List } from 'immutable';
+
 import * as constants from '../constants';
 import { setBackwardCheckpoint, setModified } from '../actions';
-import { List } from 'immutable';
 
 export const triggerUndo = store => next => action => {
   const undoable = new List([

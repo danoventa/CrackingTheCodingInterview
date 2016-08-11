@@ -1,5 +1,6 @@
-import * as constants from '../constants';
 import { handleActions } from 'redux-actions';
+
+import * as constants from '../constants';
 
 import {
   shutdownKernel,

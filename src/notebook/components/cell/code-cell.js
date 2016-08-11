@@ -1,15 +1,14 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { TogglableDisplay } from 'react-jupyter-display-area';
+import Immutable from 'immutable';
 
 import Inputs from './inputs';
 
 import Editor from './editor';
-import { TogglableDisplay } from 'react-jupyter-display-area';
 import LatexRenderer from '../latex';
 
 import Pager from './pager';
-
-import Immutable from 'immutable';
 
 class CodeCell extends React.Component {
   static propTypes = {
