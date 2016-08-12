@@ -48,6 +48,9 @@
     "url": "https://github.com/nteract/nteract/issues"
   },
   "homepage": "https://github.com/nteract/nteract",
+  "greenkeeper": {
+    "ignore": ["commonmark", "electron-prebuilt", "redux-observable"]
+  },
   "dependencies": {
     "codemirror": "^5.16.0",
     "commonmark": "^0.24.0",
