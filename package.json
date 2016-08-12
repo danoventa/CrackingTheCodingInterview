@@ -24,7 +24,7 @@
     "precoverage": "nyc npm run test:unit",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov",
     "predist": "npm run build && rimraf dist",
-    "dist": "electron-packager . nteract --prune --out dist",
+    "dist": "set NODE_ENV=production electron-packager . nteract --prune --out dist",
     "dist:linux64": "npm run dist -- --platform=linux --arch=x64",
     "dist:linux32": "npm run dist -- --platform=linux --arch=ia32",
     "dist:osx": "npm run dist -- --platform=darwin --arch=x64 --icon ./static/icon.icns --extend-info=./static/extend.plist --app-category-type=public.app-category.developer-tools --app-bundle-id=io.nteract.nteract --osx-sign",
