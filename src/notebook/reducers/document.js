@@ -220,13 +220,15 @@ export default handleActions({
     const cell = cellMap.get(id);
     return state.set('copied', new Immutable.Map({ id, cell }));
   },
-  [constants.PASTE_CELL]: function copyCell(state) {
-    const copiedCell = state.getIn(['copied', 'cell']);
+  [constants.PASTE_CELL]: function pasteCell(state) {
+    const copiedCell = state.getIn(['copied', 'cell'])
     const copiedId = state.getIn(['copied', 'id']);
     const id = uuid.v4();
 
     return state.update('notebook', (notebook) =>
-        commutable.insertCellAfter(notebook, copiedCell, id, copiedId));
+        commutable.insertCellAfter(notebook, copiedCell, id, copiedId))
+          .setIn(['cellStatuses', id, 'outputHidden'], false)
+          .setIn(['cellStatuses', id, 'inputHidden'], false);
   },
   [constants.CHANGE_CELL_TYPE]: function changeCellType(state, action) {
     const { id, to } = action;
