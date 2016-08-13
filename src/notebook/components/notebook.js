@@ -12,7 +12,13 @@ import { displayOrder, transforms } from 'transformime-react';
 import Cell from './cell/cell';
 import DraggableCell from './cell/draggable-cell';
 import CellCreator from './cell/cell-creator';
-import { executeCell, focusNextCell, moveCell } from '../actions';
+import {
+  executeCell,
+  focusNextCell,
+  moveCell,
+  copyCell,
+  pasteCell,
+} from '../actions';
 
 import complete from '../api/messaging/completion';
 
@@ -69,6 +75,8 @@ class Notebook extends React.Component {
     this.keyDown = this.keyDown.bind(this);
     this.moveCell = this.moveCell.bind(this);
     this.getCompletions = this.getCompletions.bind(this);
+    this.copyCell = this.copyCell.bind(this);
+    this.pasteCell = this.pasteCell.bind(this);
   }
 
   componentDidMount() {
@@ -128,9 +136,24 @@ class Notebook extends React.Component {
     this.props.dispatch(moveCell(sourceId, destinationId, above));
   }
 
+  copyCell() {
+    console.log(this.props.focusedCell);
+    this.props.dispatch(copyCell(this.props.focusedCell));
+  }
+
+  pasteCell() {
+    this.props.dispatch(pasteCell());
+  }
+
 
   keyDown(e) {
     if (e.keyCode !== 13) {
+      const cmdOrCtrl = e.ctrlKey;
+      if (cmdOrCtrl && e.keyCode === 67) {
+        this.copyCell();
+      } else if (cmdOrCtrl && e.keyCode === 86) {
+        this.pasteCell();
+      }
       return;
     }
 
