@@ -14,8 +14,6 @@ import {
   executeCell,
   clearCellOutput,
   newKernel,
-  save,
-  saveAs,
   killKernel,
   interruptKernel,
   undo,
@@ -23,6 +21,11 @@ import {
   updateDocument,
   setForwardCheckpoint,
 } from '../actions';
+
+import {
+  save,
+  saveAs,
+} from '../epics/saving';
 
 import { copyNotebook } from '../utils';
 

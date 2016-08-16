@@ -1,13 +1,10 @@
 import Immutable from 'immutable';
-import * as commutable from 'commutable';
-import { writeFile } from 'fs';
 
 import Rx from 'rxjs/Rx';
 
 import * as agendas from '../agendas';
 import { launchKernel } from '../api/kernel';
 import * as constants from '../constants';
-
 
 const path = require('path');
 
@@ -55,37 +52,6 @@ export function newKernel(kernelSpecName, cwd) {
   });
 }
 
-export function save(filename, notebook) {
-  return () => Rx.Observable.create((subscriber) => {
-    // If there isn't a filename, save-as it instead
-    if (!filename) {
-      throw new Error('save needs a filename');
-    }
-
-    subscriber.next({
-      type: constants.START_SAVING,
-    });
-    writeFile(filename, JSON.stringify(commutable.toJS(notebook), null, 1), (err) => {
-      if (err) {
-        console.error(err);
-        throw err;
-      }
-      subscriber.next({
-        type: constants.DONE_SAVING,
-      });
-    });
-  });
-}
-
-export function saveAs(filename, notebook) {
-  return (actions, store) => Rx.Observable.create((subscriber) => {
-    subscriber.next({
-      type: constants.CHANGE_FILENAME,
-      filename,
-    });
-    store.dispatch(save(filename, notebook));
-  });
-}
 
 export function setNotebook(nbData, filename) {
   const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();

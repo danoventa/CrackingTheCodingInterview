@@ -31,7 +31,6 @@ export const doneSaving = () => ({ type: DONE_SAVING });
 export const saveEpic = actions =>
   actions.ofType(SAVE)
     .do(action => {
-      console.log(action);
       // If there isn't a filename, save-as it instead
       if (!action.filename) {
         throw new Error('save needs a filename');
