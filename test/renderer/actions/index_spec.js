@@ -63,36 +63,7 @@ describe('newKernel', () => {
   });
 });
 
-describe('save', () => {
-  it('creates a START_SAVING action', (done) => {
-    actions.save('test/test-save.ipynb', dummyCommutable)()
-      .first()
-      .subscribe((action) => {
-        expect(action).to.deep.equal({
-          type: constants.START_SAVING,
-        });
-        done();
-      }, (action) => {
-        expect.fail();
-      });
-  });
-});
 
-describe('saveAs', () => {
-  it('creates a CHANGE_FILENAME action', (done) => {
-    actions.saveAs('test/test-ipynb-saveas.ipynb', dummyCommutable)(actions, dummyStore())
-      .first()
-      .subscribe((action) => {
-        expect(action).to.deep.equal({
-          type: constants.CHANGE_FILENAME,
-          filename: 'test/test-ipynb-saveas.ipynb'
-        });
-        done();
-      }, (action) => {
-        expect.fail();
-      });
-  });
-});
 
 describe('setNotebook', () => {
   it('creates a SET_NOTEBOOK action', () => {
