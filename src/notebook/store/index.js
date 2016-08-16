@@ -7,7 +7,6 @@ import { saveEpic, saveAsEpic } from '../epics/saving';
 
 const epics = combineEpics(saveEpic, saveAsEpic);
 
-
 const middlewares = [
   createEpicMiddleware(epics),
   triggerUndo,
