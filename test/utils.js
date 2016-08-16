@@ -9,7 +9,6 @@ import {
 
 import { shutdownKernel } from '../src/notebook/api/kernel';
 import * as actions from '../src/notebook/actions';
-import { getEntries } from '../src/notebook/performance';
 import createStore from '../src/notebook/store';
 import { reducers } from '../src/notebook/reducers';
 import { acquireKernelInfo } from '../src/notebook/agendas';
