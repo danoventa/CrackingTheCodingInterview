@@ -53,7 +53,8 @@
           }
         }, 1);
         if (process.env.NODE_ENV !== 'production') {
-            require('electron-react-devtools').inject()
+            var rdev = require('electron-react-devtools');
+            rdev.install();
         }
       };
     </script>
