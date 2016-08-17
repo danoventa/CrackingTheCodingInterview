@@ -137,7 +137,6 @@ class Notebook extends React.Component {
   }
 
   copyCell() {
-    console.log(this.props.focusedCell);
     this.props.dispatch(copyCell(this.props.focusedCell));
   }
 

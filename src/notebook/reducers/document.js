@@ -221,7 +221,7 @@ export default handleActions({
     return state.set('copied', new Immutable.Map({ id, cell }));
   },
   [constants.PASTE_CELL]: function pasteCell(state) {
-    const copiedCell = state.getIn(['copied', 'cell'])
+    const copiedCell = state.getIn(['copied', 'cell']);
     const copiedId = state.getIn(['copied', 'id']);
     const id = uuid.v4();
 
