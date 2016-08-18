@@ -7,7 +7,7 @@ import { fromJS } from 'commutable';
 
 import Rx from 'rxjs/Rx';
 
-import { deferURL } from '../../main/launch';
+import { deferURL } from '../main/launch';
 
 
 const HOME = home();

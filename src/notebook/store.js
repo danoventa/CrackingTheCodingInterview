@@ -1,9 +1,9 @@
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
-import { triggerUndo, triggerModified } from '../middlewares';
-import rootReducer from '../reducers';
+import { triggerUndo, triggerModified } from './middlewares';
+import rootReducer from './reducers';
 
-import { saveEpic, saveAsEpic } from '../epics/saving';
+import { saveEpic, saveAsEpic } from './epics/saving';
 
 const epics = combineEpics(saveEpic, saveAsEpic);
 

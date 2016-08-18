@@ -2,7 +2,7 @@ import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
   createMessage,
-} from '../api/messaging';
+} from './api/messaging';
 
 import {
   createCellAfter,
@@ -13,7 +13,7 @@ import {
   updateCellStatus,
   setLanguageInfo,
   associateCellToMsg,
-} from '../actions';
+} from './actions';
 
 const Rx = require('rxjs/Rx');
 const Immutable = require('immutable');
