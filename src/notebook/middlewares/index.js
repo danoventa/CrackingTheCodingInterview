@@ -28,7 +28,7 @@ export const triggerModified = store => next => action => {
     constants.SET_NOTEBOOK,
     constants.UPDATE_CELL_EXECUTION_COUNT,
     constants.CHANGE_OUTPUT_VISIBILITY,
-    constants.CHANGE_InPUT_VISIBILITY,
+    constants.CHANGE_INPUT_VISIBILITY,
     constants.UPDATE_CELL_PAGERS,
     constants.SET_LANGUAGE_INFO,
     constants.SET_EXECUTION_STATE,
