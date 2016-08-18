@@ -48,13 +48,13 @@ export function newKernelObservable(kernelSpecName, cwd) {
   return Rx.Observable.create((observer) => {
     launch(kernelSpecName, { cwd })
       .then(c => {
-        const { kernelConfig, spawn, connectionFile } = c;
+        const { config, spawn, connectionFile } = c;
         const identity = uuid.v4();
         const channels = {
-          shell: createShellSubject(identity, kernelConfig),
-          iopub: createIOPubSubject(identity, kernelConfig),
-          control: createControlSubject(identity, kernelConfig),
-          stdin: createStdinSubject(identity, kernelConfig),
+          shell: createShellSubject(identity, config),
+          iopub: createIOPubSubject(identity, config),
+          control: createControlSubject(identity, config),
+          stdin: createStdinSubject(identity, config),
         };
 
         // Listen to the execution status of the kernel
@@ -79,8 +79,7 @@ export function newKernelObservable(kernelSpecName, cwd) {
           spawn,
           kernelSpecName,
         });
-      })
-    .catch((err) => console.error(err));
+      });
   });
 }
 
