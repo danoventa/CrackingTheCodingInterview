@@ -2,9 +2,9 @@ import Immutable from 'immutable';
 
 import Rx from 'rxjs/Rx';
 
-import * as agendas from '../agendas';
-import { launchKernel } from '../api/kernel';
-import * as constants from '../constants';
+import * as agendas from './agendas';
+import { launchKernel } from './api/kernel';
+import * as constants from './constants';
 
 const path = require('path');
 

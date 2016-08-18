@@ -6,9 +6,9 @@ import {
 
 import {
   showSaveAsDialog,
-} from '../api/save';
+} from './api/save';
 
-import { tildify, launchFilename } from '../native-window';
+import { tildify, launchFilename } from './native-window';
 
 import {
   executeCell,
@@ -20,16 +20,16 @@ import {
   redo,
   updateDocument,
   setForwardCheckpoint,
-} from '../actions';
+} from './actions';
 
 import {
   save,
   saveAs,
-} from '../epics/saving';
+} from './epics/saving';
 
-import { copyNotebook } from '../utils';
+import { copyNotebook } from './utils';
 
-import publish from '../publication/github';
+import publish from './publication/github';
 
 const BrowserWindow = remote.BrowserWindow;
 
