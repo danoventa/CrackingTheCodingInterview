@@ -4,10 +4,12 @@ import Rx from 'rxjs/Rx';
 import * as agendas from './agendas';
 import * as constants from './constants';
 
-import { newKernelNotYetEpic } from './not-yet-epics/kernelLaunch';
-
 export function newKernel(kernelSpecName, cwd) {
-  return newKernelNotYetEpic(kernelSpecName, cwd);
+  return {
+    type: constants.LAUNCH_KERNEL,
+    kernelSpecName,
+    cwd,
+  };
 }
 
 const path = require('path');
@@ -16,13 +18,6 @@ export function setExecutionState(executionState) {
   return {
     type: constants.SET_EXECUTION_STATE,
     executionState,
-  };
-}
-
-export function setLanguageInfo(langInfo) {
-  return {
-    type: constants.SET_LANGUAGE_INFO,
-    langInfo,
   };
 }
 
