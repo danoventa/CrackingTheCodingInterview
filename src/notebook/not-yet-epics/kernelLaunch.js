@@ -13,7 +13,7 @@ import { setExecutionState } from '../actions';
 
 import { NEW_KERNEL } from '../constants';
 
-export function newKernel(kernelSpecName, cwd) {
+export function newKernelNotYetEpic(kernelSpecName, cwd) {
   return () => Rx.Observable.create((subscriber) => {
     launchKernel(kernelSpecName, { cwd })
     .then(kc => {

@@ -4,9 +4,11 @@ import Rx from 'rxjs/Rx';
 import * as agendas from './agendas';
 import * as constants from './constants';
 
-import { newKernel as newKernelImp } from './not-yet-epics/kernelLaunch';
+import { newKernelNotYetEpic } from './not-yet-epics/kernelLaunch';
 
-export const newKernel = newKernelImp;
+export function newKernel(kernelSpecName, cwd) {
+  return newKernelNotYetEpic(kernelSpecName, cwd);
+}
 
 const path = require('path');
 
