@@ -15,8 +15,6 @@ import {
   createMessage,
 } from '../api/messaging';
 
-import { launchKernel } from '../api/kernel';
-
 import { setExecutionState } from '../actions';
 
 import { NEW_KERNEL, LAUNCH_KERNEL, SET_LANGUAGE_INFO } from '../constants';
