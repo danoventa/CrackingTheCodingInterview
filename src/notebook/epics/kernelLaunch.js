@@ -1,9 +1,3 @@
-/**
-* TODO: Convert to Epic by
-*   - following guidance in https://github.com/nteract/nteract/issues/579
-*   - checking out epics/saving.js
-*/
-
 import Rx from 'rxjs/Rx';
 
 import {
@@ -27,7 +21,6 @@ export function acquireKernelInfo(channels) {
   const { shell } = channels;
 
   const message = createMessage('kernel_info_request');
-  console.log(message);
 
   const obs = shell
     .childOf(message)
