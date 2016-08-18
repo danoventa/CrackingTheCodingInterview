@@ -1,39 +1,10 @@
 import * as fs from 'fs';
-import * as uuid from 'uuid';
-import { launch } from 'spawnteract';
-
-import {
-  createControlSubject,
-  createStdinSubject,
-  createIOPubSubject,
-  createShellSubject,
-} from 'enchannel-zmq-backend';
 
 import { shutdownRequest } from 'enchannel';
 import { getUsername, session } from './messaging/index';
 
-export function launchKernel(kernelSpecName, spawnOptions) {
-  return launch(kernelSpecName, spawnOptions)
-    .then(c => {
-      const kernelConfig = c.config;
-      const spawn = c.spawn;
-      const connectionFile = c.connectionFile;
-      const identity = uuid.v4();
-      const channels = {
-        shell: createShellSubject(identity, kernelConfig),
-        iopub: createIOPubSubject(identity, kernelConfig),
-        control: createControlSubject(identity, kernelConfig),
-        stdin: createStdinSubject(identity, kernelConfig),
-      };
-      return {
-        channels,
-        connectionFile,
-        spawn,
-      };
-    });
-}
 
-function cleanupKernel(kernel, closeChannels) {
+export function cleanupKernel(kernel, closeChannels, _fs = fs) {
   if (kernel.channels && closeChannels) {
     try {
       kernel.channels.shell.complete();
@@ -55,25 +26,20 @@ function cleanupKernel(kernel, closeChannels) {
     } catch (err) {
       // nom nom nom
       console.warn(`Could not cleanup kernel process stdio, have they already
-        been destoryed?`, kernel.spawn);
+        been destroyed?`, kernel.spawn);
     }
   }
   if (kernel.connectionFile) {
-    fs.unlinkSync(kernel.connectionFile);
+    _fs.unlinkSync(kernel.connectionFile);
   }
 }
 
-export function forceShutdownKernel(kernel) {
+export function forceShutdownKernel(kernel, _fs = fs) {
   if (kernel && kernel.spawn && kernel.spawn.kill) {
     kernel.spawn.kill('SIGKILL');
   }
 
-  cleanupKernel(kernel, true);
-
-  // TODO: Refactor to either return a new blank kernel "reduction" or how we do this
-  delete kernel.channels; // eslint-disable-line
-  delete kernel.spawn; // eslint-disable-line
-  delete kernel.connectionFile; // eslint-disable-line
+  cleanupKernel(kernel, true, _fs);
 }
 
 export function shutdownKernel(kernel) {

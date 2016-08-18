@@ -1,5 +1,16 @@
 import Rx from 'rxjs/Rx';
 
+import { launch } from 'spawnteract';
+
+import * as uuid from 'uuid';
+
+import {
+  createControlSubject,
+  createStdinSubject,
+  createIOPubSubject,
+  createShellSubject,
+} from 'enchannel-zmq-backend';
+
 import {
   createMessage,
 } from '../api/messaging';
@@ -37,7 +48,24 @@ export function acquireKernelInfo(channels) {
 
 export function newKernelObservable(kernelSpecName, cwd) {
   return Rx.Observable.create((observer) => {
-    launchKernel(kernelSpecName, { cwd })
+    launch(kernelSpecName, { cwd })
+      .then(c => {
+        const kernelConfig = c.config;
+        const spawn = c.spawn;
+        const connectionFile = c.connectionFile;
+        const identity = uuid.v4();
+        const channels = {
+          shell: createShellSubject(identity, kernelConfig),
+          iopub: createIOPubSubject(identity, kernelConfig),
+          control: createControlSubject(identity, kernelConfig),
+          stdin: createStdinSubject(identity, kernelConfig),
+        };
+        return {
+          channels,
+          connectionFile,
+          spawn,
+        };
+      })
     .then(kc => {
       const { channels, connectionFile, spawn } = kc;
 
