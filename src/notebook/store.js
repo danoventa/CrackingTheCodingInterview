@@ -4,7 +4,7 @@ import { triggerUndo, triggerModified } from './middlewares';
 import rootReducer from './reducers';
 
 import { saveEpic, saveAsEpic } from './epics/saving';
-import { newKernelEpic } from './not-yet-epics/kernelLaunch';
+import { newKernelEpic } from './epics/kernelLaunch';
 
 const epics = combineEpics(saveEpic, saveAsEpic, newKernelEpic);
 

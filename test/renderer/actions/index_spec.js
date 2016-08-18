@@ -27,43 +27,15 @@ describe('setExecutionState', () => {
   })
 });
 
-describe('setLanguageInfo', () => {
-  it('creates a SET_LANGUAGE_INFO action', () => {
-    const langInfo = {
-      "codemirror_mode": {
-        "name": "ipython",
-        "version": 3
-      },
-      "file_extension": ".py",
-      "mimetype": "text/x-python",
-      "name":"python",
-      "nbconvert_exporter":"python",
-      "pygments_lexer":"ipython3",
-      "version":"3.5.1",
-    };
-
-    expect(actions.setLanguageInfo(langInfo)).to.deep.equal({
-      type: constants.SET_LANGUAGE_INFO,
-      langInfo: langInfo,
-    });
-  })
-});
-
 describe('newKernel', () => {
-  it('creates a NEW_KERNEL action', (done) => {
-    actions.newKernel('python2', '.')()
-      .first()
-      .subscribe((action) => {
-        expect(action.type).to.equal(constants.NEW_KERNEL);
-        expect(action.kernelSpecName).to.equal('python2');
-        done();
-      }, (action) => {
-        expect.fail();
-      });
+  it('creates a LAUNCH_KERNEL action', () => {
+    expect(actions.newKernel('python2', '.')).to.deep.equal({
+      type: constants.LAUNCH_KERNEL,
+      kernelSpecName: 'python2',
+      cwd: '.',
+    })
   });
 });
-
-
 
 describe('setNotebook', () => {
   it('creates a SET_NOTEBOOK action', () => {
