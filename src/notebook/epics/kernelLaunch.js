@@ -48,9 +48,7 @@ export function newKernelObservable(kernelSpecName, cwd) {
   return Rx.Observable.create((observer) => {
     launch(kernelSpecName, { cwd })
       .then(c => {
-        const kernelConfig = c.config;
-        const spawn = c.spawn;
-        const connectionFile = c.connectionFile;
+        const { kernelConfig, spawn, connectionFile } = c;
         const identity = uuid.v4();
         const channels = {
           shell: createShellSubject(identity, kernelConfig),
@@ -58,38 +56,30 @@ export function newKernelObservable(kernelSpecName, cwd) {
           control: createControlSubject(identity, kernelConfig),
           stdin: createStdinSubject(identity, kernelConfig),
         };
-        return {
+
+        // Listen to the execution status of the kernel
+        channels.iopub
+          .filter(msg => msg.header.msg_type === 'status')
+          .first()
+          .map(msg => msg.content.execution_state)
+          .subscribe((state) => observer.next(setExecutionState(state)));
+          // TODO: Determine if the execution state gets set elsewhere (I think it does)
+          // TODO: Possibly only grab the first for this one or unsubscribe
+
+        acquireKernelInfo(channels)
+          .subscribe(action => {
+            observer.next(action);
+            observer.next(setExecutionState('idle'));
+          });
+
+        observer.next({
+          type: NEW_KERNEL,
           channels,
           connectionFile,
           spawn,
-        };
-      })
-    .then(kc => {
-      const { channels, connectionFile, spawn } = kc;
-
-      // Listen to the execution status of the kernel
-      channels.iopub
-        .filter(msg => msg.header.msg_type === 'status')
-        .first()
-        .map(msg => msg.content.execution_state)
-        .subscribe((state) => observer.next(setExecutionState(state)));
-        // TODO: Determine if the execution state gets set elsewhere (I think it does)
-        // TODO: Possibly only grab the first for this one or unsubscribe
-
-      acquireKernelInfo(channels)
-        .subscribe(action => {
-          observer.next(action);
-          observer.next(setExecutionState('idle'));
+          kernelSpecName,
         });
-
-      observer.next({
-        type: NEW_KERNEL,
-        channels,
-        connectionFile,
-        spawn,
-        kernelSpecName,
-      });
-    })
+      })
     .catch((err) => console.error(err));
   });
 }
