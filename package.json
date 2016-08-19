@@ -14,7 +14,7 @@
     "build": "babel src --out-dir build",
     "build:icon": "./scripts/make_icons.sh && cd static/icons && iconutil -c icns nteract.iconset && mv nteract.icns ../icon.icns",
     "build:watch": "npm run build -- --watch",
-    "test": "npm run test:functional && npm run test:unit",
+    "test": "npm run test:unit",
     "pretest:functional": "npm run build",
     "test:functional": "electron-mocha --compilers js:babel-core/register 'test/main/**/*.js'",
     "test:unit": "mocha -r test/setup.js --compilers js:babel-core/register 'test/renderer/**/*.js'",
