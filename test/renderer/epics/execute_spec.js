@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { updateCellSource, executeCell } from '../../src/notebook/actions';
-import { liveStore, dispatchQueuePromise, waitForOutputs } from '../utils';
+import { executeCell } from '../../../src/notebook/epics/execute';
+import { liveStore, dispatchQueuePromise, waitForOutputs } from '../../utils';
 
 describe('agendas.executeCell', () => {
   it('is a thunk (returns a function)', function() {
