@@ -49,7 +49,7 @@ function reduceOutputs(outputs, output) {
   return outputs.push(Immutable.fromJS(output));
 }
 
-export function executeCellObservable(store, channels, id, code) {
+export function executeCellObservable(cellMessageAssociation, channels, id, code) {
   return Rx.Observable.create((subscriber) => {
     if (!channels || !channels.iopub || !channels.shell) {
       subscriber.error('kernel not connected');
@@ -102,11 +102,10 @@ export function executeCellObservable(store, channels, id, code) {
     // to the execution request and messages mapped to the cell (from widget
     // interaction, for example).
     const cellMessages = iopub
-      .filter(msg => {
-        const state = store.getState();
-        return executeRequest.header.msg_id === msg.parent_header.msg_id || // child msg
-          state.document.getIn(['cellMsgAssociations', id]) === msg.parent_header.msg_id; // mapped
-      })
+      .filter(msg =>
+        executeRequest.header.msg_id === msg.parent_header.msg_id || // child msg
+          cellMessageAssociation === msg.parent_header.msg_id // mapped
+      )
       .share();
 
     cellMessages
@@ -161,7 +160,9 @@ export function executeCell(channels, id, source, kernelConnected, notificationS
       return;
     }
 
-    const obs = executeCellObservable(store, channels, id, source).takeUntil(
+    const state = store.getState();
+    const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
+    const obs = executeCellObservable(cellMessageAssociation, channels, id, source).takeUntil(
       actions.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id)
     );
 
@@ -172,3 +173,16 @@ export function executeCell(channels, id, source, kernelConnected, notificationS
     });
   });
 }
+
+
+/*
+export function executeCellEpic(action$, store) {
+  const state = store.getState();
+
+  const cellExecuteActions =
+    action$.ofType('EXECUTE_CELL')
+      .map(action => {
+        action.
+      })
+}
+*/
