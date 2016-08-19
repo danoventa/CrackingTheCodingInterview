@@ -39,16 +39,11 @@ describe('newKernel', () => {
 
 describe('setNotebook', () => {
   it('creates a SET_NOTEBOOK action', () => {
-    actions.setNotebook(dummyJSON, 'test/test-ipynb.ipynb')(actions, dummyStore())
-      .first()
-      .subscribe((action) => {
-        expect(action).to.deep.equal({
-          type: constants.SET_NOTEBOOK,
-          data: fromJS(dummyJSON)
-        });
-      }, (action) => {
-        expect.fail()
-      });
+    expect(actions.setNotebook(dummyJSON, 'test/test-ipynb.ipynb')).to.deep.equal({
+      type: constants.SET_NOTEBOOK,
+      data: fromJS(dummyJSON),
+      filename: 'test/test-ipynb.ipynb',
+    });
   });
 });
 
