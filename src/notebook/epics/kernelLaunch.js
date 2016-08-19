@@ -93,6 +93,8 @@ export const acquireKernelInfoEpic = action$ =>
     .mergeMap(action =>
       // TODO: This Observable should be cancelled if another NEW_KERNEL occurs
       acquireKernelInfo(action.channels)
+        // delay request for kernel to _really_ be ready
+        .delay(200)
     );
 
 export const newKernelEpic = action$ =>
