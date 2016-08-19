@@ -108,9 +108,6 @@ export const newNotebookKernelEpic = action$ =>
       if (!action.data) {
         throw new Error('newNotebookKernel needs notebook data');
       }
-      if (!action.filename) {
-        throw new Error('newNotebookKernel needs a filename');
-      }
     }).map(action => {
       const { filename, data } = action;
       const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();
