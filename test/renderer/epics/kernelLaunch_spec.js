@@ -77,6 +77,5 @@ describe('acquireKernelInfo', () => {
       })
       done();
     })
-
   })
 })

@@ -19,6 +19,17 @@ import { setExecutionState } from '../actions';
 
 import { NEW_KERNEL, LAUNCH_KERNEL, SET_LANGUAGE_INFO } from '../constants';
 
+/**
+ * TODO: Ideally this flow of actions should be:
+ *
+ * LAUNCH_KERNEL
+ * KERNEL_LAUNCHED
+ * ACQUIRE_KERNEL_INFO
+ * SET_LANGUAGE_INFO
+ * KERNEL_READY
+ *
+ */
+
 export function setLanguageInfo(langInfo) {
   return {
     type: SET_LANGUAGE_INFO,
@@ -65,12 +76,6 @@ export function newKernelObservable(kernelSpecName, cwd) {
           // TODO: Determine if the execution state gets set elsewhere (I think it does)
           // TODO: Possibly only grab the first for this one or unsubscribe
 
-        acquireKernelInfo(channels)
-          .subscribe(action => {
-            observer.next(action);
-            observer.next(setExecutionState('idle'));
-          });
-
         observer.next({
           type: NEW_KERNEL,
           channels,
@@ -82,6 +87,12 @@ export function newKernelObservable(kernelSpecName, cwd) {
   });
 }
 
+export const acquireKernelInfoEpic = action$ =>
+  action$.ofType('NEW_KERNEL')
+    .mergeMap(action =>
+      // TODO: This Observable should be cancelled if another NEW_KERNEL occurs
+      acquireKernelInfo(action.channels)
+    );
 
 export const newKernelEpic = action$ =>
   action$.ofType(LAUNCH_KERNEL)
