@@ -81,18 +81,18 @@ export function newKernelObservable(kernelSpecName, cwd) {
 export const watchExecutionStateEpic = action$ =>
   action$.ofType(NEW_KERNEL)
     .switchMap(action =>
-      action.channels.iopub
-        .filter(msg => msg.header.msg_type === 'status')
-        .map(msg => setExecutionState(msg.content.execution_state))
+      Rx.Observable.merge(
+        action.channels.iopub
+          .filter(msg => msg.header.msg_type === 'status')
+          .map(msg => setExecutionState(msg.content.execution_state)),
+        Rx.Observable.of(setExecutionState('idle'))
+      )
     );
 
 export const acquireKernelInfoEpic = action$ =>
   action$.ofType(NEW_KERNEL)
-    .mergeMap(action =>
-      // TODO: This Observable should be cancelled if another NEW_KERNEL occurs
+    .switchMap(action =>
       acquireKernelInfo(action.channels)
-        // delay request for kernel to _really_ be ready
-        .delay(100)
     );
 
 export const newKernelEpic = action$ =>
