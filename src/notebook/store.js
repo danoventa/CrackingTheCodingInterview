@@ -7,13 +7,15 @@ import { saveEpic, saveAsEpic } from './epics/saving';
 import {
   newKernelEpic,
   acquireKernelInfoEpic,
+  watchExecutionState,
 } from './epics/kernelLaunch';
 
 const epics = combineEpics(
   saveEpic,
   saveAsEpic,
   newKernelEpic,
-  acquireKernelInfoEpic
+  acquireKernelInfoEpic,
+  watchExecutionState
 );
 
 const middlewares = [

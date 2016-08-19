@@ -67,15 +67,6 @@ export function newKernelObservable(kernelSpecName, cwd) {
           stdin: createStdinSubject(identity, config),
         };
 
-        // Listen to the execution status of the kernel
-        channels.iopub
-          .filter(msg => msg.header.msg_type === 'status')
-          .first()
-          .map(msg => msg.content.execution_state)
-          .subscribe((state) => observer.next(setExecutionState(state)));
-          // TODO: Determine if the execution state gets set elsewhere (I think it does)
-          // TODO: Possibly only grab the first for this one or unsubscribe
-
         observer.next({
           type: NEW_KERNEL,
           channels,
@@ -87,8 +78,18 @@ export function newKernelObservable(kernelSpecName, cwd) {
   });
 }
 
+export const watchExecutionState = action$ =>
+  action$.ofType(NEW_KERNEL)
+    .mergeMap(action =>
+      action.channels.iopub
+        .filter(msg => msg.header.msg_type === 'status')
+        .map(msg => setExecutionState(msg.content.execution_state))
+          // TODO: Determine if the execution state gets set elsewhere (I think it does)
+          // TODO: Possibly only grab the first for this one or unsubscribe
+    );
+
 export const acquireKernelInfoEpic = action$ =>
-  action$.ofType('NEW_KERNEL')
+  action$.ofType(NEW_KERNEL)
     .mergeMap(action =>
       // TODO: This Observable should be cancelled if another NEW_KERNEL occurs
       acquireKernelInfo(action.channels)
