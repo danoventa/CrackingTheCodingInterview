@@ -37,8 +37,7 @@ export function acquireKernelInfo(channels) {
     .first()
     .pluck('content', 'language_info')
     .map(setLanguageInfo)
-    .publishReplay(1)
-    .refCount();
+    .cache(1);
 
   shell.next(message);
   return obs;
