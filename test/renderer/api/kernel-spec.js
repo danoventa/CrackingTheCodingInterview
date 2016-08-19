@@ -1,50 +1,104 @@
-import { expect } from 'chai';
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require("sinon-chai");
+
+chai.use(sinonChai);
+const expect = chai.expect;
+
+const fs = require('fs');
 
 import {
-  launchKernel,
   shutdownKernel,
   forceShutdownKernel,
+  cleanupKernel,
 } from '../../../src/notebook/api/kernel';
 
 import reducers from '../../../src/notebook/reducers';
 import * as constants from '../../../src/notebook/constants';
 import { AppRecord } from '../../../src/notebook/records';
 
-describe('the circle of life', () => {
-  it.skip('is available for creating and destroying kernels', () => {
-    const kernelPromise = launchKernel('python2');
+const emptyKernel = Object.freeze({
+  channels: {
+    shell: {},
+    iopub: {},
+    control: {},
+    stdin: {},
+  },
+  spawn: {
+    stdin: {},
+    stdout: {},
+    stderr: {},
+  },
+  connectionFile: '/tmp/connection.json',
+})
 
-    return kernelPromise.then(kernel => {
-      expect(kernel.channels).to.not.be.undefined;
-      return shutdownKernel(kernel).then(() => {
-        expect(kernel.channels).to.be.undefined;
-      });
-    })
-  });
-  it('is available for creating and force shutting down kernels', () => {
-    const kernelPromise = launchKernel('python2');
+function setupMockKernel() {
+  const kernel = Object.assign({}, emptyKernel);
+  kernel.channels.shell.complete = sinon.spy()
+  kernel.channels.iopub.complete = sinon.spy()
+  kernel.channels.control.complete = sinon.spy()
+  kernel.channels.stdin.complete = sinon.spy()
 
-    return kernelPromise.then(kernel => {
-      expect(kernel.channels).to.not.be.undefined;
-      forceShutdownKernel(kernel);
-      expect(kernel.channels).to.be.undefined;
-    })
-  });
-  it('can be interrupted', () => {
-    const kernelPromise = launchKernel('python2');
+  kernel.spawn.stdin.destroy = sinon.spy()
+  kernel.spawn.stdout.destroy = sinon.spy()
+  kernel.spawn.stderr.destroy = sinon.spy()
 
-    return kernelPromise.then(kernel => {
-      const originalState = {
-        app: new AppRecord(kernel),
-      };
+  kernel.spawn.kill = sinon.spy()
 
-      const action = {
-        type: constants.INTERRUPT_KERNEL,
-      };
+  return kernel;
+}
 
-      const state = reducers(originalState, action);
-      expect(state.app.spawn.connected).to.be.false;
-      shutdownKernel(kernel);
-    });
-  });
-});
+describe('forceShutdownKernel', () => {
+  it('fully cleans up the kernel and uses SIGKILL', () => {
+    const kernel = setupMockKernel();
+
+    const mockFs = {
+      unlinkSync: sinon.spy(),
+    };
+
+    forceShutdownKernel(kernel, mockFs);
+
+    expect(kernel.channels.shell.complete).to.have.been.called;
+    expect(kernel.channels.iopub.complete).to.have.been.called;
+    expect(kernel.channels.control.complete).to.have.been.called;
+    expect(kernel.channels.stdin.complete).to.have.been.called;
+
+    expect(kernel.spawn.stdin.destroy).to.have.been.called;
+    expect(kernel.spawn.stdout.destroy).to.have.been.called;
+    expect(kernel.spawn.stderr.destroy).to.have.been.called;
+
+    expect(kernel.spawn.kill).to.have.been.calledWith('SIGKILL');
+
+    // TODO: expect kernel.connectionFile to have called out to fs
+    expect(mockFs.unlinkSync).to.have.been.calledWith(kernel.connectionFile);
+  })
+})
+
+describe('cleanupKernel', () => {
+  it('cleans out artifacts from the kernel object', () => {
+    const kernel = setupMockKernel();
+
+    const mockFs = {
+      unlinkSync: sinon.spy(),
+    };
+
+    cleanupKernel(kernel, true, mockFs);
+
+    expect(kernel.channels.shell.complete).to.have.been.called;
+    expect(kernel.channels.iopub.complete).to.have.been.called;
+    expect(kernel.channels.control.complete).to.have.been.called;
+    expect(kernel.channels.stdin.complete).to.have.been.called;
+
+    expect(kernel.spawn.stdin.destroy).to.have.been.called;
+    expect(kernel.spawn.stdout.destroy).to.have.been.called;
+    expect(kernel.spawn.stderr.destroy).to.have.been.called;
+
+    expect(kernel.spawn.kill).to.not.have.been.called;
+
+    // TODO: expect kernel.connectionFile to have called out to fs
+    expect(mockFs.unlinkSync).to.have.been.calledWith(kernel.connectionFile);
+  })
+})
+
+describe('shutdownKernel', () => {
+})

@@ -1,10 +1,16 @@
 import Immutable from 'immutable';
-
 import Rx from 'rxjs/Rx';
 
 import * as agendas from './agendas';
-import { launchKernel } from './api/kernel';
 import * as constants from './constants';
+
+export function newKernel(kernelSpecName, cwd) {
+  return {
+    type: constants.LAUNCH_KERNEL,
+    kernelSpecName,
+    cwd,
+  };
+}
 
 const path = require('path');
 
@@ -14,44 +20,6 @@ export function setExecutionState(executionState) {
     executionState,
   };
 }
-
-export function setLanguageInfo(langInfo) {
-  return {
-    type: constants.SET_LANGUAGE_INFO,
-    langInfo,
-  };
-}
-
-export function newKernel(kernelSpecName, cwd) {
-  return () => Rx.Observable.create((subscriber) => {
-    launchKernel(kernelSpecName, { cwd })
-      .then(kc => {
-        const { channels, connectionFile, spawn } = kc;
-
-        // Listen to the execution status of the kernel
-        channels.iopub
-          .filter(msg => msg.header.msg_type === 'status')
-          .map(msg => msg.content.execution_state)
-          .subscribe(() => subscriber.next(setExecutionState('idle')));
-
-        agendas.acquireKernelInfo(channels)
-          .subscribe(action => {
-            subscriber.next(action);
-            subscriber.next(setExecutionState('idle'));
-          });
-
-        subscriber.next({
-          type: constants.NEW_KERNEL,
-          channels,
-          connectionFile,
-          spawn,
-          kernelSpecName,
-        });
-      })
-      .catch((err) => console.error(err));
-  });
-}
-
 
 export function setNotebook(nbData, filename) {
   const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();

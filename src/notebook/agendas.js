@@ -1,7 +1,6 @@
 import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
-  createMessage,
 } from './api/messaging';
 
 import {
@@ -11,30 +10,11 @@ import {
   updateCellOutputs,
   updateCellPagers,
   updateCellStatus,
-  setLanguageInfo,
   associateCellToMsg,
 } from './actions';
 
 const Rx = require('rxjs/Rx');
 const Immutable = require('immutable');
-
-export function acquireKernelInfo(channels) {
-  const { shell } = channels;
-
-  const message = createMessage('kernel_info_request');
-
-  const obs = shell
-    .childOf(message)
-    .ofMessageType('kernel_info_reply')
-    .first()
-    .pluck('content', 'language_info')
-    .map(setLanguageInfo)
-    .publishReplay(1)
-    .refCount();
-
-  shell.next(message);
-  return obs;
-}
 
 const emptyOutputs = new Immutable.List();
 

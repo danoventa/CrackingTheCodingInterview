@@ -3,12 +3,12 @@ import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { triggerUndo, triggerModified } from './middlewares';
 import rootReducer from './reducers';
 
-import { saveEpic, saveAsEpic } from './epics/saving';
+import epics from './epics';
 
-const epics = combineEpics(saveEpic, saveAsEpic);
+const rootEpic = combineEpics(...epics);
 
 const middlewares = [
-  createEpicMiddleware(epics),
+  createEpicMiddleware(rootEpic),
   triggerUndo,
   triggerModified,
 ];
