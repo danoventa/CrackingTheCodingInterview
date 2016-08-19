@@ -4,11 +4,14 @@ const Rx = require('rxjs/Rx');
 
 const EventEmitter = require('events');
 
+import { ActionsObservable } from 'redux-observable';
+
 import * as constants from '../../../src/notebook/constants';
 
 import {
   setLanguageInfo,
   acquireKernelInfo,
+  watchExecutionStateEpic,
 } from '../../../src/notebook/epics/kernelLaunch';
 
 import {
@@ -77,5 +80,12 @@ describe('acquireKernelInfo', () => {
       })
       done();
     })
+  })
+})
+
+describe('watchExecutionStateEpic', () => {
+  it('returns an Observable with an initial state of idle', () => {
+    const action$ = new ActionsObservable();
+    const obs = watchExecutionStateEpic(action$);
   })
 })
