@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import { executeCell,
+import { executeCell } from '../../epics/execute';
+
+import {
   removeCell,
   toggleStickyCell,
   clearCellOutput,

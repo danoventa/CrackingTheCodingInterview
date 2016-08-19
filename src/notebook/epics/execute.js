@@ -1,7 +1,7 @@
 import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
-} from './api/messaging';
+} from '../api/messaging';
 
 import {
   createCellAfter,
@@ -11,7 +11,11 @@ import {
   updateCellPagers,
   updateCellStatus,
   associateCellToMsg,
-} from './actions';
+} from '../actions';
+
+import {
+  ERROR_KERNEL_NOT_CONNECTED,
+} from '../constants';
 
 const Rx = require('rxjs/Rx');
 const Immutable = require('immutable');
@@ -45,7 +49,7 @@ function reduceOutputs(outputs, output) {
   return outputs.push(Immutable.fromJS(output));
 }
 
-export function executeCell(store, channels, id, code) {
+export function executeCellObservable(store, channels, id, code) {
   return Rx.Observable.create((subscriber) => {
     if (!channels || !channels.iopub || !channels.shell) {
       subscriber.error('kernel not connected');
@@ -140,5 +144,31 @@ export function executeCell(store, channels, id, code) {
     return function executionDisposed() {
       subscriptions.forEach((sub) => sub.unsubscribe());
     };
+  });
+}
+
+export function executeCell(channels, id, source, kernelConnected, notificationSystem) {
+  return (actions, store) => Rx.Observable.create((subscriber) => {
+    store.dispatch({ type: 'ABORT_EXECUTION', id });
+
+    if (!kernelConnected) {
+      notificationSystem.addNotification({
+        title: 'Could not execute cell',
+        message: 'The cell could not be executed because the kernel is not connected.',
+        level: 'error',
+      });
+      store.dispatch(updateCellExecutionCount(id, undefined));
+      return;
+    }
+
+    const obs = executeCellObservable(store, channels, id, source).takeUntil(
+      actions.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id)
+    );
+
+    obs.subscribe(action => {
+      subscriber.next(action);
+    }, (error) => {
+      subscriber.next({ type: ERROR_KERNEL_NOT_CONNECTED, message: error });
+    });
   });
 }

@@ -10,8 +10,9 @@ import {
 
 import { tildify, launchFilename } from './native-window';
 
+import { executeCell } from './epics/execute';
+
 import {
-  executeCell,
   clearCellOutput,
   newKernel,
   killKernel,

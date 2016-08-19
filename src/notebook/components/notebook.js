@@ -13,12 +13,12 @@ import Cell from './cell/cell';
 import DraggableCell from './cell/draggable-cell';
 import CellCreator from './cell/cell-creator';
 import {
-  executeCell,
   focusNextCell,
   moveCell,
   copyCell,
   pasteCell,
 } from '../actions';
+import { executeCell } from '../epics/execute';
 
 import complete from '../api/messaging/completion';
 
