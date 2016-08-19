@@ -78,7 +78,7 @@ export function newKernelObservable(kernelSpecName, cwd) {
   });
 }
 
-export const watchExecutionState = action$ =>
+export const watchExecutionStateEpic = action$ =>
   action$.ofType(NEW_KERNEL)
     .mergeMap(action =>
       action.channels.iopub
