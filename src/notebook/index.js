@@ -18,7 +18,6 @@ import Notebook from './components/notebook';
 import {
   setNotebook,
   setNotificationSystem,
-  setExecutionState,
 } from './actions';
 
 import { initMenuHandlers } from './menu';
@@ -28,8 +27,6 @@ import { initGlobalHandlers } from './global-events';
 import { AppRecord, DocumentRecord, MetadataRecord } from './records';
 
 const Github = require('github');
-
-const Rx = require('rxjs/Rx');
 
 const github = new Github();
 
@@ -54,23 +51,6 @@ ipc.on('main:load', (e, launchData) => {
   }, reducers);
 
   const { dispatch } = store;
-
-  Rx.Observable.from(store)
-    .pluck('app')
-    .pluck('channels')
-    .distinctUntilChanged()
-    .switchMap(channels => {
-      if (!channels || !channels.iopub) {
-        return Rx.Observable.of('not connected');
-      }
-      return channels
-        .iopub
-        .ofMessageType('status')
-        .pluck('content', 'execution_state');
-    })
-    .subscribe(st => {
-      dispatch(setExecutionState(st));
-    });
 
   window.store = store;
 
