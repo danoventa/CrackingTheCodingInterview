@@ -1,16 +1,16 @@
 import { expect } from 'chai';
 import path from 'path';
 
-import * as actions from '../../../src/notebook/actions';
+import * as actions from '../../src/notebook/actions';
 
-import * as constants from '../../../src/notebook/constants';
+import * as constants from '../../src/notebook/constants';
 
-import { dummyStore } from '../../utils';
+import { dummyStore } from '../utils';
 
 import {
   dummyJSON,
   dummyCommutable
-} from '../dummy-nb';
+} from './dummy-nb';
 
 import {
   fromJS
