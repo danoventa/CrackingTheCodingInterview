@@ -12,8 +12,6 @@ export function newKernel(kernelSpecName, cwd) {
   };
 }
 
-const path = require('path');
-
 export function setExecutionState(executionState) {
   return {
     type: constants.SET_EXECUTION_STATE,
@@ -22,23 +20,12 @@ export function setExecutionState(executionState) {
 }
 
 export function setNotebook(nbData, filename) {
-  const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();
-  return (actions, store) => Rx.Observable.create((subscriber) => {
-    const data = Immutable.fromJS(nbData);
-    subscriber.next({
-      type: constants.SET_NOTEBOOK,
-      data,
-    });
-
-    // Get the kernel name from the kernelspec, fallback on language_info, and
-    // in the worse case scenario spawn a Python 3 kernel.
-    const kernelName = data.getIn([
-      'metadata', 'kernelspec', 'name',
-    ], data.getIn([
-      'metadata', 'language_info', 'name',
-    ], 'python3'));
-    store.dispatch(newKernel(kernelName, cwd));
-  });
+  const data = Immutable.fromJS(nbData);
+  return {
+    type: constants.SET_NOTEBOOK,
+    data,
+    filename,
+  };
 }
 
 export function updateCellSource(id, source) {

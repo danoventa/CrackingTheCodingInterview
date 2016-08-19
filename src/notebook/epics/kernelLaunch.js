@@ -15,20 +15,16 @@ import {
   createMessage,
 } from '../api/messaging';
 
-import { setExecutionState } from '../actions';
+import { setExecutionState, newKernel } from '../actions';
 
-import { NEW_KERNEL, LAUNCH_KERNEL, SET_LANGUAGE_INFO } from '../constants';
+import {
+  NEW_KERNEL,
+  LAUNCH_KERNEL,
+  SET_LANGUAGE_INFO,
+  SET_NOTEBOOK,
+} from '../constants';
 
-/**
- * TODO: Ideally this flow of actions should be:
- *
- * LAUNCH_KERNEL
- * KERNEL_LAUNCHED
- * ACQUIRE_KERNEL_INFO
- * SET_LANGUAGE_INFO
- * KERNEL_READY
- *
- */
+const path = require('path');
 
 export function setLanguageInfo(langInfo) {
   return {
@@ -105,3 +101,23 @@ export const newKernelEpic = action$ =>
     .mergeMap(action =>
       newKernelObservable(action.kernelSpecName, action.cwd)
     );
+
+export const newNotebookKernelEpic = action$ =>
+  action$.ofType(SET_NOTEBOOK)
+    .do(action => {
+      if (!action.data) {
+        throw new Error('newNotebookKernel needs notebook data');
+      }
+      if (!action.filename) {
+        throw new Error('newNotebookKernel needs a filename');
+      }
+    }).map(action => {
+      const { filename, data } = action;
+      const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();
+      const kernelName = data.getIn([
+        'metadata', 'kernelspec', 'name',
+      ], data.getIn([
+        'metadata', 'language_info', 'name',
+      ], 'python3'));
+      return newKernel(kernelName, cwd);
+    });

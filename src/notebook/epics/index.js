@@ -7,6 +7,7 @@ import {
   newKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
+  newNotebookKernelEpic,
 } from './kernelLaunch';
 
 const epics = [
@@ -15,6 +16,7 @@ const epics = [
   newKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
+  newNotebookKernelEpic,
 ];
 
 export default epics;
