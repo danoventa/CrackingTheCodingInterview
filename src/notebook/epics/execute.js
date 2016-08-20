@@ -1,7 +1,7 @@
 import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
-} from './api/messaging';
+} from '../api/messaging';
 
 import {
   createCellAfter,
@@ -11,7 +11,7 @@ import {
   updateCellPagers,
   updateCellStatus,
   associateCellToMsg,
-} from './actions';
+} from '../actions';
 
 const Rx = require('rxjs/Rx');
 const Immutable = require('immutable');
@@ -45,7 +45,7 @@ function reduceOutputs(outputs, output) {
   return outputs.push(Immutable.fromJS(output));
 }
 
-export function executeCell(store, channels, id, code) {
+export function executeCellObservable(channels, id, code, cellMessageAssociation) {
   return Rx.Observable.create((subscriber) => {
     if (!channels || !channels.iopub || !channels.shell) {
       subscriber.error('kernel not connected');
@@ -98,11 +98,10 @@ export function executeCell(store, channels, id, code) {
     // to the execution request and messages mapped to the cell (from widget
     // interaction, for example).
     const cellMessages = iopub
-      .filter(msg => {
-        const state = store.getState();
-        return executeRequest.header.msg_id === msg.parent_header.msg_id || // child msg
-          state.document.getIn(['cellMsgAssociations', id]) === msg.parent_header.msg_id; // mapped
-      })
+      .filter(msg =>
+        executeRequest.header.msg_id === msg.parent_header.msg_id || // child msg
+          cellMessageAssociation === msg.parent_header.msg_id // mapped
+      )
       .share();
 
     cellMessages
@@ -141,4 +140,58 @@ export function executeCell(store, channels, id, code) {
       subscriptions.forEach((sub) => sub.unsubscribe());
     };
   });
+}
+
+export const EXECUTE_CELL = 'EXECUTE_CELL';
+
+export function executeCell(id, source) {
+  return {
+    type: EXECUTE_CELL,
+    id,
+    source,
+  };
+}
+
+export function executeCellEpic(action$, store) {
+  return action$.ofType('EXECUTE_CELL')
+    .do(action => {
+      if (!action.id) {
+        throw new Error('execute cell needs an id');
+      }
+      if (typeof action.source !== 'string') {
+        throw new Error('execute cell needs source string');
+      }
+    })
+    .groupBy(action => action.id)
+    // On each cell we want to kill of any old observables and begin new ones
+    // grouping by cell id
+    .map(actionObservable =>
+      actionObservable
+        .switchMap(action => {
+          const { source, id } = action;
+          const state = store.getState();
+          const channels = state.app.channels;
+          const notificationSystem = state.app.notificationSystem;
+          const kernelConnected = channels &&
+            !(state.app.executionState === 'starting' ||
+              state.app.executionState === 'not connected');
+
+          const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
+
+          if (!kernelConnected) {
+            // TODO: Switch this to dispatching an error
+            notificationSystem.addNotification({
+              title: 'Could not execute cell',
+              message: 'The cell could not be executed because the kernel is not connected.',
+              level: 'error',
+            });
+            return Rx.Observable.of(updateCellExecutionCount(id, undefined));
+          }
+
+          return executeCellObservable(channels, id, source, cellMessageAssociation)
+            .takeUntil(action$.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id));
+        })
+    )
+    // Bring back all the inner Observables into one stream
+    .mergeAll();
 }

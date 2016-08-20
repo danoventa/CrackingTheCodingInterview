@@ -10,8 +10,9 @@ import {
 
 import { tildify, launchFilename } from './native-window';
 
+import { executeCell } from './epics/execute';
+
 import {
-  executeCell,
   clearCellOutput,
   newKernel,
   killKernel,
@@ -129,18 +130,12 @@ export function dispatchPublishGist(store, dispatch) {
 
 export function dispatchRunAll(store, dispatch) {
   const state = store.getState();
-  const { channels, executionState, notificationSystem } = state.app;
   const notebook = state.document.get('notebook');
   const cells = notebook.get('cellMap');
-  const kernelConnected = channels &&
-    !(executionState === 'starting' || executionState === 'not connected');
   notebook.get('cellOrder').map((value) => dispatch(
     executeCell(
-      channels,
       value,
-      cells.getIn([value, 'source']),
-      kernelConnected,
-      notificationSystem
+      cells.getIn([value, 'source'])
     )
   ));
 }

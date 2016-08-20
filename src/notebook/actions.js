@@ -1,7 +1,5 @@
 import Immutable from 'immutable';
-import Rx from 'rxjs/Rx';
 
-import * as agendas from './agendas';
 import * as constants from './constants';
 
 export function newKernel(kernelSpecName, cwd) {
@@ -163,32 +161,6 @@ export function toggleStickyCell(id) {
     type: constants.TOGGLE_STICKY_CELL,
     id,
   };
-}
-
-export function executeCell(channels, id, source, kernelConnected, notificationSystem) {
-  return (actions, store) => Rx.Observable.create((subscriber) => {
-    store.dispatch({ type: 'ABORT_EXECUTION', id });
-
-    if (!kernelConnected) {
-      notificationSystem.addNotification({
-        title: 'Could not execute cell',
-        message: 'The cell could not be executed because the kernel is not connected.',
-        level: 'error',
-      });
-      store.dispatch(updateCellExecutionCount(id, undefined));
-      return;
-    }
-
-    const obs = agendas.executeCell(store, channels, id, source).takeUntil(
-      actions.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id)
-    );
-
-    obs.subscribe(action => {
-      subscriber.next(action);
-    }, (error) => {
-      subscriber.next({ type: constants.ERROR_KERNEL_NOT_CONNECTED, message: error });
-    });
-  });
 }
 
 export function splitCell(id, position) {

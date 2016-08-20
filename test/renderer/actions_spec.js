@@ -238,52 +238,6 @@ describe('setBackwardCheckpoint', () => {
   });
 });
 
-describe('executeCell', () => {
-  it.skip('creates an ERROR_KERNEL_NOT_CONNECTED action with channels not setup', (done) => {
-    const channels = {
-    };
-    const id = '235';
-    const source = 'print("hey")';
-
-    actions.executeCell(channels, id, source, true, undefined)()
-      .first()
-      .subscribe((action) => {
-        expect(action).to.deep.equal({
-          type: constants.ERROR_KERNEL_NOT_CONNECTED,
-          message: 'kernel not connected',
-        })
-        done();
-      }, (action) => {
-        expect.fail();
-      }
-    );
-  });
-
-  // Incomplete test setup, skipping yet providing boilerplate
-  it.skip('echoes actions passed on from agendas.executeCell', (done) => {
-    const channels = {
-      iopub: new Rx.Subject(), // need to mock these
-      shell: new Rx.Subject(), // or mock agendas.executeCell
-    };
-    const id = '235';
-    const source = 'print("hey")';
-
-    const subject = new Rx.Subject();
-
-    subject
-      .take(4)
-      .subscribe((action) => {
-        expect(action).to.deep.equal({});
-        done();
-      }, (action) => {
-        expect.fail();
-      }
-    );
-
-    actions.executeCell(channels, id, source, true, undefined)(subject);
-  });
-});
-
 describe('splitCell', () => {
   it('creates a SPLIT_CELL action', () => {
     expect(actions.splitCell('235', 0)).to.deep.equal({

@@ -13,12 +13,12 @@ import Cell from './cell/cell';
 import DraggableCell from './cell/draggable-cell';
 import CellCreator from './cell/cell-creator';
 import {
-  executeCell,
   focusNextCell,
   moveCell,
   copyCell,
   pasteCell,
 } from '../actions';
+import { executeCell } from '../epics/execute';
 
 import complete from '../api/messaging/completion';
 
@@ -34,9 +34,6 @@ const mapStateToProps = (state) => ({
   cellStatuses: state.document.get('cellStatuses'),
   stickyCells: state.document.get('stickyCells'),
   notificationSystem: state.app.notificationSystem,
-  kernelConnected: state.app.channels &&
-    !(state.app.executionState === 'starting' ||
-      state.app.executionState === 'not connected'),
 });
 
 class Notebook extends React.Component {
@@ -51,7 +48,6 @@ class Notebook extends React.Component {
     stickyCells: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
     theme: React.PropTypes.string,
-    kernelConnected: React.PropTypes.bool,
     notificationSystem: React.PropTypes.any,
   };
 
@@ -63,7 +59,6 @@ class Notebook extends React.Component {
   static propsTypes = {
     dispatch: React.PropTypes.func,
     notificationSystem: React.PropTypes.any,
-    kernelConnected: React.PropTypes.bool,
   };
 
   constructor() {
@@ -178,11 +173,8 @@ class Notebook extends React.Component {
     if (cell.get('cell_type') === 'code') {
       this.props.dispatch(
         executeCell(
-          this.props.channels,
           id,
-          cell.get('source'),
-          this.props.kernelConnected,
-          this.props.notificationSystem
+          cell.get('source')
         )
       );
     }

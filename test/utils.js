@@ -11,7 +11,7 @@ import { shutdownKernel } from '../src/notebook/api/kernel';
 import * as actions from '../src/notebook/actions';
 import createStore from '../src/notebook/store';
 import { reducers } from '../src/notebook/reducers';
-import { acquireKernelInfo } from '../src/notebook/agendas';
+import { acquireKernelInfo } from '../src/notebook/epics/kernelLaunch';
 
 import { AppRecord, DocumentRecord, MetadataRecord } from '../src/notebook/records';
 
@@ -19,6 +19,8 @@ import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
 } from '../src/notebook/api/messaging';
+
+const sinon = require('sinon');
 
 export function dispatchQueuePromise(dispatch) {
   return new Promise(resolve => {
@@ -134,6 +136,9 @@ export function dummyStore() {
     }),
     app: AppRecord({
       executionState: 'not connected',
+      notificationSystem: {
+        addNotification: sinon.spy(),
+      }
     }),
     metadata: MetadataRecord({
       filename: 'dummy-store-nb.ipynb',
