@@ -172,6 +172,8 @@ export function executeCellEpic(action$, store) {
     // Split stream into individual cells
     .map(cellActionObservable =>
       cellActionObservable
+        // We use a switchMap so that when a new cell execution request comes in
+        // the old observable for this cell is closed off properly
         .switchMap(({ source, id }) => {
           const state = store.getState();
           const channels = state.app.channels;
