@@ -10,9 +10,14 @@ import {
   newNotebookKernelEpic,
 } from './kernelLaunch';
 
+import {
+  executeCellEpic,
+} from './execute';
+
 const epics = [
   saveEpic,
   saveAsEpic,
+  executeCellEpic,
   newKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,

@@ -13,10 +13,6 @@ import {
   associateCellToMsg,
 } from '../actions';
 
-import {
-  ERROR_KERNEL_NOT_CONNECTED,
-} from '../constants';
-
 const Rx = require('rxjs/Rx');
 const Immutable = require('immutable');
 
@@ -146,18 +142,64 @@ export function executeCellObservable(channels, id, code, cellMessageAssociation
   });
 }
 
-/**
-
-export function executeCell(id, source, kernelConnected)
-
- */
+export const EXECUTE_CELL = 'EXECUTE_CELL';
 
 export function executeCell(id, source) {
+  return {
+    type: EXECUTE_CELL,
+    id,
+    source,
+  };
+}
+
+export function executeCellEpic(action$, store) {
+  return action$.ofType('EXECUTE_CELL')
+    .do(action => {
+      if (!action.id) {
+        throw new Error('execute cell needs an id');
+      }
+      if (typeof action.source !== 'string') {
+        throw new Error('execute cell needs source string');
+      }
+    })
+    .groupBy(action => action.id)
+    // On each cell we want to kill of any old observables and begin new ones
+    // grouping by cell id
+    .map(actionObservable =>
+      actionObservable
+        .switchMap(action => {
+          const { source, id } = action;
+          const state = store.getState();
+          const channels = state.app.channels;
+          const notificationSystem = state.app.notificationSystem;
+          const kernelConnected = channels &&
+            !(state.app.executionState === 'starting' ||
+              state.app.executionState === 'not connected');
+
+          const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
+
+          if (!kernelConnected) {
+            // TODO: Switch this to dispatching an error
+            notificationSystem.addNotification({
+              title: 'Could not execute cell',
+              message: 'The cell could not be executed because the kernel is not connected.',
+              level: 'error',
+            });
+            return Rx.Observable.of(updateCellExecutionCount(id, undefined));
+          }
+
+          return executeCellObservable(channels, id, source, cellMessageAssociation)
+            .takeUntil(action$.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id));
+        })
+    )
+    // Bring back all the inner Observables into one stream
+    .mergeAll();
+}
+
+/*
+export function executeCellOriginal(id, source) {
   return (actions, store) => Rx.Observable.create((subscriber) => {
-    const state = store.getState();
-    const channels = state.app.channels;
-    const notificationSystem = state.app.notificationSystem;
-    const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
+
 
     store.dispatch({ type: 'ABORT_EXECUTION', id });
 
@@ -184,17 +226,5 @@ export function executeCell(id, source) {
       subscriber.next({ type: ERROR_KERNEL_NOT_CONNECTED, message: error });
     });
   });
-}
-
-
-/*
-export function executeCellEpic(action$, store) {
-  const state = store.getState();
-
-  const cellExecuteActions =
-    action$.ofType('EXECUTE_CELL')
-      .map(action => {
-        action.
-      })
 }
 */
