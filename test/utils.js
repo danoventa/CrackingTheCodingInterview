@@ -20,6 +20,8 @@ import {
   msgSpecToNotebookFormat,
 } from '../src/notebook/api/messaging';
 
+const sinon = require('sinon');
+
 export function dispatchQueuePromise(dispatch) {
   return new Promise(resolve => {
     resolve();
@@ -134,6 +136,9 @@ export function dummyStore() {
     }),
     app: AppRecord({
       executionState: 'not connected',
+      notificationSystem: {
+        addNotification: sinon.spy(),
+      }
     }),
     metadata: MetadataRecord({
       filename: 'dummy-store-nb.ipynb',

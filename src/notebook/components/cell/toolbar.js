@@ -15,7 +15,6 @@ import {
 
 const mapStateToProps = (state) => ({
   channels: state.app.channels,
-  notificationSystem: state.app.notificationSystem,
 });
 
 export class Toolbar extends React.Component {
@@ -23,7 +22,6 @@ export class Toolbar extends React.Component {
     cell: React.PropTypes.any,
     channels: React.PropTypes.object,
     id: React.PropTypes.string,
-    notificationSystem: React.PropTypes.any,
     type: React.PropTypes.string,
     setHoverState: React.PropTypes.func,
   };
@@ -107,7 +105,7 @@ export class Toolbar extends React.Component {
         <div className="cell-toolbar">
           {showPlay &&
             <span>
-              <button onClick={this.executeCell}>
+              <button onClick={this.executeCell} className="executeButton" >
                 <span className="octicon octicon-triangle-right" />
               </button>
             </span>}
