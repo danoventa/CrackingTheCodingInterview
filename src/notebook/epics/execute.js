@@ -146,10 +146,17 @@ export function executeCellObservable(channels, id, code, cellMessageAssociation
   });
 }
 
-export function executeCell(id, source, kernelConnected, notificationSystem) {
+/**
+
+export function executeCell(id, source, kernelConnected)
+
+ */
+
+export function executeCell(id, source, kernelConnected) {
   return (actions, store) => Rx.Observable.create((subscriber) => {
     const state = store.getState();
     const channels = state.app.channels;
+    const notificationSystem = state.app.notificationSystem;
     const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
 
     store.dispatch({ type: 'ABORT_EXECUTION', id });

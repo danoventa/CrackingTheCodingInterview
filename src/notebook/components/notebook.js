@@ -180,8 +180,7 @@ class Notebook extends React.Component {
         executeCell(
           id,
           cell.get('source'),
-          this.props.kernelConnected,
-          this.props.notificationSystem
+          this.props.kernelConnected
         )
       );
     }

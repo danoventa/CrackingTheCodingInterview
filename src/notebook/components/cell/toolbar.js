@@ -90,8 +90,7 @@ export class Toolbar extends React.Component {
     this.context.store.dispatch(executeCell(
                                       this.props.id,
                                       this.props.cell.get('source'),
-                                      this.props.kernelConnected,
-                                      this.props.notificationSystem));
+                                      this.props.kernelConnected));
   }
 
   clearCellOutput() {
