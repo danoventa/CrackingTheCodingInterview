@@ -130,16 +130,12 @@ export function dispatchPublishGist(store, dispatch) {
 
 export function dispatchRunAll(store, dispatch) {
   const state = store.getState();
-  const { channels, executionState } = state.app;
   const notebook = state.document.get('notebook');
   const cells = notebook.get('cellMap');
-  const kernelConnected = channels &&
-    !(executionState === 'starting' || executionState === 'not connected');
   notebook.get('cellOrder').map((value) => dispatch(
     executeCell(
       value,
-      cells.getIn([value, 'source']),
-      kernelConnected
+      cells.getIn([value, 'source'])
     )
   ));
 }

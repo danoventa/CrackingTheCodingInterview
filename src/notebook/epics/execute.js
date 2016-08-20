@@ -152,7 +152,7 @@ export function executeCell(id, source, kernelConnected)
 
  */
 
-export function executeCell(id, source, kernelConnected) {
+export function executeCell(id, source) {
   return (actions, store) => Rx.Observable.create((subscriber) => {
     const state = store.getState();
     const channels = state.app.channels;
@@ -160,6 +160,9 @@ export function executeCell(id, source, kernelConnected) {
     const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
 
     store.dispatch({ type: 'ABORT_EXECUTION', id });
+
+    const kernelConnected = channels &&
+      !(state.app.executionState === 'starting' || state.app.executionState === 'not connected');
 
     if (!kernelConnected) {
       notificationSystem.addNotification({

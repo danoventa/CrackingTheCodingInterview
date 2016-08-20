@@ -34,9 +34,6 @@ const mapStateToProps = (state) => ({
   cellStatuses: state.document.get('cellStatuses'),
   stickyCells: state.document.get('stickyCells'),
   notificationSystem: state.app.notificationSystem,
-  kernelConnected: state.app.channels &&
-    !(state.app.executionState === 'starting' ||
-      state.app.executionState === 'not connected'),
 });
 
 class Notebook extends React.Component {
@@ -51,7 +48,6 @@ class Notebook extends React.Component {
     stickyCells: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
     theme: React.PropTypes.string,
-    kernelConnected: React.PropTypes.bool,
     notificationSystem: React.PropTypes.any,
   };
 
@@ -63,7 +59,6 @@ class Notebook extends React.Component {
   static propsTypes = {
     dispatch: React.PropTypes.func,
     notificationSystem: React.PropTypes.any,
-    kernelConnected: React.PropTypes.bool,
   };
 
   constructor() {
@@ -179,8 +174,7 @@ class Notebook extends React.Component {
       this.props.dispatch(
         executeCell(
           id,
-          cell.get('source'),
-          this.props.kernelConnected
+          cell.get('source')
         )
       );
     }

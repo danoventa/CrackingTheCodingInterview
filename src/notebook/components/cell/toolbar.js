@@ -16,9 +16,6 @@ import {
 const mapStateToProps = (state) => ({
   channels: state.app.channels,
   notificationSystem: state.app.notificationSystem,
-  kernelConnected: state.app.channels &&
-    !(state.app.executionState === 'starting' ||
-      state.app.executionState === 'not connected'),
 });
 
 export class Toolbar extends React.Component {
@@ -26,7 +23,6 @@ export class Toolbar extends React.Component {
     cell: React.PropTypes.any,
     channels: React.PropTypes.object,
     id: React.PropTypes.string,
-    kernelConnected: React.PropTypes.bool,
     notificationSystem: React.PropTypes.any,
     type: React.PropTypes.string,
     setHoverState: React.PropTypes.func,
@@ -89,8 +85,7 @@ export class Toolbar extends React.Component {
   executeCell() {
     this.context.store.dispatch(executeCell(
                                       this.props.id,
-                                      this.props.cell.get('source'),
-                                      this.props.kernelConnected));
+                                      this.props.cell.get('source')));
   }
 
   clearCellOutput() {
