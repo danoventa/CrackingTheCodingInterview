@@ -178,7 +178,6 @@ class Notebook extends React.Component {
     if (cell.get('cell_type') === 'code') {
       this.props.dispatch(
         executeCell(
-          this.props.channels,
           id,
           cell.get('source'),
           this.props.kernelConnected,

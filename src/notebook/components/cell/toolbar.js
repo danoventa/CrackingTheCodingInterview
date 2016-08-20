@@ -87,7 +87,7 @@ export class Toolbar extends React.Component {
   }
 
   executeCell() {
-    this.context.store.dispatch(executeCell(this.props.channels,
+    this.context.store.dispatch(executeCell(
                                       this.props.id,
                                       this.props.cell.get('source'),
                                       this.props.kernelConnected,

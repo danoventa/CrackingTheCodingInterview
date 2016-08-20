@@ -137,7 +137,6 @@ export function dispatchRunAll(store, dispatch) {
     !(executionState === 'starting' || executionState === 'not connected');
   notebook.get('cellOrder').map((value) => dispatch(
     executeCell(
-      channels,
       value,
       cells.getIn([value, 'source']),
       kernelConnected,

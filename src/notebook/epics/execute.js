@@ -49,7 +49,7 @@ function reduceOutputs(outputs, output) {
   return outputs.push(Immutable.fromJS(output));
 }
 
-export function executeCellObservable(cellMessageAssociation, channels, id, code) {
+export function executeCellObservable(channels, id, code, cellMessageAssociation) {
   return Rx.Observable.create((subscriber) => {
     if (!channels || !channels.iopub || !channels.shell) {
       subscriber.error('kernel not connected');
@@ -146,8 +146,12 @@ export function executeCellObservable(cellMessageAssociation, channels, id, code
   });
 }
 
-export function executeCell(channels, id, source, kernelConnected, notificationSystem) {
+export function executeCell(id, source, kernelConnected, notificationSystem) {
   return (actions, store) => Rx.Observable.create((subscriber) => {
+    const state = store.getState();
+    const channels = state.app.channels;
+    const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
+
     store.dispatch({ type: 'ABORT_EXECUTION', id });
 
     if (!kernelConnected) {
@@ -160,9 +164,7 @@ export function executeCell(channels, id, source, kernelConnected, notificationS
       return;
     }
 
-    const state = store.getState();
-    const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
-    const obs = executeCellObservable(cellMessageAssociation, channels, id, source).takeUntil(
+    const obs = executeCellObservable(channels, id, source, cellMessageAssociation).takeUntil(
       actions.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id)
     );
 
