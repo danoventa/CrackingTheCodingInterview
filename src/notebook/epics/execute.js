@@ -195,36 +195,3 @@ export function executeCellEpic(action$, store) {
     // Bring back all the inner Observables into one stream
     .mergeAll();
 }
-
-/*
-export function executeCellOriginal(id, source) {
-  return (actions, store) => Rx.Observable.create((subscriber) => {
-
-
-    store.dispatch({ type: 'ABORT_EXECUTION', id });
-
-    const kernelConnected = channels &&
-      !(state.app.executionState === 'starting' || state.app.executionState === 'not connected');
-
-    if (!kernelConnected) {
-      notificationSystem.addNotification({
-        title: 'Could not execute cell',
-        message: 'The cell could not be executed because the kernel is not connected.',
-        level: 'error',
-      });
-      store.dispatch(updateCellExecutionCount(id, undefined));
-      return;
-    }
-
-    const obs = executeCellObservable(channels, id, source, cellMessageAssociation).takeUntil(
-      actions.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id)
-    );
-
-    obs.subscribe(action => {
-      subscriber.next(action);
-    }, (error) => {
-      subscriber.next({ type: ERROR_KERNEL_NOT_CONNECTED, message: error });
-    });
-  });
-}
-*/

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { mount } from 'enzyme';
 
+const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require("sinon-chai");
 
@@ -54,10 +55,7 @@ describe('Toolbar.executeCell', () => {
       .find('.executeButton');
 
     button.simulate('click');
+    // TODO: Check on the dispatched actions
 
-    // Note that this is a sinon spy
-    const notifier = store.getState().app.notificationSystem;
-
-    expect(store.getState().app.notificationSystem.addNotification)
   });
 });
