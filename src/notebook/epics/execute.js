@@ -13,10 +13,16 @@ import {
   associateCellToMsg,
 } from '../actions';
 
+import {
+  REMOVE_CELL,
+  ABORT_EXECUTION,
+} from '../constants';
+
 const Rx = require('rxjs/Rx');
 const Immutable = require('immutable');
 
 const emptyOutputs = new Immutable.List();
+
 
 function reduceOutputs(outputs, output) {
   if (output.output_type === 'clear_output') {
@@ -163,12 +169,12 @@ export function executeCellEpic(action$, store) {
       }
     })
     .groupBy(action => action.id)
-    // On each cell we want to kill of any old observables and begin new ones
-    // grouping by cell id
-    .map(actionObservable =>
-      actionObservable
-        .switchMap(action => {
-          const { source, id } = action;
+    // Split stream into individual cells
+    .map(cellActionObservable =>
+      cellActionObservable
+        // We use a switchMap so that when a new cell execution request comes in
+        // the old observable for this cell is closed off properly
+        .switchMap(({ source, id }) => {
           const state = store.getState();
           const channels = state.app.channels;
           const notificationSystem = state.app.notificationSystem;
@@ -189,7 +195,8 @@ export function executeCellEpic(action$, store) {
           }
 
           return executeCellObservable(channels, id, source, cellMessageAssociation)
-            .takeUntil(action$.filter(x => x.type === 'ABORT_EXECUTION' && x.id === id));
+            .takeUntil(action$.filter(laterAction => laterAction.id === id)
+                              .ofType(ABORT_EXECUTION, REMOVE_CELL));
         })
     )
     // Bring back all the inner Observables into one stream
