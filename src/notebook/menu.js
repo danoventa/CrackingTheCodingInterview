@@ -133,7 +133,7 @@ export function dispatchRunAll(store, dispatch) {
   const notebook = state.document.get('notebook');
   const cells = notebook.get('cellMap');
   notebook.get('cellOrder').filter((cellID) =>
-    cells.getIn([cellID,'cell_type']) === 'code')
+    cells.getIn([cellID, 'cell_type']) === 'code')
       .map((cellID) => dispatch(
         executeCell(
           cellID,
