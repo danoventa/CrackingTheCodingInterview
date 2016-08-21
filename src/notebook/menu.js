@@ -132,11 +132,13 @@ export function dispatchRunAll(store, dispatch) {
   const state = store.getState();
   const notebook = state.document.get('notebook');
   const cells = notebook.get('cellMap');
-  notebook.get('cellOrder').map((value) => dispatch(
-    executeCell(
-      value,
-      cells.getIn([value, 'source'])
-    )
+  notebook.get('cellOrder').filter((cellID) =>
+    cells.getIn([cellID, 'cell_type']) === 'code')
+      .map((cellID) => dispatch(
+        executeCell(
+          cellID,
+          cells.getIn([cellID, 'source'])
+        )
   ));
 }
 
