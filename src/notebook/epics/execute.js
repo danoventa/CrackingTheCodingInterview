@@ -158,6 +158,10 @@ export function executeCell(id, source) {
   };
 }
 
+/**
+ * the execute cell epic processes execute requests for all cells, creating
+ * inner observable streams of the running execution responses
+ */
 export function executeCellEpic(action$, store) {
   return action$.ofType('EXECUTE_CELL')
     .do(action => {
@@ -168,31 +172,32 @@ export function executeCellEpic(action$, store) {
         throw new Error('execute cell needs source string');
       }
     })
+    // Split stream by cell IDs
     .groupBy(action => action.id)
-    // Split stream into individual cells
+    // Work on each cell's stream
     .map(cellActionObservable =>
       cellActionObservable
-        // We use a switchMap so that when a new cell execution request comes in
-        // the old observable for this cell is closed off properly
+        // When a new EXECUTE_CELL comes in with the current ID, we create a
+        // a new observable and unsubscribe from the old one.
         .switchMap(({ source, id }) => {
           const state = store.getState();
           const channels = state.app.channels;
-          const notificationSystem = state.app.notificationSystem;
+
           const kernelConnected = channels &&
             !(state.app.executionState === 'starting' ||
               state.app.executionState === 'not connected');
 
-          const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
-
           if (!kernelConnected) {
             // TODO: Switch this to dispatching an error
-            notificationSystem.addNotification({
+            state.app.notificationSystem.addNotification({
               title: 'Could not execute cell',
               message: 'The cell could not be executed because the kernel is not connected.',
               level: 'error',
             });
             return Rx.Observable.of(updateCellExecutionCount(id, undefined));
           }
+
+          const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
 
           return executeCellObservable(channels, id, source, cellMessageAssociation)
             .takeUntil(action$.filter(laterAction => laterAction.id === id)
