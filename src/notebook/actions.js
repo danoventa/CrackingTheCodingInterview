@@ -217,21 +217,6 @@ export function setBackwardCheckpoint(documentState, clearFutureStack) {
   };
 }
 
-export const undo = {
-  type: constants.UNDO,
-};
-
-export const redo = {
-  type: constants.REDO,
-};
-
-export function updateDocument(newDocument) {
-  return {
-    type: constants.UPDATE_DOCUMENT,
-    newDocument,
-  };
-}
-
 export function copyCell(id) {
   return {
     type: constants.COPY_CELL,

@@ -2,10 +2,6 @@ import { handleActions } from 'redux-actions';
 
 import * as constants from '../constants';
 
-function clearFuture(state) {
-  return state.set('future', state.future.clear());
-}
-
 export default handleActions({
   [constants.CHANGE_FILENAME]: function changeFilename(state, action) {
     if (action.filename) {
@@ -23,18 +19,5 @@ export default handleActions({
       return clearFuture(state.set('past', state.past.push(documentState)));
     }
     return state.set('past', state.past.push(documentState));
-  },
-  [constants.CLEAR_FUTURE]: clearFuture,
-  [constants.UNDO]: function undo(state) {
-    if (state.past.size === 0) {
-      return state;
-    }
-    return state.set('past', state.past.pop());
-  },
-  [constants.REDO]: function redo(state) {
-    if (state.future.size === 0) {
-      return state;
-    }
-    return state.set('future', state.future.pop());
   },
 }, {});
