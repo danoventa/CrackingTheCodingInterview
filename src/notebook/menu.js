@@ -30,13 +30,15 @@ import { copyNotebook } from './utils';
 
 import publish from './publication/github';
 
+import { ActionCreators } from 'redux-undo';
+
 const BrowserWindow = remote.BrowserWindow;
 
 const path = require('path');
 
 export function dispatchSaveAs(store, dispatch, evt, filename) {
   const state = store.getState();
-  const notebook = state.document.get('notebook');
+  const notebook = state.document.present.get('notebook');
   dispatch(saveAs(filename, notebook));
 }
 
@@ -48,7 +50,7 @@ export function triggerSaveAs(store, dispatch) {
       }
       const state = store.getState();
       const { executionState } = state.app;
-      const notebook = state.document.get('notebook');
+      const notebook = state.document.present.get('notebook');
       dispatch(saveAs(filename, notebook));
       BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
     }
@@ -57,7 +59,7 @@ export function triggerSaveAs(store, dispatch) {
 
 export function dispatchSave(store, dispatch) {
   const state = store.getState();
-  const notebook = state.document.get('notebook');
+  const notebook = state.document.present.get('notebook');
   const filename = state.metadata.get('filename');
   const notificationSystem = state.app.get('notificationSystem');
   try {
@@ -83,7 +85,7 @@ export function dispatchSave(store, dispatch) {
 export function dispatchNewkernel(store, dispatch, evt, name) {
   const state = store.getState();
   const spawnOptions = {};
-  if (state && state.document && state.document.get('filename')) {
+  if (state && state.document.present && state.metadata.get('filename')) {
     spawnOptions.cwd = path.dirname(path.resolve(state.filename));
   }
   dispatch(newKernel(name, spawnOptions));
@@ -92,7 +94,7 @@ export function dispatchNewkernel(store, dispatch, evt, name) {
 export function dispatchPublishGist(store, dispatch) {
   const state = store.getState();
   const filename = state.metadata.get('filename');
-  const notebook = state.document.get('notebook');
+  const notebook = state.document.present.get('notebook');
   const { notificationSystem, github } = state.app;
 
   const agenda = publish(github, notebook, filename, notificationSystem);
@@ -128,7 +130,7 @@ export function dispatchPublishGist(store, dispatch) {
 
 export function dispatchRunAll(store, dispatch) {
   const state = store.getState();
-  const notebook = state.document.get('notebook');
+  const notebook = state.document.present.get('notebook');
   const cells = notebook.get('cellMap');
   notebook.get('cellOrder').filter((cellID) =>
     cells.getIn([cellID, 'cell_type']) === 'code')
@@ -142,7 +144,7 @@ export function dispatchRunAll(store, dispatch) {
 
 export function dispatchClearAll(store, dispatch) {
   const state = store.getState();
-  const notebook = state.document.get('notebook');
+  const notebook = state.document.present.get('notebook');
   notebook.get('cellOrder').map((value) => dispatch(clearCellOutput(value)));
 }
 
@@ -168,7 +170,7 @@ export function dispatchRestartKernel(store, dispatch) {
   const state = store.getState();
   const { notificationSystem } = state.app;
   const spawnOptions = {};
-  if (state && state.document && state.metadata.get('filename')) {
+  if (state && state.document.present && state.metadata.get('filename')) {
     spawnOptions.cwd = path.dirname(path.resolve(state.filename));
   }
 
@@ -190,9 +192,11 @@ export function dispatchRestartClearAll(store, dispatch) {
 }
 
 export function dispatchUndo(store, dispatch) {
+  dispatch(ActionCreators.undo());
 }
 
 export function dispatchRedo(store, dispatch) {
+  dispatch(ActionCreators.redo());
 }
 
 export function dispatchZoomIn() {
