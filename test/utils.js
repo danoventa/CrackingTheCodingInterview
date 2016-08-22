@@ -125,15 +125,19 @@ export function dummyStore() {
     'metadata', 'kernelspec', 'name',
   ], 'python2');
   return createStore({
-    document: DocumentRecord({
-      notebook,
-      cellPagers: new Immutable.Map(),
-      cellStatuses: new Immutable.Map(),
-      stickyCells: new Immutable.Map(),
-      cellMsgAssociations: new Immutable.Map(),
-      msgCellAssociations: new Immutable.Map(),
-      outputStatuses: new Immutable.Map(),
-    }),
+    document: {
+      past: [],
+      present: DocumentRecord({
+        notebook,
+        cellPagers: new Immutable.Map(),
+        cellStatuses: new Immutable.Map(),
+        stickyCells: new Immutable.Map(),
+        cellMsgAssociations: new Immutable.Map(),
+        msgCellAssociations: new Immutable.Map(),
+        outputStatuses: new Immutable.Map(),
+      }),
+      future: [],
+    },
     app: AppRecord({
       executionState: 'not connected',
       notificationSystem: {
