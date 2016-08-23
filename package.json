@@ -82,6 +82,7 @@
     "redux": "^3.5.2",
     "redux-actions": "^0.11.0",
     "redux-observable": "^0.9.1",
+    "redux-undo": "^1.0.0-beta9",
     "rxjs": "^5.0.0-beta.6",
     "spawnteract": "^2.1.0",
     "tmp": "0.0.28",

@@ -6,8 +6,6 @@ import { Provider } from 'react-redux';
 
 import NotificationSystem from 'react-notification-system';
 
-import Immutable from 'immutable';
-
 import { ipcRenderer as ipc } from 'electron';
 import storage from 'electron-json-storage';
 
@@ -43,11 +41,13 @@ ipc.on('main:load', (e, launchData) => {
       github,
     }),
     metadata: new MetadataRecord({
-      past: new Immutable.List(),
-      future: new Immutable.List(),
       filename: launchData.filename,
     }),
-    document: new DocumentRecord(),
+    document: {
+      past: [],
+      present: new DocumentRecord(),
+      future: [],
+    },
   }, reducers);
 
   const { dispatch } = store;

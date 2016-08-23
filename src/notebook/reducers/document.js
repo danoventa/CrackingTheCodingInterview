@@ -207,13 +207,6 @@ export default handleActions({
       .set('cellMsgAssociations', cellMsgAssociations)
       .set('msgCellAssociations', msgCellAssociations);
   },
-  [constants.UPDATE_DOCUMENT]: function undo(state, action) {
-    const { newDocument } = action;
-    if (newDocument) {
-      return newDocument;
-    }
-    return state;
-  },
   [constants.COPY_CELL]: function copyCell(state, action) {
     const { id } = action;
     const cellMap = state.getIn(['notebook', 'cellMap']);
