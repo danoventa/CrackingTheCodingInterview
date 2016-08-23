@@ -1,7 +1,7 @@
 import { List } from 'immutable';
 
 import * as constants from './constants';
-import { setBackwardCheckpoint, setModified } from './actions';
+import { setModified } from './actions';
 
 export const triggerModified = store => next => action => {
   const ignore = new List([

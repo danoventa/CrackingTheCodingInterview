@@ -6,8 +6,6 @@ import { Provider } from 'react-redux';
 
 import NotificationSystem from 'react-notification-system';
 
-import Immutable from 'immutable';
-
 import { ipcRenderer as ipc } from 'electron';
 import storage from 'electron-json-storage';
 

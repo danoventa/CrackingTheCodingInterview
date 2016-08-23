@@ -4,6 +4,8 @@ import {
   remote,
 } from 'electron';
 
+import { ActionCreators } from 'redux-undo';
+
 import {
   showSaveAsDialog,
 } from './api/save';
@@ -17,8 +19,6 @@ import {
   newKernel,
   killKernel,
   interruptKernel,
-  updateDocument,
-  setForwardCheckpoint,
 } from './actions';
 
 import {
@@ -29,8 +29,6 @@ import {
 import { copyNotebook } from './utils';
 
 import publish from './publication/github';
-
-import { ActionCreators } from 'redux-undo';
 
 const BrowserWindow = remote.BrowserWindow;
 
