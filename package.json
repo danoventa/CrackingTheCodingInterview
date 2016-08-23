@@ -55,7 +55,7 @@
     ]
   },
   "dependencies": {
-    "codemirror": "^5.16.0",
+    "codemirror": "^5.18.2",
     "commonmark": "^0.24.0",
     "commonmark-react-renderer": "^4.2.4",
     "commutable": "^1.2.0",
@@ -107,7 +107,7 @@
     "enzyme": "^2.2.0",
     "eslint": "^3.3.0",
     "eslint-config-airbnb": "^10.0.1",
-    "eslint-plugin-import": "^1.13.0",
+    "eslint-plugin-import": "^1.14.0",
     "eslint-plugin-jsx-a11y": "^2.1.0",
     "eslint-plugin-react": "^6.0.0",
     "jsdom": "^9.4.2",
