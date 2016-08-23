@@ -9,7 +9,6 @@ import {
   removeCell,
   toggleStickyCell,
   clearCellOutput,
-  splitCell,
   changeOutputVisibility,
 } from '../../actions';
 
@@ -36,7 +35,6 @@ export class Toolbar extends React.Component {
     this.removeCell = this.removeCell.bind(this);
     this.executeCell = this.executeCell.bind(this);
     this.clearCellOutput = this.clearCellOutput.bind(this);
-    this.splitCell = this.splitCell.bind(this);
     this.setHoverState = this.setHoverState.bind(this);
     this.toggleStickyCell = this.toggleStickyCell.bind(this);
     this.changeOutputVisibility = this.changeOutputVisibility.bind(this);
@@ -90,10 +88,6 @@ export class Toolbar extends React.Component {
     this.context.store.dispatch(clearCellOutput(this.props.id));
   }
 
-  splitCell() {
-    this.context.store.dispatch(splitCell(this.props.id, 0));
-  }
-
   changeOutputVisibility() {
     this.context.store.dispatch(changeOutputVisibility(this.props.id));
   }
@@ -111,9 +105,6 @@ export class Toolbar extends React.Component {
             </span>}
           <button onClick={this.removeCell}>
             <span className="octicon octicon-trashcan" />
-          </button>
-          <button onClick={this.splitCell}>
-            <span className="octicon octicon-unfold" />
           </button>
           <button onClick={this.toggleStickyCell}>
             <span className="octicon octicon-pin" />
