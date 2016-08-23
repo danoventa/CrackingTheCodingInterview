@@ -27,7 +27,7 @@ cache:
     - zeromq-$ZMQ
 
 before_install:
-  - source travis_before_install
+  - source scripts/travis_before_install
   - pip install jupyter_console --user
   - pip install ipywidgets --user
   - jupyter kernelspec install-self --user
