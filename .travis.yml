@@ -28,9 +28,6 @@ cache:
 
 before_install:
   - source scripts/travis_before_install
-  - pip install jupyter_console --user
-  - pip install ipywidgets --user
-  - jupyter kernelspec install-self --user
 
 install: env LD_LIBRARY_PATH=$LDHACK/lib LD_RUN_PATH=$LDHACK/lib PKG_CONFIG_PATH=$LDHACK/lib/pkgconfig LDFLAGS=-L$LDHACK/lib CFLAGS=-I$LDHACK/lib/include npm install
 
