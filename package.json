@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "codemirror": "^5.18.2",
-    "commonmark": "^0.24.0",
+    "commonmark": "^0.26.0",
     "commonmark-react-renderer": "^4.2.4",
     "commutable": "^1.2.0",
     "electron-json-storage": "^2.0.0",
@@ -86,7 +86,7 @@
     "rxjs": "^5.0.0-beta.6",
     "spawnteract": "^2.1.0",
     "tmp": "0.0.28",
-    "transformime-react": "^1.0.0",
+    "transformime-react": "^1.0.2",
     "uuid": "^2.0.2",
     "yargs": "^5.0.0"
   },
