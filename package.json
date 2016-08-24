@@ -57,7 +57,7 @@
   "dependencies": {
     "codemirror": "^5.18.2",
     "commonmark": "^0.26.0",
-    "commonmark-react-renderer": "^4.2.4",
+    "commonmark-react-renderer": "^4.3.1",
     "commutable": "^1.2.0",
     "electron-json-storage": "^2.0.0",
     "enchannel": "^1.1.3",
