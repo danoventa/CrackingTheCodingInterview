@@ -47,7 +47,7 @@ export function triggerSaveAs(store, dispatch) {
         return;
       }
       const state = store.getState();
-      const { executionState } = state.app;
+      const executionState = state.app.get('executionState');
       const notebook = state.document.present.get('notebook');
       dispatch(saveAs(filename, notebook));
       BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
@@ -93,7 +93,8 @@ export function dispatchPublishGist(store, dispatch) {
   const state = store.getState();
   const filename = state.metadata.get('filename');
   const notebook = state.document.present.get('notebook');
-  const { notificationSystem, github } = state.app;
+  const notificationSystem = state.app.get('notificationSystem');
+  const github = state.app.get('github');
 
   const agenda = publish(github, notebook, filename, notificationSystem);
 
@@ -152,7 +153,7 @@ export function dispatchKillKernel(store, dispatch) {
 
 export function dispatchInterruptKernel(store, dispatch) {
   const state = store.getState();
-  const { notificationSystem } = state.app;
+  const notificationSystem = state.app.get('notificationSystem');
   if (process.platform === 'win32') {
     notificationSystem.addNotification({
       title: 'Not supported in Windows',
@@ -166,7 +167,7 @@ export function dispatchInterruptKernel(store, dispatch) {
 
 export function dispatchRestartKernel(store, dispatch) {
   const state = store.getState();
-  const { notificationSystem } = state.app;
+  const notificationSystem = state.app.get('notificationSystem');
   const spawnOptions = {};
   if (state && state.document.present && state.metadata.get('filename')) {
     spawnOptions.cwd = path.dirname(path.resolve(state.filename));
@@ -207,7 +208,7 @@ export function dispatchZoomOut() {
 
 export function dispatchDuplicate(store) {
   const state = store.getState();
-  const { notificationSystem } = state.app;
+  const notificationSystem = state.app.get('notificationSystem');
   const filename = state.metadata.get('filename');
   if (filename) {
     copyNotebook(filename).then((value) => {
