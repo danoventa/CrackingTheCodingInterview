@@ -84,8 +84,8 @@ function validateKernel(store) {
 function relaunchKernel(store) {
   const state = store.getState();
   const spawnOptions = {};
-  if (state && state.document && state.document.get('filename')) {
-    spawnOptions.cwd = path.dirname(path.resolve(state.filename));
+  if (state && state.document && state.metadata.get('filename')) {
+    spawnOptions.cwd = path.dirname(path.resolve(state.metadata.filename));
   }
 
   store.dispatch(actions.killKernel);

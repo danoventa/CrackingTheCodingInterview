@@ -169,7 +169,7 @@ export function dispatchRestartKernel(store, dispatch) {
   const { notificationSystem } = state.app;
   const spawnOptions = {};
   if (state && state.document.present && state.metadata.get('filename')) {
-    spawnOptions.cwd = path.dirname(path.resolve(state.filename));
+    spawnOptions.cwd = path.dirname(path.resolve(state.metadata.filename));
   }
 
   dispatch(killKernel);
