@@ -80,11 +80,11 @@ export function dispatchSave(store, dispatch) {
   }
 }
 
-export function dispatchNewkernel(store, dispatch, evt, name) {
+export function dispatchNewKernel(store, dispatch, evt, name) {
   const state = store.getState();
   const spawnOptions = {};
   if (state && state.document.present && state.metadata.get('filename')) {
-    spawnOptions.cwd = path.dirname(path.resolve(state.filename));
+    spawnOptions.cwd = path.dirname(path.resolve(state.metadata.get('filename')));
   }
   dispatch(newKernel(name, spawnOptions));
 }
@@ -227,7 +227,7 @@ export function dispatchDuplicate(store) {
 export function initMenuHandlers(store, dispatch) {
   ipc.on('menu:undo', dispatchUndo.bind(null, store, dispatch));
   ipc.on('menu:redo', dispatchRedo.bind(null, store, dispatch));
-  ipc.on('menu:new-kernel', dispatchNewkernel.bind(null, store, dispatch));
+  ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store, dispatch));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store, dispatch));
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store, dispatch));
   ipc.on('menu:save', dispatchSave.bind(null, store, dispatch));
