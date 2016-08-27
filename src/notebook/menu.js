@@ -30,10 +30,10 @@ import publish from './publication/github';
 
 const BrowserWindow = remote.BrowserWindow;
 
-export function dispatchSaveAs(store, dispatch, evt, filename) {
+export function dispatchSaveAs(store, evt, filename) {
   const state = store.getState();
   const notebook = state.document.present.get('notebook');
-  dispatch(saveAs(filename, notebook));
+  store.dispatch(saveAs(filename, notebook));
 }
 
 const remoteElectron = remote.require('electron');
@@ -54,7 +54,7 @@ export function showSaveAsDialog(defaultPath) {
   });
 }
 
-export function triggerSaveAs(store, dispatch) {
+export function triggerSaveAs(store) {
   showSaveAsDialog()
     .then(filename => {
       if (!filename) {
@@ -63,22 +63,22 @@ export function triggerSaveAs(store, dispatch) {
       const state = store.getState();
       const executionState = state.app.get('executionState');
       const notebook = state.document.present.get('notebook');
-      dispatch(saveAs(filename, notebook));
+      store.dispatch(saveAs(filename, notebook));
       BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
     }
   );
 }
 
-export function dispatchSave(store, dispatch) {
+export function dispatchSave(store) {
   const state = store.getState();
   const notebook = state.document.present.get('notebook');
   const filename = state.metadata.get('filename');
   const notificationSystem = state.app.get('notificationSystem');
   try {
     if (!filename) {
-      triggerSaveAs(store, dispatch);
+      triggerSaveAs(store);
     } else {
-      dispatch(save(filename, notebook));
+      store.dispatch(save(filename, notebook));
     }
     notificationSystem.addNotification({
       title: 'Save successful!',
@@ -94,16 +94,16 @@ export function dispatchSave(store, dispatch) {
   }
 }
 
-export function dispatchNewKernel(store, dispatch, evt, name) {
+export function dispatchNewKernel(store, evt, name) {
   const state = store.getState();
   const spawnOptions = {};
   if (state && state.document.present && state.metadata.get('filename')) {
     spawnOptions.cwd = path.dirname(path.resolve(state.metadata.get('filename')));
   }
-  dispatch(newKernel(name, spawnOptions));
+  store.dispatch(newKernel(name, spawnOptions));
 }
 
-export function dispatchPublishGist(store, dispatch) {
+export function dispatchPublishGist(store) {
   const state = store.getState();
   const filename = state.metadata.get('filename');
   const notebook = state.document.present.get('notebook');
@@ -113,7 +113,7 @@ export function dispatchPublishGist(store, dispatch) {
   const agenda = publish(github, notebook, filename, notificationSystem);
 
   agenda.subscribe((action) => {
-    dispatch(action);
+    store.dispatch(action);
   }, (err) => {
     if (err.message) {
       const githubError = JSON.parse(err.message);
@@ -141,13 +141,13 @@ export function dispatchPublishGist(store, dispatch) {
   });
 }
 
-export function dispatchRunAll(store, dispatch) {
+export function dispatchRunAll(store) {
   const state = store.getState();
   const notebook = state.document.present.get('notebook');
   const cells = notebook.get('cellMap');
   notebook.get('cellOrder').filter((cellID) =>
     cells.getIn([cellID, 'cell_type']) === 'code')
-      .map((cellID) => dispatch(
+      .map((cellID) => store.dispatch(
         executeCell(
           cellID,
           cells.getIn([cellID, 'source'])
@@ -155,17 +155,17 @@ export function dispatchRunAll(store, dispatch) {
   ));
 }
 
-export function dispatchClearAll(store, dispatch) {
+export function dispatchClearAll(store) {
   const state = store.getState();
   const notebook = state.document.present.get('notebook');
-  notebook.get('cellOrder').map((value) => dispatch(clearCellOutput(value)));
+  notebook.get('cellOrder').map((value) => store.dispatch(clearCellOutput(value)));
 }
 
-export function dispatchKillKernel(store, dispatch) {
-  dispatch(killKernel);
+export function dispatchKillKernel(store) {
+  store.dispatch(killKernel);
 }
 
-export function dispatchInterruptKernel(store, dispatch) {
+export function dispatchInterruptKernel(store) {
   const state = store.getState();
   const notificationSystem = state.app.get('notificationSystem');
   if (process.platform === 'win32') {
@@ -175,11 +175,11 @@ export function dispatchInterruptKernel(store, dispatch) {
       level: 'error',
     });
   } else {
-    dispatch(interruptKernel);
+    store.dispatch(interruptKernel);
   }
 }
 
-export function dispatchRestartKernel(store, dispatch) {
+export function dispatchRestartKernel(store) {
   const state = store.getState();
   const notificationSystem = state.app.get('notificationSystem');
   const spawnOptions = {};
@@ -187,8 +187,8 @@ export function dispatchRestartKernel(store, dispatch) {
     spawnOptions.cwd = path.dirname(path.resolve(state.metadata.filename));
   }
 
-  dispatch(killKernel);
-  dispatch(newKernel(state.app.kernelSpecName, spawnOptions));
+  store.dispatch(killKernel);
+  store.dispatch(newKernel(state.app.kernelSpecName, spawnOptions));
 
   notificationSystem.addNotification({
     title: 'Kernel Restarted',
@@ -199,17 +199,17 @@ export function dispatchRestartKernel(store, dispatch) {
   });
 }
 
-export function dispatchRestartClearAll(store, dispatch) {
-  dispatchRestartKernel(store, dispatch);
-  dispatchClearAll(store, dispatch);
+export function dispatchRestartClearAll(store) {
+  dispatchRestartKernel(store);
+  dispatchClearAll(store);
 }
 
-export function dispatchUndo(store, dispatch) {
-  dispatch(ActionCreators.undo());
+export function dispatchUndo(store) {
+  store.dispatch(ActionCreators.undo());
 }
 
-export function dispatchRedo(store, dispatch) {
-  dispatch(ActionCreators.redo());
+export function dispatchRedo(store) {
+  store.dispatch(ActionCreators.redo());
 }
 
 export function dispatchZoomIn() {
@@ -239,20 +239,20 @@ export function dispatchDuplicate(store) {
   }
 }
 
-export function initMenuHandlers(store, dispatch) {
-  ipc.on('menu:undo', dispatchUndo.bind(null, store, dispatch));
-  ipc.on('menu:redo', dispatchRedo.bind(null, store, dispatch));
-  ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store, dispatch));
-  ipc.on('menu:run-all', dispatchRunAll.bind(null, store, dispatch));
-  ipc.on('menu:clear-all', dispatchClearAll.bind(null, store, dispatch));
-  ipc.on('menu:save', dispatchSave.bind(null, store, dispatch));
-  ipc.on('menu:save-as', dispatchSaveAs.bind(null, store, dispatch));
+export function initMenuHandlers(store) {
+  ipc.on('menu:undo', dispatchUndo.bind(null, store));
+  ipc.on('menu:redo', dispatchRedo.bind(null, store));
+  ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
+  ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
+  ipc.on('menu:clear-all', dispatchClearAll.bind(null, store));
+  ipc.on('menu:save', dispatchSave.bind(null, store));
+  ipc.on('menu:save-as', dispatchSaveAs.bind(null, store));
   ipc.on('menu:duplicate-notebook', dispatchDuplicate.bind(null, store));
-  ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store, dispatch));
-  ipc.on('menu:interrupt-kernel', dispatchInterruptKernel.bind(null, store, dispatch));
-  ipc.on('menu:restart-kernel', dispatchRestartKernel.bind(null, store, dispatch));
-  ipc.on('menu:restart-and-clear-all', dispatchRestartClearAll.bind(null, store, dispatch));
-  ipc.on('menu:publish:gist', dispatchPublishGist.bind(null, store, dispatch));
-  ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store, dispatch));
-  ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store, dispatch));
+  ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store));
+  ipc.on('menu:interrupt-kernel', dispatchInterruptKernel.bind(null, store));
+  ipc.on('menu:restart-kernel', dispatchRestartKernel.bind(null, store));
+  ipc.on('menu:restart-and-clear-all', dispatchRestartClearAll.bind(null, store));
+  ipc.on('menu:publish:gist', dispatchPublishGist.bind(null, store));
+  ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store));
+  ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store));
 }

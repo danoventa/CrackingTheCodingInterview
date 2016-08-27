@@ -50,13 +50,12 @@ ipc.on('main:load', (e, launchData) => {
     },
   }, reducers);
 
-  const { dispatch } = store;
-
+  // Register for debugging
   window.store = store;
 
   initNativeHandlers(store);
-  initMenuHandlers(store, dispatch);
-  initGlobalHandlers(store, dispatch);
+  initMenuHandlers(store);
+  initGlobalHandlers(store);
 
   class App extends React.Component {
     constructor(props) {
@@ -78,10 +77,10 @@ ipc.on('main:load', (e, launchData) => {
       });
     }
     componentDidMount() {
-      dispatch(setNotificationSystem(this.refs.notificationSystem));
+      store.dispatch(setNotificationSystem(this.refs.notificationSystem));
       const state = store.getState();
       const filename = (state && state.metadata.filename) || launchData.filename;
-      dispatch(setNotebook(launchData.notebook, filename));
+      store.dispatch(setNotebook(launchData.notebook, filename));
     }
     render() {
       return (
