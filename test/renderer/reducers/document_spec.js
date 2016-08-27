@@ -41,6 +41,32 @@ describe('setNotebook', () => {
   });
 });
 
+describe('setLanguageInfo', () => {
+  it('adds the metadata fields for the kernelspec and kernel_info', () => {
+    const initialState = {
+      app: [],
+      document: {
+        past: [],
+        present: initialDocument,
+        future: [],
+      },
+    };
+    const kernelInfo = {
+      name: 'french',
+      spec: {
+        language: 'french',
+        display_name: 'français',
+      }
+    };
+    const state = reducers(initialState, { type: constants.SET_KERNEL_INFO, kernelInfo });
+    const metadata = state.document.present.getIn(['notebook', 'metadata']);
+    console.log(metadata);
+    expect(metadata.getIn(['kernel_info', 'name'])).to.equal('french');
+    expect(metadata.getIn(['kernelspec', 'name'])).to.equal('french');
+    expect(metadata.getIn(['kernelspec', 'display_name'])).to.equal('français');
+  });
+});
+
 describe('focusCell', () => {
   it('should set focusedCell to the appropriate cell ID', () => {
     const originalState = {
@@ -400,7 +426,7 @@ describe('splitCell', () => {
       id: id,
       position: 0,
     };
-    
+
     const state = reducers(originalState, action);
     expect(state.document.present.getIn(['notebook', 'cellOrder']).size).to.equal(4);
   });
