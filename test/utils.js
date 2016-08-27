@@ -18,7 +18,7 @@ import { AppRecord, DocumentRecord, MetadataRecord } from '../src/notebook/recor
 import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
-} from '../src/notebook/api/messaging';
+} from '../src/notebook/messaging';
 
 const sinon = require('sinon');
 

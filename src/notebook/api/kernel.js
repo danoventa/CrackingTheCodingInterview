@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 import { shutdownRequest } from 'enchannel';
-import { getUsername, session } from './messaging/index';
+import { getUsername, session } from '../messaging/index';
 
 export function cleanupKernel(kernel, closeChannels, _fs = fs) {
   if (kernel.channels && closeChannels) {

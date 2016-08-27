@@ -1,7 +1,7 @@
 import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
-} from '../api/messaging';
+} from '../messaging';
 
 import {
   createCellAfter,

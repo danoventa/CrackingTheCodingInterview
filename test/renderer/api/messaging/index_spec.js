@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { childOf } from '../../../../src/notebook/api/messaging';
+import { childOf } from '../../../../src/notebook/messaging';
 
 const Rx = require('rxjs/Rx');
 
