@@ -10,6 +10,13 @@ export function newKernel(kernelSpecName, cwd) {
   };
 }
 
+export function setNotebookKernelSpec(kernelSpec) {
+  return {
+    type: constants.SET_KERNEL_SPEC,
+    kernelSpec,
+  };
+}
+
 export function setExecutionState(executionState) {
   return {
     type: constants.SET_EXECUTION_STATE,

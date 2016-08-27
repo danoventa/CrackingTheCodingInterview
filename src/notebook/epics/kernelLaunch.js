@@ -15,7 +15,11 @@ import {
   createMessage,
 } from '../kernel/messaging';
 
-import { setExecutionState, newKernel } from '../actions';
+import {
+  setExecutionState,
+  newKernel,
+  setNotebookKernelSpec,
+} from '../actions';
 
 import {
   NEW_KERNEL,
@@ -55,8 +59,12 @@ export function newKernelObservable(kernelSpecName, cwd) {
   return Rx.Observable.create((observer) => {
     launch(kernelSpecName, { cwd })
       .then(c => {
-        const { config, spawn, connectionFile } = c;
+        const { config, spawn, connectionFile, kernelSpec } = c;
+
         const identity = uuid.v4();
+        // TODO: I'm realizing that we could trigger on when the underlying sockets
+        //       are ready with these subjects to let us know when the kernels
+        //       are *really* ready
         const channels = {
           shell: createShellSubject(identity, config),
           iopub: createIOPubSubject(identity, config),
@@ -64,12 +72,18 @@ export function newKernelObservable(kernelSpecName, cwd) {
           stdin: createStdinSubject(identity, config),
         };
 
+        observer.next(setNotebookKernelSpec({
+          name: kernelSpecName,
+          spec: kernelSpec,
+        }));
+
         observer.next({
           type: NEW_KERNEL,
           channels,
           connectionFile,
           spawn,
           kernelSpecName,
+          kernelSpec,
         });
       });
   });

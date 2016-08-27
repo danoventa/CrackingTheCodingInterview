@@ -188,6 +188,14 @@ export default handleActions({
     const langInfo = Immutable.fromJS(action.langInfo);
     return state.setIn(['notebook', 'metadata', 'language_info'], langInfo);
   },
+  [constants.SET_KERNEL_SPEC]: function setKernelSpec(state, action) {
+    const { kernelSpec } = action;
+    return state.setIn(['notebook', 'metadata', 'kernelspec'], Immutable.fromJS({
+      name: kernelSpec.name,
+      language: kernelSpec.spec.language,
+      display_name: kernelSpec.spec.display_name,
+    }));
+  },
   [constants.OVERWRITE_METADATA_FIELD]: function overwriteMetadata(state, action) {
     const { field, value } = action;
     return state.setIn(['notebook', 'metadata', field], Immutable.fromJS(value));
