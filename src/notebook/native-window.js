@@ -54,6 +54,8 @@ export function initNativeHandlers(store) {
 }
 
 function launch(notebook, filename) {
+  // TODO: This code is also done in main and we need to make sure it's consistent
+  //       Rely on sourcing from ../main/{something}
   let win = new BrowserWindow({
     width: 800,
     height: 1000,
