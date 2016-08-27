@@ -4,11 +4,9 @@ import {
   remote,
 } from 'electron';
 
-import { ActionCreators } from 'redux-undo';
+import * as path from 'path';
 
-import {
-  showSaveAsDialog,
-} from './api/save';
+import { ActionCreators } from 'redux-undo';
 
 import { tildify, launchFilename } from './native-window';
 
@@ -32,12 +30,28 @@ import publish from './publication/github';
 
 const BrowserWindow = remote.BrowserWindow;
 
-const path = require('path');
-
 export function dispatchSaveAs(store, dispatch, evt, filename) {
   const state = store.getState();
   const notebook = state.document.present.get('notebook');
   dispatch(saveAs(filename, notebook));
+}
+
+const remoteElectron = remote.require('electron');
+const dialog = remoteElectron.dialog;
+
+export function showSaveAsDialog(defaultPath) {
+  return new Promise((resolve) => {
+    const filename = dialog.showSaveDialog({
+      title: 'Save Notebook',
+      defaultPath,
+      filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
+    });
+
+    if (filename && path.extname(filename) === '') {
+      resolve(`${filename}.ipynb`);
+    }
+    resolve(filename);
+  });
 }
 
 export function triggerSaveAs(store, dispatch) {
