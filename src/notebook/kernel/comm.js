@@ -1,3 +1,7 @@
+/**
+ * Currently unused, leaving here for when the widgets are brought back in
+ */
+
 import * as uuid from 'uuid';
 import Rx from 'rxjs/Rx';
 import { createMessage } from './';

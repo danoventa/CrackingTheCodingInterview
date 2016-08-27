@@ -1,6 +1,6 @@
 import {
   forceShutdownKernel,
-} from './api/kernel';
+} from './kernel/shutdown';
 
 /**
 export function beforeUnload(store, dispatch, e) {

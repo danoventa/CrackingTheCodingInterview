@@ -1,6 +1,8 @@
 import {
   createMessage,
-} from './index';
+} from './messaging';
+
+// TODO: Turn this into an Observable to use with an epic
 
 /**
  * Request completion hints from the kernel

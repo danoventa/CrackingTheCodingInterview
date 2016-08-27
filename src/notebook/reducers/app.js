@@ -4,7 +4,7 @@ import * as constants from '../constants';
 
 import {
   shutdownKernel,
-} from '../api/kernel';
+} from '../kernel/shutdown';
 
 function cleanupKernel(state) {
   const kernel = {
