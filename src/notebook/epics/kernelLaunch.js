@@ -13,7 +13,7 @@ import {
 
 import {
   createMessage,
-} from '../messaging';
+} from '../kernel/messaging';
 
 import { setExecutionState, newKernel } from '../actions';
 

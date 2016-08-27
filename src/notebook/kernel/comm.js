@@ -1,6 +1,10 @@
+/**
+ * Currently unused, leaving here for when the widgets are brought back in
+ */
+
 import * as uuid from 'uuid';
 import Rx from 'rxjs/Rx';
-import { createMessage } from './';
+import { createMessage } from './messaging';
 
 /** TODO: Move to more generic location
  * Get an Observable for kernel channels.

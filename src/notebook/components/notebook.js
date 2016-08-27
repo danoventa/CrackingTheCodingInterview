@@ -20,7 +20,7 @@ import {
 } from '../actions';
 import { executeCell } from '../epics/execute';
 
-import complete from '../messaging/completion';
+import complete from '../kernel/completion';
 
 // Always set up the markdown mode
 require('codemirror/mode/markdown/markdown');

@@ -11,7 +11,7 @@ import {
   shutdownKernel,
   forceShutdownKernel,
   cleanupKernel,
-} from '../../../src/notebook/api/kernel';
+} from '../../../src/notebook/kernel/shutdown';
 
 import reducers from '../../../src/notebook/reducers';
 import * as constants from '../../../src/notebook/constants';

@@ -16,7 +16,7 @@ import {
 
 import {
   createMessage,
-} from '../../../src/notebook/messaging';
+} from '../../../src/notebook/kernel/messaging';
 
 describe('setLanguageInfo', () => {
   it('creates a SET_LANGUAGE_INFO action', () => {

@@ -7,7 +7,7 @@ import {
   appendCell,
 } from 'commutable';
 
-import { shutdownKernel } from '../src/notebook/api/kernel';
+import { shutdownKernel } from '../src/notebook/kernel/shutdown';
 import * as actions from '../src/notebook/actions';
 import createStore from '../src/notebook/store';
 import { reducers } from '../src/notebook/reducers';
@@ -18,7 +18,7 @@ import { AppRecord, DocumentRecord, MetadataRecord } from '../src/notebook/recor
 import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
-} from '../src/notebook/messaging';
+} from '../src/notebook/kernel/messaging';
 
 const sinon = require('sinon');
 
