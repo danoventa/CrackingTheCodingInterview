@@ -31,11 +31,12 @@ export function initNativeHandlers(store) {
     .map(state => {
       const modified = state.app.get('modified');
       const executionState = state.app.get('executionState');
-      const filename = state.metadata.get('filename');
-      const displayName = state.document.present.getIn(['notebook', 'metadata', 'kernelspec', 'display_name'], '...');
+      const filename = tildify(state.metadata.get('filename')) || 'Untitled';
+      const displayName = state.document.present
+        .getIn(['notebook', 'metadata', 'kernelspec', 'display_name'], '...');
 
       return {
-        title: `${tildify(filename) || 'Untitled'} - ${displayName} - ${executionState} ${modified ? '*' : ''}`,
+        title: `${filename} - ${displayName} - ${executionState} ${modified ? '*' : ''}`,
         path: filename,
       };
     })
