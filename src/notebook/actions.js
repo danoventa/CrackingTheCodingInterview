@@ -10,10 +10,10 @@ export function newKernel(kernelSpecName, cwd) {
   };
 }
 
-export function setNotebookKernelSpec(kernelSpec) {
+export function setNotebookKernelInfo(kernelInfo) {
   return {
-    type: constants.SET_KERNEL_SPEC,
-    kernelSpec,
+    type: constants.SET_KERNEL_INFO,
+    kernelInfo,
   };
 }
 

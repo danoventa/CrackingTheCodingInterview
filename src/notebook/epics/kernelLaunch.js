@@ -18,7 +18,7 @@ import {
 import {
   setExecutionState,
   newKernel,
-  setNotebookKernelSpec,
+  setNotebookKernelInfo,
 } from '../actions';
 
 import {
@@ -72,7 +72,7 @@ export function newKernelObservable(kernelSpecName, cwd) {
           stdin: createStdinSubject(identity, config),
         };
 
-        observer.next(setNotebookKernelSpec({
+        observer.next(setNotebookKernelInfo({
           name: kernelSpecName,
           spec: kernelSpec,
         }));
