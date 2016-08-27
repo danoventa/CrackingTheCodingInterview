@@ -22,6 +22,7 @@ import {
   LAUNCH_KERNEL,
   SET_LANGUAGE_INFO,
   SET_NOTEBOOK,
+  ERROR_KERNEL_LAUNCH_FAILED,
 } from '../constants';
 
 const path = require('path');
@@ -100,7 +101,12 @@ export const newKernelEpic = action$ =>
     })
     .mergeMap(action =>
       newKernelObservable(action.kernelSpecName, action.cwd)
-    );
+    )
+    .catch(error => Rx.Observable.of({
+      type: ERROR_KERNEL_LAUNCH_FAILED,
+      payload: error,
+      error: true,
+    }));
 
 export const newNotebookKernelEpic = action$ =>
   action$.ofType(SET_NOTEBOOK)
@@ -115,6 +121,6 @@ export const newNotebookKernelEpic = action$ =>
         'metadata', 'kernelspec', 'name',
       ], data.getIn([
         'metadata', 'language_info', 'name',
-      ], 'python3'));
+      ], 'python3')); // TODO: keep default kernel consistent
       return newKernel(kernelName, cwd);
     });
