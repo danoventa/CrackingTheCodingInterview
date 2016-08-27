@@ -47,6 +47,18 @@ describe('setNotebook', () => {
   });
 });
 
+describe('setNotebookKernelInfo', () => {
+  it('creates a SET_KERNEL_INFO action', () => {
+    const kernelInfo = {name: 'japanese'};
+    expect(actions.setNotebookKernelInfo(kernelInfo)).to.deep.equal({
+      type: constants.SET_KERNEL_INFO,
+      kernelInfo: {
+        name: 'japanese',
+      }
+    })
+  })
+})
+
 describe('updateCellSource', () => {
   it('creates a UPDATE_CELL_SOURCE action', () => {
     expect(actions.updateCellSource('1234', '# test')).to.deep.equal({
