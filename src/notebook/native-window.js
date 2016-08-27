@@ -32,9 +32,10 @@ export function initNativeHandlers(store) {
       const modified = state.app.get('modified');
       const executionState = state.app.get('executionState');
       const filename = state.metadata.get('filename');
+      const displayName = state.document.present.getIn(['notebook', 'metadata', 'kernelspec', 'display_name'], '...');
 
       return {
-        title: `${tildify(filename) || 'Untitled'} - ${executionState} ${modified ? '*' : ''}`,
+        title: `${tildify(filename) || 'Untitled'} - ${displayName} - ${executionState} ${modified ? '*' : ''}`,
         path: filename,
       };
     })
