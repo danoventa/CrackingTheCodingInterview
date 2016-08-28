@@ -143,9 +143,9 @@ class Notebook extends React.Component {
   keyDown(e) {
     if (e.keyCode !== 13) {
       const cmdOrCtrl = e.ctrlKey || e.metaKey;
-      if (cmdOrCtrl && e.keyCode === 67) {
+      if (cmdOrCtrl && e.shiftKey && e.keyCode === 67) {
         this.copyCell();
-      } else if (cmdOrCtrl && e.keyCode === 86) {
+      } else if (cmdOrCtrl && e.shiftKey && e.keyCode === 86) {
         this.pasteCell();
       }
       return;
