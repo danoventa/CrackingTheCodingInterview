@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
@@ -16,7 +15,7 @@ const mapStateToProps = (state) => ({
   channels: state.app.channels,
 });
 
-export class Toolbar extends React.Component {
+export class DumbToolbar extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     channels: React.PropTypes.object,
@@ -87,4 +86,4 @@ export class Toolbar extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Toolbar);
+export default connect(mapStateToProps)(DumbToolbar);
