@@ -115,22 +115,21 @@ td {
 .cell-toolbar-mask
 {
     position: absolute;
-    top: -37px;
-    right: -5px;
+    top: 0px;
+    right: 0px;
     z-index: 99;
     height: 34px;
-
+    opacity: .5;
     /* Set the left padding to 50px to give users extra room to move their
     mouse to the toolbar without causing the cell to go out of focus and thus
     hide the toolbar before they get there. */
-    padding: 5px 5px 0px 50px;
+    padding: 0px 0px 0px 50px;
 }
 
 .cell-toolbar
 {
     display: inline-box;
     background: var(--toolbar-bg);
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,.50);
 }
 
 .cell-toolbar button
