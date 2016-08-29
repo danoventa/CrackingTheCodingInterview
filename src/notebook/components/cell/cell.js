@@ -98,7 +98,7 @@ export class Cell extends React.Component {
         onContextMenu={this.contextMenu}
       >
         {
-          this.state.hoverCell ? <Toolbar
+          this.state.hoverCell || focused ? <Toolbar
             type={type}
             cell={cell}
             id={this.props.id}
