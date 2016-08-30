@@ -16,6 +16,7 @@ import {
 import {
   REMOVE_CELL,
   ABORT_EXECUTION,
+  ERROR_EXECUTING,
 } from '../constants';
 
 const Rx = require('rxjs/Rx');
@@ -205,5 +206,10 @@ export function executeCellEpic(action$, store) {
         })
     )
     // Bring back all the inner Observables into one stream
-    .mergeAll();
+    .mergeAll()
+    .catch(error => Rx.Observable.of({
+      type: ERROR_EXECUTING,
+      payload: error,
+      error: true,
+    }));
 }
