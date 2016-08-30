@@ -42,12 +42,10 @@ export class Cell extends React.Component {
     this.focusAboveCell = this.focusAboveCell.bind(this);
     this.focusBelowCell = this.focusBelowCell.bind(this);
     this.setCellHoverState = this.setCellHoverState.bind(this);
-    this.setToolbarHoverState = this.setToolbarHoverState.bind(this);
   }
 
   state = {
     hoverCell: false,
-    hoverToolbar: false,
   };
 
   componentWillMount() {
@@ -76,10 +74,6 @@ export class Cell extends React.Component {
     }
   }
 
-  setToolbarHoverState(hoverToolbar) {
-    this.setState({ hoverToolbar });
-  }
-
   selectCell() {
     this.context.store.dispatch(focusCell(this.props.id));
   }
@@ -104,10 +98,9 @@ export class Cell extends React.Component {
         onContextMenu={this.contextMenu}
       >
         {
-          this.state.hoverCell || this.state.hoverToolbar ? <Toolbar
+          this.state.hoverCell || focused ? <Toolbar
             type={type}
-            setHoverState={this.setToolbarHoverState}
-            cell={this.props.cell}
+            cell={cell}
             id={this.props.id}
           /> : null
         }
@@ -116,16 +109,16 @@ export class Cell extends React.Component {
           <MarkdownCell
             focusAbove={this.focusAboveCell}
             focusBelow={this.focusBelowCell}
-            focused={this.props.id === this.props.focusedCell}
-            cell={this.props.cell}
+            focused={focused}
+            cell={cell}
             id={this.props.id}
             theme={this.props.theme}
           /> :
           <CodeCell
             focusAbove={this.focusAboveCell}
             focusBelow={this.focusBelowCell}
-            focused={this.props.id === this.props.focusedCell}
-            cell={this.props.cell}
+            focused={focused}
+            cell={cell}
             id={this.props.id}
             theme={this.props.theme}
             language={this.props.language}
