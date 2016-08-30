@@ -6,8 +6,6 @@ import {
 
 import * as path from 'path';
 
-import { ActionCreators } from 'redux-undo';
-
 import { tildify, launchFilename } from './native-window';
 
 import { executeCell } from './epics/execute';
