@@ -26,13 +26,13 @@ import complete from '../kernel/completion';
 require('codemirror/mode/markdown/markdown');
 
 const mapStateToProps = (state) => ({
-  theme: state.document.present.theme,
-  notebook: state.document.present.get('notebook'),
+  theme: state.document.theme,
+  notebook: state.document.get('notebook'),
   channels: state.app.channels,
-  cellPagers: state.document.present.get('cellPagers'),
-  focusedCell: state.document.present.get('focusedCell'),
-  cellStatuses: state.document.present.get('cellStatuses'),
-  stickyCells: state.document.present.get('stickyCells'),
+  cellPagers: state.document.get('cellPagers'),
+  focusedCell: state.document.get('focusedCell'),
+  cellStatuses: state.document.get('cellStatuses'),
+  stickyCells: state.document.get('stickyCells'),
   notificationSystem: state.app.notificationSystem,
 });
 

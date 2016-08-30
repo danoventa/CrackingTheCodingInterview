@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { ContextMenuLayer as contextMenuLayer } from 'react-contextmenu';
 
 import Immutable from 'immutable';
 
@@ -95,7 +94,6 @@ export class Cell extends React.Component {
         className={`cell ${type === 'markdown' ? 'text' : 'code'} ${focused ? 'focused' : ''}`}
         onClick={this.selectCell}
         ref="cell"
-        onContextMenu={this.contextMenu}
       >
         {
           this.state.hoverCell || focused ? <Toolbar
@@ -135,7 +133,4 @@ export class Cell extends React.Component {
   }
 }
 
-export default contextMenuLayer('cell-context-menu', (props) => ({
-  id: props.id,
-  type: props.cell.get('cell_type'),
-}))(Cell);
+export default Cell;

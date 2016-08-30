@@ -6,7 +6,6 @@ import { findDOMNode } from 'react-dom';
 import Immutable from 'immutable';
 
 import Cell from './cell';
-import CellContextMenu from './cell-context-menu';
 import { focusCell } from '../../actions';
 
 const cellSource = {
@@ -136,7 +135,6 @@ class DraggableCell extends React.Component {
         }
         <div>
           <Cell {...this.props} />
-          <CellContextMenu id={this.props.id} type={this.props.cell.get('cell_type')} />
         </div>
       </div>
     );

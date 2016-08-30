@@ -100,19 +100,6 @@ export const edit = {
   label: 'Edit',
   submenu: [
     {
-      label: 'Undo',
-      accelerator: 'CmdOrCtrl+Z',
-      click: createSender('menu:undo'),
-    },
-    {
-      label: 'Redo',
-      accelerator: 'Shift+CmdOrCtrl+Z',
-      click: createSender('menu:redo'),
-    },
-    {
-      type: 'separator',
-    },
-    {
       label: 'Cut',
       accelerator: 'CmdOrCtrl+X',
       role: 'cut',
