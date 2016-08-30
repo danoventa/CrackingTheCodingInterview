@@ -8,12 +8,13 @@ import {
 
 import { defaultMenu, loadFullMenu } from './menu';
 
-const version = require('../../package.json').version;
+const log = require('electron-log');
 
+const version = require('../../package.json').version;
 
 const argv = require('yargs')
   .version(version)
-  .parse(process.argv.slice(1));
+  .parse(process.argv.slice(2));
 
 const notebooks = argv._;
 
@@ -29,14 +30,22 @@ app.on('open-file', (event, path) => {
   launchFilename(resolve(path));
 });
 
+
 app.on('ready', () => {
+  log.info('app in ready state');
+
   // Get the default menu first
   Menu.setApplicationMenu(defaultMenu);
   // Let the kernels/languages come in after
   loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
   if (notebooks.length <= 0) {
+    log.info('launching an empty notebook by default');
     launchNewNotebook('python3');
   } else {
-    notebooks.filter(Boolean).forEach(f => launchFilename(resolve(f)));
+    notebooks
+      .filter(Boolean)
+      .filter(x => x !== '.') // Ignore the `electron .`
+      // TODO: Consider opening something for directories
+      .forEach(f => launchFilename(resolve(f)));
   }
 });

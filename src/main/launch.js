@@ -6,11 +6,12 @@ import { emptyNotebook, emptyCodeCell, appendCell, fromJS } from 'commutable';
 import * as immutable from 'immutable';
 import fs from 'fs';
 
+const log = require('electron-log');
+
 export function deferURL(event, url) {
   event.preventDefault();
   shell.openExternal(url);
 }
-
 
 export function launch(notebook, filename) {
   let iconPath = '';
@@ -63,7 +64,9 @@ export function launchNewNotebook(kernelspec) {
 
 export function launchFilename(filename) {
   if (!filename) {
-    console.warn('WARNING: launching a notebook with no filename and no kernelspec');
+    const warning = 'WARNING: launching a notebook with no filename and no kernelspec';
+    log.info(warning); // Since it's not really a warning, this is our default case
+    console.warn(warning);
     return Promise.resolve(launchNewNotebook());
   }
 
@@ -71,7 +74,10 @@ export function launchFilename(filename) {
     fs.readFile(filename, {}, (err, data) => {
       if (err) {
         reject(err);
-        console.warn('Filename not resolved, launching an empty Notebook.');
+        const warning = 'Filename not resolved, launching an empty Notebook.';
+        // TODO: This should open a new notebook with the given filename
+        log.warn(warning);
+        console.warn(warning);
         launchNewNotebook('python3');
       } else {
         resolve(launch(fromJS(JSON.parse(data)), filename));
