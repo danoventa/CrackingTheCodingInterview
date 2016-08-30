@@ -197,7 +197,7 @@ export function executeCellEpic(action$, store) {
             return Rx.Observable.of(updateCellExecutionCount(id, undefined));
           }
 
-          const cellMessageAssociation = state.document.present.getIn(['cellMsgAssociations', id]);
+          const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
 
           return executeCellObservable(channels, id, source, cellMessageAssociation)
             .takeUntil(action$.filter(laterAction => laterAction.id === id)

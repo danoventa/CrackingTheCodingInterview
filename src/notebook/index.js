@@ -43,11 +43,7 @@ ipc.on('main:load', (e, launchData) => {
     metadata: new MetadataRecord({
       filename: launchData.filename,
     }),
-    document: {
-      past: [],
-      present: new DocumentRecord(),
-      future: [],
-    },
+    document: new DocumentRecord(),
   }, reducers);
 
   // Register for debugging

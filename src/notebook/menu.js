@@ -32,7 +32,7 @@ const BrowserWindow = remote.BrowserWindow;
 
 export function dispatchSaveAs(store, evt, filename) {
   const state = store.getState();
-  const notebook = state.document.present.get('notebook');
+  const notebook = state.document.get('notebook');
   store.dispatch(saveAs(filename, notebook));
 }
 
@@ -62,7 +62,7 @@ export function triggerSaveAs(store) {
       }
       const state = store.getState();
       const executionState = state.app.get('executionState');
-      const notebook = state.document.present.get('notebook');
+      const notebook = state.document.get('notebook');
       store.dispatch(saveAs(filename, notebook));
       BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
     }
@@ -71,7 +71,7 @@ export function triggerSaveAs(store) {
 
 export function dispatchSave(store) {
   const state = store.getState();
-  const notebook = state.document.present.get('notebook');
+  const notebook = state.document.get('notebook');
   const filename = state.metadata.get('filename');
   const notificationSystem = state.app.get('notificationSystem');
   try {
@@ -97,7 +97,7 @@ export function dispatchSave(store) {
 export function dispatchNewKernel(store, evt, name) {
   const state = store.getState();
   const spawnOptions = {};
-  if (state && state.document.present && state.metadata.get('filename')) {
+  if (state && state.document && state.metadata.get('filename')) {
     spawnOptions.cwd = path.dirname(path.resolve(state.metadata.get('filename')));
   }
   store.dispatch(newKernel(name, spawnOptions));
@@ -106,7 +106,7 @@ export function dispatchNewKernel(store, evt, name) {
 export function dispatchPublishGist(store) {
   const state = store.getState();
   const filename = state.metadata.get('filename');
-  const notebook = state.document.present.get('notebook');
+  const notebook = state.document.get('notebook');
   const notificationSystem = state.app.get('notificationSystem');
   const github = state.app.get('github');
 
@@ -143,7 +143,7 @@ export function dispatchPublishGist(store) {
 
 export function dispatchRunAll(store) {
   const state = store.getState();
-  const notebook = state.document.present.get('notebook');
+  const notebook = state.document.get('notebook');
   const cells = notebook.get('cellMap');
   notebook.get('cellOrder').filter((cellID) =>
     cells.getIn([cellID, 'cell_type']) === 'code')
@@ -157,7 +157,7 @@ export function dispatchRunAll(store) {
 
 export function dispatchClearAll(store) {
   const state = store.getState();
-  const notebook = state.document.present.get('notebook');
+  const notebook = state.document.get('notebook');
   notebook.get('cellOrder').map((value) => store.dispatch(clearCellOutput(value)));
 }
 
@@ -183,7 +183,7 @@ export function dispatchRestartKernel(store) {
   const state = store.getState();
   const notificationSystem = state.app.get('notificationSystem');
   const spawnOptions = {};
-  if (state && state.document.present && state.metadata.get('filename')) {
+  if (state && state.document && state.metadata.get('filename')) {
     spawnOptions.cwd = path.dirname(path.resolve(state.metadata.filename));
   }
 
