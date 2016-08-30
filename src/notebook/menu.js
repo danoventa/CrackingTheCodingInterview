@@ -204,14 +204,6 @@ export function dispatchRestartClearAll(store) {
   dispatchClearAll(store);
 }
 
-export function dispatchUndo(store) {
-  store.dispatch(ActionCreators.undo());
-}
-
-export function dispatchRedo(store) {
-  store.dispatch(ActionCreators.redo());
-}
-
 export function dispatchZoomIn() {
   webFrame.setZoomLevel(webFrame.getZoomLevel() + 1);
 }
@@ -240,8 +232,6 @@ export function dispatchDuplicate(store) {
 }
 
 export function initMenuHandlers(store) {
-  ipc.on('menu:undo', dispatchUndo.bind(null, store));
-  ipc.on('menu:redo', dispatchRedo.bind(null, store));
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store));
