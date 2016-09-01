@@ -15,8 +15,13 @@ export class PlotlyTransform extends React.Component {
   }
 
   render() {
+    const { layout } = this.props.data.toJS();
+    const style = {};
+    if (layout.height && !layout.autosize) {
+      style.height = layout.height;
+    }
     return (
-      <div ref={(el) => this.el = el} /> // eslint-disable-line
+      <div style={style} ref={(el) => this.el = el} /> // eslint-disable-line
     );
   }
 }
