@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Plotly = require('plotly.js');
+const Plotly = require('plotly.js/dist/plotly');
 
 const MIMETYPE = 'application/json+plotly.v1';
 
