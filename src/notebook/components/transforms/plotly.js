@@ -17,7 +17,7 @@ export class PlotlyTransform extends React.Component {
   render() {
     const { layout } = this.props.data.toJS();
     const style = {};
-    if (layout.height && !layout.autosize) {
+    if (layout && layout.height && !layout.autosize) {
       style.height = layout.height;
     }
     return (
