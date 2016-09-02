@@ -96,7 +96,7 @@ export class Cell extends React.Component {
         ref="cell"
       >
         {
-          this.state.hoverCell || focused ? <Toolbar
+          focused ? <Toolbar
             type={type}
             cell={cell}
             id={this.props.id}

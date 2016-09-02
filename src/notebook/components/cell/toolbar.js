@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 
 import { executeCell } from '../../epics/execute';
 
@@ -9,6 +10,8 @@ import {
   toggleStickyCell,
   clearCellOutput,
   changeOutputVisibility,
+  changeInputVisibility,
+  changeCellType,
 } from '../../actions';
 
 const mapStateToProps = (state) => ({
@@ -34,7 +37,9 @@ export class DumbToolbar extends React.Component {
     this.executeCell = this.executeCell.bind(this);
     this.clearCellOutput = this.clearCellOutput.bind(this);
     this.toggleStickyCell = this.toggleStickyCell.bind(this);
+    this.changeInputVisibility = this.changeInputVisibility.bind(this);
     this.changeOutputVisibility = this.changeOutputVisibility.bind(this);
+    this.changeCellType = this.changeCellType.bind(this);
   }
 
   shouldComponentUpdate() {
@@ -56,11 +61,24 @@ export class DumbToolbar extends React.Component {
   }
 
   clearCellOutput() {
+    this.refs.dropdown.hide();
     this.context.store.dispatch(clearCellOutput(this.props.id));
   }
 
+  changeInputVisibility() {
+    this.refs.dropdown.hide();
+    this.context.store.dispatch(changeInputVisibility(this.props.id));
+  }
+
   changeOutputVisibility() {
+    this.refs.dropdown.hide();
     this.context.store.dispatch(changeOutputVisibility(this.props.id));
+  }
+
+  changeCellType() {
+    this.refs.dropdown.hide();
+    const to = this.props.type === 'markdown' ? 'code' : 'markdown';
+    this.context.store.dispatch(changeCellType(this.props.id, to));
   }
 
   render() {
@@ -80,6 +98,31 @@ export class DumbToolbar extends React.Component {
           <button onClick={this.toggleStickyCell}>
             <span className="octicon octicon-pin" />
           </button>
+          <Dropdown ref="dropdown">
+            <DropdownTrigger>
+              <button>
+                <span className="octicon octicon-chevron-down" />
+              </button>
+            </DropdownTrigger>
+            <DropdownContent ref="DropdownContent">
+              <ul>
+                <li onClick={this.clearCellOutput}>
+                  <a>Clear Cell Output</a>
+                </li>
+                <li onClick={this.changeInputVisibility}>
+                  <a>Toggle Input Visibility</a>
+                </li>
+                <li onClick={this.changeOutputVisibility}>
+                  <a>Toggle Output Visibility</a>
+                </li>
+                <li onClick={this.changeCellType}>
+                  <a>
+                  Convert to {this.props.type === 'markdown' ? 'Code' : 'Markdown'} Cell
+                  </a>
+                </li>
+              </ul>
+            </DropdownContent>
+          </Dropdown>
         </div>
       </div>
     );
