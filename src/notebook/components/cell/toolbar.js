@@ -66,14 +66,17 @@ export class DumbToolbar extends React.Component {
   }
 
   changeInputVisibility() {
+    this.refs.dropdown.hide();
     this.context.store.dispatch(changeInputVisibility(this.props.id));
   }
 
   changeOutputVisibility() {
+    this.refs.dropdown.hide();
     this.context.store.dispatch(changeOutputVisibility(this.props.id));
   }
 
   changeCellType() {
+    this.refs.dropdown.hide();
     const to = this.props.type === 'markdown' ? 'code' : 'markdown';
     this.context.store.dispatch(changeCellType(this.props.id, to));
   }
