@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 
 import { executeCell } from '../../epics/execute';
 
@@ -50,6 +51,8 @@ export class DumbToolbar extends React.Component {
   }
 
   executeCell() {
+    console.log('EXECUTE!');
+    this.refs.dropdown.hide();
     this.context.store.dispatch(executeCell(
                                       this.props.id,
                                       this.props.cell.get('source')));
@@ -65,6 +68,7 @@ export class DumbToolbar extends React.Component {
 
   render() {
     const showPlay = this.props.type !== 'markdown';
+    const markDown = `change cell type to ${showPlay ? 'Markdown' : 'Code'}`;
     return (
       <div className="cell-toolbar-mask" ref="mask">
         <div className="cell-toolbar">
@@ -80,6 +84,29 @@ export class DumbToolbar extends React.Component {
           <button onClick={this.toggleStickyCell}>
             <span className="octicon octicon-pin" />
           </button>
+          <Dropdown ref="dropdown">
+            <DropdownTrigger>
+              <button onClick={console.log('click')}>
+                <span className="octicon octicon-chevron-down" />
+              </button>
+            </DropdownTrigger>
+            <DropdownContent>
+              <ul>
+                <li onClick={this.executeCell}>
+                  <a>Toggle Output Visibility</a>
+                </li>
+                <li onClick={this.executeCell}>
+                  <a>Toggle Input Visibility</a>
+                </li>
+                <li onClick={this.executeCell}>
+                  <a>Change Cell Type to  `showPlay ? 'Markdown : 'Code'` </a>
+                </li>
+                <li onClick={this.executeCell}>
+                  <a>Clear Cell Output</a>
+                </li>
+              </ul>
+            </DropdownContent>
+          </Dropdown>
         </div>
       </div>
     );
