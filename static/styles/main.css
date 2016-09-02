@@ -418,9 +418,11 @@ li.CodeMirror-hint-active {
 .dropdown {
     opacity: 1.0;
     display: inline-block;
+
 }
 
 .dropdown__content {
+    display: none;
     opacity:  1.0;
     position: absolute;
     left: 8px;
@@ -432,6 +434,7 @@ li.CodeMirror-hint-active {
     padding-top: 0px;
     padding-right: 0px;
     font-size: 11px;
+    margin: 20px 0;
 }
 
 .dropdown__content ul {
@@ -445,8 +448,6 @@ li.CodeMirror-hint-active {
     cursor: pointer;
 }
 
-
-
 .dropdown--active .dropdown__content {
-    display: block;
+    display: inline-block;
 }
