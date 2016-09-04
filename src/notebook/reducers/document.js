@@ -229,7 +229,7 @@ export default handleActions({
     const cell = cellMap.get(id);
     return state
       .set('copied', new Immutable.Map({ id, cell }))
-      .update('notebook',(notebook) => commutable.removeCell(notebook, id));
+      .update('notebook', (notebook) => commutable.removeCell(notebook, id));
   },
   [constants.PASTE_CELL]: function pasteCell(state) {
     const copiedCell = state.getIn(['copied', 'cell']);
