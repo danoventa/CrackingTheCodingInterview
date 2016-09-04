@@ -37,7 +37,6 @@ const mapStateToProps = (state) => ({
   focusedCell: state.document.get('focusedCell'),
   cellStatuses: state.document.get('cellStatuses'),
   stickyCells: state.document.get('stickyCells'),
-  notificationSystem: state.app.notificationSystem,
 });
 
 class Notebook extends React.Component {
@@ -52,7 +51,6 @@ class Notebook extends React.Component {
     stickyCells: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
     theme: React.PropTypes.string,
-    notificationSystem: React.PropTypes.any,
   };
 
   static defaultProps = {
@@ -60,9 +58,8 @@ class Notebook extends React.Component {
     transforms,
   };
 
-  static propsTypes = {
-    dispatch: React.PropTypes.func,
-    notificationSystem: React.PropTypes.any,
+  static contextTypes = {
+    store: React.PropTypes.object,
   };
 
   constructor() {
@@ -133,19 +130,19 @@ class Notebook extends React.Component {
   }
 
   moveCell(sourceId, destinationId, above) {
-    this.props.dispatch(moveCell(sourceId, destinationId, above));
+    this.context.store.dispatch(moveCell(sourceId, destinationId, above));
   }
 
   copyCell() {
-    this.props.dispatch(copyCell(this.props.focusedCell));
+    this.context.store.dispatch(copyCell(this.props.focusedCell));
   }
 
   cutCell() {
-    this.props.dispatch(cutCell(this.props.focusedCell));
+    this.context.store.dispatch(cutCell(this.props.focusedCell));
   }
 
   pasteCell() {
-    this.props.dispatch(pasteCell());
+    this.context.store.dispatch(pasteCell());
   }
 
 
@@ -178,11 +175,11 @@ class Notebook extends React.Component {
     const cell = cellMap.get(id);
 
     if (e.shiftKey) {
-      this.props.dispatch(focusNextCell(this.props.focusedCell, true));
+      this.context.store.dispatch(focusNextCell(this.props.focusedCell, true));
     }
 
     if (cell.get('cell_type') === 'code') {
-      this.props.dispatch(
+      this.context.store.dispatch(
         executeCell(
           id,
           cell.get('source')
