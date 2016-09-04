@@ -64,6 +64,7 @@ export const UPDATE_CELL_STATUS = 'UPDATE_CELL_STATUS';
 export const ASSOCIATE_CELL_TO_MSG = 'ASSOCIATE_CELL_TO_MSG';
 
 export const COPY_CELL = 'COPY_CELL';
+export const CUT_CELL = 'CUT_CELL';
 export const PASTE_CELL = 'PASTE_CELL';
 
 export const CHANGE_CELL_TYPE = 'CHANGE_CELL_TYPE';

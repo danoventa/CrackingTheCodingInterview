@@ -223,6 +223,14 @@ export default handleActions({
     const cell = cellMap.get(id);
     return state.set('copied', new Immutable.Map({ id, cell }));
   },
+  [constants.CUT_CELL]: function cutCell(state, action) {
+    const { id } = action;
+    const cellMap = state.getIn(['notebook', 'cellMap']);
+    const cell = cellMap.get(id);
+    return state
+      .set('copied', new Immutable.Map({ id, cell }))
+      .update('notebook',(notebook) => commutable.removeCell(notebook, id));
+  },
   [constants.PASTE_CELL]: function pasteCell(state) {
     const copiedCell = state.getIn(['copied', 'cell']);
     const copiedId = state.getIn(['copied', 'id']);
