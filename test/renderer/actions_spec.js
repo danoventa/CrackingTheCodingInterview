@@ -269,6 +269,15 @@ describe('copyCell', () => {
   });
 });
 
+describe('cutCell', () => {
+  it('creates a CUT_CELL action', () => {
+    expect(actions.cutCell('235')).to.deep.equal({
+      type: constants.CUT_CELL,
+      id: '235',
+    });
+  });
+});
+
 describe('changeOutputVisibility', () => {
   it('creates a CHANGE_OUTPUT_VISIBILITY action', () => {
     expect(actions.changeOutputVisibility('235')).to.deep.equal({

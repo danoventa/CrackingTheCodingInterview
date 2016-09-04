@@ -19,6 +19,7 @@ import {
   focusNextCell,
   moveCell,
   copyCell,
+  cutCell,
   pasteCell,
 } from '../actions';
 import { executeCell } from '../epics/execute';
@@ -74,6 +75,7 @@ class Notebook extends React.Component {
     this.moveCell = this.moveCell.bind(this);
     this.getCompletions = this.getCompletions.bind(this);
     this.copyCell = this.copyCell.bind(this);
+    this.cutCell = this.cutCell.bind(this);
     this.pasteCell = this.pasteCell.bind(this);
   }
 
@@ -138,6 +140,10 @@ class Notebook extends React.Component {
     this.props.dispatch(copyCell(this.props.focusedCell));
   }
 
+  cutCell() {
+    this.props.dispatch(cutCell(this.props.focusedCell));
+  }
+
   pasteCell() {
     this.props.dispatch(pasteCell());
   }
@@ -148,6 +154,8 @@ class Notebook extends React.Component {
       const cmdOrCtrl = e.ctrlKey || e.metaKey;
       if (cmdOrCtrl && e.shiftKey && e.keyCode === 67) {
         this.copyCell();
+      } else if (cmdOrCtrl && e.shiftKey && e.keyCode === 88) {
+        this.cutCell();
       } else if (cmdOrCtrl && e.shiftKey && e.keyCode === 86) {
         this.pasteCell();
       }

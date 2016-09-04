@@ -231,6 +231,13 @@ export function copyCell(id) {
   };
 }
 
+export function cutCell(id) {
+  return {
+    type: constants.CUT_CELL,
+    id,
+  };
+}
+
 export function pasteCell() {
   return {
     type: constants.PASTE_CELL,

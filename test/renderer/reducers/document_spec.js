@@ -430,6 +430,27 @@ describe('copyCell', () => {
   });
 });
 
+describe('cutCell', () => {
+  it('cuts a cell', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+    const cell = originalState.document.getIn(['notebook', 'cellMap', id]);
+
+    const action = {
+      type: constants.CUT_CELL,
+      id: id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['copied', 'cell'])).to.equal(cell);
+    expect(state.document.getIn(['copied', 'id'])).to.equal(id);
+    expect(state.document.getIn(['notebook', 'cellMap', id])).to.be.undefined;
+  });
+});
+
 describe('pasteCell', () => {
   it('pastes a cell', () => {
     const id = monocellDocument.getIn(['notebook', 'cellOrder']).first();
