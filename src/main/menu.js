@@ -123,6 +123,11 @@ export const edit = {
       type: 'separator',
     },
     {
+      label: 'New Code Cell',
+      accelerator: 'CmdOrCtrl+Shift+N',
+      click: createSender('menu:new-code-cell'),
+    },
+    {
       label: 'Copy Cell',
       accelerator: 'CmdOrCtrl+Shift+C',
       click: createSender('menu:copy-cell'),
