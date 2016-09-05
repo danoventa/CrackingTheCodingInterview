@@ -424,10 +424,9 @@ li.CodeMirror-hint-active {
     opacity:  1.0;
     position: absolute;
     left: 8px;
-    border-color: gray;
+    border-color: rgba(122,122,122,0.3);
     border-width: 1px;
     border-style: solid;
-    background-color: #FFF;
     padding: 10px;
     padding-top: 0px;
     padding-right: 0px;

@@ -13,8 +13,8 @@
   --toolbar-button-hover: #555;
 
   --dropdown-content: white;
-  --dropdown-content-hover: grey;
-  
+  --dropdown-content-hover:  var(--toolbar-button-hover);
+
   --pager-bg: #fafafa;
   --input-color: #8c8a8e;
 
