@@ -64,15 +64,12 @@ ipc.on('main:load', (e, launchData) => {
       store.dispatch(setNotebook(launchData.notebook, filename));
     }
     render() {
-      const state = store.getState();
-      const theme = state.app.theme;
       return (
         <Provider store={store}>
           <div>
             <Notebook />
             <NotificationSystem ref="notificationSystem" />
             <link rel="stylesheet" href="../static/styles/main.css" />
-            <link rel="stylesheet" href={`../static/styles/theme-${theme}.css`} />
           </div>
         </Provider>
       );

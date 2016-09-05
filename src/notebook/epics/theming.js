@@ -14,7 +14,7 @@ export const getStoredThemeObservable = () =>
       } else if (Object.keys(data).length === 0) {
         observer.complete();
       } else {
-        observer.next({ theme: data.theme });
+        observer.next(data.theme);
       }
       observer.complete();
     });

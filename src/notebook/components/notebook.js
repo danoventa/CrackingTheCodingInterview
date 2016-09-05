@@ -30,7 +30,7 @@ import complete from '../kernel/completion';
 require('codemirror/mode/markdown/markdown');
 
 const mapStateToProps = (state) => ({
-  theme: state.document.theme,
+  theme: state.app.theme,
   notebook: state.document.get('notebook'),
   channels: state.app.channels,
   cellPagers: state.document.get('cellPagers'),
@@ -269,15 +269,18 @@ class Notebook extends React.Component {
     }
     const cellOrder = this.props.notebook.get('cellOrder');
     return (
-      <div className="notebook" ref="cells">
-        <div className="sticky-cells-placeholder" ref="sticky-cells-placeholder" />
-        <div className="sticky-cell-container" ref="sticky-cell-container">
-          {cellOrder
-            .filter(id => this.props.stickyCells.get(id))
-            .map(this.createStickyCellElement)}
+      <div>
+        <div className="notebook" ref="cells">
+          <div className="sticky-cells-placeholder" ref="sticky-cells-placeholder" />
+          <div className="sticky-cell-container" ref="sticky-cell-container">
+            {cellOrder
+              .filter(id => this.props.stickyCells.get(id))
+              .map(this.createStickyCellElement)}
+          </div>
+          <CellCreator id={cellOrder.get(0, null)} above />
+          {cellOrder.map(this.createCellElement)}
         </div>
-        <CellCreator id={cellOrder.get(0, null)} above />
-        {cellOrder.map(this.createCellElement)}
+        <link rel="stylesheet" href={`../static/styles/theme-${this.props.theme}.css`} />
       </div>
     );
   }
