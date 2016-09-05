@@ -118,6 +118,7 @@
     "mocha": "^3.0.2",
     "nyc": "^8.0.0",
     "react-addons-test-utils": "^15.3.1",
+    "react-dnd-test-backend": "^1.0.2",
     "rimraf": "^2.5.2",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",

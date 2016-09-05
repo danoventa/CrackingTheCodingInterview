@@ -3,7 +3,7 @@ import * as commutable from 'commutable';
 export const dummy = '{"cells":[{"cell_type":"markdown","metadata":{},\
 "source":["## The Notable Nteract Notebook\\n","\\n","**It\'s a notebook!**\\n"]},\
 {"cell_type":"code","execution_count":11,"metadata":{"collapsed":false},\
-"outputs":[{"data":{"text/html":["<h1>Multiple</h1>"],\
+"outputs":[{"data":{"text/plain":["<h1>Multiple</h1>"],\
 "text/plain":["<IPython.core.display.HTML object>"]},"metadata":{},"output_type":"display_data"}],\
 "source":["import IPython\\n","\\n","from IPython.display import HTML\\n",\
 "from IPython.display import Markdown\\n","from IPython.display import display\\n","\\n",\

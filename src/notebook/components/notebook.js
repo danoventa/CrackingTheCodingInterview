@@ -39,7 +39,7 @@ const mapStateToProps = (state) => ({
   stickyCells: state.document.get('stickyCells'),
 });
 
-class Notebook extends React.Component {
+export class Notebook extends React.Component {
   static propTypes = {
     channels: React.PropTypes.any,
     dispatch: React.PropTypes.func,
@@ -51,11 +51,13 @@ class Notebook extends React.Component {
     stickyCells: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
     theme: React.PropTypes.string,
+    CellComponent: React.PropTypes.any,
   };
 
   static defaultProps = {
     displayOrder,
     transforms,
+    CellComponent: DraggableCell,
   };
 
   static contextTypes = {
@@ -147,7 +149,11 @@ class Notebook extends React.Component {
 
 
   keyDown(e) {
+    // Global event registration for copy paste handling of cells
     if (e.keyCode !== 13) {
+      // Cut, Copy, Paste rely on (ctrl|cmd + shift + c/p/x) to not interfere with
+      // native copy of outputs or with CodeMirror
+      // TODO: Add cell CCP to the menu
       const cmdOrCtrl = e.ctrlKey || e.metaKey;
       if (cmdOrCtrl && e.shiftKey && e.keyCode === 67) {
         this.copyCell();
@@ -239,13 +245,16 @@ class Notebook extends React.Component {
     const cellMap = this.props.notebook.get('cellMap');
     const cell = cellMap.get(id);
     const isStickied = this.props.stickyCells.get(id);
+
+    const CellComponent = this.props.CellComponent;
+
     return (
       <div key={`cell-container-${id}`} ref="container">
         {isStickied ?
           <div className="cell-placeholder">
             <span className="octicon octicon-link-external" />
           </div> :
-          <DraggableCell {...this.createCellProps(id, cell)} />}
+          <CellComponent {...this.createCellProps(id, cell)} />}
         <CellCreator key={`creator-${id}`} id={id} above={false} />
       </div>);
   }
