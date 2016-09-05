@@ -23,6 +23,7 @@ import {
   copyCell,
   cutCell,
   pasteCell,
+  createCellAfter,
 } from './actions';
 
 import {
@@ -257,12 +258,19 @@ export function dispatchPasteCell(store) {
   store.dispatch(pasteCell());
 }
 
+export function dispatchCreateCellAfter(store) {
+  const state = store.getState();
+  const focused = state.document.get('focusedCell');
+  store.dispatch(createCellAfter(focused));
+}
+
 export function initMenuHandlers(store) {
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store));
   ipc.on('menu:save', dispatchSave.bind(null, store));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store));
+  ipc.on('menu:new-code-cell', dispatchCreateCellAfter.bind(null, store));
   ipc.on('menu:copy-cell', dispatchCopyCell.bind(null, store));
   ipc.on('menu:cut-cell', dispatchCutCell.bind(null, store));
   ipc.on('menu:paste-cell', dispatchPasteCell.bind(null, store));
