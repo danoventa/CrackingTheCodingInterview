@@ -18,9 +18,6 @@ import CellCreator from './cell/cell-creator';
 import {
   focusNextCell,
   moveCell,
-  copyCell,
-  cutCell,
-  pasteCell,
 } from '../actions';
 import { executeCell } from '../epics/execute';
 
@@ -149,19 +146,7 @@ export class Notebook extends React.Component {
 
 
   keyDown(e) {
-    // Global event registration for copy paste handling of cells
     if (e.keyCode !== 13) {
-      // Cut, Copy, Paste rely on (ctrl|cmd + shift + c/p/x) to not interfere with
-      // native copy of outputs or with CodeMirror
-      // TODO: Add cell CCP to the menu
-      const cmdOrCtrl = e.ctrlKey || e.metaKey;
-      if (cmdOrCtrl && e.shiftKey && e.keyCode === 67) {
-        this.copyCell();
-      } else if (cmdOrCtrl && e.shiftKey && e.keyCode === 88) {
-        this.cutCell();
-      } else if (cmdOrCtrl && e.shiftKey && e.keyCode === 86) {
-        this.pasteCell();
-      }
       return;
     }
 
