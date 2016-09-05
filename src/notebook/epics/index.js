@@ -21,10 +21,12 @@ import {
 
 import {
   initialGitHubAuthEpic,
+  publishEpic,
 } from './github-publish';
 
 const epics = [
   initialGitHubAuthEpic,
+  publishEpic,
   getStoredThemeEpic,
   setThemeEpic,
   saveEpic,
