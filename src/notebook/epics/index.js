@@ -14,7 +14,12 @@ import {
   executeCellEpic,
 } from './execute';
 
+import {
+  getStoredThemeEpic,
+} from './theming';
+
 const epics = [
+  getStoredThemeEpic,
   saveEpic,
   saveAsEpic,
   executeCellEpic,

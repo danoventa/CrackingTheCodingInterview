@@ -231,6 +231,8 @@ class Notebook extends React.Component {
       pagers: this.props.cellPagers.get(id),
       focusedCell: this.props.focusedCell,
       running: this.props.cellStatuses.getIn([id, 'status']) === 'busy',
+      // Theme is passed through to let the Editor component know when to
+      // tell CodeMirror to remeasure
       theme: this.props.theme,
     };
   }

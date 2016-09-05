@@ -70,3 +70,5 @@ export const PASTE_CELL = 'PASTE_CELL';
 export const CHANGE_CELL_TYPE = 'CHANGE_CELL_TYPE';
 
 export const SET_MODIFIED = 'SET_MODIFIED';
+
+export const SET_THEME = 'SET_THEME';
