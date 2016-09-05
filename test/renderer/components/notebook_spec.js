@@ -185,6 +185,7 @@ describe('Notebook DnD', () => {
     const manager = component.get(0).getManager();
     const backend = manager.getBackend();
 
+    // TODO: Write tests for cell drag and drop
   })
 })
 
