@@ -10,6 +10,7 @@ export const AppRecord = new Immutable.Record({
   kernelSpecName: null,
   isSaving: false,
   modified: false,
+  theme: 'light',
 });
 
 export const DocumentRecord = new Immutable.Record({

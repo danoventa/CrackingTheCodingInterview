@@ -33,3 +33,13 @@ global.window.document.createRange = function createRange() {
     }
   }
 };
+
+var mock = require('mock-require');
+mock('electron-json-storage', {
+  'get': function(key, callback){
+    callback(null, { theme: 'light' });
+  },
+  'set': function(key, json, callback) {
+    callback(null);
+  },
+})

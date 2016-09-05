@@ -61,4 +61,7 @@ export default handleActions({
     const { value } = action;
     return state.set('modified', value);
   },
+  [constants.SET_THEME]: function setTheme(state, action) {
+    return state.set('theme', action.theme);
+  },
 }, {});

@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import NotificationSystem from 'react-notification-system';
 
 import { ipcRenderer as ipc } from 'electron';
-import storage from 'electron-json-storage';
 
 import configureStore from './store';
 import { reducers } from './reducers';
@@ -57,20 +56,6 @@ ipc.on('main:load', (e, launchData) => {
     constructor(props) {
       super(props);
       this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-      this.state = {
-        theme: 'light',
-      };
-      storage.get('theme', (error, data) => {
-        if (error) throw error;
-        if (Object.keys(data).length === 0) return;
-        this.setState({
-          theme: data.theme,
-        });
-      });
-      ipc.on('menu:theme', (ev, theme) => {
-        storage.set('theme', { theme });
-        this.setState({ theme });
-      });
     }
     componentDidMount() {
       store.dispatch(setNotificationSystem(this.refs.notificationSystem));
@@ -82,14 +67,9 @@ ipc.on('main:load', (e, launchData) => {
       return (
         <Provider store={store}>
           <div>
-            {
-              this.state.err &&
-                <pre>{this.state.err.toString()}</pre>
-            }
             <Notebook />
             <NotificationSystem ref="notificationSystem" />
             <link rel="stylesheet" href="../static/styles/main.css" />
-            <link rel="stylesheet" href={`../static/styles/theme-${this.state.theme}.css`} />
           </div>
         </Provider>
       );
