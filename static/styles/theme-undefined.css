@@ -50,6 +50,36 @@
   100% { background-color: #9b59b6; }
 }
 
+@keyframes barrel-roll {
+25% {
+    -webkit-transform: rotate(-30deg);
+    -moz-transform: rotate(-30deg);
+    -ms-transform: rotate(-30deg);
+    -o-transform: rotate(-30deg);
+    transform: rotate(-30deg);
+}
+75% {
+    -webkit-transform: rotate(-330deg);
+    -moz-transform: rotate(-330deg);
+    -ms-transform: rotate(-330deg);
+    -o-transform: rotate(-330deg);
+    transform: rotate(-330deg);
+}
+100% {
+    -webkit-transform: rotate(-360deg);
+    -moz-transform: rotate(-360deg);
+    -ms-transform: rotate(-360deg);
+    -o-transform: rotate(-360deg);
+    transform: rotate(-360deg);
+}
+}
+
+.cell.focused,
+.cell:focus
+{
+    animation: barrel-roll 0.5s linear;
+}
+
 body {
   animation: disco-mode 5s infinite;
 }

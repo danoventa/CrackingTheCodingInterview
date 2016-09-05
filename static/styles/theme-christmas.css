@@ -8,7 +8,7 @@
   --cell-bg-hover: #eeedee;
   --cell-bg-focus: #E87D7D;
 
-  --toolbar-bg: white;
+  --toolbar-bg: rgba(255,255,255,.3);
   --toolbar-button: #aaa;
   --toolbar-button-hover: #555;
 
