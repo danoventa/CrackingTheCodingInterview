@@ -27,10 +27,10 @@ import {
 import { Notebook, ConnectedNotebook } from '../../../src/notebook/components/notebook';
 
 // Boilerplate test to make sure the testing setup is configured
-describe('ConnectedNotebook', () => {
+describe('Notebook', () => {
   it('accepts an Immutable.List of cells', () => {
     const component = shallow(
-      <ConnectedNotebook
+      <Notebook
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
         cellStatuses={new Immutable.Map()}
@@ -39,6 +39,7 @@ describe('ConnectedNotebook', () => {
           // triggered.
           .set(dummyCommutable.getIn(['cellOrder', 0]), true)
         }
+        CellComponent={Cell}
         outputStatuses={new Immutable.Map()}
       />
     );
@@ -51,13 +52,14 @@ describe('ConnectedNotebook', () => {
                                 .setIn([cellID, 'inputHidden'], false);
     });
     const component = mount(
-      <ConnectedNotebook
+      <Notebook
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
         cellStatuses={cellStatuses}
         stickyCells={new Immutable.Map()}
         displayOrder={displayOrder.delete('text/html')}
         transforms={transforms.delete('text/html')}
+        CellComponent={Cell}
       />
     );
     expect(component.find('.notebook').length).to.be.above(0, '.notebook');
