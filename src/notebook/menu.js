@@ -11,6 +11,11 @@ import { tildify, launchFilename } from './native-window';
 import { executeCell } from './epics/execute';
 
 import {
+  setTheme,
+} from './epics/theming';
+
+
+import {
   clearCellOutput,
   newKernel,
   killKernel,
@@ -229,6 +234,10 @@ export function dispatchDuplicate(store) {
   }
 }
 
+export function dispatchSetTheme(store, evt, theme) {
+  store.dispatch(setTheme(theme));
+}
+
 export function initMenuHandlers(store) {
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
@@ -243,4 +252,5 @@ export function initMenuHandlers(store) {
   ipc.on('menu:publish:gist', dispatchPublishGist.bind(null, store));
   ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store));
   ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store));
+  ipc.on('menu:theme', dispatchSetTheme.bind(null, store));
 }

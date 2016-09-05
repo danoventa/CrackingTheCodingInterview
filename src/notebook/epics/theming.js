@@ -14,10 +14,19 @@ export const getStoredThemeObservable = () =>
       } else if (Object.keys(data).length === 0) {
         observer.complete();
       } else {
-        console.log(data);
         observer.next({ theme: data.theme });
-        observer.complete();
       }
+      observer.complete();
+    });
+  });
+
+export const setStoredThemeObservable = (theme) =>
+  Observable.create(observer => {
+    storage.set('theme', { theme }, (error) => {
+      if (error) {
+        observer.error(error);
+      }
+      observer.complete();
     });
   });
 
@@ -33,3 +42,11 @@ export const getStoredThemeEpic = () =>
   // * We could turn this into watching the theming file continuously
   getStoredThemeObservable()
     .map(setTheme);
+
+// storage.set('theme', { theme });
+
+export const setThemeEpic = (action$) =>
+  action$.ofType(constants.SET_THEME)
+    .mergeMap(action =>
+      setStoredThemeObservable(action.theme)
+    );

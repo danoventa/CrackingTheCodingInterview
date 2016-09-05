@@ -16,10 +16,12 @@ import {
 
 import {
   getStoredThemeEpic,
+  setThemeEpic,
 } from './theming';
 
 const epics = [
   getStoredThemeEpic,
+  setThemeEpic,
   saveEpic,
   saveAsEpic,
   executeCellEpic,
