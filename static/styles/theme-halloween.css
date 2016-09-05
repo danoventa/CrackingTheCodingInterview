@@ -8,10 +8,13 @@
   --cell-bg-hover: #eeedee;
   --cell-bg-focus: #E26710;
 
-  --toolbar-bg: white;
+  --toolbar-bg: rgba(255,255,255,0.3);
   --toolbar-button: #aaa;
   --toolbar-button-hover: #555;
 
+  --dropdown-content: white;
+  --dropdown-content-hover: grey;
+  
   --pager-bg: #fafafa;
   --input-color: #8c8a8e;
 
