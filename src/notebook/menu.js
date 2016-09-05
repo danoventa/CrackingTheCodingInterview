@@ -20,6 +20,9 @@ import {
   newKernel,
   killKernel,
   interruptKernel,
+  copyCell,
+  cutCell,
+  pasteCell,
 } from './actions';
 
 import {
@@ -238,12 +241,31 @@ export function dispatchSetTheme(store, evt, theme) {
   store.dispatch(setTheme(theme));
 }
 
+export function dispatchCopyCell(store) {
+  const state = store.getState();
+  const focused = state.document.get('focusedCell');
+  store.dispatch(copyCell(focused));
+}
+
+export function dispatchCutCell(store) {
+  const state = store.getState();
+  const focused = state.document.get('focusedCell');
+  store.dispatch(cutCell(focused));
+}
+
+export function dispatchPasteCell(store) {
+  store.dispatch(pasteCell());
+}
+
 export function initMenuHandlers(store) {
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store));
   ipc.on('menu:save', dispatchSave.bind(null, store));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store));
+  ipc.on('menu:copy-cell', dispatchCopyCell.bind(null, store));
+  ipc.on('menu:cut-cell', dispatchCutCell.bind(null, store));
+  ipc.on('menu:paste-cell', dispatchPasteCell.bind(null, store));
   ipc.on('menu:duplicate-notebook', dispatchDuplicate.bind(null, store));
   ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store));
   ipc.on('menu:interrupt-kernel', dispatchInterruptKernel.bind(null, store));
