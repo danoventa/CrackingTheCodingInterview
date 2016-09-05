@@ -70,9 +70,6 @@ export class Notebook extends React.Component {
     this.keyDown = this.keyDown.bind(this);
     this.moveCell = this.moveCell.bind(this);
     this.getCompletions = this.getCompletions.bind(this);
-    this.copyCell = this.copyCell.bind(this);
-    this.cutCell = this.cutCell.bind(this);
-    this.pasteCell = this.pasteCell.bind(this);
   }
 
   componentDidMount() {
@@ -131,19 +128,6 @@ export class Notebook extends React.Component {
   moveCell(sourceId, destinationId, above) {
     this.context.store.dispatch(moveCell(sourceId, destinationId, above));
   }
-
-  copyCell() {
-    this.context.store.dispatch(copyCell(this.props.focusedCell));
-  }
-
-  cutCell() {
-    this.context.store.dispatch(cutCell(this.props.focusedCell));
-  }
-
-  pasteCell() {
-    this.context.store.dispatch(pasteCell());
-  }
-
 
   keyDown(e) {
     if (e.keyCode !== 13) {

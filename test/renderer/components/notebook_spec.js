@@ -74,96 +74,34 @@ describe('Notebook', () => {
     expect(component.find('.notebook .cell.code .outputs').length).to.be.above(0, '.notebook .cell.code .outputs');
   });
 
-  it('dispatches cut/copy/paste actions', () => {
-    // Note: because the notebook component is so heavy to load, this test is
-    // bulked up with all the cut, copy, paste goodness
-    const focusedCell = dummyCommutable.getIn(['cellOrder', 0]);
+  describe('getLanguageMode', () => {
+    it('determines the right language from the notebook metadata', () => {
+      // Note: because the notebook component is so heavy to load, this test is
+      // bulked up with all the cut, copy, paste goodness
+      const focusedCell = dummyCommutable.getIn(['cellOrder', 0]);
 
-    const context = {
-      store: dummyStore(),
-    }
+      const context = {
+        store: dummyStore(),
+      }
 
-    context.store.dispatch = sinon.spy();
+      context.store.dispatch = sinon.spy();
 
-    const component = shallow(
-      <Notebook
-        notebook={dummyCommutable}
-        cellPagers={new Immutable.Map()}
-        cellStatuses={dummyCellStatuses}
-        stickyCells={(new Immutable.Map())}
-        outputStatuses={new Immutable.Map()}
-        CellComponent={Cell}
-        focusedCell={focusedCell}
-      />, { context });
+      const component = shallow(
+        <Notebook
+          notebook={dummyCommutable}
+          cellPagers={new Immutable.Map()}
+          cellStatuses={dummyCellStatuses}
+          stickyCells={(new Immutable.Map())}
+          outputStatuses={new Immutable.Map()}
+          CellComponent={Cell}
+          focusedCell={focusedCell}
+        />, { context });
 
-    const inst = component.instance();
+      const inst = component.instance();
 
-    inst.copyCell();
-    expect(context.store.dispatch.firstCall).to.have.been.calledWith({
-      type: 'COPY_CELL',
-      id: focusedCell,
-    })
+      const lang = inst.getLanguageMode()
 
-    inst.cutCell();
-    expect(context.store.dispatch.secondCall).to.have.been.calledWith({
-      type: 'CUT_CELL',
-      id: focusedCell,
-    })
-
-    inst.pasteCell();
-    expect(context.store.dispatch.thirdCall).to.have.been.calledWith({
-      type: 'PASTE_CELL'
-    });
-  });
-
-  it('responds via ctrl-shift-c with a COPY_CELL action', () => {
-    // Note: because the notebook component is so heavy to load, this test is
-    // bulked up with all the cut, copy, paste goodness
-    const focusedCell = dummyCommutable.getIn(['cellOrder', 0]);
-
-    const context = {
-      store: dummyStore(),
-    }
-
-    context.store.dispatch = sinon.spy();
-
-    const component = shallow(
-      <Notebook
-        notebook={dummyCommutable}
-        cellPagers={new Immutable.Map()}
-        cellStatuses={dummyCellStatuses}
-        stickyCells={(new Immutable.Map())}
-        outputStatuses={new Immutable.Map()}
-        CellComponent={Cell}
-        focusedCell={focusedCell}
-      />, { context });
-
-    const inst = component.instance();
-
-    // Note that we can't use enzyme's simulate because the event listener is
-    // document level not React level
-    const ev = new window.CustomEvent('keydown');
-    ev.ctrlKey = true;
-    ev.shiftKey = true;
-    ev.keyCode = 'c'.charCodeAt(0) - 32; // get the key code
-
-    inst.keyDown(ev);
-    expect(context.store.dispatch).to.have.been.calledWith({
-      type: 'COPY_CELL',
-      id: focusedCell,
-    })
-
-    ev.keyCode = 'v'.charCodeAt(0) - 32;
-    inst.keyDown(ev);
-    expect(context.store.dispatch).to.have.been.calledWith({
-      type: 'PASTE_CELL',
-    })
-
-    ev.keyCode = 'x'.charCodeAt(0) - 32;
-    inst.keyDown(ev);
-    expect(context.store.dispatch).to.have.been.calledWith({
-      type: 'CUT_CELL',
-      id: focusedCell,
+      expect(lang).to.equal('python');
     })
   })
 })
