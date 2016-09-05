@@ -24,6 +24,11 @@ import {
   dummyCommutable,
 } from '../dummy-nb';
 
+const dummyCellStatuses = dummyCommutable.get('cellOrder')
+      .reduce((statuses, cellID) =>
+        statuses.set(cellID, Immutable.fromJS({ outputHidden: false, inputHidden: false })),
+      new Immutable.Map());
+
 import { Notebook, ConnectedNotebook } from '../../../src/notebook/components/notebook';
 
 // Boilerplate test to make sure the testing setup is configured
@@ -46,16 +51,11 @@ describe('Notebook', () => {
     expect(component).to.not.be.null;
   });
   it('implements the correct css spec', () => {
-    let cellStatuses = new Immutable.Map();
-    dummyCommutable.get('cellOrder').map((cellID) => {
-      cellStatuses = cellStatuses.setIn([cellID, 'outputHidden'], false)
-                                .setIn([cellID, 'inputHidden'], false);
-    });
     const component = mount(
       <Notebook
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
-        cellStatuses={cellStatuses}
+        cellStatuses={dummyCellStatuses}
         stickyCells={new Immutable.Map()}
         displayOrder={displayOrder.delete('text/html')}
         transforms={transforms.delete('text/html')}
@@ -77,21 +77,14 @@ describe('Notebook', () => {
 
 
 describe('Notebook DnD', () => {
-  it('drag and drop could be tested', () => {
+  it('drag and drop can be tested', () => {
     const TestNotebook = DragDropContext(TestBackend)(Notebook);
-    const notebook = dummyCommutable;
-    const cellStatuses = notebook.get('cellOrder')
-      .reduce((statuses, cellID) =>
-        statuses.set(cellID, Immutable.fromJS({ outputHidden: false, inputHidden: false })),
-      new Immutable.Map());
-
-    const focusedCell = notebook.getIn(['cellOrder', 0]);
 
     const component = mount(
       <TestNotebook
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
-        cellStatuses={cellStatuses}
+        cellStatuses={dummyCellStatuses}
         stickyCells={(new Immutable.Map())}
         outputStatuses={new Immutable.Map()}
       />
@@ -104,15 +97,9 @@ describe('Notebook DnD', () => {
 })
 
 
-describe('Notebook', () => {
-  it('can be tested separately', () => {
-    const notebook = dummyCommutable;
-    const cellStatuses = notebook.get('cellOrder')
-      .reduce((statuses, cellID) =>
-        statuses.set(cellID, Immutable.fromJS({ outputHidden: false, inputHidden: false })),
-      new Immutable.Map());
-
-    const focusedCell = notebook.getIn(['cellOrder', 0]);
+describe('Notebook.copyCell', () => {
+  it('triggers a COPY_CELL action', () => {
+    const focusedCell = dummyCommutable.getIn(['cellOrder', 0]);
 
     const context = {
       store: dummyStore(),
@@ -120,11 +107,11 @@ describe('Notebook', () => {
 
     context.store.dispatch = sinon.spy();
 
-    const component = mount(
+    const component = shallow(
       <Notebook
         notebook={dummyCommutable}
         cellPagers={new Immutable.Map()}
-        cellStatuses={cellStatuses}
+        cellStatuses={dummyCellStatuses}
         stickyCells={(new Immutable.Map())}
         outputStatuses={new Immutable.Map()}
         CellComponent={Cell}
@@ -138,6 +125,40 @@ describe('Notebook', () => {
       type: 'COPY_CELL',
       id: focusedCell,
     })
+  })
+  it('responds via ctrl-shift-c with a COPY_CELL action', () => {
+    const focusedCell = dummyCommutable.getIn(['cellOrder', 0]);
 
+    const context = {
+      store: dummyStore(),
+    }
+
+    context.store.dispatch = sinon.spy();
+
+    const component = shallow(
+      <Notebook
+        notebook={dummyCommutable}
+        cellPagers={new Immutable.Map()}
+        cellStatuses={dummyCellStatuses}
+        stickyCells={(new Immutable.Map())}
+        outputStatuses={new Immutable.Map()}
+        CellComponent={Cell}
+        focusedCell={focusedCell}
+      />, { context });
+
+    // Note that we can't use enzyme's simulate because the event listener is
+    // document level not React level
+    const ev = new window.CustomEvent('keydown');
+    ev.ctrlKey = true;
+    ev.shiftKey = true;
+    ev.keyCode = 'c'.charCodeAt(0) - 32; // get the key code
+
+    const inst = component.instance();
+    inst.keyDown(ev);
+
+    expect(context.store.dispatch).to.have.been.calledWith({
+      type: 'COPY_CELL',
+      id: focusedCell,
+    })
   })
 })
