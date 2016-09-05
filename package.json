@@ -17,7 +17,7 @@
     "test": "npm run test:unit",
     "pretest:functional": "npm run build",
     "test:functional": "electron-mocha --compilers js:babel-core/register 'test/main/**/*.js'",
-    "test:unit": "electron-mocha -r test/setup.js --compilers js:babel-core/register 'test/renderer/**/*.js'",
+    "test:unit": "mocha -r test/setup.js --compilers js:babel-core/register 'test/renderer/**/*.js'",
     "test:watch": "watch 'npm run test' test/",
     "test:lint": "npm run lint",
     "precoverage": "nyc npm run test:unit",
