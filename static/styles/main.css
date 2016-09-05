@@ -128,8 +128,7 @@ td {
 .cell-toolbar
 {
     display: inline-box;
-    background: var(--main-bg-color);
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--toolbar-bg);
 }
 
 .cell-toolbar button
@@ -152,7 +151,6 @@ td {
 {
     font-size: 15px;
     line-height: 1;
-
     color: var(--toolbar-button);
 
 }
@@ -426,16 +424,15 @@ li.CodeMirror-hint-active {
     opacity:  1.0;
     position: absolute;
     left: 8px;
-    border-color: gray;
+    border-color: rgba(122,122,122,0.3);
     border-width: 1px;
     border-style: solid;
-    background-color: #FFF;
     padding: 10px;
     padding-top: 0px;
     padding-right: 0px;
     font-size: 11px;
     margin: 20px 0;
-    background-color: rgba(255,255,255,1);
+    background-color: var(--dropdown-content);
 }
 
 .dropdown__content ul {
@@ -446,7 +443,7 @@ li.CodeMirror-hint-active {
 }
 
 .dropdown__content ul li:hover {
-    background-color: #ecf0f1;
+    background-color: var(--dropdown-content-hover);
     cursor: pointer;
 }
 
