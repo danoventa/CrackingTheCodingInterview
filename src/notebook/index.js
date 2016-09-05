@@ -23,22 +23,9 @@ import { initGlobalHandlers } from './global-events';
 
 import { AppRecord, DocumentRecord, MetadataRecord } from './records';
 
-const Github = require('github');
-
-const github = new Github();
-
-if (process.env.GITHUB_TOKEN) {
-  github.authenticate({
-    type: 'oauth',
-    token: process.env.GITHUB_TOKEN,
-  }, (x) => console.error(x));
-}
-
 ipc.on('main:load', (e, launchData) => {
   const store = configureStore({
-    app: new AppRecord({
-      github,
-    }),
+    app: new AppRecord(),
     metadata: new MetadataRecord({
       filename: launchData.filename,
     }),

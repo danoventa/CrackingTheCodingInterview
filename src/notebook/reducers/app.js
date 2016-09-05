@@ -64,4 +64,7 @@ export default handleActions({
   [constants.SET_THEME]: function setTheme(state, action) {
     return state.set('theme', action.theme);
   },
+  [constants.SET_GITHUB]: function setGithub(state, action) {
+    return state.set('github', action.github);
+  },
 }, {});

@@ -19,7 +19,12 @@ import {
   setThemeEpic,
 } from './theming';
 
+import {
+  initialGitHubAuthEpic,
+} from './github-publish';
+
 const epics = [
+  initialGitHubAuthEpic,
   getStoredThemeEpic,
   setThemeEpic,
   saveEpic,
