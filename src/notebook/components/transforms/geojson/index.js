@@ -1,7 +1,6 @@
 import React from 'react';
 
 const L = require('leaflet');
-L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images/';
 
 const MIMETYPE = 'application/vnd.geojson.v1+json';
 
