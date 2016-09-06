@@ -14,6 +14,10 @@ import {
   setTheme,
 } from './epics/theming';
 
+import {
+  PUBLISH_GIST,
+} from './epics/github-publish';
+
 
 import {
   clearCellOutput,
@@ -32,8 +36,6 @@ import {
 } from './epics/saving';
 
 import { copyNotebook } from './utils';
-
-import publish from './publication/github';
 
 const BrowserWindow = remote.BrowserWindow;
 
@@ -111,41 +113,7 @@ export function dispatchNewKernel(store, evt, name) {
 }
 
 export function dispatchPublishGist(store) {
-  const state = store.getState();
-  const filename = state.metadata.get('filename');
-  const notebook = state.document.get('notebook');
-  const notificationSystem = state.app.get('notificationSystem');
-  const github = state.app.get('github');
-
-  const agenda = publish(github, notebook, filename, notificationSystem);
-
-  agenda.subscribe((action) => {
-    store.dispatch(action);
-  }, (err) => {
-    if (err.message) {
-      const githubError = JSON.parse(err.message);
-      if (githubError.message === 'Bad credentials') {
-        notificationSystem.addNotification({
-          title: 'Bad credentials',
-          message: 'Unable to authenticate with your credentials.\n' +
-                   'What do you have $GITHUB_TOKEN set to?',
-          level: 'error',
-        });
-        return;
-      }
-      notificationSystem.addNotification({
-        title: 'Publication Error',
-        message: githubError.message,
-        level: 'error',
-      });
-      return;
-    }
-    notificationSystem.addNotification({
-      title: 'Unknown Publication Error',
-      message: err.toString(),
-      level: 'error',
-    });
-  });
+  store.dispatch({ type: PUBLISH_GIST });
 }
 
 export function dispatchRunAll(store) {

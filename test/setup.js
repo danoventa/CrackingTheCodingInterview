@@ -43,3 +43,9 @@ mock('electron-json-storage', {
     callback(null);
   },
 })
+
+mock('electron', {
+  'shell': {
+    'openExternal': function(url) { },
+  },
+})
