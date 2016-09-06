@@ -6,15 +6,10 @@ addons:
     packages:
     - gcc-4.9
     - g++-4.9
-    - uuid-dev
-    - libssl-dev
-    - wget
 language: node_js
 node_js:
 - '6'
 env:
-  global:
-  - ZMQ="3.2.5"
   matrix:
   - GROUP=unit
   - GROUP=functional
@@ -24,12 +19,9 @@ cache:
   apt: true
   directories:
     - node_modules
-    - zeromq-$ZMQ
 
 before_install:
   - source scripts/travis_before_install
-
-install: env LD_LIBRARY_PATH=$LDHACK/lib LD_RUN_PATH=$LDHACK/lib PKG_CONFIG_PATH=$LDHACK/lib/pkgconfig LDFLAGS=-L$LDHACK/lib CFLAGS=-I$LDHACK/lib/include npm install
 
 before_script:
 - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
