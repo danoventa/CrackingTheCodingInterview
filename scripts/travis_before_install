@@ -1,6 +1,4 @@
-echo $TEST
-echo $GROUP
-if [ "${TEST}" == "lint" ]; then
+if [ "${GROUP}" == "lint" ]; then
   echo "skipping mega-install"
   return
 fi
