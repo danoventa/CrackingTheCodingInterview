@@ -15,7 +15,10 @@ env:
   - GROUP=functional
   - GROUP=lint
 
-cache: false
+cache:
+  apt: true
+  directories:
+    - node_modules
 
 before_install:
   - source scripts/travis_before_install
