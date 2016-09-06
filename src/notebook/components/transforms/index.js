@@ -5,11 +5,15 @@ import { displayOrder, transforms } from 'transformime-react';
  */
 
 import PlotlyTransform from './plotly';
+import GeoJSONTransform from './geojson';
+
 
 const defaultDisplayOrder = displayOrder
-  .splice(0, 0, PlotlyTransform.MIMETYPE);
+  .insert(0, PlotlyTransform.MIMETYPE)
+  .insert(0, GeoJSONTransform.MIMETYPE);
 
 const defaultTransforms = transforms
-  .set(PlotlyTransform.MIMETYPE, PlotlyTransform);
+  .set(PlotlyTransform.MIMETYPE, PlotlyTransform)
+  .set(GeoJSONTransform.MIMETYPE, GeoJSONTransform);
 
 export { defaultDisplayOrder, defaultTransforms };
