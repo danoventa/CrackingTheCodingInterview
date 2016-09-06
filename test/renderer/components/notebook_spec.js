@@ -76,8 +76,6 @@ describe('Notebook', () => {
 
   describe('getLanguageMode', () => {
     it('determines the right language from the notebook metadata', () => {
-      // Note: because the notebook component is so heavy to load, this test is
-      // bulked up with all the cut, copy, paste goodness
       const focusedCell = dummyCommutable.getIn(['cellOrder', 0]);
 
       const context = {
@@ -127,7 +125,3 @@ describe('Notebook DnD', () => {
   })
 })
 
-
-describe('Notebook.copyCell', () => {
-
-})
