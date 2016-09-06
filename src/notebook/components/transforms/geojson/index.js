@@ -23,12 +23,15 @@ export class GeoJSONTransform extends React.Component {
   shouldComponentUpdate() {
     return false;
   }
-  
+
   render() {
     return (
       <div>
-        <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css"/>
-        <div ref={(el) => this.el = el} style={{height: '800px', width: '100%'}}/>
+        <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
+        <div
+          ref={(el) => this.el = el} // eslint-disable-line
+          style={{ height: '800px', width: '100%' }}
+        />
       </div>
     );
   }
