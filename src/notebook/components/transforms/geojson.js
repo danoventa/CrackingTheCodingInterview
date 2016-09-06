@@ -2,11 +2,12 @@ import React from 'react';
 
 const L = require('leaflet');
 
-const MIMETYPE = 'application/vnd.geojson.v1+json';
+const MIMETYPE = 'application/vnd.geo+json';
 
 export class GeoJSONTransform extends React.Component {
   componentDidMount() {
     const map = L.map(this.el);
+    // TODO: Determine a strategy for picking tiles
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       id: 'mapbox.light',
@@ -29,8 +30,8 @@ export class GeoJSONTransform extends React.Component {
       <div>
         <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
         <div
-          ref={(el) => this.el = el} // eslint-disable-line
-          style={{ height: '800px', width: '100%' }}
+          ref={(el) => { this.el = el; }}
+          style={{ height: '600px', width: '100%' }}
         />
       </div>
     );
