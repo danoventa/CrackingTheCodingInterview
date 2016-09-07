@@ -24,6 +24,13 @@
     </div>
     <script>
       window.onload = function deferredLoad() {
+        if (process.env.NODE_ENV === 'development') {
+            var rdev = require('electron-react-devtools');
+            rdev.install();
+        } else {
+            // Force production by default for the sake of packaging
+            process.env.NODE_ENV = 'production';
+        }
         setTimeout(function timeoutCallback() {
           try {
             require('../build/notebook/index');
@@ -52,10 +59,6 @@
             console.dir(err);
           }
         }, 1);
-        if (process.env.NODE_ENV !== 'production') {
-            var rdev = require('electron-react-devtools');
-            rdev.install();
-        }
       };
     </script>
   </body>
