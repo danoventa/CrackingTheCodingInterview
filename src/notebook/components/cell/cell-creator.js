@@ -20,7 +20,7 @@ export default class CellCreator extends React.Component {
     show: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     // Listen to the page level mouse move event and manually check for
     // intersection because we don't want the hover region to actually capture
     // any mouse events.  The hover region is an invisible element that
