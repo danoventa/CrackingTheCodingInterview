@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prestart": "npm run build",
-    "start": "electron .",
+    "start": "cross-env NODE_ENV=development electron .",
     "prepublish": "npm run build",
     "clean": "rimraf build dist",
     "lint": "eslint src",
