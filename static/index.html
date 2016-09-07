@@ -52,7 +52,7 @@
             console.dir(err);
           }
         }, 1);
-        if (process.env.NODE_ENV !== 'production') {
+        if (process.env.NODE_ENV === 'development') {
             var rdev = require('electron-react-devtools');
             rdev.install();
         }
