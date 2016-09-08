@@ -17,13 +17,13 @@ import {
  * @return {Promise}            A promise that resolves to a complete_reply,
  *                              which has the format:
  *
- *                              	{
- *                              		status: 'ok' || 'error',
- *                              	  matches: Array,
- *                              	  cursor_start: number,
- *                              	  cursor_end: number,
- *                              	  metadata: {}
- *                                }
+ *                              {
+ *                                status: 'ok' || 'error',
+ *                                matches: Array,
+ *                                cursor_start: number,
+ *                                cursor_end: number,
+ *                                metadata: {}
+ *                              }
  */
 export default function complete(channels, code, cursorPos) {
   if (!channels || !channels.shell) {
