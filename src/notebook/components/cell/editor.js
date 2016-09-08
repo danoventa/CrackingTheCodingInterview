@@ -125,6 +125,8 @@ export default class Editor extends React.Component {
         if (!event.cm.state.completionActive) {
           event.cm.execCommand('autocomplete');
         }
+      }, error => {
+        console.error(error);
       });
   }
 

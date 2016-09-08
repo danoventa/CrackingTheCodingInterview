@@ -82,7 +82,7 @@ export class Cell extends React.Component {
   }
 
   focusBelowCell() {
-    this.context.store.dispatch(focusNextCell(this.props.id));
+    this.context.store.dispatch(focusNextCell(this.props.id, true));
   }
 
   render() {
