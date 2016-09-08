@@ -1,3 +1,5 @@
+import Immutable from 'immutable';
+
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 
@@ -16,7 +18,16 @@ const middlewares = [
 if (process.env.NODE_ENV === 'development') {
   const createLogger = require('redux-logger');  // eslint-disable-line
 
-  const logger = createLogger();
+  const logger = createLogger({
+    stateTransformer: (state) =>
+      Object.keys(state).reduce((prev, key) =>
+        Object.assign(
+          {},
+          prev,
+          { [key]: Immutable.Iterable.isIterable(state[key]) ? state[key].toJS() : state[key] }
+        )
+    , {}),
+  });
   middlewares.push(logger);
 }
 

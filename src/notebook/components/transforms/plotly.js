@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const Plotly = require('plotly.js/dist/plotly');
 
 const MIMETYPE = 'application/vnd.plotly.v1+json';
 
 export class PlotlyTransform extends React.Component {
+  static shouldComponentUpdate() {
+    return false;
+  }
+
   constructor() {
     super();
     this.getFigure = this.getFigure.bind(this);
@@ -16,9 +20,6 @@ export class PlotlyTransform extends React.Component {
     Plotly.newPlot(this.el, figure.data, figure.layout);
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
 
   getFigure() {
     const figure = this.props.data;
@@ -42,7 +43,7 @@ export class PlotlyTransform extends React.Component {
 }
 
 PlotlyTransform.propTypes = {
-  data: React.PropTypes.any,
+  data: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 PlotlyTransform.MIMETYPE = MIMETYPE;
