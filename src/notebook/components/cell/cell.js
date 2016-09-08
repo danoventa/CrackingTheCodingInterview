@@ -23,7 +23,6 @@ export class Cell extends React.Component {
     getCompletions: React.PropTypes.func,
     focusedCell: React.PropTypes.string,
     language: React.PropTypes.string,
-    onCellChange: React.PropTypes.func,
     running: React.PropTypes.bool,
     theme: React.PropTypes.string,
     pagers: React.PropTypes.instanceOf(Immutable.List),
