@@ -12,7 +12,7 @@ const expect = chai.expect;
 import * as commutable from 'commutable';
 import { dummyStore } from '../../../utils';
 
-import { DumbToolbar as Toolbar } from '../../../../src/notebook/components/cell/toolbar';
+import Toolbar from '../../../../src/notebook/components/cell/toolbar';
 import { setNotificationSystem } from '../../../../src/notebook/actions';
 
 

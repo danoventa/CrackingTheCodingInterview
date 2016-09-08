@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 
@@ -14,14 +13,13 @@ import {
   changeCellType,
 } from '../../actions';
 
-const mapStateToProps = (state) => ({
-  channels: state.app.channels,
-});
+export default class Toolbar extends React.Component {
+  static shouldComponentUpdate() {
+    return false;
+  }
 
-export class DumbToolbar extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
-    channels: React.PropTypes.object,
     id: React.PropTypes.string,
     type: React.PropTypes.string,
   };
@@ -40,10 +38,6 @@ export class DumbToolbar extends React.Component {
     this.changeInputVisibility = this.changeInputVisibility.bind(this);
     this.changeOutputVisibility = this.changeOutputVisibility.bind(this);
     this.changeCellType = this.changeCellType.bind(this);
-  }
-
-  shouldComponentUpdate() {
-    return false;
   }
 
   toggleStickyCell() {
@@ -128,5 +122,3 @@ export class DumbToolbar extends React.Component {
     );
   }
 }
-
-export default connect(mapStateToProps)(DumbToolbar);
