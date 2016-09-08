@@ -191,6 +191,9 @@ export function dispatchDuplicate(store) {
   const state = store.getState();
   const notificationSystem = state.app.get('notificationSystem');
   const filename = state.metadata.get('filename');
+  // TODO: This dispatcher should emit an action to duplicate the current
+  //       notebook document as it exists in memory, and copyNotebook should
+  //       be part of a redux-observable epic for copying the notebook based on that
   if (filename) {
     copyNotebook(filename).then((value) => {
       launchFilename(value);
