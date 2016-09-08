@@ -100,9 +100,80 @@ describe('Notebook', () => {
       const lang = inst.getLanguageMode()
 
       expect(lang).to.equal('python');
-    })
-  })
-})
+    });
+  });
+
+  describe('keyDown', () => {
+    it('detects a cell execution keypress', () => {
+      const focusedCell = dummyCommutable.getIn(['cellOrder', 1]);
+
+      const context = {
+        store: dummyStore(),
+      }
+
+      context.store.dispatch = sinon.spy();
+
+      const component = shallow(
+        <Notebook
+          notebook={dummyCommutable}
+          cellPagers={new Immutable.Map()}
+          cellStatuses={dummyCellStatuses}
+          stickyCells={(new Immutable.Map())}
+          outputStatuses={new Immutable.Map()}
+          CellComponent={Cell}
+          focusedCell={focusedCell}
+        />, { context });
+
+      const inst = component.instance();
+
+      const evt = new window.CustomEvent('keydown');
+      evt.ctrlKey = true;
+      evt.keyCode = 13;
+
+      inst.keyDown(evt);
+
+      expect(context.store.dispatch.firstCall).to.have.been.calledWith({
+        type: 'EXECUTE_CELL',
+        id: focusedCell,
+        source: dummyCommutable.getIn(['cellMap', focusedCell, 'source'])
+      });
+    });
+    it('detects a focus to next cell keypress', () => {
+      const focusedCell = dummyCommutable.getIn(['cellOrder', 1]);
+
+      const context = {
+        store: dummyStore(),
+      }
+
+      context.store.dispatch = sinon.spy();
+
+      const component = shallow(
+        <Notebook
+          notebook={dummyCommutable}
+          cellPagers={new Immutable.Map()}
+          cellStatuses={dummyCellStatuses}
+          stickyCells={(new Immutable.Map())}
+          outputStatuses={new Immutable.Map()}
+          CellComponent={Cell}
+          focusedCell={focusedCell}
+        />, { context });
+
+      const inst = component.instance();
+
+      const evt = new window.CustomEvent('keydown');
+      evt.shiftKey = true;
+      evt.keyCode = 13;
+
+      inst.keyDown(evt);
+
+      expect(context.store.dispatch.firstCall).to.have.been.calledWith({
+        type: 'FOCUS_NEXT_CELL',
+        id: focusedCell,
+        createCellIfUndefined: true,
+      });
+    });
+  });
+});
 
 describe('Notebook DnD', () => {
   it('drag and drop can be tested', () => {

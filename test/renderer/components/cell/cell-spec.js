@@ -2,9 +2,13 @@ import React from 'react';
 import Immutable from 'immutable';
 
 import { mount } from 'enzyme';
-import {expect} from 'chai';
+import chai, { expect } from 'chai';
 import { dummyStore } from '../../../utils'
+
 import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+
+chai.use(sinonChai);
 
 import { Cell } from '../../../../src/notebook/components/cell/cell';
 import * as commutable from 'commutable';
@@ -34,5 +38,36 @@ describe('Cell', () => {
     );
     expect(cell).to.not.be.null;
     expect(cell.find('div.code.cell').length).to.be.greaterThan(0);
+  });
+  it('dispatches cell actions', () => {
+    const store = dummyStore();
+    const cell = mount(
+      <Cell cell={commutable.emptyMarkdownCell} {...sharedProps} />,
+      {
+        context: { store }
+      }
+    );
+
+    store.dispatch = sinon.spy();
+    const inst = cell.instance();
+
+    inst.selectCell();
+    expect(store.dispatch.firstCall).to.have.been.calledWith({
+      type: 'FOCUS_CELL',
+      id: undefined,
+    });
+
+    inst.focusAboveCell();
+    expect(store.dispatch.secondCall).to.have.been.calledWith({
+      type: 'FOCUS_PREVIOUS_CELL',
+      id: undefined,
+    });
+
+    inst.focusBelowCell();
+    expect(store.dispatch.thirdCall).to.have.been.calledWith({
+      type: 'FOCUS_NEXT_CELL',
+      id: undefined,
+      createCellIfUndefined: true,
+    });
   });
 });
