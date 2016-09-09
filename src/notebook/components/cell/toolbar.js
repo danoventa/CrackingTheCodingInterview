@@ -1,3 +1,5 @@
+/* eslint class-methods-use-this: 0 */
+
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
@@ -14,10 +16,6 @@ import {
 } from '../../actions';
 
 export default class Toolbar extends React.Component {
-  static shouldComponentUpdate() {
-    return false;
-  }
-
   static propTypes = {
     cell: React.PropTypes.any,
     id: React.PropTypes.string,
@@ -38,6 +36,10 @@ export default class Toolbar extends React.Component {
     this.changeInputVisibility = this.changeInputVisibility.bind(this);
     this.changeOutputVisibility = this.changeOutputVisibility.bind(this);
     this.changeCellType = this.changeCellType.bind(this);
+  }
+
+  shouldComponentUpdate() {
+    return false;
   }
 
   toggleStickyCell() {
