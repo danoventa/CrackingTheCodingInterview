@@ -232,7 +232,7 @@ export function dispatchPasteCell(store) {
 export function dispatchCreateCellAfter(store) {
   const state = store.getState();
   const focused = state.document.get('focusedCell');
-  store.dispatch(createCellAfter(focused));
+  store.dispatch(createCellAfter('code', focused));
 }
 
 export function initMenuHandlers(store) {
