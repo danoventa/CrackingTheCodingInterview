@@ -48,4 +48,13 @@ mock('electron', {
   'shell': {
     'openExternal': function(url) { },
   },
+  'remote': {
+    'require': function(module) {
+      if (module === 'electron') {
+        return {
+          'dialog': function() { },
+        };
+      }
+    },
+  },
 })
