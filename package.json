@@ -2,7 +2,7 @@
   "name": "nteract",
   "version": "0.0.7",
   "description": ":notebook: the nteract notebook",
-  "main": "index.js",
+  "main": "build/main.js",
   "scripts": {
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=development electron .",
