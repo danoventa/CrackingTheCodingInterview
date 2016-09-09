@@ -1,10 +1,13 @@
-import React from 'react';
+/* eslint class-methods-use-this: 0 */
+
+import React, { PropTypes } from 'react';
 
 const Plotly = require('plotly.js/dist/plotly');
 
 const MIMETYPE = 'application/vnd.plotly.v1+json';
 
 export class PlotlyTransform extends React.Component {
+
   constructor() {
     super();
     this.getFigure = this.getFigure.bind(this);
@@ -36,13 +39,13 @@ export class PlotlyTransform extends React.Component {
       style.height = layout.height;
     }
     return (
-      <div style={style} ref={(el) => this.el = el} /> // eslint-disable-line
+      <div style={style} ref={(el) => { this.el = el; }} />
     );
   }
 }
 
 PlotlyTransform.propTypes = {
-  data: React.PropTypes.any,
+  data: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 PlotlyTransform.MIMETYPE = MIMETYPE;

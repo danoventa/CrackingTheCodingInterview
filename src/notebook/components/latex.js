@@ -16,7 +16,10 @@ function isMathJaxOkYet() {
 
 export default class LatexRenderer extends React.Component {
   static propTypes = {
-    children: React.PropTypes.any,
+    children: React.PropTypes.oneOfType([
+      React.PropTypes.arrayOf(React.PropTypes.node),
+      React.PropTypes.node,
+    ]),
   };
 
   constructor(props) {

@@ -1,4 +1,6 @@
-import React from 'react';
+/* eslint class-methods-use-this: 0 */
+
+import React, { PropTypes } from 'react';
 
 const L = require('leaflet');
 
@@ -7,6 +9,8 @@ L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images/';
 const MIMETYPE = 'application/vnd.geo+json';
 
 export class GeoJSONTransform extends React.Component {
+
+
   componentDidMount() {
     const map = L.map(this.el);
     // TODO: Determine a strategy for picking tiles
@@ -41,7 +45,7 @@ export class GeoJSONTransform extends React.Component {
 }
 
 GeoJSONTransform.propTypes = {
-  data: React.PropTypes.any,
+  data: PropTypes.object,
 };
 
 GeoJSONTransform.MIMETYPE = MIMETYPE;

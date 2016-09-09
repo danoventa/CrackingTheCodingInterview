@@ -64,6 +64,13 @@ class DraggableCell extends React.Component {
     isOver: React.PropTypes.bool.isRequired,
     focusedCell: React.PropTypes.string,
     transforms: React.PropTypes.instanceOf(Immutable.Map).isRequired,
+
+    cellStatus: React.PropTypes.instanceOf(Immutable.Map),
+    getCompletions: React.PropTypes.func,
+    language: React.PropTypes.string,
+    running: React.PropTypes.bool,
+    theme: React.PropTypes.string,
+    pagers: React.PropTypes.instanceOf(Immutable.List),
   };
 
   static contextTypes = {
@@ -134,7 +141,19 @@ class DraggableCell extends React.Component {
           )
         }
         <div>
-          <Cell {...this.props} />
+          <Cell
+            cell={this.props.cell}
+            displayOrder={this.props.displayOrder}
+            cellStatus={this.props.cellStatus}
+            id={this.props.id}
+            getCompletions={this.props.getCompletions}
+            focusedCell={this.props.focusedCell}
+            language={this.props.language}
+            running={this.props.running}
+            theme={this.props.theme}
+            pagers={this.props.pagers}
+            transforms={this.props.transforms}
+          />
         </div>
       </div>
     );

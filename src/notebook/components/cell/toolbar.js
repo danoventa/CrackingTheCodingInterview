@@ -1,5 +1,6 @@
+/* eslint class-methods-use-this: 0 */
+
 import React from 'react';
-import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 
@@ -14,14 +15,9 @@ import {
   changeCellType,
 } from '../../actions';
 
-const mapStateToProps = (state) => ({
-  channels: state.app.channels,
-});
-
-export class DumbToolbar extends React.Component {
+export default class Toolbar extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
-    channels: React.PropTypes.object,
     id: React.PropTypes.string,
     type: React.PropTypes.string,
   };
@@ -128,5 +124,3 @@ export class DumbToolbar extends React.Component {
     );
   }
 }
-
-export default connect(mapStateToProps)(DumbToolbar);

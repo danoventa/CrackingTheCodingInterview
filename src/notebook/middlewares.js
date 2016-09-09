@@ -1,5 +1,8 @@
 import { List } from 'immutable';
 
+import { createEpicMiddleware, combineEpics } from 'redux-observable';
+
+import epics from './epics';
 import * as constants from './constants';
 import { setModified } from './actions';
 
@@ -39,3 +42,12 @@ export const triggerModified = store => next => action => {
 
   return next(action);
 };
+
+const rootEpic = combineEpics(...epics);
+
+const middlewares = [
+  createEpicMiddleware(rootEpic),
+  triggerModified,
+];
+
+export default middlewares;

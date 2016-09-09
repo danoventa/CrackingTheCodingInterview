@@ -39,7 +39,6 @@ const mapStateToProps = (state) => ({
 export class Notebook extends React.Component {
   static propTypes = {
     channels: React.PropTypes.any,
-    dispatch: React.PropTypes.func,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
     notebook: React.PropTypes.any,
     transforms: React.PropTypes.instanceOf(Immutable.Map),
