@@ -19,6 +19,10 @@ export class CellCreatorButtons extends React.Component {
     store: React.PropTypes.object,
   };
 
+  static shouldComponentUpdate() {
+    return false;
+  }
+
   constructor() {
     super();
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -26,10 +30,6 @@ export class CellCreatorButtons extends React.Component {
     this.createTextCell = this.createCell.bind(this, 'markdown');
     this.createCell = this.createCell.bind(this);
     this.mergeCell = this.mergeCell.bind(this);
-  }
-
-  shouldComponentUpdate() {
-    return false;
   }
 
   createCell(type) {

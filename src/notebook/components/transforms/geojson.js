@@ -1,3 +1,5 @@
+/* eslint class-methods-use-this: 0 */
+
 import React, { PropTypes } from 'react';
 
 const L = require('leaflet');
@@ -7,9 +9,7 @@ L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images/';
 const MIMETYPE = 'application/vnd.geo+json';
 
 export class GeoJSONTransform extends React.Component {
-  static shouldComponentUpdate() {
-    return false;
-  }
+
 
   componentDidMount() {
     const map = L.map(this.el);
@@ -27,6 +27,9 @@ export class GeoJSONTransform extends React.Component {
     }
   }
 
+  shouldComponentUpdate() {
+    return false;
+  }
 
   render() {
     return (
@@ -42,8 +45,7 @@ export class GeoJSONTransform extends React.Component {
 }
 
 GeoJSONTransform.propTypes = {
-  data: PropTypes.object, // eslint-disable-line
-                          // it _is_ a generic object after all
+  data: PropTypes.object,
 };
 
 GeoJSONTransform.MIMETYPE = MIMETYPE;

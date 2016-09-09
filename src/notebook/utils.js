@@ -2,8 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import tmp from 'tmp';
 
-// TODO: this should go to an epic
-export function copyNotebook(filename) { // eslint-disable-line
+export function copyNotebook(filename) {
   return new Promise((resolve, reject) => {
     const readStream = fs.createReadStream(filename);
     readStream.on('error', reject);

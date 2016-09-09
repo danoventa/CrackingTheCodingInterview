@@ -6,7 +6,7 @@ import middlewares from './middlewares';
 import rootReducer from './reducers';
 
 if (process.env.NODE_ENV === 'development') {
-  const createLogger = require('redux-logger');  // eslint-disable-line
+  const createLogger = require('redux-logger');  // eslint-disable-line global-require
 
   const logger = createLogger({
     stateTransformer: (state) =>

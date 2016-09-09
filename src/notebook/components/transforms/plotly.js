@@ -1,3 +1,5 @@
+/* eslint class-methods-use-this: 0 */
+
 import React, { PropTypes } from 'react';
 
 const Plotly = require('plotly.js/dist/plotly');
@@ -5,9 +7,6 @@ const Plotly = require('plotly.js/dist/plotly');
 const MIMETYPE = 'application/vnd.plotly.v1+json';
 
 export class PlotlyTransform extends React.Component {
-  static shouldComponentUpdate() {
-    return false;
-  }
 
   constructor() {
     super();
@@ -20,6 +19,9 @@ export class PlotlyTransform extends React.Component {
     Plotly.newPlot(this.el, figure.data, figure.layout);
   }
 
+  shouldComponentUpdate() {
+    return false;
+  }
 
   getFigure() {
     const figure = this.props.data;
@@ -37,7 +39,7 @@ export class PlotlyTransform extends React.Component {
       style.height = layout.height;
     }
     return (
-      <div style={style} ref={(el) => this.el = el} /> // eslint-disable-line
+      <div style={style} ref={(el) => { this.el = el; }} />
     );
   }
 }

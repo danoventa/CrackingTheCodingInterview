@@ -50,7 +50,7 @@ ipc.on('main:load', (e, launchData) => {
       const filename = (state && state.metadata.filename) || launchData.filename;
       store.dispatch(setNotebook(launchData.notebook, filename));
     }
-    render() {
+    render() { // eslint-disable-line class-methods-use-this
       return (
         <Provider store={store}>
           <div>
