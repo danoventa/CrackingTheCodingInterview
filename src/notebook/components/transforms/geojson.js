@@ -13,6 +13,7 @@ export class GeoJSONTransform extends React.Component {
 
   componentDidMount() {
     const map = L.map(this.el);
+    map.scrollWheelZoom.disable();
     // TODO: Determine a strategy for picking tiles
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
