@@ -8,7 +8,7 @@ import {
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
   newNotebookKernelEpic,
-} from './kernelLaunch';
+} from './kernel-launch';
 
 import {
   executeCellEpic,

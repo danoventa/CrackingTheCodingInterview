@@ -11,7 +11,7 @@ import { shutdownKernel } from '../src/notebook/kernel/shutdown';
 import * as actions from '../src/notebook/actions';
 import createStore from '../src/notebook/store';
 import { reducers } from '../src/notebook/reducers';
-import { acquireKernelInfo } from '../src/notebook/epics/kernelLaunch';
+import { acquireKernelInfo } from '../src/notebook/epics/kernel-launch';
 
 import { AppRecord, DocumentRecord, MetadataRecord } from '../src/notebook/records';
 
