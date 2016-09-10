@@ -165,6 +165,23 @@ describe('toggleStickyCell', () => {
     const state = reducers(originalState, action);
     expect(state.document.getIn(['stickyCells', id])).to.be.true;
   });
+  it('should unstick a stuck cell given its ID', () => {
+    const id = dummyCommutable.get('cellOrder').first();
+    const doc = initialDocument.set('notebook', dummyCommutable)
+                              .setIn(['stickyCells', id], true);
+
+    const originalState = {
+      document: doc,
+    };
+
+    const action = {
+      type: constants.TOGGLE_STICKY_CELL,
+      id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['stickyCells', id])).to.be.undefined;
+  });
 });
 
 describe('updateExecutionCount', () => {
@@ -305,6 +322,20 @@ describe('mergeCellAfter', () => {
     expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(1);
     expect(state.document.getIn(['notebook', 'cellOrder']).first()).to.equal(id);
   });
+  it('should do nothing if merging the last cell', () => {
+    const originalState = {
+      document: initialDocument.set('notebook', dummyCommutable),
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
+    const action = {
+      type: constants.MERGE_CELL_AFTER,
+      id,
+    };
+    
+    const state = reducers(originalState, action);
+    expect(state.document).to.deep.equal(originalState.document);
+  });
 });
 
 describe('newCellAppend', () => {
@@ -320,6 +351,26 @@ describe('newCellAppend', () => {
 
     const state = reducers(originalState, action);
     expect(state.document.getIn(['notebook', 'cellOrder']).size).to.equal(3);
+  });
+});
+
+describe('updateSource', () => {
+  it('updates the source of the cell', () => {
+    const originalState = {
+      document: initialDocument.set('notebook', dummyCommutable),
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.UPDATE_CELL_SOURCE,
+      id: id,
+      source: 'This is a test',
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'source']))
+      .to.equal('This is a test');
   });
 });
 
@@ -407,6 +458,80 @@ describe('changeInputVisibility', () => {
 
     const state = reducers(originalState, action);
     expect(state.document.getIn(['cellStatuses', id, 'inputHidden'])).to.be.true;
+  });
+});
+
+describe('updateCellOutputs', () => {
+  it('updates cell output', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.UPDATE_CELL_OUTPUTS,
+      id: id,
+      outputs: [{data: "This is a test"}],
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'outputs']).length).to.equal(1);
+  });
+});
+
+describe('updateCellPagers', () => {
+  it('updates cell pagers', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.UPDATE_CELL_PAGERS,
+      id: id,
+      pagers: "Test pagers",
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['cellPagers', id])).to.equal("Test pagers");
+  });
+});
+
+describe('updateCellStatus', () => {
+  it('updates cell status', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.UPDATE_CELL_STATUS,
+      id: id,
+      status: "test status",
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['cellStatuses', id, 'status'])).to.equal("test status");
+  });
+});
+
+describe('setLanguageInfo', () => {
+  it('sets the language object', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+    
+    const action = {
+      type: constants.SET_LANGUAGE_INFO,
+      langInfo: "test",
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'metadata', 'language_info']))
+      .to.equal("test");
   });
 });
 
@@ -512,5 +637,21 @@ describe('changeCellType', () => {
       .to.equal('code');
     expect(state.document.getIn(['notebook', 'cellMap', id, 'outputs']))
       .to.not.be.undefined;
+  });
+  it('does nothing if cell type is same', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = monocellDocument.getIn(['notebook', 'cellOrder']).first();
+
+    const action = {
+      type: constants.CHANGE_CELL_TYPE,
+      id: id,
+      to: 'markdown',
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document).to.equal(originalState.document);
   });
 });
