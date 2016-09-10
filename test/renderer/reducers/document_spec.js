@@ -391,6 +391,50 @@ describe('overwriteMetadata', () => {
   });
 });
 
+describe('associateCellToMsg', () => {
+  it('associates a cell id with a message id', () => {
+    const originalState = {
+      document: initialDocument.set('notebook', dummyCommutable)
+                              .set('cellMsgAssociations', new Map())
+                              .set('msgCellAssociations', new Map())
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+    const msgId = '1234';
+
+    const action = {
+      type: constants.ASSOCIATE_CELL_TO_MSG,
+      cellId: id,
+      msgId: msgId,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['cellMsgAssociations', id])).to.equal(msgId);
+    expect(state.document.getIn(['msgCellAssociations', msgId])).to.equal(id);
+  });
+  it('can clear away old message ids', () => {
+    const id = dummyCommutable.get('cellOrder').first();
+    let originalState = {
+      document: initialDocument.set('notebook', dummyCommutable)
+                              .setIn(['cellMsgAssociations', id], '5678')
+                              .setIn(['msgCellAssociations', '5678'], id)
+    };
+
+    const msgId = '1234';
+    
+    const action = {
+      type: constants.ASSOCIATE_CELL_TO_MSG,
+      cellId: id,
+      msgId: msgId,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['cellMsgAssociations', id])).to.equal(msgId);
+    expect(state.document.getIn(['msgCellAssociations', msgId])).to.equal(id);
+    expect(state.document.getIn(['msgCellAssociations', '5678'])).to.be.undefined;
+  });
+});
+
 describe('splitCell', () => {
   it('splits a notebook cell into two', () => {
     const originalState = {
