@@ -4,6 +4,8 @@ import * as constants from '../../../src/notebook/constants';
 
 import reducers from '../../../src/notebook/reducers';
 
+import sinon from 'sinon';
+
 import { Map, List } from 'immutable';
 
 const setNotebook = reducers[constants.SET_NOTEBOOK];
@@ -88,5 +90,125 @@ describe('setModified', () => {
 
     const state = reducers(originalState, action);
     expect(state.app.modified).to.equal(true);
+  });
+});
+
+describe('startSaving', () => {
+  it('should set isSaving to false', () => {
+    const originalState = {
+      app: new AppRecord({
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+      }),
+    };
+
+    const action = {
+      type: constants.START_SAVING,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.isSaving).to.be.true;
+  });
+});
+
+describe('doneSaving', () => {
+  it('should set isSaving to false', () => {
+    const originalState = {
+      app: new AppRecord({
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+      }),
+    };
+
+    const action = {
+      type: constants.DONE_SAVING,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.isSaving).to.be.false;
+  });
+});
+
+describe('setExecutionState', () => {
+  it('should set the exeuction state to the given value', () => {
+    const originalState = {
+      app: new AppRecord({
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+      })
+    };
+
+    const action = {
+      type: constants.SET_EXECUTION_STATE,
+      executionState: 'idle',
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.executionState, 'idle');
+  });
+});
+
+describe('alertKernelNotConnected', () => {
+  it('sets an error on the app state', () => {
+    const originalState = {
+      app: new AppRecord({
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+      })
+    };
+
+    const action = {
+      type: constants.ERROR_KERNEL_NOT_CONNECTED,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.error).to.not.be.null;
+    expect(state.app.error).to.contain("not connected to a runtime");
+  });
+});
+
+describe('killKernel', () => {
+  it('clears out kernel configuration', () => {
+    const originalState = {
+      app: new AppRecord({
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+      })
+    };
+
+    const action = {
+      type: constants.KILL_KERNEL,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.channels).to.be.null;
+    expect(state.app.spawn).to.be.null;
+    expect(state.app.connectionFile).to.be.null;
+  });
+});
+
+describe('interruptKernel', () => {
+  it('sends a SIGINT and clears the kernel', () => {
+    const originalState = {
+      app: new AppRecord({
+        channels: false,
+        spawn: {
+          kill: (signal) => { }
+        },
+        connectionFile: false,
+      })
+    };
+
+    const action = {
+      type: constants.INTERRUPT_KERNEL,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app).to.deep.equal(originalState.app);
   });
 });
