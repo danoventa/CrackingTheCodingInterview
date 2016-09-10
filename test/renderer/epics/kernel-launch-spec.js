@@ -12,7 +12,7 @@ import {
   setLanguageInfo,
   acquireKernelInfo,
   watchExecutionStateEpic,
-} from '../../../src/notebook/epics/kernelLaunch';
+} from '../../../src/notebook/epics/kernel-launch';
 
 import {
   createMessage,
