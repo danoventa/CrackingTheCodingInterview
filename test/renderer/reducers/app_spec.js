@@ -212,3 +212,52 @@ describe('interruptKernel', () => {
     expect(state.app).to.deep.equal(originalState.app);
   });
 });
+
+describe('newKernel', () => {
+  it('creates a new kernel', () => {
+    const originalState = {
+      app: new AppRecord({
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+     })
+    };
+
+    const action = {
+      type: constants.NEW_KERNEL,
+      channels: 'test_channels',
+      spawn: 'test_spawn',
+      kernelSpecName: 'test_name',
+      executionState: 'starting',
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.executionState).to.equal('starting');
+    expect(state.app.kernelSpecName).to.equal('test_name');
+    expect(state.app.spawn).to.equal('test_spawn');
+    expect(state.app.channels).to.equal('test_channels');
+  });
+});
+
+describe('exit', () => {
+  it('calls cleanupKernel', () => {
+    const originalState = {
+      app: new AppRecord({
+        channels: false,
+        spawn: false,
+        connectionFile: false,
+     })
+    };
+
+    const action = {
+      type: constants.EXIT,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.channels).to.be.null;
+    expect(state.app.spawn).to.be.null;
+    expect(state.app.connectionFile).to.be.null;
+    expect(state.app.kernelSpecName).to.be.null;
+    expect(state.app.executionState).to.equal('not connected');
+  });
+});
