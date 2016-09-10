@@ -13,6 +13,7 @@ export const AppRecord = new Immutable.Record({
   isSaving: false,
   modified: false,
   theme: 'light',
+  error: null,
 });
 
 export const DocumentRecord = new Immutable.Record({
