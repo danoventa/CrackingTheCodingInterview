@@ -58,3 +58,7 @@ mock('electron', {
     },
   },
 })
+
+mock('home-dir', function() {
+  return '/Users/jean-tester';
+});
