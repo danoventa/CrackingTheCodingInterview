@@ -5,19 +5,18 @@
 
 ## Overview
 
-:notebook: It's an Electron-based Notebook! :notebook:
+Edit code cells, write markdown, visualize!
 
-![nteract demo](https://cloud.githubusercontent.com/assets/836375/14068164/6ebbc6ea-f42f-11e5-98bc-eb149d0b0730.gif)
+![nteract geojson](https://cloud.githubusercontent.com/assets/836375/18421299/d95ad398-783b-11e6-8b23-d54cf7caad1e.png)
 
-Note: this isn't feature complete yet. There will be :bug:s and we're currently
-lacking a lot of core features like jupyter-js-widgets, introspection, cut/copy/paste of cells.
+Note: this isn't feature complete yet. There will be :bug:s and quirks. Please come tell us about them!
 
 ### Scope and goals
 
-* Notebook environment to explore and get things done
-* Standalone cross-platform desktop application
-* Easy install with pre-configured Python3 and JavaScript runtimes
-* Grow an ecosystem of tooling to allow others to build their own platforms relying on the Jupyter specifications
+* Notebook environment to explore and get things done ✅
+* Standalone cross-platform desktop application ✅
+* Easy install with pre-configured Python3 and JavaScript runtimes ❌
+* Grow an ecosystem of tooling to allow others to build their own platforms relying on the Jupyter specifications 🔜
 
 ### Contributing
 
@@ -36,12 +35,11 @@ By participating, you are expected to uphold this code. Please report unacceptab
 * Rely on common interfaces for kernel communication via [enchannel's comm spec](https://github.com/nteract/enchannel) (Go read it!)
 * Mocks for UI can be explored in issues, while design references go in [mocks](https://github.com/nteract/mocks)
 * React for views (pushing notebook state down into the view)
-* Full node, direct to zmq (no running a Python server underneath)
+* Full node, direct to zmq (no running a Python server underneath) - you still get Python kernels though!
 
 ### Development
 
-To get started developing install a [python runtime](#python-runtime), the
-[dependencies](#dependencies) and [`nteract` itself](#install-nteract-itself).
+To get started developing install a [python runtime](#python-runtime) then install [`nteract` itself](#install-nteract-itself).
 
 #### Python runtime
 
@@ -52,39 +50,9 @@ python3 -m pip install ipykernel
 python3 -m ipykernel install --user
 ```
 
-#### Dependencies
-
-For all systems, you'll need
-
-- Node.js 6.x
-- [`npm`](https://docs.npmjs.com/getting-started/installing-node)
-- [ZeroMQ](http://zeromq.org/intro:get-the-software)
-- Python 2 (for builds - you can still run Python 3 code)
-
-Each operating system has their own instruction set. Please read on down to save yourself time.
-
-##### OS X
-
-###### homebrew on OS X
-
-- [`pkg-config`](http://www.freedesktop.org/wiki/Software/pkg-config/): `brew install pkg-config`
-- [ZeroMQ](http://zeromq.org/intro:get-the-software): `brew install zeromq`
-
-##### Windows
-
-- You'll need a compiler! [Visual Studio 2013 Community Edition](https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx) is required to build zmq.node.
-- Python (tread on your own or install [Anaconda](http://continuum.io/downloads))
-
-After these are installed, you'll likely need to restart your machine (especially after Visual Studio).
-
-##### Linux
-
-For Debian/Ubuntu based variants, you'll need `libzmq3-dev` (preferred) or alternatively `libzmq-dev`.   
-For RedHat/CentOS/Fedora based variants, you'll need `zeromq` and `zeromq-devel`.
-
 #### Install `nteract` itself
 
-Requires node 6.x and npm 3.
+Requires [node 6.x and npm 3](https://docs.npmjs.com/getting-started/installing-node).
 
 1. Fork this repo
 2. Clone it `git clone https://github.com/nteract/nteract`
@@ -92,19 +60,7 @@ Requires node 6.x and npm 3.
 4. `npm install`
 5. `npm run start`
 
-Assets are compiled via electron-compile directly, no build steps until we make a release. As you hack on components, you can reload directly or pop open the dev console and run `location.reload()`. No hot reloading at the moment.
-
 #### Troubleshooting
-
-> I did: "$ npm install", and I got: "Authorization service failure : @reactivex/rxjs"
-
-- Try `$ npm login` then `$ npm install`
-- Try `$ npm install @reactivex/rxjs; npm install;`
-- Try `$ npm install @reactivex/rxjs@5.0.0-beta.2; npm install;`
-
-> I did: "$ npm install" then "$ npm start", and I got: "no such file or directory, open '.../node_modules/electron-prebuilt/path.txt'"
-
-- Try `$ npm install electron-prebuilt`
 
 > I upgraded my developer installation and things are broken!
 
