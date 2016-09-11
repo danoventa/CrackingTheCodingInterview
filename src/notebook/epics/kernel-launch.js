@@ -5,6 +5,10 @@ import { launch } from 'spawnteract';
 import * as uuid from 'uuid';
 
 import {
+  ipcRenderer as ipc,
+} from 'electron';
+
+import {
   createControlSubject,
   createStdinSubject,
   createIOPubSubject,
@@ -116,6 +120,9 @@ export const newKernelEpic = action$ =>
     .mergeMap(action =>
       newKernelObservable(action.kernelSpecName, action.cwd)
     )
+    .do(action => {
+      ipc.send('nteract:ping:kernel', action.kernelSpecName);
+    })
     .catch(error => Rx.Observable.of({
       type: ERROR_KERNEL_LAUNCH_FAILED,
       payload: error,
