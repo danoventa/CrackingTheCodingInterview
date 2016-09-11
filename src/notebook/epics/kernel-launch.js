@@ -21,7 +21,6 @@ import {
 
 import {
   setExecutionState,
-  newKernel,
   setNotebookKernelInfo,
 } from '../actions';
 
@@ -29,11 +28,8 @@ import {
   NEW_KERNEL,
   LAUNCH_KERNEL,
   SET_LANGUAGE_INFO,
-  SET_NOTEBOOK,
   ERROR_KERNEL_LAUNCH_FAILED,
 } from '../constants';
-
-const path = require('path');
 
 export function setLanguageInfo(langInfo) {
   return {
@@ -116,13 +112,11 @@ export const newKernelEpic = action$ =>
       if (!action.kernelSpecName) {
         throw new Error('newKernel needs a kernelSpecName');
       }
+      ipc.send('nteract:ping:kernel', action.kernelSpecName);
     })
     .mergeMap(action =>
       newKernelObservable(action.kernelSpecName, action.cwd)
     )
-    .do(action => {
-      ipc.send('nteract:ping:kernel', action.kernelSpecName);
-    })
     .catch(error => Rx.Observable.of({
       type: ERROR_KERNEL_LAUNCH_FAILED,
       payload: error,

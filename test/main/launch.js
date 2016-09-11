@@ -9,7 +9,7 @@ describe('launch', () => {
       this.timeout(7000);
 
       const win = launchNewNotebook('python3');
-      ipc.on('nteract:ping:kernel', (kernel) => {
+      ipc.on('nteract:ping:kernel', (event, kernel) => {
         win.close();
         expect(kernel).to.equal('python3');
         done();
