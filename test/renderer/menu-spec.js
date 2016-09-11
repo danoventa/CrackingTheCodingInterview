@@ -9,8 +9,6 @@ import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import { copyNotebook } from '../../src/notebook/utils';
-
 chai.use(sinonChai);
 
 describe('menu', () => {
@@ -115,7 +113,7 @@ describe('menu', () => {
       });
     });
   });
-  
+
   describe('dispatchRestartKernel', () => {
     const store = dummyStore();
     store.dispatch = sinon.spy();
