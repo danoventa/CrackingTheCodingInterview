@@ -12,6 +12,11 @@ describe('launch', () => {
         expect(kernel).to.equal('python3');
         done();
       });
+
+      setTimeout(() => {
+        expect.fail('nteract:ping:kernel', null, 'Expected nteract:ping:kernel to be sent from frontend');
+        done();
+      }, 1000)
     });
   });
 });
