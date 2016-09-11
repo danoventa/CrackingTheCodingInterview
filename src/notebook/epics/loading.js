@@ -7,9 +7,9 @@ const immutable = require('immutable');
 
 const Observable = Rx.Observable;
 
-const readFileObservable = (filename, data, ...args) =>
+const readFileObservable = (filename, ...args) =>
   Observable.create(observer => {
-    fs.readFile(filename, data, ...args, error => {
+    fs.readFile(filename, ...args, (error, data) => {
       if (error) {
         observer.error(error);
       } else {
@@ -71,11 +71,8 @@ export const loadEpic = actions =>
     })
     .mergeMap(action =>
       readFileObservable(action.filename)
-        .do(console.warn.bind(console))
         .map(convertRawNotebook)
-        .do(console.warn.bind(console))
         .map(notebookLoaded)
-        .do(console.warn.bind(console))
         .catch((err) => {
           console.error(err);
           return Observable.of({ type: 'ERRORZORZ', payload: err });

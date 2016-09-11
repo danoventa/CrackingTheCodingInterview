@@ -25,17 +25,12 @@ export function launch(filename) {
   const index = path.join(__dirname, '..', '..', 'static', 'index.html');
   win.loadURL(`file://${index}`);
 
-  // When the page finishes loading, send the notebook data via IPC
-  win.webContents.on('dom-ready', () => {
-    console.warn('dom ready');
+  win.webContents.on('did-finish-load', () => {
     if (filename) {
-      console.warn(filename);
       win.webContents.send('main:load', filename);
     }
-  });
-
-  win.webContents.on('did-finish-load', () => {
-    win.webContents.send('load', filename);
+    // TODO: else, we assume it's an empty notebook, let it bootstrap
+    //       and potentially rely on `main:new`
   });
 
   win.webContents.on('will-navigate', deferURL);
@@ -49,7 +44,7 @@ export function launch(filename) {
 
 export function launchNewNotebook(kernelspec) {
   const win = launch();
-  win.webContents.on('dom-ready', () => {
+  win.webContents.on('did-finish-load', () => {
     win.webContents.send('main:new', kernelspec);
   });
 }
