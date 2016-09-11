@@ -128,20 +128,3 @@ export const newKernelEpic = action$ =>
       payload: error,
       error: true,
     }));
-
-export const newNotebookKernelEpic = action$ =>
-  action$.ofType(SET_NOTEBOOK)
-    .do(action => {
-      if (!action.notebook) {
-        throw new Error('newNotebookKernel needs notebook json');
-      }
-    }).map(action => {
-      const { filename, notebook } = action;
-      const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();
-      const kernelName = notebook.getIn([
-        'metadata', 'kernelspec', 'name',
-      ], notebook.getIn([
-        'metadata', 'language_info', 'name',
-      ], 'python3')); // TODO: keep default kernel consistent
-      return newKernel(kernelName, cwd);
-    });

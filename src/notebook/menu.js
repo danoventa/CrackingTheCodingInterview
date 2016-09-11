@@ -20,6 +20,7 @@ import {
 
 import {
   load,
+  newNotebook,
 } from './epics/loading';
 
 import {
@@ -218,6 +219,10 @@ export function dispatchLoad(store, event, filename) {
   store.dispatch(load(filename));
 }
 
+export function dispatchNewNotebook(store, event, kernelSpecName) {
+  store.dispatch(newNotebook(kernelSpecName));
+}
+
 export function initMenuHandlers(store) {
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
@@ -239,4 +244,5 @@ export function initMenuHandlers(store) {
 
   // OCD: This is more like the registration of main -> renderer thread
   ipc.on('main:load', dispatchLoad.bind(null, store));
+  ipc.on('main:new', dispatchNewNotebook.bind(null, store));
 }

@@ -5,13 +5,13 @@ import {
 
 import {
   loadEpic,
+  newNotebookEpic,
 } from './loading';
 
 import {
   newKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
-  newNotebookKernelEpic,
 } from './kernel-launch';
 
 import {
@@ -36,11 +36,11 @@ const epics = [
   saveEpic,
   saveAsEpic,
   loadEpic,
+  newNotebookEpic,
   executeCellEpic,
   newKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
-  newNotebookKernelEpic,
 ];
 
 export default epics;

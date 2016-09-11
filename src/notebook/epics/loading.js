@@ -1,9 +1,12 @@
 import { emptyNotebook, emptyCodeCell, appendCell } from 'commutable';
 
+import {
+  newKernel,
+} from '../actions';
+
 const Rx = require('rxjs/Rx');
 const fs = require('fs');
 const commutable = require('commutable');
-const immutable = require('immutable');
 
 const Observable = Rx.Observable;
 
@@ -25,27 +28,11 @@ export const NEW_NOTEBOOK = 'NEW_NOTEBOOK';
 
 export const load = (filename) => ({ type: LOAD, filename });
 
-// It's Immutable!
-const starterNotebook = appendCell(emptyNotebook, emptyCodeCell);
-
-export const newNotebook = (kernelspec) => {
-  const action = {
-    type: SET_NOTEBOOK,
-    filename: null,
-    notebook: starterNotebook,
-  };
-
-  if (kernelspec) {
-    action.notebook = action.notebook.setIn(['metadata', 'kernelspec'],
-      immutable.fromJS({
-        name: kernelspec.name,
-        language: kernelspec.spec.language,
-        display_name: kernelspec.spec.display_name,
-      }));
-  }
-  return action;
-};
-
+export const newNotebook = (kernelSpecName, cwd) => ({
+  type: NEW_NOTEBOOK,
+  kernelSpecName,
+  cwd: cwd || process.cwd(),
+});
 
 // Expects notebook to be JS Object or Immutable.js
 export const notebookLoaded = ({ filename, notebook }) => ({
@@ -69,11 +56,25 @@ export const loadEpic = actions =>
         throw new Error('load needs a filename');
       }
     })
-    .mergeMap(action =>
+    // Switch map since we want the last load request to be the lead
+    .switchMap(action =>
       readFileObservable(action.filename)
         .map(convertRawNotebook)
         .map(notebookLoaded)
         .catch((err) =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
+    );
+
+const starterNotebook = appendCell(emptyNotebook, emptyCodeCell);
+export const newNotebookEpic = action$ =>
+  action$.ofType(NEW_NOTEBOOK)
+    .switchMap(action =>
+      Observable.of(
+        {
+          type: 'SET_NOTEBOOK',
+          notebook: starterNotebook,
+        },
+        newKernel(action.kernelSpecName),
+      )
     );
