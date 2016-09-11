@@ -52,7 +52,7 @@ export const extractNewKernel = (filename, notebook) => {
   return newKernel(kernelName, cwd);
 };
 
-const convertRawNotebook = ({ filename, data }) => ({
+export const convertRawNotebook = ({ filename, data }) => ({
   filename,
   notebook: commutable.fromJS(JSON.parse(data)),
 });
