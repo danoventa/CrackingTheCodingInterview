@@ -1,4 +1,7 @@
 import * as menu from '../../src/notebook/menu';
+import * as constants from '../../src/notebook/constants';
+
+import { webFrame } from 'electron';
 
 import { dummyStore } from '../utils';
 
@@ -19,7 +22,7 @@ describe('menu', () => {
       menu.dispatchCreateCellAfter(store);
 
       expect(store.dispatch.firstCall).to.be.calledWith({
-        type: 'NEW_CELL_AFTER',
+        type: constants.NEW_CELL_AFTER,
         cellType: 'code',
         source: '',
         id: null,
@@ -35,7 +38,7 @@ describe('menu', () => {
       menu.dispatchPasteCell(store);
 
       expect(store.dispatch.firstCall).to.be.calledWith({
-        type: 'PASTE_CELL',
+        type: constants.PASTE_CELL,
       });
     });
   });
@@ -48,7 +51,7 @@ describe('menu', () => {
       menu.dispatchCutCell(store);
 
       expect(store.dispatch.firstCall).to.be.calledWith({
-        type: 'CUT_CELL',
+        type: constants.CUT_CELL,
         id: null,
       });
     });
@@ -62,7 +65,7 @@ describe('menu', () => {
       menu.dispatchCopyCell(store);
 
       expect(store.dispatch.firstCall).to.be.calledWith({
-        type: 'COPY_CELL',
+        type: constants.COPY_CELL,
         id: null,
       });
     });
@@ -76,7 +79,7 @@ describe('menu', () => {
       menu.dispatchSetTheme(store, {}, 'test_theme');
 
       expect(store.dispatch.firstCall).to.be.calledWith({
-        type: 'SET_THEME',
+        type: constants.SET_THEME,
         theme: 'test_theme',
       });
     });
@@ -84,11 +87,19 @@ describe('menu', () => {
 
   describe('dispatchZoomOut', () => {
     it('executes zoom out', () => {
+      const setZoomLevel = sinon.spy(webFrame, 'setZoomLevel');
+      menu.dispatchZoomOut();
+      setZoomLevel.restore();
+      expect(setZoomLevel).to.be.called;
     });
   });
 
   describe('dispatchZoomIn', () => {
     it('executes zoom in', () => {
+      const setZoomLevel = sinon.spy(webFrame, 'setZoomLevel');
+      menu.dispatchZoomIn();
+      setZoomLevel.restore();
+      expect(setZoomLevel).to.be.called;
     });
   });
 
@@ -100,7 +111,7 @@ describe('menu', () => {
       menu.dispatchRestartClearAll(store);
 
       expect(store.dispatch.firstCall).to.be.calledWith({
-        type: 'KILL_KERNEL',
+        type: constants.KILL_KERNEL,
       });
     });
   });
@@ -112,7 +123,7 @@ describe('menu', () => {
     menu.dispatchRestartKernel(store);
 
     expect(store.dispatch.firstCall).to.be.calledWith({
-      type: 'KILL_KERNEL',
+      type: constants.KILL_KERNEL,
     });
   });
 
@@ -124,7 +135,7 @@ describe('menu', () => {
 
     if (process.platform !== 'win32') {
       expect(store.dispatch.firstCall).to.be.calledWith({
-        type: 'INTERRUPT_KERNEL',
+        type: constants.INTERRUPT_KERNEL,
       });
     }
   });
@@ -136,7 +147,7 @@ describe('menu', () => {
     menu.dispatchKillKernel(store);
 
     expect(store.dispatch.firstCall).to.be.calledWith({
-      type: 'KILL_KERNEL',
+      type: constants.KILL_KERNEL,
     });
   });
 
@@ -147,7 +158,7 @@ describe('menu', () => {
     menu.dispatchClearAll(store);
 
     expect(store.dispatch.firstCall).to.be.calledWith({
-      type: 'CLEAR_CELL_OUTPUT',
+      type: constants.CLEAR_CELL_OUTPUT,
       id: store.getState().document.getIn(['notebook', 'cellOrder']).first()
     });
   });
@@ -184,7 +195,7 @@ describe('menu', () => {
     menu.dispatchNewKernel(store, {}, 'python2');
 
     expect(store.dispatch.firstCall).to.be.calledWith({
-      type: 'LAUNCH_KERNEL',
+      type: constants.LAUNCH_KERNEL,
       kernelSpecName: 'python2',
       cwd: { 'cwd': process.cwd() },
     });
@@ -199,6 +210,18 @@ describe('menu', () => {
     expect(store.dispatch.firstCall).to.be.calledWith({
       type: 'SAVE',
       filename: store.getState().metadata.get('filename'),
+      notebook: store.getState().document.get('notebook'),
+    });
+  });
+
+  describe('dispatchSaveAs', () => {
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    menu.dispatchSaveAs(store, {}, 'test-ipynb.ipynb');
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'SAVE_AS',
+      filename: 'test-ipynb.ipynb',
       notebook: store.getState().document.get('notebook'),
     });
   });

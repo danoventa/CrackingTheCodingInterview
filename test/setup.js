@@ -57,6 +57,10 @@ mock('electron', {
       }
     },
   },
+  'webFrame': {
+    'setZoomLevel': function(zoom) { },
+    'getZoomLevel': function() { return 1; },
+  }
 })
 
 mock('home-dir', function() {
