@@ -47,4 +47,5 @@ export function launchNewNotebook(kernelspec) {
   win.webContents.on('did-finish-load', () => {
     win.webContents.send('main:new', kernelspec);
   });
+  return win;
 }
