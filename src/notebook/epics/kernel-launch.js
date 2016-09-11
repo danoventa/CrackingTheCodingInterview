@@ -5,6 +5,10 @@ import { launch } from 'spawnteract';
 import * as uuid from 'uuid';
 
 import {
+  ipcRenderer as ipc,
+} from 'electron';
+
+import {
   createControlSubject,
   createStdinSubject,
   createIOPubSubject,
@@ -17,7 +21,6 @@ import {
 
 import {
   setExecutionState,
-  newKernel,
   setNotebookKernelInfo,
 } from '../actions';
 
@@ -25,11 +28,8 @@ import {
   NEW_KERNEL,
   LAUNCH_KERNEL,
   SET_LANGUAGE_INFO,
-  SET_NOTEBOOK,
   ERROR_KERNEL_LAUNCH_FAILED,
 } from '../constants';
-
-const path = require('path');
 
 export function setLanguageInfo(langInfo) {
   return {
@@ -112,6 +112,7 @@ export const newKernelEpic = action$ =>
       if (!action.kernelSpecName) {
         throw new Error('newKernel needs a kernelSpecName');
       }
+      ipc.send('nteract:ping:kernel', action.kernelSpecName);
     })
     .mergeMap(action =>
       newKernelObservable(action.kernelSpecName, action.cwd)
@@ -121,20 +122,3 @@ export const newKernelEpic = action$ =>
       payload: error,
       error: true,
     }));
-
-export const newNotebookKernelEpic = action$ =>
-  action$.ofType(SET_NOTEBOOK)
-    .do(action => {
-      if (!action.data) {
-        throw new Error('newNotebookKernel needs notebook data');
-      }
-    }).map(action => {
-      const { filename, data } = action;
-      const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();
-      const kernelName = data.getIn([
-        'metadata', 'kernelspec', 'name',
-      ], data.getIn([
-        'metadata', 'language_info', 'name',
-      ], 'python3')); // TODO: keep default kernel consistent
-      return newKernel(kernelName, cwd);
-    });

@@ -1,5 +1,3 @@
-import Immutable from 'immutable';
-
 import * as constants from './constants';
 
 export function newKernel(kernelSpecName, cwd) {
@@ -21,15 +19,6 @@ export function setExecutionState(executionState) {
   return {
     type: constants.SET_EXECUTION_STATE,
     executionState,
-  };
-}
-
-export function setNotebook(nbData, filename) {
-  const data = Immutable.fromJS(nbData);
-  return {
-    type: constants.SET_NOTEBOOK,
-    data,
-    filename,
   };
 }
 

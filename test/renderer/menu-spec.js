@@ -1,15 +1,16 @@
 import * as menu from '../../src/notebook/menu';
 import * as constants from '../../src/notebook/constants';
 
-import { webFrame } from 'electron';
+import {
+  webFrame,
+  ipcRenderer as ipc,
+} from 'electron';
 
 import { dummyStore } from '../utils';
 
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-
-import { copyNotebook } from '../../src/notebook/utils';
 
 chai.use(sinonChai);
 
@@ -115,7 +116,7 @@ describe('menu', () => {
       });
     });
   });
-  
+
   describe('dispatchRestartKernel', () => {
     const store = dummyStore();
     store.dispatch = sinon.spy();
@@ -225,4 +226,58 @@ describe('menu', () => {
       notebook: store.getState().document.get('notebook'),
     });
   });
+
+  describe('dispatchLoad', () => {
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    menu.dispatchLoad(store, {}, 'test-ipynb.ipynb');
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'LOAD',
+      filename: 'test-ipynb.ipynb',
+    });
+  });
+
+  describe('dispatchNewNotebook', () => {
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    menu.dispatchNewNotebook(store, {}, 'perl');
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'NEW_NOTEBOOK',
+      kernelSpecName: 'perl',
+      cwd: process.cwd(),
+    });
+  });
+
+  describe('initMenuHandlers', () => {
+    it('registers the menu events', () => {
+      const store = dummyStore();
+      const ipcOn = sinon.spy(ipc, 'on');
+      menu.initMenuHandlers(store);
+      [
+        'menu:new-kernel',
+        'menu:run-all',
+        'menu:clear-all',
+        'menu:save',
+        'menu:save-as',
+        'menu:new-code-cell',
+        'menu:copy-cell',
+        'menu:cut-cell',
+        'menu:paste-cell',
+        'menu:kill-kernel',
+        'menu:interrupt-kernel',
+        'menu:restart-kernel',
+        'menu:restart-and-clear-all',
+        'menu:publish:gist',
+        'menu:zoom-in',
+        'menu:zoom-out',
+        'menu:theme',
+        'main:load',
+        'main:new',
+      ].forEach(name => {
+        expect(ipcOn).to.have.been.calledWith(name);
+      })
+    })
+  })
 });

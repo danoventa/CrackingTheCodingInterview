@@ -31,8 +31,8 @@ describe('setNotebook', () => {
       app: [],
       document: initialDocument,
     };
-    const data = fromJS(dummyJSON);
-    const state = reducers(initialState, { type: constants.SET_NOTEBOOK, data });
+    const notebook = fromJS(dummyJSON);
+    const state = reducers(initialState, { type: constants.SET_NOTEBOOK, notebook });
     expect(state.document.getIn(['notebook', 'nbformat'])).to.equal(4);
   });
 });
@@ -332,7 +332,7 @@ describe('mergeCellAfter', () => {
       type: constants.MERGE_CELL_AFTER,
       id,
     };
-    
+
     const state = reducers(originalState, action);
     expect(state.document).to.deep.equal(originalState.document);
   });
@@ -421,7 +421,7 @@ describe('associateCellToMsg', () => {
     };
 
     const msgId = '1234';
-    
+
     const action = {
       type: constants.ASSOCIATE_CELL_TO_MSG,
       cellId: id,
@@ -567,7 +567,7 @@ describe('setLanguageInfo', () => {
     const originalState = {
       document: monocellDocument,
     };
-    
+
     const action = {
       type: constants.SET_LANGUAGE_INFO,
       langInfo: "test",

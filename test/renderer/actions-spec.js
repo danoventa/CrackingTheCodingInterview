@@ -37,16 +37,6 @@ describe('newKernel', () => {
   });
 });
 
-describe('setNotebook', () => {
-  it('creates a SET_NOTEBOOK action', () => {
-    expect(actions.setNotebook(dummyJSON, 'test/test-ipynb.ipynb')).to.deep.equal({
-      type: constants.SET_NOTEBOOK,
-      data: fromJS(dummyJSON),
-      filename: 'test/test-ipynb.ipynb',
-    });
-  });
-});
-
 describe('setNotebookKernelInfo', () => {
   it('creates a SET_KERNEL_INFO action', () => {
     const kernelInfo = {name: 'japanese'};

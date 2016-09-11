@@ -7,7 +7,7 @@ import * as constants from '../constants';
 
 export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
-    const notebook = action.data;
+    const notebook = action.notebook;
     const cellStatuses = notebook.get('cellOrder')
       .reduce((statuses, cellID) =>
         statuses.set(cellID, Immutable.fromJS({ outputHidden: false, inputHidden: false })),

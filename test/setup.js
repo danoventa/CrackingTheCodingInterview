@@ -60,6 +60,9 @@ mock('electron', {
   'webFrame': {
     'setZoomLevel': function(zoom) { },
     'getZoomLevel': function() { return 1; },
+  },
+  'ipcRenderer': {
+    'on': function() {},
   }
 })
 

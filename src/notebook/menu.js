@@ -6,7 +6,7 @@ import {
 
 import * as path from 'path';
 
-import { tildify, launchFilename } from './native-window';
+import { tildify } from './native-window';
 
 import { executeCell } from './epics/execute';
 
@@ -18,6 +18,10 @@ import {
   PUBLISH_GIST,
 } from './epics/github-publish';
 
+import {
+  load,
+  newNotebook,
+} from './epics/loading';
 
 import {
   clearCellOutput,
@@ -34,8 +38,6 @@ import {
   save,
   saveAs,
 } from './epics/saving';
-
-import { copyNotebook } from './utils';
 
 const BrowserWindow = remote.BrowserWindow;
 
@@ -187,28 +189,6 @@ export function dispatchZoomOut() {
   webFrame.setZoomLevel(webFrame.getZoomLevel() - 1);
 }
 
-export function dispatchDuplicate(store) {
-  const state = store.getState();
-  const notificationSystem = state.app.get('notificationSystem');
-  const filename = state.metadata.get('filename');
-  // TODO: This dispatcher should emit an action to duplicate the current
-  //       notebook document as it exists in memory, and copyNotebook should
-  //       be part of a redux-observable epic for copying the notebook based on that
-  if (filename) {
-    copyNotebook(filename).then((value) => {
-      launchFilename(value);
-    });
-  } else {
-    notificationSystem.addNotification({
-      title: 'Can\'t Duplicate Unsaved Notebook',
-      message: 'A notebook must be saved before it can be duplicated.',
-      dismissble: true,
-      position: 'tr',
-      level: 'warning',
-    });
-  }
-}
-
 export function dispatchSetTheme(store, evt, theme) {
   store.dispatch(setTheme(theme));
 }
@@ -235,6 +215,14 @@ export function dispatchCreateCellAfter(store) {
   store.dispatch(createCellAfter('code', focused));
 }
 
+export function dispatchLoad(store, event, filename) {
+  store.dispatch(load(filename));
+}
+
+export function dispatchNewNotebook(store, event, kernelSpecName) {
+  store.dispatch(newNotebook(kernelSpecName));
+}
+
 export function initMenuHandlers(store) {
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
@@ -245,7 +233,6 @@ export function initMenuHandlers(store) {
   ipc.on('menu:copy-cell', dispatchCopyCell.bind(null, store));
   ipc.on('menu:cut-cell', dispatchCutCell.bind(null, store));
   ipc.on('menu:paste-cell', dispatchPasteCell.bind(null, store));
-  ipc.on('menu:duplicate-notebook', dispatchDuplicate.bind(null, store));
   ipc.on('menu:kill-kernel', dispatchKillKernel.bind(null, store));
   ipc.on('menu:interrupt-kernel', dispatchInterruptKernel.bind(null, store));
   ipc.on('menu:restart-kernel', dispatchRestartKernel.bind(null, store));
@@ -254,4 +241,8 @@ export function initMenuHandlers(store) {
   ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store));
   ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store));
   ipc.on('menu:theme', dispatchSetTheme.bind(null, store));
+
+  // OCD: This is more like the registration of main -> renderer thread
+  ipc.on('main:load', dispatchLoad.bind(null, store));
+  ipc.on('main:new', dispatchNewNotebook.bind(null, store));
 }

@@ -1,8 +1,8 @@
-import { Menu, app } from 'electron';
+import { Menu, app, ipcMain as ipc } from 'electron';
 import { resolve } from 'path';
 
 import {
-  launchFilename,
+  launch,
   launchNewNotebook,
 } from './launch';
 
@@ -27,9 +27,16 @@ app.on('window-all-closed', () => {
 
 app.on('open-file', (event, path) => {
   event.preventDefault();
-  launchFilename(resolve(path));
+  launch(resolve(path));
 });
 
+ipc.on('new-kernel', (event, newKernel) => {
+  launchNewNotebook(newKernel);
+});
+
+ipc.on('open-notebook', (event, filename) => {
+  launch(resolve(filename));
+});
 
 app.on('ready', () => {
   log.info('app in ready state');
@@ -46,6 +53,6 @@ app.on('ready', () => {
       .filter(Boolean)
       .filter(x => x !== '.') // Ignore the `electron .`
       // TODO: Consider opening something for directories
-      .forEach(f => launchFilename(resolve(f)));
+      .forEach(f => launch(resolve(f)));
   }
 });
