@@ -4,8 +4,6 @@ const commutable = require('commutable');
 
 const Observable = Rx.Observable;
 
-// Extracted out for readability, but you don't have to or you can use
-// something like the rxjs-fs package
 const writeFileObservable = (filename, data, ...args) =>
   Observable.create(observer => {
     fs.writeFile(filename, data, ...args, error => {
