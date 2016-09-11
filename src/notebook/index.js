@@ -1,7 +1,3 @@
-import {
-  ipcRenderer as ipc,
-} from 'electron';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -18,10 +14,6 @@ import {
   setNotificationSystem,
 } from './actions';
 
-import {
-  load,
-} from './epics/loading';
-
 import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
 import { initGlobalHandlers } from './global-events';
@@ -33,10 +25,6 @@ const store = configureStore({
   metadata: new MetadataRecord(),
   document: new DocumentRecord(),
 }, reducers);
-
-ipc.on('main:load', (evt, filename) => {
-  store.dispatch(load(filename));
-});
 
 // Register for debugging
 window.store = store;

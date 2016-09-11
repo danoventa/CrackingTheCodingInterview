@@ -73,8 +73,7 @@ export const loadEpic = actions =>
       readFileObservable(action.filename)
         .map(convertRawNotebook)
         .map(notebookLoaded)
-        .catch((err) => {
-          console.error(err);
-          return Observable.of({ type: 'ERRORZORZ', payload: err });
-        })
+        .catch((err) =>
+          Observable.of({ type: 'ERROR', payload: err, error: true })
+        )
     );

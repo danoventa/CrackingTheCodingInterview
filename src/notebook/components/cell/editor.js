@@ -126,6 +126,8 @@ export default class Editor extends React.Component {
           event.cm.execCommand('autocomplete');
         }
       }, error => {
+        // TODO: This error needs to be propagated through our store, by refactoring
+        //       this entire setup to an observable (no explicit subscribes)
         console.error(error);
       });
   }
