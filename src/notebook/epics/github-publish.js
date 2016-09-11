@@ -18,7 +18,6 @@ const Observable = Rx.Observable;
 const Github = require('github');
 
 
-
 /**
  * Create an observable stream containing the Github API
  * @param {object} authOptions - The authorization information, right now
@@ -42,7 +41,7 @@ export const githubAuthObservable = (authOptions) =>
  */
 export const setGithub = (github) => ({
   type: SET_GITHUB,
-  github
+  github,
 });
 
 export const PUBLISH_GIST = 'PUBLISH_GIST';
@@ -154,8 +153,8 @@ export function publishNotebookObservable(github, notebook, filepath, notificati
     // Hacky fix to authenticate user, according to docs this is synchronous
     // and may break things, TODO, figure out how to make this not possibly
     // break things
-    if(process.env.GITHUB_TOKEN) {
-      github.authenticate({type:'oauth', token: process.env.GITHUB_TOKEN});
+    if (process.env.GITHUB_TOKEN) {
+      github.authenticate({ type: 'oauth', token: process.env.GITHUB_TOKEN });
     }
     // Already in a gist, update the gist
     if (notebook.hasIn(['metadata', 'gist_id'])) {
