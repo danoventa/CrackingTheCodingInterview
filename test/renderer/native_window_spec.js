@@ -17,10 +17,3 @@ describe('tildify', () => {
     expect(result).to.have.string('~');
   });
 });
-
-describe('launchFilename', () => {
-  it('should fail on an unavailable file', () => {
-    const win = nativeWindow.launchFilename('test-notebook.ipynb');
-    expect(win).to.be.rejected;
-  });
-});
