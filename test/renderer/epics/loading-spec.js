@@ -53,6 +53,6 @@ describe('convertRawNotebook', () => {
   expect(converted.filename).to.equal('/tmp/test.ipynb');
 
   const notebook = converted.notebook;
-  expect(notebook.get('metadata').toJS())
-    .to.deep.equal(dummyCommutable.get('metadata').toJS());
+  expect(dummyCommutable.get('metadata').equals(notebook.get('metadata')))
+    .to.be.true;
 })
