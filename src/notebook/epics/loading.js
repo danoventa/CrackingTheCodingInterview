@@ -8,6 +8,8 @@ const Rx = require('rxjs/Rx');
 const fs = require('fs');
 const commutable = require('commutable');
 
+const path = require('path');
+
 const Observable = Rx.Observable;
 
 const readFileObservable = (filename, ...args) =>
@@ -35,11 +37,20 @@ export const newNotebook = (kernelSpecName, cwd) => ({
 });
 
 // Expects notebook to be JS Object or Immutable.js
-export const notebookLoaded = ({ filename, notebook }) => ({
+export const notebookLoaded = (filename, notebook) => ({
   type: SET_NOTEBOOK,
   filename,
   notebook,
 });
+
+export const extractNewKernel = (filename, notebook) => {
+  const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();
+  const kernelName = notebook.getIn(
+    ['metadata', 'kernelspec', 'name'], notebook.getIn(
+      ['metadata', 'language_info', 'name'],
+        'python3')); // TODO: keep default kernel consistent
+  return newKernel(kernelName, cwd);
+};
 
 const convertRawNotebook = ({ filename, data }) => ({
   filename,
@@ -60,7 +71,12 @@ export const loadEpic = actions =>
     .switchMap(action =>
       readFileObservable(action.filename)
         .map(convertRawNotebook)
-        .map(notebookLoaded)
+        .flatMap(({ filename, notebook }) =>
+          Observable.of(
+            notebookLoaded(filename, notebook),
+            extractNewKernel(filename, notebook),
+          )
+        )
         .catch((err) =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
