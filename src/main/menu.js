@@ -1,7 +1,7 @@
 import { dialog, app, shell, Menu } from 'electron';
 import * as path from 'path';
 
-import { launchFilename, launchNewNotebook } from './launch';
+import { launch, launchNewNotebook } from './launch';
 
 const kernelspecs = require('kernelspecs');
 
@@ -35,12 +35,11 @@ export const fileSubMenus = {
         properties: [
           'openFile',
         ],
-        // TODO: This should be based on the currently opened notebook
         defaultPath: process.cwd(),
       };
       dialog.showOpenDialog(opts, (fname) => {
         if (fname) {
-          launchFilename(fname[0]);
+          launch(fname[0]);
         }
       });
     },
@@ -365,13 +364,11 @@ export function loadFullMenu() {
 
     const kernelMenuItems = Object.keys(kernelSpecs).map(generateSubMenu);
 
-    const newNotebookItems = Object.keys(kernelSpecs).map(kernelName => {
-      const kernelSpec = kernelSpecs[kernelName];
-      return {
+    const newNotebookItems = Object.keys(kernelSpecs)
+      .map(kernelName => ({
         label: kernelSpecs[kernelName].spec.display_name,
-        click: () => launchNewNotebook(kernelSpec),
-      };
-    });
+        click: () => launchNewNotebook(kernelName),
+      }));
 
     const languageMenu = {
       label: '&Language',

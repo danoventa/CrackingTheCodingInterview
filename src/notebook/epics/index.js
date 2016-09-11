@@ -4,6 +4,10 @@ import {
 } from './saving';
 
 import {
+  loadEpic,
+} from './loading';
+
+import {
   newKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
@@ -31,6 +35,7 @@ const epics = [
   setThemeEpic,
   saveEpic,
   saveAsEpic,
+  loadEpic,
   executeCellEpic,
   newKernelEpic,
   acquireKernelInfoEpic,

@@ -6,14 +6,15 @@ import { Provider } from 'react-redux';
 
 import NotificationSystem from 'react-notification-system';
 
-import { ipcRenderer as ipc } from 'electron';
+import {
+  ipcRenderer as ipc,
+} from 'electron';
 
 import configureStore from './store';
 import { reducers } from './reducers';
 import Notebook from './components/notebook';
 
 import {
-  setNotebook,
   setNotificationSystem,
 } from './actions';
 
@@ -23,48 +24,44 @@ import { initGlobalHandlers } from './global-events';
 
 import { AppRecord, DocumentRecord, MetadataRecord } from './records';
 
-ipc.on('main:load', (e, launchData) => {
-  const store = configureStore({
-    app: new AppRecord(),
-    metadata: new MetadataRecord({
-      filename: launchData.filename,
-    }),
-    document: new DocumentRecord(),
-  }, reducers);
+ipc.on('main:load', () => console.warn(arguments));
 
-  // Register for debugging
-  window.store = store;
+const store = configureStore({
+  app: new AppRecord(),
+  metadata: new MetadataRecord(),
+  document: new DocumentRecord(),
+}, reducers);
 
-  initNativeHandlers(store);
-  initMenuHandlers(store);
-  initGlobalHandlers(store);
+// Register for debugging
+window.store = store;
 
-  class App extends React.Component {
-    constructor(props) {
-      super(props);
-      this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    }
-    componentDidMount() {
-      store.dispatch(setNotificationSystem(this.refs.notificationSystem));
-      const state = store.getState();
-      const filename = (state && state.metadata.filename) || launchData.filename;
-      store.dispatch(setNotebook(launchData.notebook, filename));
-    }
-    render() { // eslint-disable-line class-methods-use-this
-      return (
-        <Provider store={store}>
-          <div>
-            <Notebook />
-            <NotificationSystem ref="notificationSystem" />
-            <link rel="stylesheet" href="../static/styles/main.css" />
-          </div>
-        </Provider>
-      );
-    }
+initNativeHandlers(store);
+initMenuHandlers(store);
+initGlobalHandlers(store);
+
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
+  componentDidMount() {
+    store.dispatch(setNotificationSystem(this.refs.notificationSystem));
+  }
+  render() { // eslint-disable-line class-methods-use-this
+    return (
+      <Provider store={store}>
+        <div>
+          <Notebook />
+          <NotificationSystem ref="notificationSystem" />
+          <link rel="stylesheet" href="../static/styles/main.css" />
+        </div>
+      </Provider>
+    );
+  }
+}
 
-  ReactDOM.render(
-    <App />,
-    document.querySelector('#app')
-  );
-});
+ReactDOM.render(
+  <App />,
+  document.querySelector('#app')
+);

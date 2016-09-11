@@ -54,9 +54,9 @@ export const notebookLoaded = ({ filename, notebook }) => ({
   notebook,
 });
 
-const convertRawNotebook = ({ filename, notebook }) => ({
+const convertRawNotebook = ({ filename, data }) => ({
   filename,
-  notebook: commutable.fromJS(JSON.parse(notebook)),
+  notebook: commutable.fromJS(JSON.parse(data)),
 });
 
 // TODO: ERROR_LOADING response
@@ -71,6 +71,13 @@ export const loadEpic = actions =>
     })
     .mergeMap(action =>
       readFileObservable(action.filename)
+        .do(console.warn.bind(console))
         .map(convertRawNotebook)
+        .do(console.warn.bind(console))
         .map(notebookLoaded)
+        .do(console.warn.bind(console))
+        .catch((err) => {
+          console.error(err);
+          return Observable.of({ type: 'ERRORZORZ', payload: err });
+        })
     );

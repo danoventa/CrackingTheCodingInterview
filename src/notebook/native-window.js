@@ -1,17 +1,13 @@
 import { remote } from 'electron';
 
 import home from 'home-dir';
-import fs from 'fs';
 import path from 'path';
-import { fromJS } from 'commutable';
 
 import Rx from 'rxjs/Rx';
 
-import { deferURL } from '../main/launch';
-
 
 const HOME = home();
-const { BrowserWindow, getCurrentWindow } = remote;
+const { getCurrentWindow } = remote;
 
 /**
  * Turn a path like /Users/n/mine.ipynb to ~/mine.ipynb
@@ -51,41 +47,4 @@ export function initNativeHandlers(store) {
       }
       win.setTitle(res.title);
     });
-}
-
-function launch(notebook, filename) {
-  // TODO: This code is also done in main and we need to make sure it's consistent
-  //       Rely on sourcing from ../main/{something}
-  let win = new BrowserWindow({
-    width: 800,
-    height: 1000,
-    title: !filename ? 'Untitled' : path.relative('.', filename.replace(/.ipynb$/, '')),
-  });
-
-  const index = path.join(__dirname, '..', '..', '..', 'static', 'index.html');
-  win.loadURL(`file://${index}`);
-
-  win.webContents.on('did-finish-load', () => {
-    win.webContents.send('main:load', { notebook: notebook.toJS(), filename });
-  });
-
-  win.webContents.on('will-navigate', deferURL);
-
-  win.on('closed', () => {
-    win = null;
-  });
-
-  return win;
-}
-
-export function launchFilename(filename) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(filename, {}, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(launch(fromJS(JSON.parse(data)), filename));
-      }
-    });
-  });
 }
