@@ -9,7 +9,7 @@ describe('launch', () => {
       this.timeout(7000);
 
       const win = launchNewNotebook('python3');
-      win.hide();
+      win.hide(); // To make it nicer to run locally
       ipc.on('nteract:ping:kernel', (event, kernel) => {
         win.close();
         expect(kernel).to.equal('python3');
