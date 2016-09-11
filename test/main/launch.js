@@ -9,6 +9,7 @@ describe('launch', () => {
       this.timeout(7000);
 
       const win = launchNewNotebook('python3');
+      win.hide();
       ipc.on('nteract:ping:kernel', (event, kernel) => {
         win.close();
         expect(kernel).to.equal('python3');
@@ -18,7 +19,7 @@ describe('launch', () => {
       setTimeout(() => {
         expect.fail('nteract:ping:kernel', null, 'Expected nteract:ping:kernel to be sent from frontend');
         done();
-      }, 5000)
+      }, 6000)
     });
   });
 });

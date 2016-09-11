@@ -29,8 +29,8 @@ export function launch(filename) {
     if (filename) {
       win.webContents.send('main:load', filename);
     }
-    // TODO: else, we assume it's an empty notebook, let it bootstrap
-    //       and potentially rely on `main:new`
+    // TODO: else, we assume it's an empty notebook
+    //       assumption right now is that launchNewNotebook will handle the follow on
   });
 
   win.webContents.on('will-navigate', deferURL);
@@ -42,10 +42,10 @@ export function launch(filename) {
   return win;
 }
 
-export function launchNewNotebook(kernelspec) {
+export function launchNewNotebook(kernelSpecName) {
   const win = launch();
   win.webContents.on('did-finish-load', () => {
-    win.webContents.send('main:new', kernelspec);
+    win.webContents.send('main:new', kernelSpecName);
   });
   return win;
 }
