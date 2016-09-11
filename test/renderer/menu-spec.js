@@ -223,4 +223,27 @@ describe('menu', () => {
       notebook: store.getState().document.get('notebook'),
     });
   });
+
+  describe('dispatchLoad', () => {
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    menu.dispatchLoad(store, {}, 'test-ipynb.ipynb');
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'LOAD',
+      filename: 'test-ipynb.ipynb',
+    });
+  });
+
+  describe('dispatchNewNotebook', () => {
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    menu.dispatchNewNotebook(store, {}, 'perl');
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'NEW_NOTEBOOK',
+      kernelSpecName: 'perl',
+      cwd: process.cwd(),
+    });
+  });
 });
