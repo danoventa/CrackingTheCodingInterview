@@ -17,6 +17,13 @@ const Observable = Rx.Observable;
 
 const Github = require('github');
 
+/**
+ * In order to use authentication, you must go to your github settings >>
+ * personal access tokens >> generate new token >> generate a token
+ * with gist permissions. Then, when starting nteract, pass your token by
+ * entering GITHUB_TOKEN=long_string_here npm run start in the command
+ * line.
+ */
 
 /**
  * Create an observable stream containing the Github API
@@ -51,7 +58,7 @@ export const PUBLISH_GIST = 'PUBLISH_GIST';
  * Return an observer that handles authorization.
  * @return Observer containing oauth token.
  */
-export const initialGitHubAuthEpic = () => {
+export const initialGitHubAuthEpic = function foo() {
   return githubAuthObservable()
     .catch(err => {
       // TODO: Prompt?
