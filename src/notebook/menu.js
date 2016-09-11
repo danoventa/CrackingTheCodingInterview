@@ -215,13 +215,10 @@ export function dispatchCreateCellAfter(store) {
 }
 
 export function dispatchLoad(store, event, filename) {
-  console.warn('can we load');
-  console.warn(filename);
   store.dispatch(load(filename));
 }
 
 export function initMenuHandlers(store) {
-  console.warn('better register');
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store));

@@ -35,7 +35,6 @@ const store = configureStore({
 }, reducers);
 
 ipc.on('main:load', (evt, filename) => {
-  console.warn('load', filename);
   store.dispatch(load(filename));
 });
 
