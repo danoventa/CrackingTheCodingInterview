@@ -99,7 +99,15 @@ describe('updateCellPagers', () => {
   })
 });
 
-
+describe('updateCellStatus', () => {
+  it('creates an UPDATE_CELL_STATUS action', () => {
+    expect(actions.updateCellStatus('1234', 'test')).to.deep.equal({
+      type: constants.UPDATE_CELL_STATUS,
+      id: '1234',
+      status: 'test',
+    });
+  });
+});
 
 describe('moveCell', () => {
   it('creates a MOVE_CELL action', () => {
@@ -217,6 +225,16 @@ describe('setNotificationSystem', () => {
     expect(actions.setNotificationSystem(null)).to.deep.equal({
       type: constants.SET_NOTIFICATION_SYSTEM,
       notificationSystem: null,
+    });
+  });
+});
+
+describe('associateCellToMsg', () => {
+  it('creates an ASSOCIATE_CELL_TO_MSG action', () => {
+    expect(actions.associateCellToMsg('1234', '5678')).to.deep.equal({
+      type: constants.ASSOCIATE_CELL_TO_MSG,
+      cellId: '1234',
+      msgId: '5678',
     });
   });
 });

@@ -20,3 +20,11 @@ describe('unload', () => {
     expect(forceShutdownKernel).to.be.called;
   });
 });
+
+describe('initGlobalHandlers', () => {
+  it('adds an unload poperty to the window object', () => {
+    const store = dummyStore();
+    globalEvents.initGlobalHandlers(store);
+    expect(global.window.onunload).to.not.be.undefined;
+  });
+});
