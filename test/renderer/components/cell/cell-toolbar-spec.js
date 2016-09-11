@@ -36,6 +36,7 @@ describe('Toolbar.executeCell', () => {
   it('dispatches an executeCell action', () => {
     const cell = commutable.emptyCodeCell.set('source', 'print("sup")')
     const store = dummyStore();
+    store.dispatch = sinon.spy();
 
     const toolbar = mount(
       <Toolbar id={'0-1-2-3'} cell={cell} />,
@@ -46,7 +47,11 @@ describe('Toolbar.executeCell', () => {
       .find('.executeButton');
 
     button.simulate('click');
-    // TODO: Check on the dispatched actions
 
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'EXECUTE_CELL',
+      source: 'print("sup")',
+      id: '0-1-2-3',
+    });
   });
 });

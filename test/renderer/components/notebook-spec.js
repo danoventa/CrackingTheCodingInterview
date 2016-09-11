@@ -195,4 +195,3 @@ describe('Notebook DnD', () => {
     // TODO: Write tests for cell drag and drop
   })
 })
-
