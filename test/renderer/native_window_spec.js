@@ -6,6 +6,8 @@ import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 
+import { dummyStore } from '../utils';
+
 import { dummyCommutable } from '../utils';
 
 describe('tildify', () => {
@@ -17,3 +19,14 @@ describe('tildify', () => {
     expect(result).to.have.string('~');
   });
 });
+
+
+describe('titleFromState', () => {
+  const store = dummyStore();
+  const titleObject = nativeWindow.titleFromState(store.getState());
+
+  expect(titleObject).to.deep.equal({
+    title: 'dummy-store-nb.ipynb - ... - not connected ',
+    path: 'dummy-store-nb.ipynb',
+  });
+})

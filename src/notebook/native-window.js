@@ -22,20 +22,22 @@ export function tildify(p) {
   return (s.indexOf(HOME) === 0 ? s.replace(HOME + path.sep, `~${path.sep}`) : s).slice(0, -1);
 }
 
+export function titleFromState(state) {
+  const modified = state.app.get('modified');
+  const executionState = state.app.get('executionState');
+  const filename = tildify(state.metadata.get('filename')) || 'Untitled';
+  const displayName = state.document
+    .getIn(['notebook', 'metadata', 'kernelspec', 'display_name'], '...');
+
+  return {
+    title: `${filename} - ${displayName} - ${executionState} ${modified ? '*' : ''}`,
+    path: filename,
+  };
+}
+
 export function initNativeHandlers(store) {
   Rx.Observable.from(store)
-    .map(state => {
-      const modified = state.app.get('modified');
-      const executionState = state.app.get('executionState');
-      const filename = tildify(state.metadata.get('filename')) || 'Untitled';
-      const displayName = state.document
-        .getIn(['notebook', 'metadata', 'kernelspec', 'display_name'], '...');
-
-      return {
-        title: `${filename} - ${displayName} - ${executionState} ${modified ? '*' : ''}`,
-        path: filename,
-      };
-    })
+    .map(titleFromState)
     .distinctUntilChanged()
     .debounceTime(200)
     .subscribe(res => {
