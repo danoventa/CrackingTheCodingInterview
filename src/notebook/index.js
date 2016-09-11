@@ -1,3 +1,7 @@
+import {
+  ipcRenderer as ipc,
+} from 'electron';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -5,10 +9,6 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { Provider } from 'react-redux';
 
 import NotificationSystem from 'react-notification-system';
-
-import {
-  ipcRenderer as ipc,
-} from 'electron';
 
 import configureStore from './store';
 import { reducers } from './reducers';
@@ -18,13 +18,15 @@ import {
   setNotificationSystem,
 } from './actions';
 
+import {
+  load,
+} from './epics/loading';
+
 import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
 import { initGlobalHandlers } from './global-events';
 
 import { AppRecord, DocumentRecord, MetadataRecord } from './records';
-
-ipc.on('main:load', () => console.warn(arguments));
 
 const store = configureStore({
   app: new AppRecord(),
@@ -32,13 +34,17 @@ const store = configureStore({
   document: new DocumentRecord(),
 }, reducers);
 
+ipc.on('main:load', (evt, filename) => {
+  console.warn('load', filename);
+  store.dispatch(load(filename));
+});
+
 // Register for debugging
 window.store = store;
 
 initNativeHandlers(store);
 initMenuHandlers(store);
 initGlobalHandlers(store);
-
 
 class App extends React.Component {
   constructor(props) {

@@ -35,7 +35,7 @@ export function launch(filename) {
   });
 
   win.webContents.on('did-finish-load', () => {
-    win.webContents.send('main:load', filename);
+    win.webContents.send('load', filename);
   });
 
   win.webContents.on('will-navigate', deferURL);

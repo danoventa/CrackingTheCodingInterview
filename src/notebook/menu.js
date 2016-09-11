@@ -241,5 +241,5 @@ export function initMenuHandlers(store) {
   ipc.on('menu:theme', dispatchSetTheme.bind(null, store));
 
   // OCD: This is more like the registration of main -> renderer thread
-  ipc.on('main:load', dispatchLoad.bind(null, store));
+  // ipc.on('main:load', dispatchLoad.bind(null, store));
 }
