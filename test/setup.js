@@ -44,6 +44,10 @@ mock('electron-json-storage', {
   },
 })
 
+mock('plotly.js/dist/plotly', {
+  'newPlot': function(data, layout, config) {},
+})
+
 mock('electron', {
   'shell': {
     'openExternal': function(url) { },
