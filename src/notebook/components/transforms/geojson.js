@@ -19,13 +19,9 @@ export class GeoJSONTransform extends React.Component {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       id: `mapbox.${this.props.theme}`,
     }).addTo(map);
-    try {
-      const geoJSON = this.props.data.toJS();
-      const geoJSONLayer = L.geoJson(geoJSON).addTo(map);
-      map.fitBounds(geoJSONLayer.getBounds());
-    } catch (err) {
-      console.error(err);
-    }
+    const geoJSON = this.props.data.toJS();
+    const geoJSONLayer = L.geoJson(geoJSON).addTo(map);
+    map.fitBounds(geoJSONLayer.getBounds());
   }
 
   shouldComponentUpdate() {
