@@ -20,6 +20,7 @@
     "test:functional:launch": "npm run sublaunch -- 'test/main/launch.js'",
     "test:functional:launchNewNotebook": "npm run sublaunch -- 'test/main/launchNewNotebook.js'",
     "test:functional": "npm run test:functional:launch && npm run test:functional:launchNewNotebook",
+    "test:coverage": "npm run coverage",
     "test:unit": "mocha -r test/setup.js --compilers js:babel-core/register 'test/renderer/**/*.js'",
     "test:watch": "watch 'npm run test' test/",
     "test:lint": "npm run lint",
