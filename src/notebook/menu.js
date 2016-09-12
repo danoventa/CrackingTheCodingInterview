@@ -65,19 +65,20 @@ export function showSaveAsDialog(defaultPath) {
   });
 }
 
+export function triggerWindowRefresh(store, filename) {
+  if (!filename) {
+    return;
+  }
+  const state = store.getState();
+  const executionState = state.app.get('executionState');
+  const notebook = state.document.get('notebook');
+  store.dispatch(saveAs(filename, notebook));
+  BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
+}
+
 export function triggerSaveAs(store) {
   showSaveAsDialog()
-    .then(filename => {
-      if (!filename) {
-        return;
-      }
-      const state = store.getState();
-      const executionState = state.app.get('executionState');
-      const notebook = state.document.get('notebook');
-      store.dispatch(saveAs(filename, notebook));
-      BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
-    }
-  );
+    .then(filename => triggerWindowRefresh(store, filename));
 }
 
 export function dispatchSave(store) {

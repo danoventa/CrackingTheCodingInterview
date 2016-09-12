@@ -120,7 +120,7 @@ function launchKernel(store, notebook, retries=2) {
     });
 }
 
-export function dummyStore() {
+export function dummyStore(config) {
   const notebook = appendCell(emptyNotebook, emptyCodeCell).setIn([
     'metadata', 'kernelspec', 'name',
   ], 'python2');
@@ -141,7 +141,7 @@ export function dummyStore() {
       }
     }),
     metadata: MetadataRecord({
-      filename: 'dummy-store-nb.ipynb',
+      filename: (config && config.noFilename) ? null : 'dummy-store-nb.ipynb',
       past: new Immutable.List(),
       future: new Immutable.List(),
     }),

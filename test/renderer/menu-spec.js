@@ -203,15 +203,17 @@ describe('menu', () => {
   });
 
   describe('dispatchSave', () => {
-    const store = dummyStore();
-    store.dispatch = sinon.spy();
+    it('sends as SAVE request if given a filename', () => {
+      const store = dummyStore();
+      store.dispatch = sinon.spy();
 
-    menu.dispatchSave(store);
+      menu.dispatchSave(store);
 
-    expect(store.dispatch.firstCall).to.be.calledWith({
-      type: 'SAVE',
-      filename: store.getState().metadata.get('filename'),
-      notebook: store.getState().document.get('notebook'),
+      expect(store.dispatch.firstCall).to.be.calledWith({
+        type: 'SAVE',
+        filename: store.getState().metadata.get('filename'),
+        notebook: store.getState().document.get('notebook'),
+      });
     });
   });
 
@@ -277,7 +279,35 @@ describe('menu', () => {
         'main:new',
       ].forEach(name => {
         expect(ipcOn).to.have.been.calledWith(name);
-      })
-    })
-  })
+      });
+    });
+  });
+
+  describe('showSaveAsDialog', () => {
+    it('returns a promise', () => {
+      const dialog = menu.showSaveAsDialog();
+      expect(dialog).to.be.a('promise');
+    });
+  });
+
+  describe('triggerWindowRefresh', () => {
+    it('does nothing if no filename is given', () => {
+      const store = dummyStore();
+
+      expect(menu.triggerWindowRefresh(store, null)).to.be.undefined;
+    });
+    it('sends a SAVE_AS action if given filename', () => {
+      const store = dummyStore();
+      const filename = 'dummy-nb.ipynb';
+      store.dispatch = sinon.spy();
+
+      menu.triggerWindowRefresh(store, filename);
+
+      expect(store.dispatch.firstCall).to.be.calledWith({
+        type: 'SAVE_AS',
+        notebook: store.getState().document.get('notebook'),
+        filename: filename,
+      });
+    });
+  });
 });
