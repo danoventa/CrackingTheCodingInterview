@@ -58,7 +58,14 @@ mock('electron', {
         return {
           'dialog': {
             'showSaveDialog': function(config) { },
-          },
+          }
+        };
+      }
+    },
+    'BrowserWindow': {
+      'getFocusedWindow': function() {
+        return {
+          'setTitle': function() {},
         };
       }
     },
