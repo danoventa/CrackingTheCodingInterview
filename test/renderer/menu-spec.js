@@ -277,7 +277,14 @@ describe('menu', () => {
         'main:new',
       ].forEach(name => {
         expect(ipcOn).to.have.been.calledWith(name);
-      })
-    })
-  })
+      });
+    });
+  });
+
+  describe('showSaveAsDialog', () => {
+    it('returns a promise', () => {
+      const dialog = menu.showSaveAsDialog();
+      expect(dialog).to.be.a('promise');
+    });
+  });
 });

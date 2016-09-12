@@ -56,7 +56,9 @@ mock('electron', {
     'require': function(module) {
       if (module === 'electron') {
         return {
-          'dialog': function() { },
+          'dialog': {
+            'showSaveDialog': function(config) { },
+          },
         };
       }
     },
@@ -72,7 +74,7 @@ mock('electron', {
   },
   'ipcRenderer': {
     'on': function() {},
-  }
+  },
 })
 
 mock('home-dir', function() {
