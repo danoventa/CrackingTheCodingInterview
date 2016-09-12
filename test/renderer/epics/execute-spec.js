@@ -42,9 +42,9 @@ describe('reduceOutputs', () => {
   })
 
   it('merges streams of text', () => {
-    const outputs = Immutable.fromJS([{name: 'stdout', text: 'hello'}])
-    const newOutputs = reduceOutputs(outputs, fromJS({name: 'stdout', text: ' world' }));
+    const outputs = Immutable.fromJS([{name: 'stdout', text: 'hello', output_type: 'stream'}])
+    const newOutputs = reduceOutputs(outputs, {name: 'stdout', text: ' world', output_type: 'stream' });
 
-    expect(newOutputs).to.equal(Immutable.fromJS([{name: 'stdout', text: 'hello world'}]));
+    expect(newOutputs).to.equal(Immutable.fromJS([{name: 'stdout', text: 'hello world', output_type: 'stream'}]));
   })
 })
