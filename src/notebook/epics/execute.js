@@ -25,7 +25,7 @@ const Immutable = require('immutable');
 const emptyOutputs = new Immutable.List();
 
 
-function reduceOutputs(outputs, output) {
+export function reduceOutputs(outputs, output) {
   if (output.output_type === 'clear_output') {
     return emptyOutputs;
   }
