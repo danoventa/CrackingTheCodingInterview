@@ -47,4 +47,24 @@ describe('reduceOutputs', () => {
 
     expect(newOutputs).to.equal(Immutable.fromJS([{name: 'stdout', text: 'hello world', output_type: 'stream'}]));
   })
+
+  it('keeps respective streams together', () => {
+    const outputs = Immutable.fromJS([
+      {name: 'stdout', text: 'hello', output_type: 'stream'},
+      {name: 'stderr', text: 'errors are', output_type: 'stream'},
+    ])
+    const newOutputs = reduceOutputs(outputs, {name: 'stdout', text: ' world', output_type: 'stream' });
+
+    expect(newOutputs).to.equal(Immutable.fromJS([
+      {name: 'stdout', text: 'hello world', output_type: 'stream'},
+      {name: 'stderr', text: 'errors are', output_type: 'stream'},
+    ]));
+
+    const evenNewerOutputs = reduceOutputs(newOutputs, {name: 'stderr', text: ' informative', output_type: 'stream' });
+    expect(evenNewerOutputs).to.equal(Immutable.fromJS([
+      {name: 'stdout', text: 'hello world', output_type: 'stream'},
+      {name: 'stderr', text: 'errors are informative', output_type: 'stream'},
+    ]));
+
+  })
 })
