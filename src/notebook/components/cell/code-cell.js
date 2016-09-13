@@ -75,7 +75,7 @@ class CodeCell extends React.Component {
                 className="pager"
                 displayOrder={this.props.displayOrder}
                 transforms={this.props.transforms}
-                pager={pager}
+                data={pager.get('data')}
                 key={key}
               />
             )
