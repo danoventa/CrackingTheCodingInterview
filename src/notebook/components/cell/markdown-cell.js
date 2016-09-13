@@ -1,6 +1,6 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-
+import { TogglableDisplay } from 'react-jupyter-display-area';
 import Editor from './editor';
 import LatexRenderer from '../latex';
 
@@ -86,7 +86,7 @@ export default class MarkdownCell extends React.Component {
     const shift = e.shiftKey;
     const ctrl = e.ctrlKey;
     if ((shift || ctrl) && e.key === 'Enter') {
-      this.setState({ view: true });
+      this.setState({ view: false });
       return false;
     }
 
@@ -108,6 +108,8 @@ export default class MarkdownCell extends React.Component {
 
   render() {
     return (
+      <div>
+      {
         (this.state && this.state.view) ?
           <div
             className="rendered"
@@ -139,6 +141,20 @@ export default class MarkdownCell extends React.Component {
               />
             </div>
           </div>
+        }
+        {
+        (!this.state.view) ?
+          <div className="outputs">
+            <LatexRenderer>
+            { mdRender(
+              this.state.source ?
+              this.state.source :
+              '*Empty markdown cell, double click me to add content.*')
+            }
+            </LatexRenderer>
+          </div> : null
+        }
+      </div>
     );
   }
 }
