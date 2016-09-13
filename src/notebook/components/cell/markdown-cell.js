@@ -119,38 +119,41 @@ export default class MarkdownCell extends React.Component {
   render() {
     return (
       <div>
-      {
-        (this.state && this.state.view && !this.isInputHidden()) ?
-          <div
-            className="rendered"
-            onDoubleClick={this.openEditor}
-            onKeyDown={this.renderedKeyDown}
-            ref="rendered"
-            tabIndex="0"
-          >
-            <LatexRenderer>
+      { !this.isInputHidden() ?
+        <div>
+          { (this.state && this.state.view) ?
+            <div
+              className="rendered"
+              onDoubleClick={this.openEditor}
+              onKeyDown={this.renderedKeyDown}
+              ref="rendered"
+              tabIndex="0"
+            >
+              <LatexRenderer>
               {mdRender(
                 this.state.source ?
-                  this.state.source :
-                  '*Empty markdown cell, double click me to add content.*')
+                this.state.source :
+                '*Empty markdown cell, double click me to add content.*')
               }
-            </LatexRenderer>
-          </div> :
-          <div onKeyDown={this.editorKeyDown}>
-            <div className="input-container">
-              <div className="prompt" />
-              <Editor
-                language="markdown"
-                id={this.props.id}
-                lineWrapping
-                input={this.state.source}
-                theme={this.props.theme}
-                focusAbove={this.props.focusAbove}
-                focusBelow={this.props.focusBelow}
-                focused={this.props.focused}
-              />
+              </LatexRenderer>
+            </div> :
+            <div onKeyDown={this.editorKeyDown}>
+              <div className="input-container">
+                <div className="prompt" />
+                <Editor
+                  language="markdown"
+                  id={this.props.id}
+                  lineWrapping
+                  input={this.state.source}
+                  theme={this.props.theme}
+                  focusAbove={this.props.focusAbove}
+                  focusBelow={this.props.focusBelow}
+                  focused={this.props.focused}
+                />
+              </div>
             </div>
-          </div>
+          }
+        </div> : null
         }
         {
         (!this.state.view && !this.isOutputHidden()) ?
