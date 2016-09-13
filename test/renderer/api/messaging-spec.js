@@ -23,19 +23,20 @@ describe('childOf', () => {
       expect(val).to.equal(3);
     });
   });
-  it('throws an error if msg_id is not present', () => {
+  it('throws an error if msg_id is not present', (done) => {
     return Rx.Observable.from([
-      {parent_header: {msg_id: '100'}},
+      {parent_header: {msg_id_bad: '100'}},
       {parent_header: {msg_id_test: '100'}},
       {parent_header: {msg_id_invalid: '200'}},
       {parent_header: {msg_id_invalid: '300'}},
     ])
     .childOf({header: {msg_id: '100'}})
-    .toPromise()
-    .then((val) => {
-      throw new Error('Promise was unexpectedly fulfilled.');
+    .subscribe((val) => {
+      throw new Error('Subscription was unexpectedly fulfilled.');
+      done();
     }, (error) => {
       expect(error).to.not.be.null;
+      done();
     });
   });
 });
@@ -60,7 +61,7 @@ describe('ofMessageType', () => {
       expect(val).to.equal(4);
     });
   });
-  it('throws an error in msg_type is not present', () => {
+  it('throws an error in msg_type is not present', (done) => {
     return Rx.Observable.from([
       {header: {msg_type_invalid: 'a'}},
       {header: {msg_type_invalid: 'd'}},
@@ -68,11 +69,12 @@ describe('ofMessageType', () => {
       {header: {msg_type: 'a'}},
     ])
     .ofMessageType(['a', 'd'])
-    .toPromise()
-    .then((val) => {
-      throw new Error('Promise was unexpectedly fulfilled.');
+    .subscribe((val) => {
+      throw new Error('Subscription was unexpectedly fulfilled.');
+      done();
     }, (error) => {
       expect(error).to.not.be.null;
+      done();
     });
   });
 });
