@@ -1,5 +1,6 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Immutable from 'immutable';
 import { TogglableDisplay } from 'react-jupyter-display-area';
 import Editor from './editor';
 import LatexRenderer from '../latex';
@@ -14,6 +15,7 @@ const mdRender = (input) => renderer.render(parser.parse(input));
 
 export default class MarkdownCell extends React.Component {
   static propTypes = {
+    cellStatus: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     cell: React.PropTypes.any,
     id: React.PropTypes.string,
     theme: React.PropTypes.string,
@@ -106,11 +108,19 @@ export default class MarkdownCell extends React.Component {
     return true;
   }
 
+  isOutputHidden() {
+    return this.props.cellStatus.get('outputHidden');
+  }
+
+  isInputHidden() {
+    return this.props.cellStatus.get('inputHidden');
+  }
+
   render() {
     return (
       <div>
       {
-        (this.state && this.state.view) ?
+        (this.state && this.state.view && !this.isInputHidden()) ?
           <div
             className="rendered"
             onDoubleClick={this.openEditor}
@@ -143,12 +153,10 @@ export default class MarkdownCell extends React.Component {
           </div>
         }
         {
-        (!this.state.view) ?
+        (!this.state.view && !this.isOutputHidden()) ?
           <div className="outputs">
             <LatexRenderer>
-            { mdRender(
-              this.state.source)
-            }
+              {mdRender(this.state.source)}
             </LatexRenderer>
           </div> : null
         }

@@ -108,6 +108,7 @@ export class Cell extends React.Component {
             focusBelow={this.focusBelowCell}
             focused={focused}
             cell={cell}
+            cellStatus={this.props.cellStatus}
             id={this.props.id}
             theme={this.props.theme}
           /> :
