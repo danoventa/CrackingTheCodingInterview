@@ -147,9 +147,7 @@ export default class MarkdownCell extends React.Component {
           <div className="outputs">
             <LatexRenderer>
             { mdRender(
-              this.state.source ?
-              this.state.source :
-              '*Empty markdown cell, double click me to add content.*')
+              this.state.source)
             }
             </LatexRenderer>
           </div> : null
