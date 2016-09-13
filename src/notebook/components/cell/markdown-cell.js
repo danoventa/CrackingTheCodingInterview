@@ -1,7 +1,6 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Immutable from 'immutable';
-import { TogglableDisplay } from 'react-jupyter-display-area';
 import Editor from './editor';
 import LatexRenderer from '../latex';
 
@@ -15,7 +14,6 @@ const mdRender = (input) => renderer.render(parser.parse(input));
 
 export default class MarkdownCell extends React.Component {
   static propTypes = {
-    cellStatus: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     cell: React.PropTypes.any,
     id: React.PropTypes.string,
     theme: React.PropTypes.string,
@@ -108,62 +106,49 @@ export default class MarkdownCell extends React.Component {
     return true;
   }
 
-  isOutputHidden() {
-    return this.props.cellStatus.get('outputHidden');
-  }
-
-  isInputHidden() {
-    return this.props.cellStatus.get('inputHidden');
-  }
-
   render() {
     return (
       <div>
-      { !this.isInputHidden() ?
-        <div>
-          { (this.state && this.state.view) ?
-            <div
-              className="rendered"
-              onDoubleClick={this.openEditor}
-              onKeyDown={this.renderedKeyDown}
-              ref="rendered"
-              tabIndex="0"
-            >
-              <LatexRenderer>
-              {mdRender(
-                this.state.source ?
-                this.state.source :
-                '*Empty markdown cell, double click me to add content.*')
-              }
-              </LatexRenderer>
-            </div> :
-            <div onKeyDown={this.editorKeyDown}>
-              <div className="input-container">
-                <div className="prompt" />
-                <Editor
-                  language="markdown"
-                  id={this.props.id}
-                  lineWrapping
-                  input={this.state.source}
-                  theme={this.props.theme}
-                  focusAbove={this.props.focusAbove}
-                  focusBelow={this.props.focusBelow}
-                  focused={this.props.focused}
-                />
-              </div>
-            </div>
-          }
-        </div> : null
-        }
-        {
-        (!this.state.view && !this.isOutputHidden()) ?
-          <div className="outputs">
-            <LatexRenderer>
-              {mdRender(this.state.source)}
-            </LatexRenderer>
-          </div> : null
-        }
-      </div>
+       { (this.state && this.state.view) ?
+         <div
+            className="rendered"
+            onDoubleClick={this.openEditor}
+            onKeyDown={this.renderedKeyDown}
+            ref="rendered"
+            tabIndex="0"
+         >
+           <LatexRenderer>
+             {mdRender(
+               this.state.source ?
+               this.state.source :
+               '*Empty markdown cell, double click me to add content.*')
+             }
+           </LatexRenderer>
+         </div> :
+       <div onKeyDown={this.editorKeyDown}>
+         <div className="input-container">
+           <div className="prompt" />
+             <Editor
+               language="markdown"
+               id={this.props.id}
+               lineWrapping
+               input={this.state.source}
+               theme={this.props.theme}
+               focusAbove={this.props.focusAbove}
+               focusBelow={this.props.focusBelow}
+               focused={this.props.focused}
+             />
+           </div>
+         </div>
+       }
+       { (!this.state.view) ?
+         <div className="outputs">
+           <LatexRenderer>
+             {mdRender(this.state.source)}
+           </LatexRenderer>
+         </div> : null
+       }
+       </div>
     );
   }
 }
