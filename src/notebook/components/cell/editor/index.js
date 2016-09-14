@@ -180,13 +180,13 @@ export default class Editor extends React.Component {
     const state = this.context.store.getState();
     const channels = state.app.channels;
 
-    const { observable, message } = this.codeCompletion(channels, cursor, code)
+    const { observable, message } = this.codeCompletion(channels, cursor, code);
 
     observable.subscribe(callback);
     channels.shell.next(message);
   }
 
-  codeCompletion(channels, cursor, code) {
+  codeCompletion(channels, cursor, code) { // eslint-disable-line
     const cursorPos = cursor.ch;
 
     const message = createMessage('complete_request');
@@ -214,7 +214,7 @@ export default class Editor extends React.Component {
         }))
         .timeout(2000), // 4s
       message,
-    }
+    };
   }
 
   render() {
