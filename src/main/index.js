@@ -12,6 +12,8 @@ import { defaultMenu, loadFullMenu } from './menu';
 
 const log = require('electron-log');
 
+const kernelspecs = require('kernelspecs');
+
 const version = require('../../package.json').version;
 
 const argv = require('yargs')
@@ -60,20 +62,22 @@ openFile$
 
 appReady$
   .subscribe(() => {
-    log.info('app in ready state');
-
-    // Get the default menu first
-    Menu.setApplicationMenu(defaultMenu);
-    // Let the kernels/languages come in after
-    loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
-    if (notebooks.length <= 0) {
-      log.info('launching an empty notebook by default');
-      launchNewNotebook('python3');
-    } else {
-      notebooks
-        .filter(Boolean)
-        .filter(x => x !== '.') // Ignore the `electron .`
-        // TODO: Consider opening something for directories
-        .forEach(f => launch(resolve(f)));
-    }
+    kernelspecs.findAll().then(kernelSpecs => {
+      if (Object.keys(kernelSpecs).length !== 0) {
+        // Get the default menu first
+        Menu.setApplicationMenu(defaultMenu);
+        // Let the kernels/languages come in after
+        loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
+        if (notebooks.length <= 0) {
+          log.info('launching an empty notebook by default');
+          launchNewNotebook('python3');
+        } else {
+          notebooks
+            .filter(Boolean)
+            .filter(x => x !== '.') // Ignore the `electron .`
+            // TODO: Consider opening something for directories
+            .forEach(f => launch(resolve(f)));
+        }
+      }
+    });
   });
