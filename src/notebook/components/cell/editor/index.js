@@ -11,13 +11,20 @@ import 'codemirror/addon/hint/anyword-hint';
 
 import {
   createMessage,
-} from '../../kernel/messaging';
+} from '../../../kernel/messaging';
 
 
-import { updateCellSource } from '../../actions';
+import { updateCellSource } from '../../../actions';
+
+export function formChangeObject(cm, change) {
+  return {
+    cm,
+    change,
+  };
+}
 
 // Hint picker
-const pick = (cm, handle) => handle.pick();
+export const pick = (cm, handle) => handle.pick();
 
 function goLineUpOrEmit(editor) {
   const cursor = editor.getCursor();
@@ -82,6 +89,7 @@ export default class Editor extends React.Component {
     this.onChange = this.onChange.bind(this);
 
     this.hint = this.completions.bind(this);
+    this.codeCompletion = this.codeCompletion.bind(this);
     this.hint.async = true;
 
     // Remember the name of the theme that's applied so that when it changes we
@@ -95,13 +103,6 @@ export default class Editor extends React.Component {
       this.refs.codemirror.focus();
     }
 
-    function formChangeObject(cm, change) {
-      return {
-        cm,
-        change,
-      };
-    }
-
     const cm = this.refs.codemirror.getCodeMirror();
     cm.on('topBoundary', this.props.focusAbove);
     cm.on('bottomBoundary', this.props.focusBelow);
@@ -112,6 +113,7 @@ export default class Editor extends React.Component {
 
     // TODO: The subscription created here needs to be cleaned up when the cell
     //       is deleted
+    //       Suggestion: trigger off of a codemirror event
     inputEvents
       .switchMap(i => Rx.Observable.of(i)) // Not sure how to do this without identity function
       // Pass through changes that aren't newlines
@@ -173,10 +175,18 @@ export default class Editor extends React.Component {
       return;
     }
     const cursor = editor.getCursor();
+    const code = editor.getValue();
+
     const state = this.context.store.getState();
     const channels = state.app.channels;
 
-    const code = editor.getValue();
+    const { observable, message } = this.codeCompletion(channels, cursor, code);
+
+    observable.subscribe(callback);
+    channels.shell.next(message);
+  }
+
+  codeCompletion(channels, cursor, code) { // eslint-disable-line
     const cursorPos = cursor.ch;
 
     const message = createMessage('complete_request');
@@ -185,26 +195,26 @@ export default class Editor extends React.Component {
       cursor_pos: cursorPos,
     };
 
-    channels.shell
-      .childOf(message)
-      .ofMessageType('complete_reply')
-      .pluck('content')
-      .first()
-      .map(results => ({
-        list: results.matches,
-        from: {
-          line: cursor.line,
-          ch: results.cursor_start,
-        },
-        to: {
-          line: cursor.line,
-          ch: results.cursor_end,
-        },
-      }))
-      .timeout(4000) // 4s
-      .subscribe(x => callback(x));
-
-    channels.shell.next(message);
+    return {
+      observable: channels.shell
+        .childOf(message)
+        .ofMessageType('complete_reply')
+        .pluck('content')
+        .first()
+        .map(results => ({
+          list: results.matches,
+          from: {
+            line: cursor.line,
+            ch: results.cursor_start,
+          },
+          to: {
+            line: cursor.line,
+            ch: results.cursor_end,
+          },
+        }))
+        .timeout(2000), // 4s
+      message,
+    };
   }
 
   render() {
