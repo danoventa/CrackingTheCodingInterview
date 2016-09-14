@@ -9,22 +9,9 @@ import Rx from 'rxjs/Rx';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/anyword-hint';
 
-import {
-  createMessage,
-} from '../../../kernel/messaging';
-
+import { codeComplete, pick, formChangeObject } from './complete';
 
 import { updateCellSource } from '../../../actions';
-
-export function formChangeObject(cm, change) {
-  return {
-    cm,
-    change,
-  };
-}
-
-// Hint picker
-export const pick = (cm, handle) => handle.pick();
 
 function goLineUpOrEmit(editor) {
   const cursor = editor.getCursor();
@@ -89,7 +76,6 @@ export default class Editor extends React.Component {
     this.onChange = this.onChange.bind(this);
 
     this.hint = this.completions.bind(this);
-    this.codeCompletion = this.codeCompletion.bind(this);
     this.hint.async = true;
 
     // Remember the name of the theme that's applied so that when it changes we
@@ -133,8 +119,6 @@ export default class Editor extends React.Component {
           event.cm.execCommand('autocomplete');
         }
       }, error => {
-        // TODO: This error needs to be propagated through our store, by refactoring
-        //       this entire setup to an observable (no explicit subscribes)
         console.error(error);
       });
   }
@@ -180,41 +164,10 @@ export default class Editor extends React.Component {
     const state = this.context.store.getState();
     const channels = state.app.channels;
 
-    const { observable, message } = this.codeCompletion(channels, cursor, code);
+    const { observable, message } = codeComplete(channels, cursor, code);
 
     observable.subscribe(callback);
     channels.shell.next(message);
-  }
-
-  codeCompletion(channels, cursor, code) { // eslint-disable-line
-    const cursorPos = cursor.ch;
-
-    const message = createMessage('complete_request');
-    message.content = {
-      code,
-      cursor_pos: cursorPos,
-    };
-
-    return {
-      observable: channels.shell
-        .childOf(message)
-        .ofMessageType('complete_reply')
-        .pluck('content')
-        .first()
-        .map(results => ({
-          list: results.matches,
-          from: {
-            line: cursor.line,
-            ch: results.cursor_start,
-          },
-          to: {
-            line: cursor.line,
-            ch: results.cursor_end,
-          },
-        }))
-        .timeout(2000), // 4s
-      message,
-    };
   }
 
   render() {
