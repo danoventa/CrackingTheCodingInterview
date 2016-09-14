@@ -357,16 +357,19 @@ export function loadFullMenu() {
       };
     }
 
+    let languageMenu = {};
+    let newNotebookItems = {};
+
     if (Object.keys(kernelSpecs).length !== 0) {
       const kernelMenuItems = Object.keys(kernelSpecs).map(generateSubMenu);
 
-      const newNotebookItems = Object.keys(kernelSpecs)
+      newNotebookItems = Object.keys(kernelSpecs)
         .map(kernelName => ({
           label: kernelSpecs[kernelName].spec.display_name,
           click: () => launchNewNotebook(kernelName),
         }));
 
-      const languageMenu = {
+      languageMenu = {
         label: '&Language',
         submenu: [
           {
@@ -399,11 +402,15 @@ export function loadFullMenu() {
         buttons: [],
         message: 'No kernels are installed on your system.',
         detail: 'No kernels are installed on your system so you will not be ' +
-                'able to execute code cells in any language.',
+                'able to execute code cells in any language. You can read about ' +
+                'installing kernels https://ipython.readthedocs.io/en/latest/install/kernel_install.html',
       }, (index) => {
-        const languageMenu = {
-          label: '&Language',
-        };
+        if (index === 0) {
+          languageMenu = {
+            label: '&Language',
+            submenu: [],
+          };
+        }
       });
     }
 
