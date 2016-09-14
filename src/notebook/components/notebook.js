@@ -21,15 +21,12 @@ import {
 } from '../actions';
 import { executeCell } from '../epics/execute';
 
-import complete from '../kernel/completion';
-
 // Always set up the markdown mode
 require('codemirror/mode/markdown/markdown');
 
 const mapStateToProps = (state) => ({
   theme: state.app.theme,
   notebook: state.document.get('notebook'),
-  channels: state.app.channels,
   cellPagers: state.document.get('cellPagers'),
   focusedCell: state.document.get('focusedCell'),
   cellStatuses: state.document.get('cellStatuses'),
@@ -38,7 +35,6 @@ const mapStateToProps = (state) => ({
 
 export class Notebook extends React.Component {
   static propTypes = {
-    channels: React.PropTypes.any,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
     notebook: React.PropTypes.any,
     transforms: React.PropTypes.instanceOf(Immutable.Map),

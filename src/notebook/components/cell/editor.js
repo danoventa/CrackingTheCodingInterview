@@ -201,7 +201,7 @@ export default class Editor extends React.Component {
           ch: results.cursor_end,
         },
       }))
-      // TODO: time this out so subscription doesn't stay open
+      .timeout(4000) // 4s
       .subscribe(x => callback(x));
 
     channels.shell.next(message);
