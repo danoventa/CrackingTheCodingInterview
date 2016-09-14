@@ -12,9 +12,7 @@ export function formChangeObject(cm, change) {
   };
 }
 
-export function codeComplete(channels, cursor, code) {
-  const cursorPos = cursor.ch;
-
+export function codeComplete(channels, cursorPos, line, code) {
   const message = createMessage('complete_request');
   message.content = {
     code,
@@ -30,11 +28,11 @@ export function codeComplete(channels, cursor, code) {
       .map(results => ({
         list: results.matches,
         from: {
-          line: cursor.line,
+          line,
           ch: results.cursor_start,
         },
         to: {
-          line: cursor.line,
+          line,
           ch: results.cursor_end,
         },
       }))
