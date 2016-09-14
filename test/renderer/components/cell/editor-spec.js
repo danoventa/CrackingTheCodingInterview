@@ -1,43 +1,77 @@
 import React from 'react';
-import Immutable from 'immutable';
 
 import { mount } from 'enzyme';
 import chai, { expect } from 'chai';
-import { dummyStore } from '../../../utils'
 
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 import Rx from 'rxjs/Rx';
 
-import { createMessage, childOf, ofMessageType } from '../../../../src/notebook/kernel/messaging';
+import { createMessage } from '../../../../src/notebook/kernel/messaging';
+
+import { dummyStore } from '../../../utils';
+
+import Editor from '../../../../src/notebook/components/cell/editor';
 
 chai.use(sinonChai);
 
-import Editor, { formChangeObject, pick } from '../../../../src/notebook/components/cell/editor';
-import complete from '../../../../src/notebook/components/cell/editor/complete';
+
+const complete = require('../../../../src/notebook/components/cell/editor/complete');
 
 describe('Editor', () => {
-  it('handles code completion', () => {
-    const store = dummyStore();
+  it('reaches out for code completion', (done) => {
+    const sent = new Rx.Subject();
+    const received = new Rx.Subject();
+
+    const mockSocket = Rx.Subject.create(sent, received);
+
+    const state = {
+      app: {
+        channels: {
+          shell: mockSocket,
+        },
+      },
+    };
+    const store = {
+      getState: () => state,
+    };
+
     const editorWrapper = mount(
       <Editor
         completion
       />,
       {
-        context: { store }
+        context: { store },
       }
     );
     expect(editorWrapper).to.not.be.null;
+
+    const editor = editorWrapper.instance();
+    const cm = {
+      getCursor: () => 'MY CURSOR',
+      getValue: () => 'MY VALUE',
+    };
+
+    const callback = sinon.spy();
+
+    const completer = sinon.spy(complete, 'codeComplete');
+    sent.subscribe(msg => {
+      expect(msg.content.code).to.equal('MY VALUE');
+      expect(completer).to.have.been.calledWith(state.app.channels, 'MY CURSOR', 'MY VALUE');
+      completer.restore();
+      done();
+    });
+    editor.completions(cm, callback);
   });
 });
 
 describe('complete', () => {
   it('handles code completion', (done) => {
     const cursor = {
-        line: 1,
-        ch: 9,
-    }
+      line: 1,
+      ch: 9,
+    };
     const code = 'import thi';
 
     const sent = new Rx.Subject();
@@ -47,9 +81,9 @@ describe('complete', () => {
 
     const channels = {
       shell: mockSocket,
-    }
+    };
 
-    const {observable, message} = complete(channels, cursor, code);
+    const {observable, message} = complete.codeComplete(channels, cursor, code);
 
     // Test the message created for sending
     expect(message.content).to.deep.equal({
@@ -85,7 +119,7 @@ describe('complete', () => {
 
 describe('formChangeObject', () => {
   it('translates arguments to a nice Object', () => {
-    expect(formChangeObject(1,2)).to.deep.equal({cm: 1, change: 2});
+    expect(complete.formChangeObject(1,2)).to.deep.equal({cm: 1, change: 2});
   })
 })
 
@@ -96,7 +130,7 @@ describe('pick', () => {
       pick: sinon.spy(),
     }
 
-    pick(null, handle);
+    complete.pick(null, handle);
     expect(handle.pick).to.have.been.called;
   })
 })

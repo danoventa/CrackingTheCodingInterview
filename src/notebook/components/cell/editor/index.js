@@ -9,19 +9,9 @@ import Rx from 'rxjs/Rx';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/anyword-hint';
 
-import complete from './complete';
+import { codeComplete, pick, formChangeObject } from './complete';
 
 import { updateCellSource } from '../../../actions';
-
-export function formChangeObject(cm, change) {
-  return {
-    cm,
-    change,
-  };
-}
-
-// Hint picker
-export const pick = (cm, handle) => handle.pick();
 
 function goLineUpOrEmit(editor) {
   const cursor = editor.getCursor();
@@ -174,7 +164,7 @@ export default class Editor extends React.Component {
     const state = this.context.store.getState();
     const channels = state.app.channels;
 
-    const { observable, message } = complete(channels, cursor, code);
+    const { observable, message } = codeComplete(channels, cursor, code);
 
     observable.subscribe(callback);
     channels.shell.next(message);

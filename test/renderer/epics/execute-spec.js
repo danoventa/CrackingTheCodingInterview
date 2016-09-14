@@ -14,7 +14,6 @@ import {
   EXECUTE_CELL,
   reduceOutputs,
 } from '../../../src/notebook/epics/execute';
-import { liveStore, dispatchQueuePromise, waitForOutputs } from '../../utils';
 
 describe('executeCell', () => {
   it('returns an executeCell action', () => {

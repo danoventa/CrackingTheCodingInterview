@@ -2,7 +2,17 @@ import {
   createMessage,
 } from '../../../kernel/messaging';
 
-export default function codeCompletion(channels, cursor, code) {
+// Hint picker
+export const pick = (cm, handle) => handle.pick();
+
+export function formChangeObject(cm, change) {
+  return {
+    cm,
+    change,
+  };
+}
+
+export function codeComplete(channels, cursor, code) {
   const cursorPos = cursor.ch;
 
   const message = createMessage('complete_request');
