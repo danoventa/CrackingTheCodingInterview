@@ -200,21 +200,6 @@ export default handleActions({
     const { field, value } = action;
     return state.setIn(['notebook', 'metadata', field], Immutable.fromJS(value));
   },
-  [constants.ASSOCIATE_CELL_TO_MSG]: function associateCellToMsg(state, action) {
-    const { cellId, msgId } = action;
-
-    // Keep a forward and backward mapping of cell and msg ids so we can make
-    // sure only one mapping per cell exists at any given time.
-    const oldMsgId = state.getIn(['cellMsgAssociations', cellId]);
-    const cellMsgAssociations = state.get('cellMsgAssociations').set(cellId, msgId);
-    let msgCellAssociations = state.get('msgCellAssociations').set(msgId, cellId);
-    if (oldMsgId) {
-      msgCellAssociations = msgCellAssociations.delete(oldMsgId);
-    }
-    return state
-      .set('cellMsgAssociations', cellMsgAssociations)
-      .set('msgCellAssociations', msgCellAssociations);
-  },
   [constants.COPY_CELL]: function copyCell(state, action) {
     const { id } = action;
     const cellMap = state.getIn(['notebook', 'cellMap']);
