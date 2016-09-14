@@ -1,6 +1,8 @@
 import { Menu, app, ipcMain as ipc } from 'electron';
 import { resolve } from 'path';
 
+import Rx from 'rxjs/Rx';
+
 import {
   launch,
   launchNewNotebook,
@@ -25,11 +27,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('open-file', (event, path) => {
-  event.preventDefault();
-  launch(resolve(path));
-});
-
 ipc.on('new-kernel', (event, newKernel) => {
   launchNewNotebook(newKernel);
 });
@@ -38,21 +35,45 @@ ipc.on('open-notebook', (event, filename) => {
   launch(resolve(filename));
 });
 
-app.on('ready', () => {
-  log.info('app in ready state');
+const appReady$ = Rx.Observable.fromEvent(app, 'ready');
 
-  // Get the default menu first
-  Menu.setApplicationMenu(defaultMenu);
-  // Let the kernels/languages come in after
-  loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
-  if (notebooks.length <= 0) {
-    log.info('launching an empty notebook by default');
-    launchNewNotebook('python3');
-  } else {
-    notebooks
-      .filter(Boolean)
-      .filter(x => x !== '.') // Ignore the `electron .`
-      // TODO: Consider opening something for directories
-      .forEach(f => launch(resolve(f)));
-  }
-});
+const openFile$ = Rx.Observable.fromEvent(
+  app,
+  'open-file', (event, path) => ({ event, path })
+);
+
+function openFileFromEvent({ event, path }) {
+  event.preventDefault();
+  launch(resolve(path));
+}
+
+// Since we can't launch until app is ready
+// and OS X will send the open-file events early,
+// buffer those that come early.
+openFile$
+  .buffer(appReady$) // Form an array of open-file events from before app-ready
+  .first() // Should only be the first
+  .subscribe(buffer => {
+    buffer.forEach(openFileFromEvent);
+    // TODO: Rely on this stream to choose whether default notebook gets opened
+  });
+
+appReady$
+  .subscribe(() => {
+    log.info('app in ready state');
+
+    // Get the default menu first
+    Menu.setApplicationMenu(defaultMenu);
+    // Let the kernels/languages come in after
+    loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
+    if (notebooks.length <= 0) {
+      log.info('launching an empty notebook by default');
+      launchNewNotebook('python3');
+    } else {
+      notebooks
+        .filter(Boolean)
+        .filter(x => x !== '.') // Ignore the `electron .`
+        // TODO: Consider opening something for directories
+        .forEach(f => launch(resolve(f)));
+    }
+  });
