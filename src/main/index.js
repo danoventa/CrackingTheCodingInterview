@@ -63,7 +63,6 @@ openFile$
 appReady$
   .subscribe(() => {
     kernelspecs.findAll().then(kernelSpecs => {
-      kernelSpecs = {};
       if (Object.keys(kernelSpecs).length !== 0) {
         // Get the default menu first
         Menu.setApplicationMenu(defaultMenu);
@@ -87,7 +86,7 @@ appReady$
           message: 'No kernels are installed on your system.',
           detail: 'No kernels are installed on your system so you will not be ' +
             'able to execute code cells in any language. You can read about ' +
-            'installing kernels at ' + 
+            'installing kernels at ' +
             'https://ipython.readthedocs.io/en/latest/install/kernel_install.html',
         }, (index) => {
           if (index === 0) {
