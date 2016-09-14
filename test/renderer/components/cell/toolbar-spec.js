@@ -109,7 +109,7 @@ describe('Toolbar.clearCellOutput', () => {
     store.dispatch = sinon.spy();
 
     const toolbar = mount(
-      <Toolbar id={'0-1-2-3'} cell={cell} />,
+      <Toolbar id={'0-1-2-3'} cell={cell} type={'code'}/>,
       { context: { store } }
     );
 
@@ -132,7 +132,7 @@ describe('Toolbar.changeInputVisibility', () => {
     store.dispatch = sinon.spy();
 
     const toolbar = mount(
-      <Toolbar id={'0-1-2-3'} cell={cell} />,
+      <Toolbar id={'0-1-2-3'} cell={cell} type={'code'} />,
       { context: { store } }
     );
 
@@ -155,7 +155,7 @@ describe('Toolbar.changeOutputVisibility', () => {
     store.dispatch = sinon.spy();
 
     const toolbar = mount(
-      <Toolbar id={'0-1-2-3'} cell={cell} />,
+      <Toolbar id={'0-1-2-3'} cell={cell} type={'code'}/>,
       { context: { store } }
     );
 
@@ -184,6 +184,8 @@ describe('Toolbar.changeCellType', () => {
 
     const button = toolbar
       .find('.changeType');
+
+    console.log(button);
 
     button.simulate('click');
 
