@@ -4,7 +4,9 @@ import middlewares from './middlewares';
 import rootReducer from './reducers';
 
 if (process.env.NODE_ENV === 'development') {
-  middlewares.push(require('./logger')()); // eslint-disable-line global-require
+  const logger = require('./logger'); // eslint-disable-line global-require
+
+  middlewares.push(logger());
 }
 
 export default function configureStore(initialState) {

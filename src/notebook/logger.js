@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 
 const createLogger = require('redux-logger');
 
-export default function clogger() {
+module.exports = function clogger() {
   const logger = createLogger({
     stateTransformer: (state) =>
       Object.keys(state).reduce((prev, key) =>
@@ -14,4 +14,4 @@ export default function clogger() {
     , {}),
   });
   return logger;
-}
+};
