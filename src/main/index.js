@@ -49,6 +49,8 @@ function openFileFromEvent({ event, path }) {
   launch(resolve(path));
 }
 
+const kernelSpecsPromise = kernelspecs.findAll();
+
 // Since we can't launch until app is ready
 // and OS X will send the open-file events early,
 // buffer those that come early.
@@ -56,28 +58,36 @@ openFile$
   .buffer(appReady$) // Form an array of open-file events from before app-ready
   .first() // Should only be the first
   .subscribe(buffer => {
+    // Now we can choose whether to open the default notebook
+    // based on if arguments went through argv or through open-file events
+    if (notebooks.length <= 0 && buffer.length <= 0) {
+      log.info('launching an empty notebook by default');
+      kernelSpecsPromise.then(specs =>
+        launchNewNotebook(Object.keys(specs)[0])
+      );
+    } else {
+      notebooks
+        .filter(Boolean)
+        .filter(x => x !== '.') // Ignore the `electron .`
+        // TODO: Consider opening something for directories
+        .forEach(f => launch(resolve(f)));
+    }
     buffer.forEach(openFileFromEvent);
-    // TODO: Rely on this stream to choose whether default notebook gets opened
   });
+
+// All open file events after app is ready
+openFile$
+  .skipUntil(appReady$)
+  .subscribe(openFileFromEvent);
 
 appReady$
   .subscribe(() => {
-    kernelspecs.findAll().then(kernelSpecs => {
+    kernelSpecsPromise.then(kernelSpecs => {
       if (Object.keys(kernelSpecs).length !== 0) {
         // Get the default menu first
         Menu.setApplicationMenu(defaultMenu);
         // Let the kernels/languages come in after
         loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
-        if (notebooks.length <= 0) {
-          log.info('launching an empty notebook by default');
-          launchNewNotebook('python3');
-        } else {
-          notebooks
-            .filter(Boolean)
-            .filter(x => x !== '.') // Ignore the `electron .`
-            // TODO: Consider opening something for directories
-            .forEach(f => launch(resolve(f)));
-        }
       } else {
         dialog.showMessageBox({
           type: 'warning',
