@@ -112,6 +112,7 @@ export default class Editor extends React.Component {
 
     // TODO: The subscription created here needs to be cleaned up when the cell
     //       is deleted
+    //       Suggestion: trigger off of a codemirror event
     inputEvents
       .switchMap(i => Rx.Observable.of(i)) // Not sure how to do this without identity function
       // Pass through changes that aren't newlines
