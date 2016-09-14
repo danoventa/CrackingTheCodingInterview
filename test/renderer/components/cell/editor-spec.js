@@ -59,7 +59,7 @@ describe('Editor', () => {
     const completer = sinon.spy(complete, 'codeComplete');
     sent.subscribe(msg => {
       expect(msg.content.code).to.equal('MY VALUE');
-      expect(completer).to.have.been.calledWith(state.app.channels, 90001, 12, 'MY VALUE');
+      expect(completer).to.have.been.calledWith(state.app.channels, cm);
       completer.restore();
       done();
     });
@@ -87,7 +87,7 @@ describe('Editor', () => {
 
     const editor = editorWrapper.instance();
     const cm = {
-      getCursor: () => 'MY CURSOR',
+      getCursor: () => ({line: 12}),
       getValue: () => 'MY VALUE',
       indexFromPos: () => 90001,
     };
@@ -110,16 +110,19 @@ describe('complete', () => {
       shell: mockSocket,
     };
 
-    const code = 'import thi';
-    const cursorPos = 9;
-    const line = 1;
+    const cm = {
+      getCursor: () => ({ line: 2 }),
+      getValue: () => '\n\nimport thi',
+      indexFromPos: () => 12,
+      posFromIndex: (x) => ({ ch: x, line: 3 }),
+    };
 
-    const {observable, message} = complete.codeComplete(channels, cursorPos, line, code);
+    const {observable, message} = complete.codeComplete(channels, cm);
 
     // Test the message created for sending
     expect(message.content).to.deep.equal({
-      code: 'import thi',
-      cursor_pos: 9,
+      code: '\n\nimport thi',
+      cursor_pos: 12,
     });
 
     // Craft the response to their message
@@ -135,9 +138,9 @@ describe('complete', () => {
     observable.subscribe(
       msg => {
         expect(msg).to.deep.equal({
-            from: { line: 1, ch: 9 },
+            from: { line: 3, ch: 9 },
             list: ["import this"],
-            to: { ch: 10, line: 1 },
+            to: { ch: 10, line: 3 },
           });
       },
       err => { throw err },
