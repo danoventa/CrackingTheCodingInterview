@@ -80,7 +80,7 @@ export function executeCellObservable(channels, id, code) {
       executeRequest.header.msg_id === msg.parent_header.msg_id
     );
 
-  const megaObservable = Rx.Observable.merge(
+  const cellAction$ = Rx.Observable.merge(
     // Inline %load
     setInputStream.filter(x => x.replace)
       .pluck('text')
@@ -116,10 +116,12 @@ export function executeCellObservable(channels, id, code) {
       .map(outputs => updateCellOutputs(id, outputs))
   );
 
-  return {
-    observable: megaObservable,
-    message: executeRequest,
-  };
+  // On subscription, send the message
+  return Rx.Observable.create(observer => {
+    const subscription = cellAction$.subscribe(observer);
+    channels.shell.next(executeRequest);
+    return subscription;
+  });
 }
 
 export const EXECUTE_CELL = 'EXECUTE_CELL';
@@ -171,12 +173,7 @@ export function executeCellEpic(action$, store) {
             return Rx.Observable.of(updateCellExecutionCount(id, undefined));
           }
 
-          const { observable, message } = executeCellObservable(channels, id, source);
-
-          // TODO: Where do I defer this? I need it done after subscription...
-          channels.shell.next(message);
-
-          return observable
+          return executeCellObservable(channels, id, source)
             .takeUntil(action$.filter(laterAction => laterAction.id === id)
                               .ofType(ABORT_EXECUTION, REMOVE_CELL));
         })
