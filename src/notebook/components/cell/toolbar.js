@@ -88,10 +88,10 @@ export default class Toolbar extends React.Component {
                 <span className="octicon octicon-triangle-right" />
               </button>
             </span>}
-          <button onClick={this.removeCell}>
+          <button onClick={this.removeCell} className="deleteButton" >
             <span className="octicon octicon-trashcan" />
           </button>
-          <button onClick={this.toggleStickyCell}>
+          <button onClick={this.toggleStickyCell} className="stickyButton" >
             <span className="octicon octicon-pin" />
           </button>
           <Dropdown ref="dropdown">
@@ -104,19 +104,19 @@ export default class Toolbar extends React.Component {
               {
               (this.props.type === 'code') ?
                 <ul>
-                  <li onClick={this.clearCellOutput}>
+                  <li onClick={this.clearCellOutput} className="clearOutput" >
                     <a>Clear Cell Output</a>
                   </li>
-                  <li onClick={this.changeInputVisibility}>
+                  <li onClick={this.changeInputVisibility} className="inputVisibility" >
                     <a>Toggle Input Visibility</a>
                   </li>
-                  <li onClick={this.changeOutputVisibility}>
+                  <li onClick={this.changeOutputVisibility} className="outputVisibility" >
                     <a>Toggle Output Visibility</a>
                   </li>
                 </ul> : null
               }
               <ul>
-                <li onClick={this.changeCellType}>
+                <li onClick={this.changeCellType} className="changeType" >
                   <a>
                   Convert to {this.props.type === 'markdown' ? 'Code' : 'Markdown'} Cell
                   </a>

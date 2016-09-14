@@ -55,3 +55,142 @@ describe('Toolbar.executeCell', () => {
     });
   });
 });
+
+describe('Toolbar.removeCell', () => {
+  it('dispatches a REMOVE_CELL action', () => {
+    const cell = commutable.emptyCodeCell;
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    const toolbar = mount(
+      <Toolbar id={'0-1-2-3'} cell={cell} />,
+      { context: { store } }
+    );
+
+    const button = toolbar
+      .find('.deleteButton');
+
+    button.simulate('click');
+
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'REMOVE_CELL',
+      id: '0-1-2-3',
+    });
+  });
+});
+
+describe('Toolbar.toggleStickyCell', () => {
+  it('dispatches TOGGLE_STICKY_CELL action', () => {
+    const cell = commutable.emptyCodeCell;
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    const toolbar = mount(
+      <Toolbar id={'0-1-2-3'} cell={cell} />,
+      { context: { store } }
+    );
+
+    const button = toolbar
+      .find('.stickyButton');
+
+    button.simulate('click');
+
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'TOGGLE_STICKY_CELL',
+      id: '0-1-2-3',
+    });
+  });
+});
+
+describe('Toolbar.clearCellOutput', () => {
+  it('dispatches CLEAR_CELL_OUTPUT action', () => {
+    const cell = commutable.emptyCodeCell;
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    const toolbar = mount(
+      <Toolbar id={'0-1-2-3'} cell={cell} />,
+      { context: { store } }
+    );
+
+    const button = toolbar
+      .find('.clearOutput');
+
+    button.simulate('click');
+
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'CLEAR_CELL_OUTPUT',
+      id: '0-1-2-3',
+    });
+  });
+});
+
+describe('Toolbar.changeInputVisibility', () => {
+  it('dispatches CHANGE_INPUT_VISIBILITY action', () => {
+    const cell = commutable.emptyCodeCell;
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    const toolbar = mount(
+      <Toolbar id={'0-1-2-3'} cell={cell} />,
+      { context: { store } }
+    );
+
+    const button = toolbar
+      .find('.inputVisibility');
+
+    button.simulate('click');
+
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'CHANGE_INPUT_VISIBILITY',
+      id: '0-1-2-3',
+    });
+  });
+});
+
+describe('Toolbar.changeOutputVisibility', () => {
+  it('dispatches CHANGE_OUTPUT_VISIBILITY action', () => {
+    const cell = commutable.emptyCodeCell;
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    const toolbar = mount(
+      <Toolbar id={'0-1-2-3'} cell={cell} />,
+      { context: { store } }
+    );
+
+    const button = toolbar
+      .find('.outputVisibility');
+
+    button.simulate('click');
+
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'CHANGE_OUTPUT_VISIBILITY',
+      id: '0-1-2-3',
+    });
+  });
+});
+
+describe('Toolbar.changeCellType', () => {
+  it('dispatches CHANGE_CELL_TYPE action', () => {
+    const cell = commutable.emptyCodeCell;
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    const toolbar = mount(
+      <Toolbar id={'0-1-2-3'} cell={cell} />,
+      { context: { store } }
+    );
+
+    const button = toolbar
+      .find('.changeType');
+
+    button.simulate('click');
+
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'CHANGE_CELL_TYPE',
+      id: '0-1-2-3',
+      to: 'markdown',
+    });
+  });
+});
