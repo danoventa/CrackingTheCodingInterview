@@ -99,7 +99,6 @@ export default class MarkdownCell extends React.Component {
         this.props.focusBelow();
         break;
       case 'Enter':
-        console.log('entering!')
         this.openEditor();
         e.preventDefault();
         return false;
@@ -111,23 +110,22 @@ export default class MarkdownCell extends React.Component {
   render() {
     console.log(this.state.view);
     return (
-      <div>
-       { (this.state && this.state.view) ?
-         <div
-            className="rendered"
-            onDoubleClick={this.openEditor}
-            onKeyDown={this.renderedKeyDown}
-            ref="rendered"
-            tabIndex="0"
-         >
-           <LatexRenderer>
-             {mdRender(
-               this.state.source ?
-               this.state.source :
+       (this.state && this.state.view) ?
+       <div
+         className="rendered"
+         onDoubleClick={this.openEditor}
+         onKeyDown={this.renderedKeyDown}
+         ref="rendered"
+         tabIndex="0"
+       >
+         <LatexRenderer>
+          {mdRender(
+            this.state.source ?
+            this.state.source :
                '*Empty markdown cell, double click me to add content.*')
-             }
-           </LatexRenderer>
-         </div> :
+          }
+         </LatexRenderer>
+       </div> :
        <div onKeyDown={this.editorKeyDown}>
          <div className="input-container">
            <div className="prompt" />
@@ -142,15 +140,11 @@ export default class MarkdownCell extends React.Component {
                focused={this.props.focused}
              />
            </div>
-         </div>
-       }
-       { (!this.state.view) ?
          <div className="outputs">
            <LatexRenderer>
              {mdRender(this.state.source)}
            </LatexRenderer>
-         </div> : null
-       }
+         </div>
        </div>
     );
   }
