@@ -120,7 +120,7 @@ export default class Editor extends React.Component {
                        !(event.change.text[0] === '' && event.change.text[1] === ''))
       )
       // Pass through only partial tokens that are composed of words
-      .filter(event => {
+      .filter((event) => {
         const editor = event.cm;
         const tokenRange = editor.findWordAt(editor.getCursor());
         const token = editor.getRange(tokenRange.anchor, tokenRange.head);

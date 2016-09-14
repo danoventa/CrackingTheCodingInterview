@@ -349,7 +349,7 @@ export function generateDefaultTemplate() {
 export const defaultMenu = Menu.buildFromTemplate(generateDefaultTemplate());
 
 export function loadFullMenu() {
-  return kernelspecs.findAll().then(kernelSpecs => {
+  return kernelspecs.findAll().then((kernelSpecs) => {
     function generateSubMenu(kernelName) {
       return {
         label: kernelSpecs[kernelName].spec.display_name,
