@@ -61,9 +61,6 @@ export function executeCellObservable(channels, id, code) {
 
     const { iopub, shell } = channels;
 
-    // Track all of our subscriptions for full disposal
-    const subscriptions = [];
-
     const executeRequest = createExecuteRequest(code);
 
     const payloadStream = shell.childOf(executeRequest)
@@ -75,6 +72,15 @@ export function executeCellObservable(channels, id, code) {
     // Sets the next cell source
     const setInputStream = payloadStream
       .filter(payload => payload.source === 'set_next_input');
+
+    // Messages that should affect the cell's output are both messages child
+    // to the execution request and messages mapped to the cell (from widget
+    // interaction, for example).
+    const cellMessages = iopub
+      .filter(msg =>
+        executeRequest.header.msg_id === msg.parent_header.msg_id
+      );
+
 
     const megaObservable = Rx.Observable.merge(
       setInputStream.filter(x => x.replace)
@@ -88,54 +94,29 @@ export function executeCellObservable(channels, id, code) {
       payloadStream.filter(p => p.source === 'page')
         .scan((acc, pd) => acc.push(Immutable.fromJS(pd)), new Immutable.List())
         .map((pagerDatas) => updateCellPagers(id, pagerDatas)),
+      cellMessages
+        .ofMessageType(['status'])
+        .pluck('content', 'execution_state')
+        .map(status => updateCellStatus(id, status)),
+      // Update the input numbering: `[ ]`
+      cellMessages.ofMessageType(['execute_input'])
+        .pluck('content', 'execution_count')
+        .first()
+        .map(ct => updateCellExecutionCount(id, ct)),
+      // Handle all nbformattable messages, clearing output first
+      Rx.Observable.of(updateCellOutputs(id, new Immutable.List())),
+      cellMessages
+        .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
+        .map(msgSpecToNotebookFormat)
+        // Iteratively reduce on the outputs
+        .scan(reduceOutputs, emptyOutputs)
+        // Update the outputs with each change
+        .map(outputs => updateCellOutputs(id, outputs))
     );
 
     megaObservable.subscribe(action => subscriber.next(action));
 
-    // Messages that should affect the cell's output are both messages child
-    // to the execution request and messages mapped to the cell (from widget
-    // interaction, for example).
-    const cellMessages = iopub
-      .filter(msg =>
-        executeRequest.header.msg_id === msg.parent_header.msg_id
-      )
-      .share();
-
-    cellMessages
-      .ofMessageType(['status'])
-      .pluck('content', 'execution_state')
-      .subscribe((status) => {
-        subscriber.next(updateCellStatus(id, status));
-      });
-
-    // Update the input numbering: `[ ]`
-    subscriptions.push(
-      cellMessages.ofMessageType(['execute_input'])
-        .pluck('content', 'execution_count')
-        .first()
-        .subscribe((ct) => {
-          subscriber.next(updateCellExecutionCount(id, ct));
-        })
-    );
-
-    // Handle all nbformattable messages, clearing output first
-    subscriber.next(updateCellOutputs(id, new Immutable.List()));
-    subscriptions.push(cellMessages
-      .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
-      .map(msgSpecToNotebookFormat)
-      // Iteratively reduce on the outputs
-      .scan(reduceOutputs, emptyOutputs)
-      // Update the outputs with each change
-      .subscribe(outputs => {
-        subscriber.next(updateCellOutputs(id, outputs));
-      })
-    );
-
     shell.next(executeRequest);
-
-    return function executionDisposed() {
-      subscriptions.forEach((sub) => sub.unsubscribe());
-    };
   });
 }
 
@@ -195,9 +176,14 @@ export function executeCellEpic(action$, store) {
     )
     // Bring back all the inner Observables into one stream
     .mergeAll()
-    .catch(error => Rx.Observable.of({
-      type: ERROR_EXECUTING,
-      payload: error,
-      error: true,
-    }));
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      console.log(error.stack);
+      return Rx.Observable.of({
+        type: ERROR_EXECUTING,
+        payload: error,
+        error: true,
+      });
+    });
 }
