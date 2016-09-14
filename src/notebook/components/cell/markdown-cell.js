@@ -1,6 +1,5 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Immutable from 'immutable';
 import Editor from './editor';
 import LatexRenderer from '../latex';
 
@@ -10,7 +9,7 @@ const MarkdownRenderer = require('commonmark-react-renderer');
 const parser = new CommonMark.Parser();
 const renderer = new MarkdownRenderer();
 
-const mdRender = (input) => renderer.render(parser.parse(input));
+const mdRender = input => renderer.render(parser.parse(input));
 
 export default class MarkdownCell extends React.Component {
   static propTypes = {
@@ -83,7 +82,6 @@ export default class MarkdownCell extends React.Component {
    * Handles when a keydown event occurs on the rendered MD cell
    */
   renderedKeyDown(e) {
-    console.log('renderedKeyDown')
     const shift = e.shiftKey;
     const ctrl = e.ctrlKey;
     if ((shift || ctrl) && e.key === 'Enter') {
@@ -108,27 +106,26 @@ export default class MarkdownCell extends React.Component {
   }
 
   render() {
-    console.log(this.state.view);
     return (
        (this.state && this.state.view) ?
-       <div
-         className="rendered"
-         onDoubleClick={this.openEditor}
-         onKeyDown={this.renderedKeyDown}
-         ref="rendered"
-         tabIndex="0"
-       >
-         <LatexRenderer>
-          {mdRender(
+         <div
+           className="rendered"
+           onDoubleClick={this.openEditor}
+           onKeyDown={this.renderedKeyDown}
+           ref="rendered"
+           tabIndex="0"
+         >
+           <LatexRenderer>
+           {mdRender(
             this.state.source ?
             this.state.source :
                '*Empty markdown cell, double click me to add content.*')
-          }
-         </LatexRenderer>
-       </div> :
-       <div onKeyDown={this.editorKeyDown}>
-         <div className="input-container">
-           <div className="prompt" />
+           }
+           </LatexRenderer>
+         </div> :
+         <div onKeyDown={this.editorKeyDown}>
+           <div className="input-container">
+             <div className="prompt" />
              <Editor
                language="markdown"
                id={this.props.id}
@@ -140,12 +137,12 @@ export default class MarkdownCell extends React.Component {
                focused={this.props.focused}
              />
            </div>
-         <div className="outputs">
-           <LatexRenderer>
-             {mdRender(this.state.source)}
-           </LatexRenderer>
+           <div className="outputs">
+             <LatexRenderer>
+            {mdRender(this.state.source)}
+             </LatexRenderer>
+           </div>
          </div>
-       </div>
     );
   }
 }
