@@ -101,16 +101,21 @@ export default class Toolbar extends React.Component {
               </button>
             </DropdownTrigger>
             <DropdownContent ref="DropdownContent">
+              {
+              (this.props.type === 'code') ?
+                <ul>
+                  <li onClick={this.clearCellOutput}>
+                    <a>Clear Cell Output</a>
+                  </li>
+                  <li onClick={this.changeInputVisibility}>
+                    <a>Toggle Input Visibility</a>
+                  </li>
+                  <li onClick={this.changeOutputVisibility}>
+                    <a>Toggle Output Visibility</a>
+                  </li>
+                </ul> : null
+              }
               <ul>
-                <li onClick={this.clearCellOutput}>
-                  <a>Clear Cell Output</a>
-                </li>
-                <li onClick={this.changeInputVisibility}>
-                  <a>Toggle Input Visibility</a>
-                </li>
-                <li onClick={this.changeOutputVisibility}>
-                  <a>Toggle Output Visibility</a>
-                </li>
                 <li onClick={this.changeCellType}>
                   <a>
                   Convert to {this.props.type === 'markdown' ? 'Code' : 'Markdown'} Cell
