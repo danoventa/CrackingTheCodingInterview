@@ -52,72 +52,70 @@ export function reduceOutputs(outputs, output) {
 }
 
 export function executeCellObservable(channels, id, code) {
-  return Rx.Observable.create((subscriber) => {
-    if (!channels || !channels.iopub || !channels.shell) {
-      subscriber.error('kernel not connected');
-      subscriber.complete();
-      return () => {};
-    }
+  if (!channels || !channels.iopub || !channels.shell) {
+    return {
+      observable: Rx.Observable.throw(new Error('kernel not connected')),
+      message: null,
+    };
+  }
 
-    const { iopub, shell } = channels;
+  const executeRequest = createExecuteRequest(code);
 
-    const executeRequest = createExecuteRequest(code);
+  const { iopub, shell } = channels;
+  const payloadStream = shell.childOf(executeRequest)
+    .ofMessageType('execute_reply')
+    .pluck('content', 'payload')
+    .filter(Boolean)
+    .flatMap(payloads => Rx.Observable.from(payloads));
 
-    const payloadStream = shell.childOf(executeRequest)
-      .ofMessageType('execute_reply')
-      .pluck('content', 'payload')
-      .filter(Boolean)
-      .flatMap(payloads => Rx.Observable.from(payloads));
+  // Sets the next cell source
+  const setInputStream = payloadStream
+    .filter(payload => payload.source === 'set_next_input');
 
-    // Sets the next cell source
-    const setInputStream = payloadStream
-      .filter(payload => payload.source === 'set_next_input');
-
-    // Messages that should affect the cell's output are both messages child
-    // to the execution request and messages mapped to the cell (from widget
-    // interaction, for example).
-    const cellMessages = iopub
-      .filter(msg =>
-        executeRequest.header.msg_id === msg.parent_header.msg_id
-      );
-
-
-    const megaObservable = Rx.Observable.merge(
-      setInputStream.filter(x => x.replace)
-        .pluck('text')
-        .map(text => updateCellSource(id, text)),
-      setInputStream.filter(x => !x.replace)
-        .pluck('text')
-        .map((text) => createCellAfter('code', id, text)),
-      // Update the doc/pager section, clearing it first
-      Rx.Observable.of(updateCellPagers(id, new Immutable.List())),
-      payloadStream.filter(p => p.source === 'page')
-        .scan((acc, pd) => acc.push(Immutable.fromJS(pd)), new Immutable.List())
-        .map((pagerDatas) => updateCellPagers(id, pagerDatas)),
-      cellMessages
-        .ofMessageType(['status'])
-        .pluck('content', 'execution_state')
-        .map(status => updateCellStatus(id, status)),
-      // Update the input numbering: `[ ]`
-      cellMessages.ofMessageType(['execute_input'])
-        .pluck('content', 'execution_count')
-        .first()
-        .map(ct => updateCellExecutionCount(id, ct)),
-      // Handle all nbformattable messages, clearing output first
-      Rx.Observable.of(updateCellOutputs(id, new Immutable.List())),
-      cellMessages
-        .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
-        .map(msgSpecToNotebookFormat)
-        // Iteratively reduce on the outputs
-        .scan(reduceOutputs, emptyOutputs)
-        // Update the outputs with each change
-        .map(outputs => updateCellOutputs(id, outputs))
+  // Messages that should affect the cell's output are both messages child
+  // to the execution request and messages mapped to the cell (from widget
+  // interaction, for example).
+  const cellMessages = iopub
+    .filter(msg =>
+      executeRequest.header.msg_id === msg.parent_header.msg_id
     );
 
-    megaObservable.subscribe(action => subscriber.next(action));
+  const megaObservable = Rx.Observable.merge(
+    setInputStream.filter(x => x.replace)
+      .pluck('text')
+      .map(text => updateCellSource(id, text)),
+    setInputStream.filter(x => !x.replace)
+      .pluck('text')
+      .map((text) => createCellAfter('code', id, text)),
+    // Update the doc/pager section, clearing it first
+    Rx.Observable.of(updateCellPagers(id, new Immutable.List())),
+    payloadStream.filter(p => p.source === 'page')
+      .scan((acc, pd) => acc.push(Immutable.fromJS(pd)), new Immutable.List())
+      .map((pagerDatas) => updateCellPagers(id, pagerDatas)),
+    cellMessages
+      .ofMessageType(['status'])
+      .pluck('content', 'execution_state')
+      .map(status => updateCellStatus(id, status)),
+    // Update the input numbering: `[ ]`
+    cellMessages.ofMessageType(['execute_input'])
+      .pluck('content', 'execution_count')
+      .first()
+      .map(ct => updateCellExecutionCount(id, ct)),
+    // Handle all nbformattable messages, clearing output first
+    Rx.Observable.of(updateCellOutputs(id, new Immutable.List())),
+    cellMessages
+      .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
+      .map(msgSpecToNotebookFormat)
+      // Iteratively reduce on the outputs
+      .scan(reduceOutputs, emptyOutputs)
+      // Update the outputs with each change
+      .map(outputs => updateCellOutputs(id, outputs))
+  );
 
-    shell.next(executeRequest);
-  });
+  return {
+    observable: megaObservable,
+    message: executeRequest,
+  };
 }
 
 export const EXECUTE_CELL = 'EXECUTE_CELL';
@@ -169,21 +167,23 @@ export function executeCellEpic(action$, store) {
             return Rx.Observable.of(updateCellExecutionCount(id, undefined));
           }
 
-          return executeCellObservable(channels, id, source)
+          const { observable, message } = executeCellObservable(channels, id, source);
+
+          // TODO: Where do I defer this? I need it done after subscription...
+          channels.shell.next(message);
+
+          return observable
             .takeUntil(action$.filter(laterAction => laterAction.id === id)
                               .ofType(ABORT_EXECUTION, REMOVE_CELL));
         })
     )
     // Bring back all the inner Observables into one stream
     .mergeAll()
-    .catch(error => {
-      console.error(error);
-      console.log(error);
-      console.log(error.stack);
-      return Rx.Observable.of({
+    .catch(error =>
+      Rx.Observable.of({
         type: ERROR_EXECUTING,
         payload: error,
         error: true,
-      });
-    });
+      })
+    );
 }
