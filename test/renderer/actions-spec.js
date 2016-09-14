@@ -219,16 +219,6 @@ describe('setNotificationSystem', () => {
   });
 });
 
-describe('associateCellToMsg', () => {
-  it('creates an ASSOCIATE_CELL_TO_MSG action', () => {
-    expect(actions.associateCellToMsg('1234', '5678')).to.deep.equal({
-      type: constants.ASSOCIATE_CELL_TO_MSG,
-      cellId: '1234',
-      msgId: '5678',
-    });
-  });
-});
-
 describe('overwriteMetadata', () => {
   it('creates an OVERWRITE_METADATA_FIELD', () => {
     expect(actions.overwriteMetadata('foo', {bar: 3})).to.deep.equal({

@@ -10,7 +10,6 @@ import {
   updateCellOutputs,
   updateCellPagers,
   updateCellStatus,
-  associateCellToMsg,
 } from '../actions';
 
 import {
@@ -52,7 +51,7 @@ export function reduceOutputs(outputs, output) {
   return outputs.push(Immutable.fromJS(output));
 }
 
-export function executeCellObservable(channels, id, code, cellMessageAssociation) {
+export function executeCellObservable(channels, id, code) {
   return Rx.Observable.create((subscriber) => {
     if (!channels || !channels.iopub || !channels.shell) {
       subscriber.error('kernel not connected');
@@ -66,11 +65,8 @@ export function executeCellObservable(channels, id, code, cellMessageAssociation
     const subscriptions = [];
 
     const executeRequest = createExecuteRequest(code);
-    subscriber.next(associateCellToMsg(id, executeRequest.header.msg_id));
 
-    const shellChildren = shell.childOf(executeRequest).share();
-
-    const payloadStream = shellChildren
+    const payloadStream = shell.childOf(executeRequest)
       .ofMessageType('execute_reply')
       .pluck('content', 'payload')
       .filter(Boolean)
@@ -106,8 +102,7 @@ export function executeCellObservable(channels, id, code, cellMessageAssociation
     // interaction, for example).
     const cellMessages = iopub
       .filter(msg =>
-        executeRequest.header.msg_id === msg.parent_header.msg_id || // child msg
-          cellMessageAssociation === msg.parent_header.msg_id // mapped
+        executeRequest.header.msg_id === msg.parent_header.msg_id
       )
       .share();
 
@@ -198,9 +193,7 @@ export function executeCellEpic(action$, store) {
             return Rx.Observable.of(updateCellExecutionCount(id, undefined));
           }
 
-          const cellMessageAssociation = state.document.getIn(['cellMsgAssociations', id]);
-
-          return executeCellObservable(channels, id, source, cellMessageAssociation)
+          return executeCellObservable(channels, id, source)
             .takeUntil(action$.filter(laterAction => laterAction.id === id)
                               .ofType(ABORT_EXECUTION, REMOVE_CELL));
         })

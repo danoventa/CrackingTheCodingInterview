@@ -26,7 +26,6 @@ export const triggerModified = store => next => action => {
     constants.STARTED_UPLOADING,
     constants.DONE_UPLOADING,
     constants.SET_NOTIFICATION_SYSTEM,
-    constants.ASSOCIATE_CELL_TO_MSG,
     constants.SET_FORWARD_CHECKPOINT,
     constants.SET_BACKWARD_CHECKPOINT,
     constants.CLEAR_FUTURE,

@@ -32,8 +32,6 @@ export function dummyStore(config) {
       cellPagers: new Immutable.Map(),
       cellStatuses: new Immutable.Map(),
       stickyCells: new Immutable.Map(),
-      cellMsgAssociations: new Immutable.Map(),
-      msgCellAssociations: new Immutable.Map(),
       outputStatuses: new Immutable.Map(),
     }),
     app: AppRecord({

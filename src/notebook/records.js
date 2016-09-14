@@ -23,8 +23,6 @@ export const DocumentRecord = new Immutable.Record({
   outputStatuses: new Immutable.Map(),
   stickyCells: new Immutable.Map(),
   focusedCell: null,
-  cellMsgAssociations: new Immutable.Map(),
-  msgCellAssociations: new Immutable.Map(),
   copied: new Immutable.Map(),
 });
 
