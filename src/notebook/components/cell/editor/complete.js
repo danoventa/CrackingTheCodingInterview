@@ -12,8 +12,10 @@ export function formChangeObject(cm, change) {
   };
 }
 
-export function codeComplete(channels, cursor, code) {
-  const cursorPos = cursor.ch;
+export function codeComplete(channels, editor) {
+  const cursor = editor.getCursor();
+  const cursorPos = editor.indexFromPos(cursor);
+  const code = editor.getValue();
 
   const message = createMessage('complete_request');
   message.content = {
@@ -29,14 +31,8 @@ export function codeComplete(channels, cursor, code) {
       .first()
       .map(results => ({
         list: results.matches,
-        from: {
-          line: cursor.line,
-          ch: results.cursor_start,
-        },
-        to: {
-          line: cursor.line,
-          ch: results.cursor_end,
-        },
+        from: editor.posFromIndex(results.cursor_start),
+        to: editor.posFromIndex(results.cursor_end),
       }))
       .timeout(2000), // 4s
     message,
