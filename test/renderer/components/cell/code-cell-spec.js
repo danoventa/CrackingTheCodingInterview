@@ -24,4 +24,14 @@ describe('CodeCell', () => {
     );
     expect(cell.find('.input').length).to.be.greaterThan(0);
   });
+  it('creates a pager', () => {
+    const cell = mount(
+      <CodeCell cell={commutable.emptyCodeCell} {...sharedProps}
+      cellStatus={Immutable.Map({'outputHidden': false, 'inputHidden': false})}
+      pagers={Immutable.Map({'content':
+        Immutable.Map({'data': Immutable.Map({'text/plain': 'one'})})})}/>
+    );
+    expect(cell.find('.pagers').length).to.be.greaterThan(0);
+  });
+
 });
