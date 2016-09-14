@@ -8,6 +8,11 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
 import MarkdownCell from '../../../../src/notebook/components/cell/markdown-cell';
+import {
+  focusPreviousCell,
+  focusNextCell,
+} from '../../../../src/notebook/actions';
+
 import * as commutable from 'commutable';
 import { displayOrder, transforms } from 'transformime-react';
 
@@ -54,7 +59,11 @@ describe('MarkdownCell', () => {
     store.dispatch = sinon.spy();
 
     const cell = shallow(
-      <MarkdownCell id='1234' cell={commutable.emptyMarkdownCell} {...{displayOrder, transforms }}/>,
+      <MarkdownCell
+        id='1234'
+        cell={commutable.emptyMarkdownCell}
+        focusAbove={() => store.dispatch(focusPreviousCell('1234'))}
+        {...{displayOrder, transforms }}/>,
       { context: { store } }
     );
 
@@ -71,7 +80,11 @@ describe('MarkdownCell', () => {
     store.dispatch = sinon.spy();
 
     const cell = shallow(
-      <MarkdownCell id='1234' cell={commutable.emptyMarkdownCell} {...{displayOrder, transforms }}/>,
+      <MarkdownCell
+        id='1234'
+        cell={commutable.emptyMarkdownCell}
+        focusBelow={() => store.dispatch(focusNextCell('1234', true))}
+        {...{displayOrder, transforms }}/>,
       { context: { store } }
     );
 
@@ -80,6 +93,7 @@ describe('MarkdownCell', () => {
     expect(store.dispatch.firstCall).to.be.calledWith({
       type: 'FOCUS_NEXT_CELL',
       id: '1234',
+      createCellIfUndefined: true,
     });
   });
 });
