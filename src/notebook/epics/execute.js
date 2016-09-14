@@ -75,27 +75,22 @@ export function executeCellObservable(channels, id, code) {
     // Sets the next cell source
     const setInputStream = payloadStream
       .filter(payload => payload.source === 'set_next_input');
-    subscriptions.push(
+
+    const megaObservable = Rx.Observable.merge(
       setInputStream.filter(x => x.replace)
         .pluck('text')
-        .subscribe(text => {
-          subscriber.next(updateCellSource(id, text));
-        }));
-    subscriptions.push(
+        .map(text => updateCellSource(id, text)),
       setInputStream.filter(x => !x.replace)
         .pluck('text')
-        .subscribe((text) => {
-          subscriber.next(createCellAfter('code', id, text));
-        }));
-
-    // Update the doc/pager section, clearing it first
-    subscriber.next(updateCellPagers(id, new Immutable.List()));
-    subscriptions.push(
+        .map((text) => createCellAfter('code', id, text)),
+      // Update the doc/pager section, clearing it first
+      Rx.Observable.of(updateCellPagers(id, new Immutable.List())),
       payloadStream.filter(p => p.source === 'page')
         .scan((acc, pd) => acc.push(Immutable.fromJS(pd)), new Immutable.List())
-        .subscribe((pagerDatas) => {
-          subscriber.next(updateCellPagers(id, pagerDatas));
-        }));
+        .map((pagerDatas) => updateCellPagers(id, pagerDatas)),
+    );
+
+    megaObservable.subscribe(action => subscriber.next(action));
 
     // Messages that should affect the cell's output are both messages child
     // to the execution request and messages mapped to the cell (from widget
