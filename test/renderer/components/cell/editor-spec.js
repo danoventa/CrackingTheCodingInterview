@@ -8,19 +8,72 @@ import { dummyStore } from '../../../utils'
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
+import Rx from 'rxjs/Rx';
+
+import { createMessage, childOf, ofMessageType } from '../../../../src/notebook/kernel/messaging';
+
 chai.use(sinonChai);
 
 import Editor from '../../../../src/notebook/components/cell/editor';
 
 describe('Editor', () => {
-  it('should be able to render a markdown cell', () => {
+  it('handles code completion', (done) => {
     const store = dummyStore();
     const editorWrapper = mount(
-      <Editor />,
+      <Editor
+        completion
+      />,
       {
         context: { store }
       }
     );
     expect(editorWrapper).to.not.be.null;
+
+    const callback = sinon.spy();
+
+    const cursor = {
+        line: 1,
+        ch: 9,
+    }
+    const code = 'import thi';
+
+    const sent = new Rx.Subject();
+    const received = new Rx.Subject();
+
+    const mockSocket = Rx.Subject.create(sent, received);
+
+    const channels = {
+      shell: mockSocket,
+    }
+
+    const {observable, message} = editorWrapper.instance().codeCompletion(channels, cursor, code);
+
+    expect(message.content).to.deep.equal({
+      code: 'import thi',
+      cursor_pos: 9,
+    });
+
+    const response = createMessage('complete_reply');
+    response.content = {
+      matches: ['import this'],
+      cursor_start: 9,
+      cursor_end: 10, // Likely hokey values
+    }
+    response.parent_header = Object.assign({}, message.header);
+
+    sent.next(message);
+
+    observable.subscribe(
+      msg => {
+        expect(msg).to.deep.equal({
+            from: { line: 1, ch: 9 },
+            list: ["import this"],
+            to: { ch: 10, line: 1 },
+          });
+      },
+      err => { throw err },
+      done
+    );
+    received.next(response);
   });
 });

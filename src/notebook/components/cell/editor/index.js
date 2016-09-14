@@ -11,10 +11,17 @@ import 'codemirror/addon/hint/anyword-hint';
 
 import {
   createMessage,
-} from '../../kernel/messaging';
+} from '../../../kernel/messaging';
 
 
-import { updateCellSource } from '../../actions';
+import { updateCellSource } from '../../../actions';
+
+export function formChangeObject(cm, change) {
+  return {
+    cm,
+    change,
+  };
+}
 
 // Hint picker
 const pick = (cm, handle) => handle.pick();
@@ -82,6 +89,7 @@ export default class Editor extends React.Component {
     this.onChange = this.onChange.bind(this);
 
     this.hint = this.completions.bind(this);
+    this.codeCompletion = this.codeCompletion.bind(this);
     this.hint.async = true;
 
     // Remember the name of the theme that's applied so that when it changes we
@@ -93,13 +101,6 @@ export default class Editor extends React.Component {
     // On first load, if focused, set codemirror to focus
     if (this.props.focused) {
       this.refs.codemirror.focus();
-    }
-
-    function formChangeObject(cm, change) {
-      return {
-        cm,
-        change,
-      };
     }
 
     const cm = this.refs.codemirror.getCodeMirror();
@@ -174,10 +175,18 @@ export default class Editor extends React.Component {
       return;
     }
     const cursor = editor.getCursor();
+    const code = editor.getValue();
+
     const state = this.context.store.getState();
     const channels = state.app.channels;
 
-    const code = editor.getValue();
+    const { observable, message } = this.codeCompletion(channels, cursor, code)
+
+    observable.subscribe(callback);
+    channels.shell.next(message);
+  }
+
+  codeCompletion(channels, cursor, code) {
     const cursorPos = cursor.ch;
 
     const message = createMessage('complete_request');
@@ -186,26 +195,26 @@ export default class Editor extends React.Component {
       cursor_pos: cursorPos,
     };
 
-    channels.shell
-      .childOf(message)
-      .ofMessageType('complete_reply')
-      .pluck('content')
-      .first()
-      .map(results => ({
-        list: results.matches,
-        from: {
-          line: cursor.line,
-          ch: results.cursor_start,
-        },
-        to: {
-          line: cursor.line,
-          ch: results.cursor_end,
-        },
-      }))
-      .timeout(4000) // 4s
-      .subscribe(x => callback(x));
-
-    channels.shell.next(message);
+    return {
+      observable: channels.shell
+        .childOf(message)
+        .ofMessageType('complete_reply')
+        .pluck('content')
+        .first()
+        .map(results => ({
+          list: results.matches,
+          from: {
+            line: cursor.line,
+            ch: results.cursor_start,
+          },
+          to: {
+            line: cursor.line,
+            ch: results.cursor_end,
+          },
+        }))
+        .timeout(2000), // 4s
+      message,
+    }
   }
 
   render() {
