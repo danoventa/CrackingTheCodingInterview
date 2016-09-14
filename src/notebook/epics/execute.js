@@ -107,7 +107,8 @@ export function executeCellObservable(channels, id, code) {
     // Clear cell outputs
     Rx.Observable.of(updateCellOutputs(id, new Immutable.List())),
     // Handle all nbformattable messages
-    cellMessages.ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
+    cellMessages
+      .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
       .map(msgSpecToNotebookFormat)
       // Iteratively reduce on the outputs
       .scan(reduceOutputs, emptyOutputs)
