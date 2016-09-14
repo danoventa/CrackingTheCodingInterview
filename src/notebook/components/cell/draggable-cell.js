@@ -66,7 +66,6 @@ class DraggableCell extends React.Component {
     transforms: React.PropTypes.instanceOf(Immutable.Map).isRequired,
 
     cellStatus: React.PropTypes.instanceOf(Immutable.Map),
-    getCompletions: React.PropTypes.func,
     language: React.PropTypes.string,
     running: React.PropTypes.bool,
     theme: React.PropTypes.string,
@@ -146,7 +145,6 @@ class DraggableCell extends React.Component {
             displayOrder={this.props.displayOrder}
             cellStatus={this.props.cellStatus}
             id={this.props.id}
-            getCompletions={this.props.getCompletions}
             focusedCell={this.props.focusedCell}
             language={this.props.language}
             running={this.props.running}

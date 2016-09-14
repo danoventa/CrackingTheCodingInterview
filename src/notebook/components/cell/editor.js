@@ -9,6 +9,11 @@ import Rx from 'rxjs/Rx';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/anyword-hint';
 
+import {
+  createMessage,
+} from '../../kernel/messaging';
+
+
 import { updateCellSource } from '../../actions';
 
 // Hint picker
@@ -45,7 +50,7 @@ export default class Editor extends React.Component {
   static propTypes = {
     id: React.PropTypes.string,
     input: React.PropTypes.any,
-    getCompletions: React.PropTypes.any,
+    completion: React.PropTypes.bool,
     language: React.PropTypes.string,
     lineNumbers: React.PropTypes.bool,
     lineWrapping: React.PropTypes.bool,
@@ -164,9 +169,28 @@ export default class Editor extends React.Component {
   }
 
   completions(editor, callback) {
+    if (!this.props.completion) {
+      return;
+    }
     const cursor = editor.getCursor();
-    if (this.props.getCompletions) {
-      this.props.getCompletions(editor.getValue(), cursor.ch).then(results => callback({
+    const state = this.context.store.getState();
+    const channels = state.app.channels;
+
+    const code = editor.getValue();
+    const cursorPos = cursor.ch;
+
+    const message = createMessage('complete_request');
+    message.content = {
+      code,
+      cursor_pos: cursorPos,
+    };
+
+    channels.shell
+      .childOf(message)
+      .ofMessageType('complete_reply')
+      .pluck('content')
+      .first()
+      .map(results => ({
         list: results.matches,
         from: {
           line: cursor.line,
@@ -176,8 +200,11 @@ export default class Editor extends React.Component {
           line: cursor.line,
           ch: results.cursor_end,
         },
-      }));
-    }
+      }))
+      // TODO: time this out so subscription doesn't stay open
+      .subscribe(x => callback(x));
+
+    channels.shell.next(message);
   }
 
   render() {

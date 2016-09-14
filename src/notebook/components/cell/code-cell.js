@@ -15,7 +15,6 @@ class CodeCell extends React.Component {
     cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
     cellStatus: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-    getCompletions: React.PropTypes.func,
     id: React.PropTypes.string,
     language: React.PropTypes.string,
     theme: React.PropTypes.string,
@@ -55,11 +54,11 @@ class CodeCell extends React.Component {
               running={this.props.running}
             />
             <Editor
+              completion
               id={this.props.id}
               input={this.props.cell.get('source')}
               language={this.props.language}
               focused={this.props.focused}
-              getCompletions={this.props.getCompletions}
               theme={this.props.theme}
               focusAbove={this.props.focusAbove}
               focusBelow={this.props.focusBelow}

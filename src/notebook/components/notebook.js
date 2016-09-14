@@ -68,7 +68,6 @@ export class Notebook extends React.Component {
     this.createStickyCellElement = this.createStickyCellElement.bind(this);
     this.keyDown = this.keyDown.bind(this);
     this.moveCell = this.moveCell.bind(this);
-    this.getCompletions = this.getCompletions.bind(this);
   }
 
   componentDidMount() {
@@ -91,10 +90,6 @@ export class Notebook extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.keyDown);
-  }
-
-  getCompletions(source, cursor) {
-    return complete(this.props.channels, source, cursor);
   }
 
   getLanguageMode() {
@@ -195,7 +190,6 @@ export class Notebook extends React.Component {
       id,
       cell,
       language: this.getLanguageMode(),
-      getCompletions: this.getCompletions,
       key: id,
       ref: id,
       displayOrder: this.props.displayOrder,
