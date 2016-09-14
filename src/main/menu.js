@@ -398,7 +398,7 @@ export function loadFullMenu() {
         title: 'No Kernels Installed',
         buttons: [],
         message: 'No kernels are installed on your system.',
-        detail: 'No kernels are installed on your system so you will not be' +
+        detail: 'No kernels are installed on your system so you will not be ' +
                 'able to execute code cells in any language.',
       }, (index) => {
         const languageMenu = {
