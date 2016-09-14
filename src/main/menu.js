@@ -357,40 +357,62 @@ export function loadFullMenu() {
       };
     }
 
-    const kernelMenuItems = Object.keys(kernelSpecs).map(generateSubMenu);
+    let languageMenu = {};
+    let newNotebookItems = {};
 
-    const newNotebookItems = Object.keys(kernelSpecs)
-      .map(kernelName => ({
-        label: kernelSpecs[kernelName].spec.display_name,
-        click: () => launchNewNotebook(kernelName),
-      }));
+    if (Object.keys(kernelSpecs).length !== 0) {
+      const kernelMenuItems = Object.keys(kernelSpecs).map(generateSubMenu);
 
-    const languageMenu = {
-      label: '&Language',
-      submenu: [
-        {
-          label: '&Kill Running Kernel',
-          click: createSender('menu:kill-kernel'),
-        },
-        {
-          label: '&Interrupt Running Kernel',
-          click: createSender('menu:interrupt-kernel'),
-        },
-        {
-          label: 'Restart Running Kernel',
-          click: createSender('menu:restart-kernel'),
-        },
-        {
-          label: 'Restart and Clear All Cells',
-          click: createSender('menu:restart-and-clear-all'),
-        },
-        {
-          type: 'separator',
-        },
-        // All the available kernels
-        ...kernelMenuItems,
-      ],
-    };
+      newNotebookItems = Object.keys(kernelSpecs)
+        .map(kernelName => ({
+          label: kernelSpecs[kernelName].spec.display_name,
+          click: () => launchNewNotebook(kernelName),
+        }));
+
+      languageMenu = {
+        label: '&Language',
+        submenu: [
+          {
+            label: '&Kill Running Kernel',
+            click: createSender('menu:kill-kernel'),
+          },
+          {
+            label: '&Interrupt Running Kernel',
+            click: createSender('menu:interrupt-kernel'),
+          },
+          {
+            label: 'Restart Running Kernel',
+            click: createSender('menu:restart-kernel'),
+          },
+          {
+            label: 'Restart and Clear All Cells',
+            click: createSender('menu:restart-and-clear-all'),
+          },
+          {
+            type: 'separator',
+          },
+          // All the available kernels
+          ...kernelMenuItems,
+        ],
+      };
+    } else {
+      dialog.showMessageBox({
+        type: 'warning',
+        title: 'No Kernels Installed',
+        buttons: [],
+        message: 'No kernels are installed on your system.',
+        detail: 'No kernels are installed on your system so you will not be ' +
+                'able to execute code cells in any language. You can read about ' +
+                'installing kernels https://ipython.readthedocs.io/en/latest/install/kernel_install.html',
+      }, (index) => {
+        if (index === 0) {
+          languageMenu = {
+            label: '&Language',
+            submenu: [],
+          };
+        }
+      });
+    }
 
     const template = [];
 
