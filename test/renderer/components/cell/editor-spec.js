@@ -49,8 +49,9 @@ describe('Editor', () => {
 
     const editor = editorWrapper.instance();
     const cm = {
-      getCursor: () => 'MY CURSOR',
+      getCursor: () => ({line: 12}),
       getValue: () => 'MY VALUE',
+      indexFromPos: () => 90001,
     };
 
     const callback = sinon.spy();
@@ -58,7 +59,7 @@ describe('Editor', () => {
     const completer = sinon.spy(complete, 'codeComplete');
     sent.subscribe(msg => {
       expect(msg.content.code).to.equal('MY VALUE');
-      expect(completer).to.have.been.calledWith(state.app.channels, 'MY CURSOR', 'MY VALUE');
+      expect(completer).to.have.been.calledWith(state.app.channels, 90001, 12, 'MY VALUE');
       completer.restore();
       done();
     });
@@ -88,6 +89,7 @@ describe('Editor', () => {
     const cm = {
       getCursor: () => 'MY CURSOR',
       getValue: () => 'MY VALUE',
+      indexFromPos: () => 90001,
     };
 
     const callback = sinon.spy();
@@ -101,22 +103,18 @@ describe('Editor', () => {
 
 describe('complete', () => {
   it('handles code completion', (done) => {
-    const cursor = {
-      line: 1,
-      ch: 9,
-    };
-    const code = 'import thi';
-
     const sent = new Rx.Subject();
     const received = new Rx.Subject();
-
     const mockSocket = Rx.Subject.create(sent, received);
-
     const channels = {
       shell: mockSocket,
     };
 
-    const {observable, message} = complete.codeComplete(channels, cursor, code);
+    const code = 'import thi';
+    const cursorPos = 9;
+    const line = 1;
+
+    const {observable, message} = complete.codeComplete(channels, cursorPos, line, code);
 
     // Test the message created for sending
     expect(message.content).to.deep.equal({
