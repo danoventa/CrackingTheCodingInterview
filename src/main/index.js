@@ -1,4 +1,4 @@
-import { Menu, app, ipcMain as ipc } from 'electron';
+import { Menu, dialog, app, ipcMain as ipc } from 'electron';
 import { resolve } from 'path';
 
 import Rx from 'rxjs/Rx';
@@ -63,6 +63,7 @@ openFile$
 appReady$
   .subscribe(() => {
     kernelspecs.findAll().then(kernelSpecs => {
+      kernelSpecs = {};
       if (Object.keys(kernelSpecs).length !== 0) {
         // Get the default menu first
         Menu.setApplicationMenu(defaultMenu);
@@ -78,6 +79,21 @@ appReady$
             // TODO: Consider opening something for directories
             .forEach(f => launch(resolve(f)));
         }
+      } else {
+        dialog.showMessageBox({
+          type: 'warning',
+          title: 'No Kernels Installed',
+          buttons: [],
+          message: 'No kernels are installed on your system.',
+          detail: 'No kernels are installed on your system so you will not be ' +
+            'able to execute code cells in any language. You can read about ' +
+            'installing kernels at ' + 
+            'https://ipython.readthedocs.io/en/latest/install/kernel_install.html',
+        }, (index) => {
+          if (index === 0) {
+            app.quit();
+          }
+        });
       }
     });
   });
