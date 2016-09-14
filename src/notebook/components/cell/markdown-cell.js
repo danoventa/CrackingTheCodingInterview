@@ -83,10 +83,11 @@ export default class MarkdownCell extends React.Component {
    * Handles when a keydown event occurs on the rendered MD cell
    */
   renderedKeyDown(e) {
+    console.log('renderedKeyDown')
     const shift = e.shiftKey;
     const ctrl = e.ctrlKey;
     if ((shift || ctrl) && e.key === 'Enter') {
-      this.setState({ view: false });
+      this.setState({ view: true });
       return false;
     }
 
@@ -98,6 +99,7 @@ export default class MarkdownCell extends React.Component {
         this.props.focusBelow();
         break;
       case 'Enter':
+        console.log('entering!')
         this.openEditor();
         e.preventDefault();
         return false;
@@ -107,6 +109,7 @@ export default class MarkdownCell extends React.Component {
   }
 
   render() {
+    console.log(this.state.view);
     return (
       <div>
        { (this.state && this.state.view) ?
