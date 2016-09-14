@@ -1,4 +1,4 @@
-import { Menu, app, ipcMain as ipc } from 'electron';
+import { Menu, dialog, app, ipcMain as ipc } from 'electron';
 import { resolve } from 'path';
 
 import Rx from 'rxjs/Rx';
@@ -11,6 +11,8 @@ import {
 import { defaultMenu, loadFullMenu } from './menu';
 
 const log = require('electron-log');
+
+const kernelspecs = require('kernelspecs');
 
 const version = require('../../package.json').version;
 
@@ -60,20 +62,37 @@ openFile$
 
 appReady$
   .subscribe(() => {
-    log.info('app in ready state');
-
-    // Get the default menu first
-    Menu.setApplicationMenu(defaultMenu);
-    // Let the kernels/languages come in after
-    loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
-    if (notebooks.length <= 0) {
-      log.info('launching an empty notebook by default');
-      launchNewNotebook('python3');
-    } else {
-      notebooks
-        .filter(Boolean)
-        .filter(x => x !== '.') // Ignore the `electron .`
-        // TODO: Consider opening something for directories
-        .forEach(f => launch(resolve(f)));
-    }
+    kernelspecs.findAll().then(kernelSpecs => {
+      if (Object.keys(kernelSpecs).length !== 0) {
+        // Get the default menu first
+        Menu.setApplicationMenu(defaultMenu);
+        // Let the kernels/languages come in after
+        loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
+        if (notebooks.length <= 0) {
+          log.info('launching an empty notebook by default');
+          launchNewNotebook('python3');
+        } else {
+          notebooks
+            .filter(Boolean)
+            .filter(x => x !== '.') // Ignore the `electron .`
+            // TODO: Consider opening something for directories
+            .forEach(f => launch(resolve(f)));
+        }
+      } else {
+        dialog.showMessageBox({
+          type: 'warning',
+          title: 'No Kernels Installed',
+          buttons: [],
+          message: 'No kernels are installed on your system.',
+          detail: 'No kernels are installed on your system so you will not be ' +
+            'able to execute code cells in any language. You can read about ' +
+            'installing kernels at ' +
+            'https://ipython.readthedocs.io/en/latest/install/kernel_install.html',
+        }, (index) => {
+          if (index === 0) {
+            app.quit();
+          }
+        });
+      }
+    });
   });
