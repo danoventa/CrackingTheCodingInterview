@@ -15,9 +15,10 @@ import { createMessage, childOf, ofMessageType } from '../../../../src/notebook/
 chai.use(sinonChai);
 
 import Editor, { formChangeObject, pick } from '../../../../src/notebook/components/cell/editor';
+import complete from '../../../../src/notebook/components/cell/editor/complete';
 
 describe('Editor', () => {
-  it('handles code completion', (done) => {
+  it('handles code completion', () => {
     const store = dummyStore();
     const editorWrapper = mount(
       <Editor
@@ -28,9 +29,11 @@ describe('Editor', () => {
       }
     );
     expect(editorWrapper).to.not.be.null;
+  });
+});
 
-    const callback = sinon.spy();
-
+describe('complete', () => {
+  it('handles code completion', (done) => {
     const cursor = {
         line: 1,
         ch: 9,
@@ -46,13 +49,15 @@ describe('Editor', () => {
       shell: mockSocket,
     }
 
-    const {observable, message} = editorWrapper.instance().codeCompletion(channels, cursor, code);
+    const {observable, message} = complete(channels, cursor, code);
 
+    // Test the message created for sending
     expect(message.content).to.deep.equal({
       code: 'import thi',
       cursor_pos: 9,
     });
 
+    // Craft the response to their message
     const response = createMessage('complete_reply');
     response.content = {
       matches: ['import this'],
@@ -61,8 +66,7 @@ describe('Editor', () => {
     }
     response.parent_header = Object.assign({}, message.header);
 
-    sent.next(message);
-
+    // Listen on the Observable
     observable.subscribe(
       msg => {
         expect(msg).to.deep.equal({
@@ -74,6 +78,7 @@ describe('Editor', () => {
       err => { throw err },
       done
     );
+    sent.next(message);
     received.next(response);
   });
 });
