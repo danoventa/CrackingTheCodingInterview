@@ -62,38 +62,41 @@ export function executeCellObservable(channels, id, code) {
   const executeRequest = createExecuteRequest(code);
 
   const { iopub, shell } = channels;
+
+  // Payload streams in general
   const payloadStream = shell.childOf(executeRequest)
     .ofMessageType('execute_reply')
     .pluck('content', 'payload')
     .filter(Boolean)
     .flatMap(payloads => Rx.Observable.from(payloads));
 
-  // Sets the next cell source
+  // Payload stream for setting the input, whether in place or "next"
   const setInputStream = payloadStream
     .filter(payload => payload.source === 'set_next_input');
 
-  // Messages that should affect the cell's output are both messages child
-  // to the execution request and messages mapped to the cell (from widget
-  // interaction, for example).
+  // All child messages for the cell
   const cellMessages = iopub
     .filter(msg =>
       executeRequest.header.msg_id === msg.parent_header.msg_id
     );
 
   const megaObservable = Rx.Observable.merge(
+    // Inline %load
     setInputStream.filter(x => x.replace)
       .pluck('text')
       .map(text => updateCellSource(id, text)),
+    // %load for the cell _after_
     setInputStream.filter(x => !x.replace)
       .pluck('text')
       .map((text) => createCellAfter('code', id, text)),
-    // Update the doc/pager section, clearing it first
+    // Clear any old pager
     Rx.Observable.of(updateCellPagers(id, new Immutable.List())),
+    // Update the doc/pager section with new bundles
     payloadStream.filter(p => p.source === 'page')
       .scan((acc, pd) => acc.push(Immutable.fromJS(pd)), new Immutable.List())
       .map((pagerDatas) => updateCellPagers(id, pagerDatas)),
-    cellMessages
-      .ofMessageType(['status'])
+    // Set the cell status
+    cellMessages.ofMessageType(['status'])
       .pluck('content', 'execution_state')
       .map(status => updateCellStatus(id, status)),
     // Update the input numbering: `[ ]`
@@ -101,10 +104,10 @@ export function executeCellObservable(channels, id, code) {
       .pluck('content', 'execution_count')
       .first()
       .map(ct => updateCellExecutionCount(id, ct)),
-    // Handle all nbformattable messages, clearing output first
+    // Clear cell outputs
     Rx.Observable.of(updateCellOutputs(id, new Immutable.List())),
-    cellMessages
-      .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
+    // Handle all nbformattable messages
+    cellMessages.ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
       .map(msgSpecToNotebookFormat)
       // Iteratively reduce on the outputs
       .scan(reduceOutputs, emptyOutputs)
