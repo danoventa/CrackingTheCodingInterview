@@ -14,7 +14,7 @@ import { createMessage, childOf, ofMessageType } from '../../../../src/notebook/
 
 chai.use(sinonChai);
 
-import Editor from '../../../../src/notebook/components/cell/editor';
+import Editor, { formChangeObject, pick } from '../../../../src/notebook/components/cell/editor';
 
 describe('Editor', () => {
   it('handles code completion', (done) => {
@@ -77,3 +77,21 @@ describe('Editor', () => {
     received.next(response);
   });
 });
+
+describe('formChangeObject', () => {
+  it('translates arguments to a nice Object', () => {
+    expect(formChangeObject(1,2)).to.deep.equal({cm: 1, change: 2});
+  })
+})
+
+describe('pick', () => {
+  it('plucks the codemirror handle', () => {
+    // no clue what to call this
+    const handle = {
+      pick: sinon.spy(),
+    }
+
+    pick(null, handle);
+    expect(handle.pick).to.have.been.called;
+  })
+})

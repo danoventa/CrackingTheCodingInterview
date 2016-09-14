@@ -24,7 +24,7 @@ export function formChangeObject(cm, change) {
 }
 
 // Hint picker
-const pick = (cm, handle) => handle.pick();
+export const pick = (cm, handle) => handle.pick();
 
 function goLineUpOrEmit(editor) {
   const cursor = editor.getCursor();
