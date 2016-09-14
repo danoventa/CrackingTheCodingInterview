@@ -113,7 +113,7 @@ export default class Editor extends React.Component {
     // TODO: The subscription created here needs to be cleaned up when the cell
     //       is deleted
     inputEvents
-      .debounceTime(20)
+      .switchMap(i => Rx.Observable.of(i)) // Not sure how to do this without identity function
       // Pass through changes that aren't newlines
       .filter(event => event.change.text.length === 1 ||
                        (event.change.text.length === 2 &&
