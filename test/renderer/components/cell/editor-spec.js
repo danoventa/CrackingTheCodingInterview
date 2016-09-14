@@ -64,6 +64,39 @@ describe('Editor', () => {
     });
     editor.completions(cm, callback);
   });
+  it('doesn\'t try for code completion when not set', () => {
+    const state = {
+      app: {
+        channels: {
+          shell: 'turtle power',
+        },
+      },
+    };
+    const store = {
+      getState: () => state,
+    };
+
+    const editorWrapper = mount(
+      <Editor />,
+      {
+        context: { store },
+      }
+    );
+    expect(editorWrapper).to.not.be.null;
+
+    const editor = editorWrapper.instance();
+    const cm = {
+      getCursor: () => 'MY CURSOR',
+      getValue: () => 'MY VALUE',
+    };
+
+    const callback = sinon.spy();
+
+    const completer = sinon.spy(complete, 'codeComplete');
+    editor.completions(cm, callback);
+    expect(completer).to.have.not.been.called;
+    completer.restore();
+  });
 });
 
 describe('complete', () => {
