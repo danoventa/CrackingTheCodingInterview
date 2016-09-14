@@ -1,6 +1,5 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-
 import Editor from './editor';
 import LatexRenderer from '../latex';
 
@@ -10,7 +9,7 @@ const MarkdownRenderer = require('commonmark-react-renderer');
 const parser = new CommonMark.Parser();
 const renderer = new MarkdownRenderer();
 
-const mdRender = (input) => renderer.render(parser.parse(input));
+const mdRender = input => renderer.render(parser.parse(input));
 
 export default class MarkdownCell extends React.Component {
   static propTypes = {
@@ -108,37 +107,42 @@ export default class MarkdownCell extends React.Component {
 
   render() {
     return (
-        (this.state && this.state.view) ?
-          <div
-            className="rendered"
-            onDoubleClick={this.openEditor}
-            onKeyDown={this.renderedKeyDown}
-            ref="rendered"
-            tabIndex="0"
-          >
-            <LatexRenderer>
-              {mdRender(
-                this.state.source ?
-                  this.state.source :
-                  '*Empty markdown cell, double click me to add content.*')
-              }
-            </LatexRenderer>
-          </div> :
-          <div onKeyDown={this.editorKeyDown}>
-            <div className="input-container">
-              <div className="prompt" />
-              <Editor
-                language="markdown"
-                id={this.props.id}
-                lineWrapping
-                input={this.state.source}
-                theme={this.props.theme}
-                focusAbove={this.props.focusAbove}
-                focusBelow={this.props.focusBelow}
-                focused={this.props.focused}
-              />
-            </div>
-          </div>
+       (this.state && this.state.view) ?
+         <div
+           className="rendered"
+           onDoubleClick={this.openEditor}
+           onKeyDown={this.renderedKeyDown}
+           ref="rendered"
+           tabIndex="0"
+         >
+           <LatexRenderer>
+           {mdRender(
+            this.state.source ?
+            this.state.source :
+               '*Empty markdown cell, double click me to add content.*')
+           }
+           </LatexRenderer>
+         </div> :
+         <div onKeyDown={this.editorKeyDown}>
+           <div className="input-container">
+             <div className="prompt" />
+             <Editor
+               language="markdown"
+               id={this.props.id}
+               lineWrapping
+               input={this.state.source}
+               theme={this.props.theme}
+               focusAbove={this.props.focusAbove}
+               focusBelow={this.props.focusBelow}
+               focused={this.props.focused}
+             />
+           </div>
+           <div className="outputs">
+             <LatexRenderer>
+            {mdRender(this.state.source)}
+             </LatexRenderer>
+           </div>
+         </div>
     );
   }
 }

@@ -22,12 +22,13 @@ describe('MarkdownCell', () => {
 
     // Starts in view mode
     expect(cell.state('view')).to.be.true;
+
+    cell.simulate('keydown', { key: 'Enter'})
+    expect(cell.state('view')).to.be.false;
     cell.simulate('keydown', { key: 'Enter', shiftKey: true })
     // Stays in view mode on shift enter
     expect(cell.state('view')).to.be.true;
     // Enter key enters edit mode
-    cell.simulate('keydown', { key: 'Enter'})
-    expect(cell.state('view')).to.be.false;
     // Back to view mode
     cell.simulate('keydown', { key: 'Enter', shiftKey: true })
     expect(cell.state('view')).to.be.true;
