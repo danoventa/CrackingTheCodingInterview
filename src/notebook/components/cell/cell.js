@@ -18,7 +18,6 @@ export class Cell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.any,
     displayOrder: React.PropTypes.instanceOf(Immutable.List),
-    cellStatus: React.PropTypes.instanceOf(Immutable.Map),
     id: React.PropTypes.string,
     focusedCell: React.PropTypes.string,
     language: React.PropTypes.string,
@@ -119,7 +118,6 @@ export class Cell extends React.Component {
             theme={this.props.theme}
             language={this.props.language}
             displayOrder={this.props.displayOrder}
-            cellStatus={this.props.cellStatus}
             transforms={this.props.transforms}
             pagers={this.props.pagers}
             running={this.props.running}
