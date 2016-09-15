@@ -1,9 +1,9 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { TogglableDisplay } from 'react-jupyter-display-area';
 import Immutable from 'immutable';
 
 import Inputs from './inputs';
+import { TogglableDisplay } from './display-area';
 
 import Editor from './editor';
 import LatexRenderer from '../latex';
@@ -74,7 +74,7 @@ class CodeCell extends React.Component {
                 className="pager"
                 displayOrder={this.props.displayOrder}
                 transforms={this.props.transforms}
-                data={pager.get('data')}
+                bundle={pager.get('data')}
                 key={key}
               />
             )
