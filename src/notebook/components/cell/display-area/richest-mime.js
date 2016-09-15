@@ -10,8 +10,8 @@ export default class RichestMime extends React.Component {
     bundle: React.PropTypes.instanceOf(Immutable.Map).isRequired,
   };
 
-  shouldComponentUpdate() {  // eslint-disable-line class-methods-use-this
-    return false;
+  shouldComponentUpdate(nextProps) {  // eslint-disable-line class-methods-use-this
+    return nextProps.theme !== this.props.theme;
   }
 
   render() {
@@ -26,9 +26,12 @@ export default class RichestMime extends React.Component {
       return null;
     }
 
+    console.warn('i am zombo.com');
+    console.warn(this.props.theme);
+
     const Transform = this.props.transforms.get(mimetype);
     const data = this.props.bundle.get(mimetype);
-    return <Transform data={data} />;
+    return <Transform data={data} theme={this.props.theme} />;
   }
 }
 
@@ -36,6 +39,7 @@ RichestMime.propTypes = {
   bundle: React.PropTypes.instanceOf(Immutable.Map).isRequired,
   displayOrder: React.PropTypes.instanceOf(Immutable.List),
   transforms: React.PropTypes.instanceOf(Immutable.Map),
+  theme: React.PropTypes.string,
 };
 
 RichestMime.defaultProps = { transforms, displayOrder };
