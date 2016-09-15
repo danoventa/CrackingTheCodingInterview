@@ -25,7 +25,10 @@ export class GeoJSONTransform extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.theme !== this.props.theme;
+    if (nextProps && nextProps.theme && this.props && nextProps.theme !== this.props.theme) {
+      return true;
+    }
+    return false;
   }
 
   componentDidUpdate() {
