@@ -73,7 +73,7 @@ describe('reduceOutputs', () => {
 
 describe('executeCellObservable', () => {
   // TODO: Refactor executeCellObservable into separate testable observables
-  it('is entirely too insane for me to test right this second', (done) => {
+  it('is entirely too insane for me to test this well right this second', (done) => {
     const frontendToShell = new Rx.Subject();
     const shellToFrontend = new Rx.Subject();
     const mockShell = Rx.Subject.create(frontendToShell, shellToFrontend);
@@ -104,6 +104,15 @@ describe('executeCellObservable', () => {
         done(); // TODO: Make sure message check above is called
       })
 
+
+  })
+
+  it('outright rejects a lack of channels.shell and iopub', (done) => {
+    const obs = executeCellObservable({}, '0', 'woo')
+    obs.subscribe(null, (err) => {
+        expect(err.message).to.equal('kernel not connected');
+        done();
+    })
 
   })
 })
