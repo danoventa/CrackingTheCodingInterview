@@ -45,7 +45,6 @@ describe('Notebook', () => {
           .set(dummyCommutable.getIn(['cellOrder', 0]), true)
         }
         CellComponent={Cell}
-        outputStatuses={new Immutable.Map()}
       />
     );
     expect(component).to.not.be.null;
@@ -90,7 +89,6 @@ describe('Notebook', () => {
           cellPagers={new Immutable.Map()}
           cellStatuses={dummyCellStatuses}
           stickyCells={(new Immutable.Map())}
-          outputStatuses={new Immutable.Map()}
           CellComponent={Cell}
           focusedCell={focusedCell}
         />, { context });
@@ -119,7 +117,6 @@ describe('Notebook', () => {
           cellPagers={new Immutable.Map()}
           cellStatuses={dummyCellStatuses}
           stickyCells={(new Immutable.Map())}
-          outputStatuses={new Immutable.Map()}
           CellComponent={Cell}
           focusedCell={focusedCell}
         />, { context });
@@ -153,7 +150,6 @@ describe('Notebook', () => {
           cellPagers={new Immutable.Map()}
           cellStatuses={dummyCellStatuses}
           stickyCells={(new Immutable.Map())}
-          outputStatuses={new Immutable.Map()}
           CellComponent={Cell}
           focusedCell={focusedCell}
         />, { context });
@@ -185,7 +181,6 @@ describe('Notebook DnD', () => {
         cellPagers={new Immutable.Map()}
         cellStatuses={dummyCellStatuses}
         stickyCells={(new Immutable.Map())}
-        outputStatuses={new Immutable.Map()}
       />
     );
 

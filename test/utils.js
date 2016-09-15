@@ -30,7 +30,6 @@ export function dummyStore(config) {
     document: DocumentRecord({
       notebook,
       cellPagers: new Immutable.Map(),
-      cellStatuses: new Immutable.Map(),
       stickyCells: new Immutable.Map(),
       outputStatuses: new Immutable.Map(),
     }),
