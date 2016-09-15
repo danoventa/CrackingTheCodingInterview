@@ -104,5 +104,21 @@ appReady$
           }
         });
       }
+    }).catch(err => {
+      dialog.showMessageBox({
+        type: 'error',
+        title: 'No Kernels Installed',
+        buttons: [],
+        message: 'No kernels are installed on your system.',
+        detail: 'No kernels are installed on your system so you will not be ' +
+          'able to execute code cells in any language. You can read about ' +
+          'installing kernels at ' +
+          'https://ipython.readthedocs.io/en/latest/install/kernel_install.html' +
+          `\nFull error: ${err.message}`,
+      }, (index) => {
+        if (index === 0) {
+          app.quit();
+        }
+      });
     });
   });
