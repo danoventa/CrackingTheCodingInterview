@@ -185,8 +185,6 @@ describe('Toolbar.changeCellType', () => {
     const button = toolbar
       .find('.changeType');
 
-    console.log(button);
-
     button.simulate('click');
 
     expect(store.dispatch.firstCall).to.be.calledWith({
