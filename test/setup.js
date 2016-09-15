@@ -100,7 +100,7 @@ mock('github', function () {
 
 mock('react-notification-system', function () {
   return {
-    'addNotification': function(config) {},
+    'addNotification': function(config) { },
     'render': function() {return null;},
   };
 });
