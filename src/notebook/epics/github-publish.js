@@ -104,7 +104,7 @@ function notifyUser(filename, gistURL, gistID, notificationSystem) {
  * notification of the user that the gist has been published.
  * @return callbackFunction for use in publishNotebookObservable
  */
-function createGistCallback(firstTimePublish, observer, filename, notificationSystem) {
+export function createGistCallback(firstTimePublish, observer, filename, notificationSystem) {
   return function gistCallback(err, response) {
     if (err) {
       observer.error(err);
