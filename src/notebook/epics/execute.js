@@ -53,10 +53,7 @@ export function reduceOutputs(outputs, output) {
 
 export function executeCellObservable(channels, id, code) {
   if (!channels || !channels.iopub || !channels.shell) {
-    return {
-      observable: Rx.Observable.throw(new Error('kernel not connected')),
-      message: null,
-    };
+    return Rx.Observable.throw(new Error('kernel not connected'));
   }
 
   const executeRequest = createExecuteRequest(code);

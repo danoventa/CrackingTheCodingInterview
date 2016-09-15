@@ -9,10 +9,13 @@ const Immutable = require('immutable');
 
 const fromJS = Immutable.fromJS;
 
+const Rx = require('rxjs/Rx');
+
 import {
   executeCell,
   EXECUTE_CELL,
   reduceOutputs,
+  executeCellObservable,
 } from '../../../src/notebook/epics/execute';
 
 describe('executeCell', () => {
@@ -64,6 +67,52 @@ describe('reduceOutputs', () => {
       {name: 'stdout', text: 'hello world', output_type: 'stream'},
       {name: 'stderr', text: 'errors are informative', output_type: 'stream'},
     ]));
+
+  })
+})
+
+describe('executeCellObservable', () => {
+  // TODO: Refactor executeCellObservable into separate testable observables
+  it('is entirely too insane for me to test this well right this second', (done) => {
+    const frontendToShell = new Rx.Subject();
+    const shellToFrontend = new Rx.Subject();
+    const mockShell = Rx.Subject.create(frontendToShell, shellToFrontend);
+    const mockIOPub = new Rx.Subject();
+
+    const channels = {
+      shell: mockShell,
+      iopub: mockIOPub,
+    };
+
+    // Expect message to have been sent
+    frontendToShell
+      .subscribe(msg => {
+        expect(msg.header.msg_type).to.equal('execute_request');
+        expect(msg.content.code).to.equal('import this');
+      })
+
+    const action$ = executeCellObservable(channels, '0', 'import this');
+
+    action$
+      .bufferCount(2)
+      .subscribe(messages => {
+        expect(messages).to.deep.equal([
+          // TODO: Order doesn't actually matter here
+          { type: 'UPDATE_CELL_PAGERS', id: '0', pagers: Immutable.List() },
+          { type: 'UPDATE_CELL_OUTPUTS', id: '0', outputs: Immutable.List() },
+        ]);
+        done(); // TODO: Make sure message check above is called
+      })
+
+
+  })
+
+  it('outright rejects a lack of channels.shell and iopub', (done) => {
+    const obs = executeCellObservable({}, '0', 'woo')
+    obs.subscribe(null, (err) => {
+        expect(err.message).to.equal('kernel not connected');
+        done();
+    })
 
   })
 })
