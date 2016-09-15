@@ -1,9 +1,9 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { TogglableDisplay } from 'react-jupyter-display-area';
 import Immutable from 'immutable';
 
 import Inputs from './inputs';
+import { TogglableDisplay } from './display-area';
 
 import Editor from './editor';
 import LatexRenderer from '../latex';

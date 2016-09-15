@@ -59,6 +59,7 @@
     ]
   },
   "dependencies": {
+    "ansi-to-react": "0.0.4",
     "codemirror": "^5.18.2",
     "commonmark": "^0.26.0",
     "commonmark-react-renderer": "^4.3.1",
