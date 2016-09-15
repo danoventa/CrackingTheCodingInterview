@@ -75,6 +75,7 @@ class CodeCell extends React.Component {
                 displayOrder={this.props.displayOrder}
                 transforms={this.props.transforms}
                 bundle={pager.get('data')}
+                theme={this.props.theme}
                 key={key}
               />
             )
@@ -89,6 +90,7 @@ class CodeCell extends React.Component {
             isHidden={this.isOutputHidden()}
             displayOrder={this.props.displayOrder}
             transforms={this.props.transforms}
+            theme={this.props.theme}
           />
         </div>
       </LatexRenderer>
