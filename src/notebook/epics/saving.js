@@ -36,7 +36,15 @@ export const saveEpic = actions =>
     })
     .mergeMap(action =>
       writeFileObservable(action.filename,
-        JSON.stringify(commutable.toJS(action.notebook), null, 1))
+        JSON.stringify(
+          commutable.toJS(
+            action.notebook.update('cellMap',cells => {
+              return cells.map((value, key) => {
+                return value.delete('inputHidden').delete('outputHidden').delete('status');
+              });
+            })),
+          null,
+          1))
         .map(doneSaving)
         // .startWith({ type: START_SAVING })
         // since SAVE effectively acts as the same as START_SAVING

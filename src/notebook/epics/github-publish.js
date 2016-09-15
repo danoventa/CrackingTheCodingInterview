@@ -134,7 +134,14 @@ export function createGistCallback(firstTimePublish, observer, filename, notific
  */
 export function publishNotebookObservable(github, notebook, filepath, notificationSystem) {
   return Rx.Observable.create((observer) => {
-    const notebookString = JSON.stringify(commutable.toJS(notebook), undefined, 1);
+    const notebookString = JSON.stringify(
+      commutable.toJS(notebook.update('cellMap', (cells) => {
+        return cells.map((value, key) => {
+          return value.delete('inputHidden').delete('outputHidden').delete('status');
+        });
+      })),
+      undefined,
+      1);
 
     let filename;
 
