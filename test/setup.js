@@ -82,8 +82,25 @@ mock('electron', {
   'ipcRenderer': {
     'on': function() {},
   },
-})
+});
 
-mock('home-dir', function() {
+mock('home-dir', function () {
   return '/Users/jean-tester';
+});
+
+mock('github', function () {
+  return {
+    'authenticate': function(config) { },
+    'gists': {
+        'edit': function(request, callback) { },
+        'create': function(request, callback) { },
+    },
+  };
+});
+
+mock('react-notification-system', function () {
+  return {
+    'addNotification': function(config) {},
+    'render': function() {return null;},
+  };
 });
