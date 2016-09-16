@@ -453,7 +453,15 @@ li.CodeMirror-hint-active {
     opacity: 1.0;
 }
 
-/* The following were written to help with the R kernel formatting */
+/*
+
+The following were written to help with the R kernel formatting
+
+We need to write something general for nested HTML like the R kernel does for
+data
+
+*/
+
 dd {
     display: block;
     -webkit-margin-start: 40px
@@ -491,6 +499,15 @@ dd {
   margin: 0
 }
 
+/* No dangling (1.) */
 li:only-child {
   list-style-type: none;
 }
+
+.list-inline li {
+  display: inline;
+  padding-right: 20px;
+  text-align: center;
+}
+
+/* End R Kernel adaptations */
