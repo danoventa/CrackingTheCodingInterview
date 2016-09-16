@@ -452,3 +452,45 @@ li.CodeMirror-hint-active {
     display: inline-block;
     opacity: 1.0;
 }
+
+/* The following were written to help with the R kernel formatting */
+dd {
+    display: block;
+    -webkit-margin-start: 40px
+}
+dl {
+    display: block;
+    -webkit-margin-before: 1__qem;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+}
+dt {
+    display: block
+}
+
+dl {
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0
+}
+dt {
+  font-weight: bold;
+  float: left;
+  width: 20%;
+  /* adjust the width; make sure the total of both is 100% */
+  padding: 0;
+  margin: 0
+}
+dd {
+  float: left;
+  width: 80%;
+  /* adjust the width; make sure the total of both is 100% */
+  padding: 0;
+  margin: 0
+}
+
+li:only-child {
+  list-style-type: none;
+}
