@@ -11,13 +11,16 @@
       "no-console": [2, { allow: ["warn", "error"] }],
       "no-underscore-dangle": [0],
        "react/no-string-refs": [0],
-       "react/jsx-filename-extension": [0],
        "import/prefer-default-export": [0],
        "import/no-named-as-default": [0],
        "react/forbid-prop-types": [0],
        "react/no-find-dom-node": [0],
        "jsx-a11y/no-static-element-interactions": [0],
-       "arrow-parens": [0]
+       "arrow-parens": [0],
+       "react/require-extension": "off",
+       "react/jsx-filename-extension": "off",
+       "import/extensions": [0, { "js": "never", "jsx": "never"}],
+       "max-len": [100]
   },
   "settings": {
       "import/core-modules": ["electron"]
