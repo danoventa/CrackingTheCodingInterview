@@ -431,7 +431,7 @@ describe('changeOutputVisibility', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn(['cellStatuses', id, 'outputHidden'])).to.be.true;
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'outputHidden'])).to.be.true;
   });
 });
 
@@ -457,7 +457,7 @@ describe('changeInputVisibility', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn(['cellStatuses', id, 'inputHidden'])).to.be.true;
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'inputHidden'])).to.be.true;
   });
 });
 
@@ -514,7 +514,7 @@ describe('updateCellStatus', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn(['cellStatuses', id, 'status'])).to.equal("test status");
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'status'])).to.equal("test status");
   });
 });
 

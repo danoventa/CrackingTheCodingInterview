@@ -14,7 +14,6 @@ class CodeCell extends React.Component {
   static propTypes = {
     cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    cellStatus: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     id: React.PropTypes.string,
     language: React.PropTypes.string,
     theme: React.PropTypes.string,
@@ -37,11 +36,11 @@ class CodeCell extends React.Component {
   }
 
   isOutputHidden() {
-    return this.props.cellStatus.get('outputHidden');
+    return this.props.cell.get('outputHidden');
   }
 
   isInputHidden() {
-    return this.props.cellStatus.get('inputHidden');
+    return this.props.cell.get('inputHidden');
   }
 
   render() {

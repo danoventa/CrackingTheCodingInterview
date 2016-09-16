@@ -29,7 +29,6 @@ const mapStateToProps = (state) => ({
   notebook: state.document.get('notebook'),
   cellPagers: state.document.get('cellPagers'),
   focusedCell: state.document.get('focusedCell'),
-  cellStatuses: state.document.get('cellStatuses'),
   stickyCells: state.document.get('stickyCells'),
 });
 
@@ -39,7 +38,6 @@ export class Notebook extends React.Component {
     notebook: React.PropTypes.any,
     transforms: React.PropTypes.instanceOf(Immutable.Map),
     cellPagers: React.PropTypes.instanceOf(Immutable.Map),
-    cellStatuses: React.PropTypes.instanceOf(Immutable.Map),
     stickyCells: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
     theme: React.PropTypes.string,
@@ -189,12 +187,11 @@ export class Notebook extends React.Component {
       key: id,
       ref: id,
       displayOrder: this.props.displayOrder,
-      cellStatus: this.props.cellStatuses.get(id),
       transforms: this.props.transforms,
       moveCell: this.moveCell,
       pagers: this.props.cellPagers.get(id),
       focusedCell: this.props.focusedCell,
-      running: this.props.cellStatuses.getIn([id, 'status']) === 'busy',
+      running: cell.get('status') === 'busy',
       // Theme is passed through to let the Editor component know when to
       // tell CodeMirror to remeasure
       theme: this.props.theme,

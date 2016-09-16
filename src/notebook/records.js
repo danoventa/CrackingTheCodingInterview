@@ -19,7 +19,6 @@ export const AppRecord = new Immutable.Record({
 export const DocumentRecord = new Immutable.Record({
   notebook: null,
   cellPagers: new Immutable.Map(),
-  cellStatuses: new Immutable.Map(),
   outputStatuses: new Immutable.Map(),
   stickyCells: new Immutable.Map(),
   focusedCell: null,
