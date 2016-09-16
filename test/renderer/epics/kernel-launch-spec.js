@@ -12,6 +12,7 @@ import {
   setLanguageInfo,
   acquireKernelInfo,
   watchExecutionStateEpic,
+  newKernelObservable,
 } from '../../../src/notebook/epics/kernel-launch';
 
 import {
@@ -37,7 +38,7 @@ describe('setLanguageInfo', () => {
       type: constants.SET_LANGUAGE_INFO,
       langInfo: langInfo,
     });
-  })
+  });
 });
 
 describe('acquireKernelInfo', () => {
@@ -69,7 +70,7 @@ describe('acquireKernelInfo', () => {
 
       // TODO: Get the Rx handling proper here
       setTimeout(() => received.next(response), 100);
-    })
+    });
 
     const obs = acquireKernelInfo({shell: mockSocket});
 
@@ -77,15 +78,23 @@ describe('acquireKernelInfo', () => {
       expect(langAction).to.deep.equal({
         'langInfo': {'language': 'python'},
         type: 'SET_LANGUAGE_INFO'
-      })
+      });
       done();
-    })
-  })
-})
+    });
+  });
+});
 
 describe('watchExecutionStateEpic', () => {
   it('returns an Observable with an initial state of idle', () => {
     const action$ = new ActionsObservable();
     const obs = watchExecutionStateEpic(action$);
-  })
-})
+    expect(obs.subscribe).to.not.be.null;
+  });
+});
+
+describe('newKernelObservable', () => {
+  it('returns an observable', () => {
+    const obs = newKernelObservable('python3', process.cwd());
+    expect(obs.subscribe).to.not.be.null;
+  });
+});
