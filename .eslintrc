@@ -19,7 +19,8 @@
        "arrow-parens": [0],
        "react/require-extension": "off",
        "comma-dangle": [0],
-       "no-unused-var": [0],
+       "no-unused-vars": [0],
+       "no-undef": [0],
        "react/jsx-filename-extension": "off",
        "import/extensions": [0, { "js": "never", "jsx": "never"}],
        "max-len": [
