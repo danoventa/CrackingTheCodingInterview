@@ -41,6 +41,10 @@ mock('electron-json-storage', {
     callback(null, { theme: 'light' });
   },
   'set': function(key, json, callback) {
+    if (!json && !key) {
+      callback(new Error('Must provide JSON and key'));
+    }
+
     callback(null);
   },
 })
