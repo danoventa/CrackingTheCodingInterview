@@ -38,11 +38,9 @@ export const saveEpic = actions =>
       writeFileObservable(action.filename,
         JSON.stringify(
           commutable.toJS(
-            action.notebook.update('cellMap',cells => {
-              return cells.map((value, key) => {
-                return value.delete('inputHidden').delete('outputHidden').delete('status');
-              });
-            })),
+            action.notebook.update('cellMap', (cells) =>
+              cells.map((value) =>
+                value.delete('inputHidden').delete('outputHidden').delete('status')))),
           null,
           1))
         .map(doneSaving)

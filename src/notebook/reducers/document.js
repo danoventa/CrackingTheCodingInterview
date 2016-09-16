@@ -8,13 +8,11 @@ import * as constants from '../constants';
 export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.notebook
-      .update('cellMap', cells => {
-        return cells.map((value, key) => {
-          return value.set('inputHidden', false)
-                      .set('outputHidden', false)
-                      .set('status', '');
-        });
-      });
+      .update('cellMap', (cells) =>
+        cells.map((value) =>
+          value.set('inputHidden', false)
+                .set('outputHidden', false)
+                .set('status', '')));
 
     return state.set('notebook', notebook)
       .set('focusedCell', notebook.getIn(['cellOrder', 0]));
