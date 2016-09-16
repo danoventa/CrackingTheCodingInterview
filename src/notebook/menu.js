@@ -2,6 +2,7 @@ import {
   ipcRenderer as ipc,
   webFrame,
   remote,
+  app,
 } from 'electron';
 
 import * as path from 'path';
@@ -77,7 +78,7 @@ export function triggerWindowRefresh(store, filename) {
 }
 
 export function triggerSaveAs(store) {
-  showSaveAsDialog()
+  showSaveAsDialog(app.getPath('home'))
     .then(filename => triggerWindowRefresh(store, filename));
 }
 

@@ -35,7 +35,7 @@ export const fileSubMenus = {
         properties: [
           'openFile',
         ],
-        defaultPath: process.cwd(),
+        defaultPath: app.getPath('home'),
       };
       dialog.showOpenDialog(opts, (fname) => {
         if (fname) {
@@ -56,6 +56,7 @@ export const fileSubMenus = {
       const opts = {
         title: 'Save Notebook As',
         filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
+        defaultPath: app.getPath('home'),
       };
       dialog.showSaveDialog(opts, (filename) => {
         if (!filename) {
