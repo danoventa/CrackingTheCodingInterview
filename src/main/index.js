@@ -22,7 +22,10 @@ const argv = require('yargs')
   .version(version)
   .parse(process.argv.slice(sliceAt));
 
-const notebooks = argv._;
+const notebooks = argv._
+  .filter(Boolean)
+  .filter(x => x !== '.'); // Ignore the `electron .`
+                           // TODO: Consider opening something for directories
 
 app.on('window-all-closed', () => {
   // On OS X, we want to keep the app and menu bar active
@@ -69,9 +72,6 @@ openFile$
       );
     } else {
       notebooks
-        .filter(Boolean)
-        .filter(x => x !== '.') // Ignore the `electron .`
-        // TODO: Consider opening something for directories
         .forEach(f => launch(resolve(f)));
     }
     buffer.forEach(openFileFromEvent);
