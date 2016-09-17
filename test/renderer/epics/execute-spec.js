@@ -119,9 +119,3 @@ describe('executeCellObservable', () => {
 
   })
 });
-
-describe('executeCellEpic', () => {
-  it.only('throws an error if not given an id', () => {
-    const store = dummyStore();
-  });
-});
