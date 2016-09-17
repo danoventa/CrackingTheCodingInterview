@@ -16,9 +16,11 @@ const kernelspecs = require('kernelspecs');
 
 const version = require('../../package.json').version;
 
+const sliceAt = process.argv[0].match('nteract') ? 1 : 2;
+
 const argv = require('yargs')
   .version(version)
-  .parse(process.argv.slice(2));
+  .parse(process.argv.slice(sliceAt));
 
 const notebooks = argv._;
 
