@@ -34,12 +34,17 @@ global.window.document.createRange = function createRange() {
   }
 };
 
+// Mocks for tests
 var mock = require('mock-require');
 mock('electron-json-storage', {
   'get': function(key, callback){
     callback(null, { theme: 'light' });
   },
   'set': function(key, json, callback) {
+    if (!json && !key) {
+      callback(new Error('Must provide JSON and key'));
+    }
+
     callback(null);
   },
 })
@@ -103,4 +108,8 @@ mock('react-notification-system', function () {
     'addNotification': function(config) { },
     'render': function() {return null;},
   };
+});
+
+mock('spawnteract', {
+  'launch': function(kernelSpec, config) { return new Promise() },
 });

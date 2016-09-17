@@ -5,6 +5,8 @@ chai.use(chaiImmutable);
 
 const expect = chai.expect;
 
+import { dummyStore } from '../../utils';
+
 const Immutable = require('immutable');
 
 const fromJS = Immutable.fromJS;
@@ -16,6 +18,7 @@ import {
   EXECUTE_CELL,
   reduceOutputs,
   executeCellObservable,
+  executeCellEpic,
 } from '../../../src/notebook/epics/execute';
 
 describe('executeCell', () => {
@@ -115,4 +118,10 @@ describe('executeCellObservable', () => {
     })
 
   })
-})
+});
+
+describe('executeCellEpic', () => {
+  it.only('throws an error if not given an id', () => {
+    const store = dummyStore();
+  });
+});
