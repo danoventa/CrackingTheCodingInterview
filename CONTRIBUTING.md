@@ -36,4 +36,13 @@ Have no fear! Here's a quick rundown of what C4.1 means for you as a contributor
 a maintainer.
 * Maintainers have the ability to review and merge pull requests.
 
+## How should I write my commit messages and PR titles?
+
+Great question! Here at nteract, we utilize the [convential-changelog-standard]
+(https://github.com/bcoe/conventional-changelog-standard/blob/master/convention.md)
+for writing our commit messages and PR titles. Why do we do this? The standard
+comes in really handy when we need to determine what kinds of information should
+go into our release documentation (as the word changelog in the title might suggest!).
+Good release messages means more informed users means a better project to use. Yay!
+
 That's it! You're good to go!
