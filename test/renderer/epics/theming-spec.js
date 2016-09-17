@@ -29,8 +29,10 @@ describe('setStoredThemeObservable', () => {
 
     setStoredThemeObs.subscribe(() => {
       expect(set).to.be.called;
-      done();
     });
+
+    set.restore();
+    done();
   });
   it('should return an error if not given a theme', (done) => {
     const setStoredThemeObs = setStoredThemeObservable();
@@ -43,6 +45,7 @@ describe('setStoredThemeObservable', () => {
       expect(error.message).to.equal('Must provide JSON and key');
     });
 
+    set.restore();
     done();
   });
 });
