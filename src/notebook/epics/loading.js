@@ -91,6 +91,6 @@ export const newNotebookEpic = action$ =>
           type: 'SET_NOTEBOOK',
           notebook: starterNotebook,
         },
-        newKernel(action.kernelSpecName),
+        newKernel(action.kernelSpecName, action.cwd),
       )
     );

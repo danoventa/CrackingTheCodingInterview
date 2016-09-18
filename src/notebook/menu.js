@@ -221,7 +221,7 @@ export function dispatchLoad(store, event, filename) {
 }
 
 export function dispatchNewNotebook(store, event, kernelSpecName) {
-  store.dispatch(newNotebook(kernelSpecName));
+  store.dispatch(newNotebook(kernelSpecName, remote.app.getPath('home')));
 }
 
 export function initMenuHandlers(store) {
