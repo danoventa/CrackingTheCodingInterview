@@ -6,6 +6,8 @@ import {
 
 import * as path from 'path';
 
+import home from 'home-dir';
+
 import { tildify } from './native-window';
 
 import { executeCell } from './epics/execute';
@@ -221,7 +223,7 @@ export function dispatchLoad(store, event, filename) {
 }
 
 export function dispatchNewNotebook(store, event, kernelSpecName) {
-  store.dispatch(newNotebook(kernelSpecName, remote.app.getPath('home')));
+  store.dispatch(newNotebook(kernelSpecName, home()));
 }
 
 export function initMenuHandlers(store) {
