@@ -115,7 +115,7 @@ export default class Editor extends React.Component {
         return /(\w|\.)/.test(token);
       })
       .subscribe(event => {
-        if (!event.cm.state.completionActive) {
+        if (!event.cm.state.completionActive && store.getState().app.executionState === 'idle') {
           event.cm.execCommand('autocomplete');
         }
       }, error => {
