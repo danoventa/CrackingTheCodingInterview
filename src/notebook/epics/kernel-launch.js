@@ -39,20 +39,23 @@ export function setLanguageInfo(langInfo) {
 }
 
 export function acquireKernelInfo(channels) {
-  const { shell } = channels;
-
   const message = createMessage('kernel_info_request');
 
-  const obs = shell
+  const obs = channels.shell
     .childOf(message)
     .ofMessageType('kernel_info_reply')
     .first()
     .pluck('content', 'language_info')
-    .map(setLanguageInfo)
-    .cache(1);
+    .map(setLanguageInfo);
+    // TODO: After a timeout, send kernel_info_request again
+    //       the retry may be better architecturally out of this function
+    //       though, by retrying this function entirely.
 
-  shell.next(message);
-  return obs;
+  return Rx.Observable.create(observer => {
+    const subscription = obs.subscribe(observer);
+    channels.shell.next(message);
+    return subscription;
+  });
 }
 
 export function newKernelObservable(kernelSpecName, cwd) {
