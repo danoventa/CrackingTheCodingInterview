@@ -248,7 +248,7 @@ describe('menu', () => {
     expect(store.dispatch.firstCall).to.be.calledWith({
       type: 'NEW_NOTEBOOK',
       kernelSpecName: 'perl',
-      cwd: process.cwd(),
+      cwd: require('home-dir')(),
     });
   });
 
