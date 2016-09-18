@@ -78,9 +78,30 @@ export function triggerWindowRefresh(store, filename) {
   BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
 }
 
+export function triggerKernelRefresh(store) {
+  dialog.showMessageBox({
+    type: 'question',
+    buttons: ["Launch New Kernel", "Don't Launch New Kernel"],
+    title: 'New Kernel Needs to Be Launched',
+    message: "It looks like you've saved your notebook file to a new location.",
+    detail: "The kernel executing your code thinks your notbook is still in the" +
+      " old location. Would you like to launch a new kernel to match it with the " +
+      "new location of the notebook?",
+  }, (index) => {
+    if (index === 1) {
+      return;
+    } else {
+      dispatchRestartKernel(store);
+    }
+  });
+}
+
 export function triggerSaveAs(store) {
   showSaveAsDialog(remote.app.getPath('home'))
-    .then(filename => triggerWindowRefresh(store, filename));
+    .then(filename => {
+      triggerWindowRefresh(store, filename)
+      triggerKernelRefresh(store);
+    });
 }
 
 export function dispatchSave(store) {
