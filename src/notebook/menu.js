@@ -78,9 +78,48 @@ export function triggerWindowRefresh(store, filename) {
   BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
 }
 
+export function dispatchRestartKernel(store) {
+  const state = store.getState();
+  const notificationSystem = state.app.get('notificationSystem');
+  const spawnOptions = {};
+  if (state && state.document && state.metadata.get('filename')) {
+    spawnOptions.cwd = path.dirname(path.resolve(state.metadata.filename));
+  }
+
+  store.dispatch(killKernel);
+  store.dispatch(newKernel(state.app.kernelSpecName, spawnOptions));
+
+  notificationSystem.addNotification({
+    title: 'Kernel Restarted',
+    message: `Kernel ${state.app.kernelSpecName} has been restarted.`,
+    dismissible: true,
+    position: 'tr',
+    level: 'success',
+  });
+}
+
+export function triggerKernelRefresh(store) {
+  dialog.showMessageBox({
+    type: 'question',
+    buttons: ['Launch New Kernel', 'Don\'t Launch New Kernel'],
+    title: 'New Kernel Needs to Be Launched',
+    message: 'It looks like you\'ve saved your notebook file to a new location.',
+    detail: 'The kernel executing your code thinks your notbook is still in the ' +
+      'old location. Would you like to launch a new kernel to match it with the ' +
+      'new location of the notebook?',
+  }, (index) => {
+    if (index === 0) {
+      dispatchRestartKernel(store);
+    }
+  });
+}
+
 export function triggerSaveAs(store) {
   showSaveAsDialog(remote.app.getPath('home'))
-    .then(filename => triggerWindowRefresh(store, filename));
+    .then(filename => {
+      triggerWindowRefresh(store, filename);
+      triggerKernelRefresh(store);
+    });
 }
 
 export function dispatchSave(store) {
@@ -157,26 +196,6 @@ export function dispatchInterruptKernel(store) {
   } else {
     store.dispatch(interruptKernel);
   }
-}
-
-export function dispatchRestartKernel(store) {
-  const state = store.getState();
-  const notificationSystem = state.app.get('notificationSystem');
-  const spawnOptions = {};
-  if (state && state.document && state.metadata.get('filename')) {
-    spawnOptions.cwd = path.dirname(path.resolve(state.metadata.filename));
-  }
-
-  store.dispatch(killKernel);
-  store.dispatch(newKernel(state.app.kernelSpecName, spawnOptions));
-
-  notificationSystem.addNotification({
-    title: 'Kernel Restarted',
-    message: `Kernel ${state.app.kernelSpecName} has been restarted.`,
-    dismissible: true,
-    position: 'tr',
-    level: 'success',
-  });
 }
 
 export function dispatchRestartClearAll(store) {
