@@ -117,13 +117,8 @@ describe('complete', () => {
       posFromIndex: (x) => ({ ch: x, line: 3 }),
     };
 
-    const {observable, message} = complete.codeComplete(channels, cm);
-
-    // Test the message created for sending
-    expect(message.content).to.deep.equal({
-      code: '\n\nimport thi',
-      cursor_pos: 12,
-    });
+    const message = createMessage('complete_request');
+    const observable = complete.codeCompleteObservable(channels, cm, message);
 
     // Craft the response to their message
     const response = createMessage('complete_reply');
@@ -146,10 +141,20 @@ describe('complete', () => {
       err => { throw err },
       done
     );
-    sent.next(message);
     received.next(response);
   });
 });
+
+describe('completionRequest', () => {
+  it('creates a valid v5 message for complete_request', () => {
+    const message = complete.completionRequest('\n\nimport thi', 12);
+    expect(message.content).to.deep.equal({
+      code: '\n\nimport thi',
+      cursor_pos: 12,
+    });
+    expect(message.header.msg_type).to.equal('complete_request');
+  })
+})
 
 describe('formChangeObject', () => {
   it('translates arguments to a nice Object', () => {

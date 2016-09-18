@@ -14,9 +14,9 @@ export function getUsername() {
     process.env.USERNAME;
 }
 
-export function createMessage(msg_type) {
+export function createMessage(msg_type, fields) {
   const username = getUsername();
-  return {
+  return Object.assign({
     header: {
       username,
       session,
@@ -28,7 +28,7 @@ export function createMessage(msg_type) {
     metadata: {},
     parent_header: {},
     content: {},
-  };
+  }, fields);
 }
 
 export function createExecuteRequest(code) {

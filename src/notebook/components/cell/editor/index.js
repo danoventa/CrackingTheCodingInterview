@@ -162,10 +162,8 @@ export default class Editor extends React.Component {
     const state = this.context.store.getState();
     const channels = state.app.channels;
 
-    const { observable, message } = codeComplete(channels, editor);
-
-    observable.subscribe(callback);
-    channels.shell.next(message);
+    codeComplete(channels, editor)
+      .subscribe(callback);
   }
 
   render() {
