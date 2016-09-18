@@ -117,13 +117,7 @@ describe('complete', () => {
       posFromIndex: (x) => ({ ch: x, line: 3 }),
     };
 
-    const {observable, message} = complete.codeComplete(channels, cm);
-
-    // Test the message created for sending
-    expect(message.content).to.deep.equal({
-      code: '\n\nimport thi',
-      cursor_pos: 12,
-    });
+    const observable = complete.codeComplete(channels, cm);
 
     // Craft the response to their message
     const response = createMessage('complete_reply');
@@ -146,7 +140,6 @@ describe('complete', () => {
       err => { throw err },
       done
     );
-    sent.next(message);
     received.next(response);
   });
 });

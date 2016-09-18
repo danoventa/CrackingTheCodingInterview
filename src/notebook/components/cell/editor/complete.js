@@ -1,3 +1,5 @@
+import Rx from 'rxjs/Rx';
+
 import {
   createMessage,
 } from '../../../kernel/messaging';
@@ -23,18 +25,22 @@ export function codeComplete(channels, editor) {
     cursor_pos: cursorPos,
   };
 
-  return {
-    observable: channels.shell
-      .childOf(message)
-      .ofMessageType('complete_reply')
-      .pluck('content')
-      .first()
-      .map(results => ({
-        list: results.matches,
-        from: editor.posFromIndex(results.cursor_start),
-        to: editor.posFromIndex(results.cursor_end),
-      }))
-      .timeout(2000), // 4s
-    message,
-  };
+  const completion$ = channels.shell
+    .childOf(message)
+    .ofMessageType('complete_reply')
+    .pluck('content')
+    .first()
+    .map(results => ({
+      list: results.matches,
+      from: editor.posFromIndex(results.cursor_start),
+      to: editor.posFromIndex(results.cursor_end),
+    }))
+    .timeout(2000); // 4s
+
+  // On subscription, send the message
+  return Rx.Observable.create(observer => {
+    const subscription = completion$.subscribe(observer);
+    channels.shell.next(message);
+    return subscription;
+  });
 }
