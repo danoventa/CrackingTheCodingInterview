@@ -22,31 +22,41 @@ export function tildify(p) {
   return (s.indexOf(HOME) === 0 ? s.replace(HOME + path.sep, `~${path.sep}`) : s).slice(0, -1);
 }
 
-export function titleFromState(state) {
-  const modified = state.app.get('modified');
-  const executionState = state.app.get('executionState');
-  const filename = tildify(state.metadata.get('filename')) || 'Untitled';
-  const displayName = state.document
-    .getIn(['notebook', 'metadata', 'kernelspec', 'display_name'], '...');
-
+export function selectTitleAttributes(state) {
   return {
-    title: `${filename} - ${displayName} - ${executionState} ${modified ? '*' : ''}`,
-    path: filename,
+    modified: state.app.get('modified'),
+    executionState: state.app.get('executionState'),
+    filename: state.metadata.get('filename') || 'Untitled',
+    displayName: state.document.getIn([
+      'notebook', 'metadata', 'kernelspec', 'display_name'], '...'),
   };
 }
 
+export function setTitleFromAttributes(attributes) {
+  const filename = tildify(attributes.filename);
+  const { modified, executionState, displayName } = attributes;
+
+  const title = `${filename} - ${displayName} - ${executionState}`;
+
+  const win = getCurrentWindow();
+  // TODO: Investigate if setRepresentedFilename() is a no-op on non-OS X
+  if (filename && win.setRepresentedFilename) {
+    // TODO: this needs to be the full path to the file
+    win.setRepresentedFilename(filename);
+  }
+  if (win.setDocumentEdited) {
+    win.setDocumentEdited(attributes.modified);
+  }
+  win.setTitle(title);
+}
+
 export function initNativeHandlers(store) {
-  Rx.Observable.from(store)
-    .map(titleFromState)
+  const state$ = Rx.Observable.from(store);
+
+  state$
+    .map(selectTitleAttributes)
     .distinctUntilChanged()
+    .switchMap(i => Rx.Observable.of(i))
     .debounceTime(200)
-    .subscribe(res => {
-      const win = getCurrentWindow();
-      // TODO: Investigate if setRepresentedFilename() is a no-op on non-OS X
-      if (res.path && win.setRepresentedFilename) {
-        // TODO: this needs to be the full path to the file
-        win.setRepresentedFilename(res.path);
-      }
-      win.setTitle(res.title);
-    });
+    .subscribe(setTitleFromAttributes, (err) => console.error(err));
 }

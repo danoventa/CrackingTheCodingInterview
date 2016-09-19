@@ -77,6 +77,7 @@ mock('electron', {
     'getCurrentWindow': function() {
       return {
         'setTitle': function(){},
+        'setDocumentEdited': function(){},
       };
     }
   },
