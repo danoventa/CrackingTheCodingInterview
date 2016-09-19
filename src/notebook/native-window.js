@@ -32,12 +32,22 @@ export function selectTitleAttributes(state) {
   };
 }
 
-export function titleFromAttributes({ modified, executionState, filename, displayName }) {
-  const tildifiedFilename = tildify(filename);
-  return {
-    title: `${tildifiedFilename} - ${displayName} - ${executionState}`,
-    path: filename,
-  };
+export function setTitleFromAttributes(attributes) {
+  const filename = tildify(attributes.filename);
+  const { modified, executionState, displayName } = attributes;
+
+  const title = `${filename} - ${displayName} - ${executionState}`;
+
+  const win = getCurrentWindow();
+  // TODO: Investigate if setRepresentedFilename() is a no-op on non-OS X
+  if (filename && win.setRepresentedFilename) {
+    // TODO: this needs to be the full path to the file
+    win.setRepresentedFilename(filename);
+  }
+  if (win.setDocumentEdited) {
+    win.setDocumentEdited(attributes.modified);
+  }
+  win.setTitle(title);
 }
 
 export function initNativeHandlers(store) {
@@ -48,15 +58,5 @@ export function initNativeHandlers(store) {
     .distinctUntilChanged()
     .switchMap(i => Rx.Observable.of(i))
     .debounceTime(200)
-    .subscribe(attributes => {
-      const { title, p } = titleFromAttributes(attributes);
-      const win = getCurrentWindow();
-      // TODO: Investigate if setRepresentedFilename() is a no-op on non-OS X
-      if (p && win.setRepresentedFilename) {
-        // TODO: this needs to be the full path to the file
-        win.setRepresentedFilename(p);
-      }
-      win.setDocumentEdited(attributes.modified);
-      win.setTitle(title);
-    }, (err) => console.error(err));
+    .subscribe(setTitleFromAttributes, (err) => console.error(err));
 }
