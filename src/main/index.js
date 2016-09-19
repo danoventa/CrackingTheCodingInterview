@@ -69,8 +69,17 @@ openFile$
       log.info('launching an empty notebook by default');
       kernelSpecsPromise.then(specs => {
         const defaultKernel = 'python3';
-        const specList = Object.keys(specs).sort();
-        const kernel = specList.python3 || specList.python2 || specList[0];
+        let kernel = defaultKernel;
+
+        if ('python3' in specs) {
+          kernel = 'python3';
+        } else if ('python2' in specs) {
+          kernel = 'python2';
+        } else {
+          const specList = Object.keys(specs);
+          specList.sort();
+          kernel = specList[0];
+        }
 
         launchNewNotebook(kernel);
       }
