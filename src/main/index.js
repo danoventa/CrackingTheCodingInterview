@@ -67,8 +67,13 @@ openFile$
     // based on if arguments went through argv or through open-file events
     if (notebooks.length <= 0 && buffer.length <= 0) {
       log.info('launching an empty notebook by default');
-      kernelSpecsPromise.then(specs =>
-        launchNewNotebook(Object.keys(specs)[0])
+      kernelSpecsPromise.then(specs => {
+        const defaultKernel = 'python3';
+        const specList = Object.keys(specs).sort();
+        const kernel = specList.python3 || specList.python2 || specList[0];
+
+        launchNewNotebook(kernel);
+      }
       );
     } else {
       notebooks
