@@ -203,7 +203,7 @@ td {
 {
     word-wrap: break-word;
     padding: 10px 10px 10px calc(var(--prompt-width) + 10px);
-    overflow: scroll;
+    overflow-y: auto;
 }
 
 .outputs>div:empty
@@ -425,7 +425,9 @@ li.CodeMirror-hint-active {
     opacity:  1.0;
     position: absolute;
     left: 8px;
-    border-style: none;
+    border-color: rgba(122,122,122,0.3);
+    border-width: 1px;
+    border-style: solid;
     padding: 10px;
     padding-top: 0px;
     padding-right: 0px;
@@ -450,3 +452,62 @@ li.CodeMirror-hint-active {
     display: inline-block;
     opacity: 1.0;
 }
+
+/*
+
+The following were written to help with the R kernel formatting
+
+We need to write something general for nested HTML like the R kernel does for
+data
+
+*/
+
+dd {
+    display: block;
+    -webkit-margin-start: 40px
+}
+dl {
+    display: block;
+    -webkit-margin-before: 1__qem;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+}
+dt {
+    display: block
+}
+
+dl {
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0
+}
+dt {
+  font-weight: bold;
+  float: left;
+  width: 20%;
+  /* adjust the width; make sure the total of both is 100% */
+  padding: 0;
+  margin: 0
+}
+dd {
+  float: left;
+  width: 80%;
+  /* adjust the width; make sure the total of both is 100% */
+  padding: 0;
+  margin: 0
+}
+
+/* No dangling (1.) */
+li:only-child {
+  list-style-type: none;
+}
+
+.list-inline li {
+  display: inline;
+  padding-right: 20px;
+  text-align: center;
+}
+
+/* End R Kernel adaptations */
