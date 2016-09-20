@@ -26,7 +26,7 @@ const argv = require('yargs')
 
 const notebooks = argv._
   .filter(Boolean)
-  .filter(x => /^(?!-)/.test(x)) // Ignore strangeness on OS X first launch
+  .filter(x => /^(?!-psn)/.test(x)) // Ignore strangeness on OS X first launch
                                  // see #805
   .filter(x => x !== '.'); // Ignore the `electron .`
                            // TODO: Consider opening something for directories
