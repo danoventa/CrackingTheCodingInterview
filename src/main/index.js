@@ -16,6 +16,8 @@ const kernelspecs = require('kernelspecs');
 
 const version = require('../../package.json').version;
 
+log.info('args', process.argv);
+
 const sliceAt = process.argv[0].match('nteract') ? 1 : 2;
 
 const argv = require('yargs')
@@ -24,6 +26,8 @@ const argv = require('yargs')
 
 const notebooks = argv._
   .filter(Boolean)
+  .filter(x => /^(?!-)/.test(x)) // Ignore strangeness on OS X first launch
+                                 // see #805
   .filter(x => x !== '.'); // Ignore the `electron .`
                            // TODO: Consider opening something for directories
 
@@ -86,7 +90,14 @@ openFile$
       );
     } else {
       notebooks
-        .forEach(f => launch(resolve(f)));
+        .forEach(f => {
+          try {
+            launch(resolve(f));
+          } catch (e) {
+            log.error(e);
+            console.error(e);
+          }
+        });
     }
     buffer.forEach(openFileFromEvent);
   });
