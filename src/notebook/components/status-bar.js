@@ -1,38 +1,36 @@
 import React from 'react';
+import moment from 'moment';
 
 export default class StatusBar extends React.Component {
   static propTypes = {
     notebook: React.PropTypes.any,
+    lastSaved: React.PropTypes.instanceOf(Date),
   };
 
   constructor(props) {
     super(props);
-    this.state = {
-      isModified: false,
-    };
+    console.log(this.props.lastSaved);
   }
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.notebook !== nextProps) {
+    if (this.props.notebook !== nextProps.notebook || 
+        this.props.lastSaved !== nextProps.lastSaved) {
       return true;
     }
     return false;
   }
 
-  componentWillRecieveProps(newProps) {
-    this.setState({
-      isModified: true,
-    });
-  }
-
   render() {
     return (
       <div className="status-bar">
-        <span>
-          <p>nteract</p>
+        <span className="pull-right">
+        { this.props.lastSaved ? 
+          <p> Last saved {moment(this.props.lastSaved).fromNow()} </p> :
+          <p> Not saved yet </p>
+        }
         </span>
         <span>
-          <p>{this.state.isModified ? Modified : ''}</p>
+          <p>nteract</p>
         </span>
       </div>
     );

@@ -27,6 +27,7 @@ require('codemirror/mode/markdown/markdown');
 
 const mapStateToProps = (state) => ({
   theme: state.app.theme,
+  lastSaved: state.app.get('lastSaved'),
   notebook: state.document.get('notebook'),
   cellPagers: state.document.get('cellPagers'),
   focusedCell: state.document.get('focusedCell'),
@@ -42,6 +43,7 @@ export class Notebook extends React.Component {
     stickyCells: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
     theme: React.PropTypes.string,
+    timeSaved: React.PropTypes.instanceOf(Date),
     CellComponent: React.PropTypes.any,
   };
 
@@ -245,7 +247,7 @@ export class Notebook extends React.Component {
           <CellCreator id={cellOrder.get(0, null)} above />
           {cellOrder.map(this.createCellElement)}
         </div>
-        <StatusBar notebook={this.props.notebook} />
+        <StatusBar notebook={this.props.notebook} lastSaved={this.props.lastSaved}/>
         <link rel="stylesheet" href={`../static/styles/theme-${this.props.theme}.css`} />
       </div>
     );
