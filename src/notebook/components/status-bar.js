@@ -5,11 +5,11 @@ export default class StatusBar extends React.Component {
   static propTypes = {
     notebook: React.PropTypes.any,
     lastSaved: React.PropTypes.instanceOf(Date),
+    kernelSpecName: React.PropTypes.string,
   };
 
   constructor(props) {
     super(props);
-    console.log(this.props.lastSaved);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -30,7 +30,7 @@ export default class StatusBar extends React.Component {
         }
         </span>
         <span>
-          <p>nteract</p>
+          <p>nteract | {this.props.kernelSpecName}</p>
         </span>
       </div>
     );
