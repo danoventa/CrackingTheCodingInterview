@@ -52,14 +52,11 @@ export default handleActions({
     return state.set('executionState', action.executionState);
   },
   [constants.DONE_SAVING]: function doneSaving(state) {
-    return state.set('isSaving', false);
+    return state.set('isSaving', false)
+                .set('timeSaved', new Date());
   },
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
     return state.set('notificationSystem', action.notificationSystem);
-  },
-  [constants.SET_MODIFIED]: function setModified(state, action) {
-    const { value } = action;
-    return state.set('modified', value);
   },
   [constants.SET_THEME]: function setTheme(state, action) {
     return state.set('theme', action.theme);
