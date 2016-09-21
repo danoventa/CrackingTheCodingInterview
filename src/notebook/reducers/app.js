@@ -53,7 +53,7 @@ export default handleActions({
   },
   [constants.DONE_SAVING]: function doneSaving(state) {
     return state.set('isSaving', false)
-                .set('timeSaved', new Date());
+                .set('lastSaved', new Date());
   },
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
     return state.set('notificationSystem', action.notificationSystem);
