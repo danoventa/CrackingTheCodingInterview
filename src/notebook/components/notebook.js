@@ -15,6 +15,7 @@ import {
 import Cell from './cell/cell';
 import DraggableCell from './cell/draggable-cell';
 import CellCreator from './cell/cell-creator';
+import StatusBar from './status-bar';
 import {
   focusNextCell,
   moveCell,
@@ -244,6 +245,7 @@ export class Notebook extends React.Component {
           <CellCreator id={cellOrder.get(0, null)} above />
           {cellOrder.map(this.createCellElement)}
         </div>
+        <StatusBar notebook={this.props.notebook} />
         <link rel="stylesheet" href={`../static/styles/theme-${this.props.theme}.css`} />
       </div>
     );
