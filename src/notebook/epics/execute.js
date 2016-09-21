@@ -1,6 +1,5 @@
 import {
-  createExecuteRequest,
-  msgSpecToNotebookFormat,
+  createMessage,
 } from '../kernel/messaging';
 
 import {
@@ -23,6 +22,24 @@ const Immutable = require('immutable');
 
 const emptyOutputs = new Immutable.List();
 
+export function msgSpecToNotebookFormat(msg) {
+  return Object.assign({}, msg.content, {
+    output_type: msg.header.msg_type,
+  });
+}
+
+export function createExecuteRequest(code) {
+  const executeRequest = createMessage('execute_request');
+  executeRequest.content = {
+    code,
+    silent: false,
+    store_history: true,
+    user_expressions: {},
+    allow_stdin: false,
+    stop_on_error: false,
+  };
+  return executeRequest;
+}
 
 export function reduceOutputs(outputs, output) {
   if (output.output_type === 'clear_output') {

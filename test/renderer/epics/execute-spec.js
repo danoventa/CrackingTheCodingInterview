@@ -19,6 +19,8 @@ import {
   reduceOutputs,
   executeCellObservable,
   executeCellEpic,
+  createExecuteRequest,
+  msgSpecToNotebookFormat,
 } from '../../../src/notebook/epics/execute';
 
 describe('executeCell', () => {
@@ -118,4 +120,25 @@ describe('executeCellObservable', () => {
     })
 
   })
+});
+
+describe('createExecuteRequest', () => {
+  it('creates an execute_request message', () => {
+    const code = 'print("test")';
+    const executeRequest = createExecuteRequest(code);
+
+    expect(executeRequest.content.code).to.equal(code);
+    expect(executeRequest.header.msg_type).to.equal('execute_request');
+  });
+});
+
+describe('msgSpecToNotebookFormat', () => {
+  it('converts a message to the notebook format', () => {
+    const msg = {content: {data: 'test'}, header: {msg_type: 'test_header'}};
+    const notebookSpecMsg = msgSpecToNotebookFormat(msg);
+
+    expect(notebookSpecMsg).to.have.property('output_type');
+    expect(notebookSpecMsg).to.have.property('data');
+    expect(notebookSpecMsg.output_type).to.equal('test_header');
+  });
 });

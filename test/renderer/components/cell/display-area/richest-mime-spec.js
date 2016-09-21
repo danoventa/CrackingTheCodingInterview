@@ -20,11 +20,12 @@ describe('RichestMime', () => {
         displayOrder={displayOrder}
         transforms={transforms}
         bundle={Immutable.fromJS({"text/plain": "THE DATA"})}
+        metadata={Immutable.fromJS({"text/plain": "alright"})}
       />
     );
 
     expect(rm.instance().shouldComponentUpdate()).to.be.false;
-    expect(rm.first().props()).to.deep.equal({data: 'THE DATA', theme: 'light'});
+    expect(rm.first().props()).to.deep.equal({data: 'THE DATA', theme: 'light', metadata: 'alright'});
   })
   it('does not render unknown mimetypes', () => {
     const rm = shallow(

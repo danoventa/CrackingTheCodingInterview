@@ -20,9 +20,11 @@ export default function Output(props) {
       // falls through
     case 'display_data': {
       const bundle = output.get('data');
+      const metadata = output.get('metadata');
       return (
         <RichestMime
           bundle={bundle}
+          metadata={metadata}
           displayOrder={props.displayOrder}
           transforms={props.transforms}
           theme={props.theme}
