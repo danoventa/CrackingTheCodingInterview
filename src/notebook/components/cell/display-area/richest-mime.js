@@ -8,6 +8,7 @@ export default class RichestMime extends React.Component {
     displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
     transforms: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     bundle: React.PropTypes.instanceOf(Immutable.Map).isRequired,
+    metadata: React.PropTypes.instanceOf(Immutable.Map).isRequired,
     theme: React.PropTypes.string,
   };
 
@@ -32,18 +33,15 @@ export default class RichestMime extends React.Component {
 
     const Transform = this.props.transforms.get(mimetype);
     const data = this.props.bundle.get(mimetype);
-    return <Transform data={data} theme={this.props.theme} />;
+    const metadata = this.props.metadata.get(mimetype);
+    return <Transform data={data} metadata={metadata} theme={this.props.theme} />;
   }
 }
-
-RichestMime.propTypes = {
-  bundle: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-  displayOrder: React.PropTypes.instanceOf(Immutable.List),
-  transforms: React.PropTypes.instanceOf(Immutable.Map),
-};
 
 RichestMime.defaultProps = {
   transforms,
   displayOrder,
   theme: 'light',
+  metadata: new Immutable.Map(),
+  bundle: new Immutable.Map(),
 };

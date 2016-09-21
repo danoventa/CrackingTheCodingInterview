@@ -31,25 +31,6 @@ export function createMessage(msg_type, fields) {
   }, fields);
 }
 
-export function createExecuteRequest(code) {
-  const executeRequest = createMessage('execute_request');
-  executeRequest.content = {
-    code,
-    silent: false,
-    store_history: true,
-    user_expressions: {},
-    allow_stdin: false,
-    stop_on_error: false,
-  };
-  return executeRequest;
-}
-
-export function msgSpecToNotebookFormat(msg) {
-  return Object.assign({}, msg.content, {
-    output_type: msg.header.msg_type,
-  });
-}
-
 /**
  * childOf filters out messages that don't have the parent header matching parentMessage
  * @param  {Object}  parentMessage Jupyter message protocol message
