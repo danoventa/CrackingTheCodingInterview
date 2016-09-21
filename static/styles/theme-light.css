@@ -43,4 +43,6 @@
   --cm-hint-color-active: var(--cm-color);
   --cm-hint-bg: var(--main-bg-color);
   --cm-hint-bg-active: #ABD1FF;
+
+  --status-bar: #eeedee;
 }

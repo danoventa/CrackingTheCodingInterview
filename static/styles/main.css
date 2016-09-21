@@ -505,3 +505,15 @@ li:only-child {
 }
 
 /* End R Kernel adaptations */
+
+/* Styling for status bar */
+.status-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 12px;
+    line-height: 0.5em;
+    background: var(--status-bar);
+}
