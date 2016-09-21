@@ -105,9 +105,12 @@ export const watchExecutionStateEpic = action$ =>
 
 export const acquireKernelInfoEpic = action$ =>
   action$.ofType(NEW_KERNEL)
-    .switchMap(action =>
-      acquireKernelInfo(action.channels)
-    );
+    .switchMap(action => {
+      if (process.env.DEBUG) {
+        window.channels = action.channels;
+      }
+      return acquireKernelInfo(action.channels);
+    });
 
 export const newKernelEpic = action$ =>
   action$.ofType(LAUNCH_KERNEL)
