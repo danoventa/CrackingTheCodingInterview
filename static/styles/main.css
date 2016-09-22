@@ -56,10 +56,6 @@ td {
     border: 1px solid var(--primary-border);
 }
 
-.pull-right {
-    float: right;
-}
-
 /*
   Notebook
  */
@@ -511,12 +507,20 @@ li:only-child {
 /* End R Kernel adaptations */
 
 /* Styling for status bar */
+.pull-right {
+    float: right;
+    padding-right: 10px;
+}
+
+.pull-left {
+    display: block;
+    padding-left: 10px;
+}
+
 .status-bar {
     position: fixed;
     bottom: 0;
     width: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
     font-size: 12px;
     line-height: 0.5em;
     background: var(--status-bar);
