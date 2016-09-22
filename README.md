@@ -11,6 +11,12 @@ Edit code cells, write markdown, visualize!
 
 Note: this isn't feature complete yet. There will be :bug:s and quirks. Please come tell us about them!
 
+### Installing
+
+Head to the [Releases](https://github.com/nteract/nteract/releases) page and download the version for your OS.
+
+<!-- TODO: Explain how to install per each platform, likely with screenshots -->
+
 ### Scope and goals
 
 * Notebook environment to explore and get things done ✅
