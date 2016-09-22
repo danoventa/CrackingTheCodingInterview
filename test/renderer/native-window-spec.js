@@ -36,7 +36,6 @@ describe('titling', () => {
       }),
       app: AppRecord({
         executionState: 'not connected',
-        modified: true,
       }),
       metadata: MetadataRecord({
         filename: 'titled.ipynb',
@@ -44,7 +43,6 @@ describe('titling', () => {
     };
 
     const titleObject = nativeWindow.selectTitleAttributes(state);
-    expect(titleObject.modified).to.be.true;
     expect(titleObject.executionState).to.equal('not connected');
     expect(titleObject.filename).to.equal('titled.ipynb');
     expect(titleObject.displayName).to.equal('python3000');
@@ -69,7 +67,6 @@ describe('setTitleFromAttributes', () => {
       }),
       app: AppRecord({
         executionState: 'not connected',
-        modified: true,
       }),
       metadata: MetadataRecord({
         filename: 'titled.ipynb',

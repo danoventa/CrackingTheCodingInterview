@@ -311,12 +311,3 @@ describe('changeCellType', () => {
     });
   });
 });
-
-describe('setModified', () => {
-  it('creates a SET_MODIFIED action', () => {
-    expect(actions.setModified(true)).to.deep.equal({
-      type: constants.SET_MODIFIED,
-      value: true,
-    });
-  });
-});
