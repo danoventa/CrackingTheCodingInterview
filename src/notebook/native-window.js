@@ -36,9 +36,7 @@ export function setTitleFromAttributes(attributes) {
   win.setTitle(title);
 }
 
-export function initNativeHandlers(store) {
-  const state$ = Rx.Observable.from(store);
-
+export function createTitleFeed(state$) {
   const modified$ = state$
     .map(state => state.document.get('notebook'))
     .scan((prev, notebook) => ({
@@ -54,7 +52,7 @@ export function initNativeHandlers(store) {
     .map(state => state.app.get('executionState'))
     .debounceTime(200);
 
-  Rx.Observable
+  return Rx.Observable
     .combineLatest(
       modified$,
       fullpath$,
@@ -62,6 +60,11 @@ export function initNativeHandlers(store) {
       (modified, fullpath, executionState) => ({ modified, fullpath, executionState })
     )
     .distinctUntilChanged()
-    .switchMap(i => Rx.Observable.of(i))
+    .switchMap(i => Rx.Observable.of(i));
+}
+
+export function initNativeHandlers(store) {
+  const state$ = Rx.Observable.from(store);
+  return createTitleFeed(state$)
     .subscribe(setTitleFromAttributes, (err) => console.error(err));
 }

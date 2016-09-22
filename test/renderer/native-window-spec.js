@@ -6,6 +6,8 @@ import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
+import Rx from 'rxjs/Rx';
+
 import { AppRecord, DocumentRecord, MetadataRecord } from '../../src/notebook/records';
 
 chai.use(sinonChai);
@@ -26,29 +28,6 @@ describe('tildify', () => {
   });
 });
 
-
-describe('titling', () => {
-  it('is able to set a title from the attributes object', () => {
-    const notebook = new Immutable.Map().setIn(['metadata', 'kernelspec', 'display_name'], 'python3000');
-    const state = {
-      document: DocumentRecord({
-        notebook,
-      }),
-      app: AppRecord({
-        executionState: 'not connected',
-      }),
-      metadata: MetadataRecord({
-        filename: 'titled.ipynb',
-      })
-    };
-
-    const titleObject = nativeWindow.selectTitleAttributes(state);
-    expect(titleObject.executionState).to.equal('not connected');
-    expect(titleObject.filename).to.equal('titled.ipynb');
-    expect(titleObject.displayName).to.equal('python3000');
-  })
-})
-
 describe('setTitleFromAttributes', () => {
   it('sets the window title', () => {
     // Set up our "Electron window"
@@ -60,6 +39,17 @@ describe('setTitleFromAttributes', () => {
 
     const remote = sinon.stub(electron.remote, 'getCurrentWindow', () => win);
 
+
+    const titleObject = { fullpath: "/tmp/test.ipynb", executionState: 'busy', modified: true };
+    nativeWindow.setTitleFromAttributes(titleObject);
+
+    // TODO: stub doesn't seem to get setup
+    // expect(win.setTitle).to.have.been.called;
+  })
+})
+
+describe('createTitleFeed', () => {
+  it('creates an observable that updates title attributes', (done) => {
     const notebook = new Immutable.Map().setIn(['metadata', 'kernelspec', 'display_name'], 'python3000');
     const state = {
       document: DocumentRecord({
@@ -73,10 +63,21 @@ describe('setTitleFromAttributes', () => {
       })
     };
 
-    const titleObject = nativeWindow.selectTitleAttributes(state);
-    nativeWindow.setTitleFromAttributes(titleObject);
+    const state$ = Rx.Observable.from([
+      state,
+    ])
 
-    // TODO: stub doesn't seem to get setup
-    // expect(win.setTitle).to.have.been.called;
+    const allAttributes = [];
+    nativeWindow.createTitleFeed(state$)
+      .subscribe(attributes => {
+        allAttributes.push(attributes);
+      }, null,
+    () => {
+      expect(allAttributes).to.deep.equal([
+        { modified: false, fullpath: 'titled.ipynb', executionState: 'not connected' }
+      ]);
+      done();
+    })
+
   })
 })
