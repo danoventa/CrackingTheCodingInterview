@@ -30,12 +30,10 @@ export function setTitleFromAttributes(attributes) {
   // TODO: Investigate if setRepresentedFilename() is a no-op on non-OS X
   if (filename && win.setRepresentedFilename) {
     win.setRepresentedFilename(attributes.fullpath);
-    // TODO: win.setDocumentEdited(prevNotebook !== currNotebook)
     win.setDocumentEdited(attributes.modified);
-  } else {
-    const title = `${filename} - ${executionState}`;
-    win.setTitle(title);
   }
+  const title = `${filename} - ${executionState}`;
+  win.setTitle(title);
 }
 
 export function initNativeHandlers(store) {
