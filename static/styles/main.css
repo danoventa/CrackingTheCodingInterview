@@ -405,7 +405,6 @@ code {
 
 .CodeMirror-hint {
   border-radius: 0px;
-  max-width: 19em;
   white-space: pre;
   cursor: pointer;
   color: var(--cm-hint-color);
