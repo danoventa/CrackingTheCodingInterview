@@ -73,26 +73,6 @@ describe('setNotificationSystem', () => {
   });
 });
 
-describe('setModified', () => {
-  it('sets the modified value', () => {
-    const originalState = {
-      app: new AppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false,
-     })
-    };
-
-    const action = {
-      type: constants.SET_MODIFIED,
-      value: true,
-    };
-
-    const state = reducers(originalState, action);
-    expect(state.app.modified).to.equal(true);
-  });
-});
-
 describe('startSaving', () => {
   it('should set isSaving to false', () => {
     const originalState = {

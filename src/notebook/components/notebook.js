@@ -15,6 +15,7 @@ import {
 import Cell from './cell/cell';
 import DraggableCell from './cell/draggable-cell';
 import CellCreator from './cell/cell-creator';
+import StatusBar from './status-bar';
 import {
   focusNextCell,
   moveCell,
@@ -26,6 +27,8 @@ require('codemirror/mode/markdown/markdown');
 
 const mapStateToProps = (state) => ({
   theme: state.app.theme,
+  lastSaved: state.app.get('lastSaved'),
+  kernelSpecName: state.app.get('kernelSpecName'),
   notebook: state.document.get('notebook'),
   cellPagers: state.document.get('cellPagers'),
   focusedCell: state.document.get('focusedCell'),
@@ -41,6 +44,8 @@ export class Notebook extends React.Component {
     stickyCells: React.PropTypes.instanceOf(Immutable.Map),
     focusedCell: React.PropTypes.string,
     theme: React.PropTypes.string,
+    lastSaved: React.PropTypes.instanceOf(Date),
+    kernelSpecName: React.PropTypes.string,
     CellComponent: React.PropTypes.any,
   };
 
@@ -244,6 +249,11 @@ export class Notebook extends React.Component {
           <CellCreator id={cellOrder.get(0, null)} above />
           {cellOrder.map(this.createCellElement)}
         </div>
+        <StatusBar
+          notebook={this.props.notebook}
+          lastSaved={this.props.lastSaved}
+          kernelSpecName={this.props.kernelSpecName}
+        />
         <link rel="stylesheet" href={`../static/styles/theme-${this.props.theme}.css`} />
       </div>
     );

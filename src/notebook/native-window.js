@@ -24,7 +24,6 @@ export function tildify(p) {
 
 export function selectTitleAttributes(state) {
   return {
-    modified: state.app.get('modified'),
     executionState: state.app.get('executionState'),
     filename: state.metadata.get('filename') || 'Untitled',
     displayName: state.document.getIn([
@@ -34,7 +33,7 @@ export function selectTitleAttributes(state) {
 
 export function setTitleFromAttributes(attributes) {
   const filename = tildify(attributes.filename);
-  const { modified, executionState, displayName } = attributes;
+  const { executionState, displayName } = attributes;
 
   const title = `${filename} - ${displayName} - ${executionState}`;
 
