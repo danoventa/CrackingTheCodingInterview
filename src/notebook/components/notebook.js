@@ -33,6 +33,7 @@ const mapStateToProps = (state) => ({
   cellPagers: state.document.get('cellPagers'),
   focusedCell: state.document.get('focusedCell'),
   stickyCells: state.document.get('stickyCells'),
+  executionState: state.app.get('executionState'),
 });
 
 export class Notebook extends React.Component {
@@ -47,6 +48,7 @@ export class Notebook extends React.Component {
     lastSaved: React.PropTypes.instanceOf(Date),
     kernelSpecName: React.PropTypes.string,
     CellComponent: React.PropTypes.any,
+    executionState: React.PropTypes.string,
   };
 
   static defaultProps = {
@@ -253,6 +255,7 @@ export class Notebook extends React.Component {
           notebook={this.props.notebook}
           lastSaved={this.props.lastSaved}
           kernelSpecName={this.props.kernelSpecName}
+          executionState={this.props.executionState}
         />
         <link rel="stylesheet" href={`../static/styles/theme-${this.props.theme}.css`} />
       </div>

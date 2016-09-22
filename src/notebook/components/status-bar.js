@@ -6,6 +6,7 @@ export default class StatusBar extends React.Component {
     notebook: React.PropTypes.any,
     lastSaved: React.PropTypes.instanceOf(Date),
     kernelSpecName: React.PropTypes.string,
+    executionState: React.PropTypes.string,
   };
 
   shouldComponentUpdate(nextProps) {
@@ -26,7 +27,7 @@ export default class StatusBar extends React.Component {
         }
         </span>
         <span className="pull-left">
-          <p>nteract | {this.props.kernelSpecName}</p>
+          <p>{this.props.kernelSpecName} | {this.props.executionState}</p>
         </span>
       </div>
     );

@@ -22,40 +22,49 @@ export function tildify(p) {
   return (s.indexOf(HOME) === 0 ? s.replace(HOME + path.sep, `~${path.sep}`) : s).slice(0, -1);
 }
 
-export function selectTitleAttributes(state) {
-  return {
-    executionState: state.app.get('executionState'),
-    filename: state.metadata.get('filename') || 'Untitled',
-    displayName: state.document.getIn([
-      'notebook', 'metadata', 'kernelspec', 'display_name'], '...'),
-  };
-}
-
 export function setTitleFromAttributes(attributes) {
-  const filename = tildify(attributes.filename);
-  const { executionState, displayName } = attributes;
-
-  const title = `${filename} - ${displayName} - ${executionState}`;
+  const filename = tildify(attributes.fullpath);
+  const { executionState } = attributes;
 
   const win = getCurrentWindow();
   // TODO: Investigate if setRepresentedFilename() is a no-op on non-OS X
   if (filename && win.setRepresentedFilename) {
-    // TODO: this needs to be the full path to the file
-    win.setRepresentedFilename(filename);
-  }
-  if (win.setDocumentEdited) {
+    win.setRepresentedFilename(attributes.fullpath);
     win.setDocumentEdited(attributes.modified);
   }
+  const title = `${filename} - ${executionState}`;
   win.setTitle(title);
+}
+
+export function createTitleFeed(state$) {
+  const modified$ = state$
+    .map(state => state.document.get('notebook'))
+    .scan((prev, notebook) => ({
+      modified: prev.notebook === notebook,
+      notebook,
+    }), {})
+    .pluck('modified');
+
+  const fullpath$ = state$
+    .map(state => state.metadata.get('filename') || 'Untitled');
+
+  const executionState$ = state$
+    .map(state => state.app.get('executionState'))
+    .debounceTime(200);
+
+  return Rx.Observable
+    .combineLatest(
+      modified$,
+      fullpath$,
+      executionState$,
+      (modified, fullpath, executionState) => ({ modified, fullpath, executionState })
+    )
+    .distinctUntilChanged()
+    .switchMap(i => Rx.Observable.of(i));
 }
 
 export function initNativeHandlers(store) {
   const state$ = Rx.Observable.from(store);
-
-  state$
-    .map(selectTitleAttributes)
-    .distinctUntilChanged()
-    .switchMap(i => Rx.Observable.of(i))
-    .debounceTime(200)
+  return createTitleFeed(state$)
     .subscribe(setTitleFromAttributes, (err) => console.error(err));
 }

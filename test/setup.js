@@ -78,6 +78,7 @@ mock('electron', {
       return {
         'setTitle': function(){},
         'setDocumentEdited': function(){},
+        'setRepresentedFilename': function() {},
       };
     }
   },

@@ -18,8 +18,8 @@ export function launch(filename) {
   let win = new BrowserWindow({
     width: 800,
     height: 1000,
-    title: !filename ? 'Untitled' : path.relative('.', filename.replace(/.ipynb$/, '')),
     icon: iconPath,
+    title: 'nteract',
   });
 
   const index = path.join(__dirname, '..', '..', 'static', 'index.html');

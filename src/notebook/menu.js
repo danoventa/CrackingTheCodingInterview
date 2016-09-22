@@ -75,7 +75,6 @@ export function triggerWindowRefresh(store, filename) {
   const executionState = state.app.get('executionState');
   const notebook = state.document.get('notebook');
   store.dispatch(saveAs(filename, notebook));
-  BrowserWindow.getFocusedWindow().setTitle(`${tildify(filename)} - ${executionState}`);
 }
 
 export function dispatchRestartKernel(store) {
