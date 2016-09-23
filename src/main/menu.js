@@ -1,4 +1,5 @@
-import { dialog, app, shell, Menu } from 'electron';
+import { dialog, app, shell, Menu, ipcMain as ipc,
+         BrowserWindow } from 'electron';
 import * as path from 'path';
 
 import { launch, launchNewNotebook } from './launch';
@@ -17,6 +18,30 @@ function createSender(eventName, obj) {
   return (item, focusedWindow) => {
     send(focusedWindow, eventName, obj);
   };
+}
+
+export function githubAuth() {
+  const win = new BrowserWindow({show: false, webPreferences: {zoomFactor: .75}});
+  win.webContents.on('dom-ready', () => {
+    if( win.getURL().match('authorize') ) {
+      win.show();
+      win.on('page-title-updated', () => {
+        win.close()
+        return githubAuth();
+      });
+    }
+    else {
+      win.webContents.executeJavaScript(`
+        require('electron').ipcRenderer.send('auth', document.body.innerHTML);
+        `);
+      ipc.on('auth', (event, auth) => {
+      // hacky parse of JSON
+        auth = auth.match(/"\w+"/g)[1].match(/[^"]/g).join('')
+        console.log(auth);
+      });
+    }
+  });
+  win.loadURL('http://localhost:3010/login');
 }
 
 export const fileSubMenus = {
@@ -70,10 +95,14 @@ export const fileSubMenus = {
     accelerator: 'CmdOrCtrl+Shift+S',
   },
   publish: {
-    label: '&Publish',
+    label: '&Github',
     submenu: [
       {
-        label: '&To Gist',
+        label: '&Authenticate',
+        click: () => githubAuth(),
+      },
+      {
+        label: '&Publish To Gist',
         click: createSender('menu:publish:gist'),
       },
     ],
