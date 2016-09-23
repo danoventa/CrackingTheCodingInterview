@@ -28,7 +28,12 @@ import {
   publishEpic,
 } from './github-publish';
 
+import {
+  commListenEpic,
+} from './comm';
+
 const epics = [
+  commListenEpic,
   initialGitHubAuthEpic,
   publishEpic,
   getStoredThemeEpic,

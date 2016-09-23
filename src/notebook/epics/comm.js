@@ -6,6 +6,8 @@ Message spec 4.1 (IPython 2.0) added a messaging system for developers to add th
 These messages are fully symmetrical - both the Kernel and the Frontend can send each message, and no messages expect a reply. The Kernel listens for these messages on the Shell channel, and the Frontend listens for them on the IOPub channel.
 */
 
+import Rx from 'rxjs/Rx';
+
 export function createCommMessage(comm_id, data) {
   return createMessage('comm_msg', { content: { comm_id, data } });
 }
@@ -27,22 +29,20 @@ export function createCommOpenMessage(comm_id, target_name, data, target_module)
 }
 
 export const commListenEpic = (action$, store) =>
-  action$.ofType(NEW_KERNEL)
-    .switchMap(action => Observable.of(action.channels))
+  action$.ofType('NEW_KERNEL')
+    .switchMap(action => Rx.Observable.of(action.channels))
     // We have a new channel
     // TODO: Open comms will need to be deleted from state
-    .map(channels => {
-      const { iopub } = channels;
+    .map(channels =>
+      channels.iopub
+        .ofMessageType(['comm_open', 'comm_msg', 'comm_close'])
+        .groupBy(msg => msg.content.comm_id)
+        .map(comm$ => ({ type: 'NEW_COMM', comm$, id: comm$.key }))
+      // IDEA: It would be very cool if comm we return here is a subject that
+      //       sends comm messages with the right comm_id already attached, so
+      //       they can send comm_msg or comm_close directly
+    )
+    .mergeAll();
 
-      const commOpens = iopub
-        .ofMessageType('comm_open')
-        .groupBy(msg => msg.content.target_name)
-        .map(comm_open => { type: 'NEW_COMM', payload: commOpen })
-        // Either we use store.getState() here to check to see if we need to
-        // close the comm/register a new comm, or we dispatch the comm_open
-        // which allows us to be a bit more dynamic
 
-      /* Every Comm has an ID and a target name. The code handling the message on the receiving side is responsible for maintaining a mapping of target_name keys to constructors. After a comm_open message has been sent, there should be a corresponding Comm instance on both sides. The data key is always a dict and can be any extra JSON information used in initialization of the comm. */
-
-      // Dispatch NEW_COMM
-    });
+// TODO: Close comms for which we don't have a matching target_name
