@@ -22,13 +22,14 @@ function createSender(eventName, obj) {
 
 export function githubAuth() {
   const win = new BrowserWindow({show: false, webPreferences: {zoomFactor: .75}});
+  let count = 0;
   win.webContents.on('dom-ready', () => {
-    if( win.getURL().match('authorize') ) {
+    if(count == 1){
+      win.destroy();
+      return githubAuth();
+    }
+    if(win.getURL().match('authorize')) {
       win.show();
-      win.on('page-title-updated', () => {
-        win.close()
-        return githubAuth();
-      });
     }
     else {
       win.webContents.executeJavaScript(`
@@ -40,6 +41,7 @@ export function githubAuth() {
         console.log(auth);
       });
     }
+    count += 1;
   });
   win.loadURL('http://localhost:3010/login');
 }
