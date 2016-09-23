@@ -50,10 +50,18 @@ img
     margin-left: auto;
 }
 
+table {
+    border-collapse: collapse;
+}
+
 th,
 td {
     padding: 0.5em 1em;
     border: 1px solid var(--primary-border);
+}
+
+th {
+    text-align: left;
 }
 
 /*
