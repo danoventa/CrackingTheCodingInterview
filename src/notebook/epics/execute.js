@@ -68,6 +68,12 @@ export function reduceOutputs(outputs, output) {
   return outputs.push(Immutable.fromJS(output));
 }
 
+export function createPagerActions(id, payloadStream) {
+  return payloadStream.filter(p => p.source === 'page')
+    .scan((acc, pd) => acc.push(Immutable.fromJS(pd)), new Immutable.List())
+    .map((pagerDatas) => updateCellPagers(id, pagerDatas));
+}
+
 export function executeCellObservable(channels, id, code) {
   if (!channels || !channels.iopub || !channels.shell) {
     return Rx.Observable.throw(new Error('kernel not connected'));
@@ -106,9 +112,7 @@ export function executeCellObservable(channels, id, code) {
     // Clear any old pager
     Rx.Observable.of(updateCellPagers(id, new Immutable.List())),
     // Update the doc/pager section with new bundles
-    payloadStream.filter(p => p.source === 'page')
-      .scan((acc, pd) => acc.push(Immutable.fromJS(pd)), new Immutable.List())
-      .map((pagerDatas) => updateCellPagers(id, pagerDatas)),
+    createPagerActions(id, payloadStream),
     // Set the cell status
     cellMessages.ofMessageType(['status'])
       .pluck('content', 'execution_state')
