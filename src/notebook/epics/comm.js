@@ -41,8 +41,10 @@ export const commListenEpic = (action$, store) =>
             if (!state.comms.hasIn(['targets', targetComm$.key])) {
               // Hey look, it's a side effect!
               action.channels.shell.next(createCommCloseMessage(msg.comm_id));
-              // We don't get this comm_close message back on IOPub though - we'll
+              // TODO: We don't get this comm_close message back on IOPub though - we'll
               // need to close this observable off or emit the comm_close internally
+              // Likely want to have a setup that returns either an Observable
+              // with just the one message or a merge of just the one + the close message
             }
           })
           // Group on the comm_id (our "secondary" key)
@@ -55,6 +57,7 @@ export const commListenEpic = (action$, store) =>
     // We double grouped, so we double merge
     .mergeAll()
     .mergeAll()
+    // TODO: Something useful with the comms
     .map(msg => ({ type: 'COMM_GENERIC', msg }))
     .catch(error =>
       Rx.Observable.of({
@@ -63,6 +66,3 @@ export const commListenEpic = (action$, store) =>
         error: true,
       })
     );
-
-
-// TODO: Close comms for which we don't have a matching target_name
