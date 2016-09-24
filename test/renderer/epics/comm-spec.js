@@ -15,7 +15,7 @@ import {
 } from '../../../src/notebook/epics/comm';
 
 describe('createCommMessage', () => {
-  it('creates an comm_msg', () => {
+  it('creates a comm_msg', () => {
     const commMessage = createCommMessage('0000', { 'hey': 'is for horses' });
 
     expect(commMessage.content.data).to.deep.equal({ 'hey': 'is for horses' });
@@ -25,7 +25,7 @@ describe('createCommMessage', () => {
 });
 
 describe('createCommOpenMessage', () => {
-  it('creates an comm_open', () => {
+  it('creates a comm_open', () => {
     const commMessage = createCommOpenMessage('0001', 'myTarget', { 'hey': 'is for horses' });
 
     expect(commMessage.content).to.deep.equal({
@@ -43,5 +43,15 @@ describe('createCommOpenMessage', () => {
       data: { 'hey': 'is for horses' },
       target_module: 'Dr. Pepper',
     });
+  });
+});
+
+describe('createCommCloseMessage', () => {
+  it('creates a comm_msg', () => {
+    const commMessage = createCommCloseMessage('0000', { 'hey': 'is for horses' });
+
+    expect(commMessage.content.data).to.deep.equal({ 'hey': 'is for horses' });
+    expect(commMessage.content.comm_id).to.equal('0000');
+    expect(commMessage.header.msg_type).to.equal('comm_close');
   });
 });
