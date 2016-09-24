@@ -24,7 +24,6 @@ import {
 } from './theming';
 
 import {
-  initialGitHubAuthEpic,
   publishEpic,
 } from './github-publish';
 
@@ -34,7 +33,6 @@ import {
 
 const epics = [
   commListenEpic,
-  initialGitHubAuthEpic,
   publishEpic,
   getStoredThemeEpic,
   setThemeEpic,
