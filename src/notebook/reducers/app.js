@@ -6,6 +6,8 @@ import {
   shutdownKernel,
 } from '../kernel/shutdown';
 
+const Github = require('github');
+
 function cleanupKernel(state) {
   const kernel = {
     channels: state.channels,
@@ -64,4 +66,9 @@ export default handleActions({
   [constants.SET_GITHUB]: function setGithub(state, action) {
     return state.set('github', action.github);
   },
+  [constants.SET_GITHUB_TOKEN]: function setGithubToken(state, action) {
+    const {githubToken} = action;
+    const github = new Github({token: githubToken});
+    return state.set('github', github);
+  }
 }, {});

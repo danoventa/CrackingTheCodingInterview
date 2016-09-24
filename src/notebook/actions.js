@@ -232,3 +232,9 @@ export function changeCellType(id, to) {
     to,
   };
 }
+export function setGithubToken(githubToken) {
+  return {
+    type: constants.SET_GITHUB_TOKEN,
+    githubToken,
+  };
+}
