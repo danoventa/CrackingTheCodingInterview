@@ -36,6 +36,8 @@ export const commListenEpic = (action$, store) =>
     .map(channels =>
       channels.iopub
         .ofMessageType(['comm_open', 'comm_msg', 'comm_close'])
+        .do(x => console.warn(x.content.data))
+        .do(x => console.warn(x))
         .groupBy(msg => msg.content.comm_id)
         .map(comm$ => ({ type: 'NEW_COMM', comm$, id: comm$.key }))
       // IDEA: It would be very cool if comm we return here is a subject that
