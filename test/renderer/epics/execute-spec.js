@@ -21,6 +21,7 @@ import {
   executeCellEpic,
   createExecuteRequest,
   msgSpecToNotebookFormat,
+  createPagerActions,
 } from '../../../src/notebook/epics/execute';
 
 describe('executeCell', () => {
@@ -140,5 +141,23 @@ describe('msgSpecToNotebookFormat', () => {
     expect(notebookSpecMsg).to.have.property('output_type');
     expect(notebookSpecMsg).to.have.property('data');
     expect(notebookSpecMsg.output_type).to.equal('test_header');
+  });
+});
+
+describe('createPagerActions', () => {
+  it('emits actions to set pagers', (done) => {
+    const msgObs = Rx.Observable.from([{
+      source: 'page',
+      data: {'text/html': 'this is a test'},
+    }]);
+
+    const pagerActions$ = createPagerActions('1', msgObs);
+
+    pagerActions$.subscribe((action) => {
+      const expected = [{ source: 'page', data: { 'text/html': 'this is a test' } } ];
+      expect(action.id).to.equal('1');
+      expect(action.pagers.toJS()).to.deep.equal(expected);
+      done();
+    });
   });
 });
