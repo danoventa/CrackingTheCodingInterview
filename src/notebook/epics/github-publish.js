@@ -4,10 +4,6 @@ import {
   overwriteMetadata,
 } from '../actions';
 
-import {
-  SET_GITHUB,
-} from '../constants';
-
 const commutable = require('commutable');
 const path = require('path');
 
@@ -25,49 +21,7 @@ const Github = require('github');
  * line.
  */
 
-/**
- * Create an observable stream containing the Github API
- * @param {object} authOptions - The authorization information, right now
- * this is just oauth token and corresponding type, but can be username
- * and password later, https://developer.github.com/v3/#authentication
- */
-export const githubAuthObservable = () =>
-  Observable.create(observer => {
-    const github = new Github();
-    if (process.env.GITHUB_TOKEN) {
-      github.authenticate({ type: 'oauth', token: process.env.GITHUB_TOKEN });
-    }
-    observer.next(github);
-    observer.complete();
-  });
-
-/**
- * setGithub is an action creator for redux, creates a plain object to be
- * merged into the state tree.
- * @param {object} github - Node-github object for using the Github API.
- * @return plain object for merging into redux state tree.
- */
-export const setGithub = (github) => ({
-  type: SET_GITHUB,
-  github,
-});
-
 export const PUBLISH_GIST = 'PUBLISH_GIST';
-
-/**
- * Return an observer that handles authorization.
- * @return Observer containing oauth token.
- */
-export const initialGitHubAuthEpic = function foo() {
-  return githubAuthObservable()
-    .catch(err => {
-      // TODO: Prompt?
-      // Leaving this here in case authentication becomes more complicated.
-      console.error(err);
-      return new Github(); // Fall back to no auth
-    })
-    .map(setGithub);
-};
 
 /**
  * Notify the notebook user that it has been published as a gist.
@@ -176,6 +130,8 @@ export function publishNotebookObservable(github, notebook, filepath, notificati
     }
   });
 }
+
+
 
 /**
  * Epic to capture the end to end action of publishing and receiving the
