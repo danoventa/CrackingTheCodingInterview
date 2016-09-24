@@ -12,6 +12,8 @@ import {
   createCommMessage,
   createCommCloseMessage,
   createCommOpenMessage,
+  targetNameKey,
+  commIDKey,
 } from '../../../src/notebook/epics/comm';
 
 describe('createCommMessage', () => {
@@ -55,3 +57,15 @@ describe('createCommCloseMessage', () => {
     expect(commMessage.header.msg_type).to.equal('comm_close');
   });
 });
+
+describe('targetNameKey', () => {
+  it('extracts target_name off a message', () => {
+    expect(targetNameKey({ content: { target_name: 'Meow'} })).to.equal('Meow');
+  })
+})
+
+describe('commIDKey', () => {
+  it('extracts comm_id off a message', () => {
+    expect(commIDKey({ content: { comm_id: '95032' } })).to.equal('95032');
+  })
+})

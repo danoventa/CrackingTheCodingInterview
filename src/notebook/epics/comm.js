@@ -29,6 +29,11 @@ export function createCommCloseMessage(comm_id, data = {}) {
   return createMessage('comm_close', { content: { comm_id, data } });
 }
 
+// Pluck off the target_name as a key for groupBy
+export const targetNameKey = (msg) => msg.content.target_name;
+// Pluck off the comm_id as a key for groupBy
+export const commIDKey = (msg) => msg.content.comm_id;
+
 export const commListenEpic = (action$, store) =>
   action$.ofType('NEW_KERNEL')
     // We have a new channel
@@ -37,7 +42,7 @@ export const commListenEpic = (action$, store) =>
       action.channels.iopub
         .ofMessageType(['comm_open', 'comm_msg', 'comm_close'])
         // Group on the target_name (our "primary" key)
-        .groupBy(msg => msg.content.target_name)
+        .groupBy(targetNameKey)
         .map(targetComm$ =>
           // Cancel target_name registrants here
           targetComm$.do(msg => {
@@ -53,7 +58,7 @@ export const commListenEpic = (action$, store) =>
             }
           })
           // Group on the comm_id (our "secondary" key)
-          .groupBy(msg => msg.content.comm_id)
+          .groupBy(commIDKey)
         )
       // IDEA: It would be very cool if comm we return here is a subject that
       //       sends comm messages with the right comm_id already attached, so
