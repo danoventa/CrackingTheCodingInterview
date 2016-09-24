@@ -15,6 +15,7 @@ import {
   targetNameKey,
   commIDKey,
   createCommErrorAction,
+  commMessageToAction,
 } from '../../../src/notebook/epics/comm';
 
 describe('createCommMessage', () => {
@@ -81,5 +82,11 @@ describe('createCommErrorAction', () => {
         expect(action.payload).to.equal(err);
         expect(action.error).to.be.true;
       })
+  })
+})
+
+describe('commMessageToAction', () => {
+  it('creates the COMM_GENERIC action', () => {
+    expect(commMessageToAction('hey')).to.deep.equal({ type: 'COMM_GENERIC', msg: 'hey' })
   })
 })

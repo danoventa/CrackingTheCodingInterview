@@ -41,6 +41,9 @@ export const createCommErrorAction = (error) =>
     error: true,
   });
 
+// TODO: Only leaving this in for prototyping
+export const commMessageToAction = (msg) => ({ type: 'COMM_GENERIC', msg });
+
 export const commListenEpic = (action$, store) =>
   action$.ofType('NEW_KERNEL')
     // We have a new channel
@@ -75,5 +78,5 @@ export const commListenEpic = (action$, store) =>
     .mergeAll()
     .mergeAll()
     // TODO: Something useful with the comms
-    .map(msg => ({ type: 'COMM_GENERIC', msg }))
+    .map(commMessageToAction)
     .catch(createCommErrorAction);
