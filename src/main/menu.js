@@ -37,7 +37,7 @@ export function githubAuth(item, focusedWindow) {
       win.show();
     }
   });
-  win.loadURL('https://oauth.nteract.io/github');
+  win.loadURL('https://nteract-oauth.now.sh/github');
 }
 
 export const fileSubMenus = {
