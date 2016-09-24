@@ -25,8 +25,8 @@ export function createCommMessage(comm_id, data = {}) {
   return createMessage('comm_msg', { content: { comm_id, data } });
 }
 
-export function createCommCloseMessage(comm_id, data = {}) {
-  return createMessage('comm_close', { content: { comm_id, data } });
+export function createCommCloseMessage(parent_header, comm_id, data = {}) {
+  return createMessage('comm_close', { content: { comm_id, data }, parent_header });
 }
 
 // Pluck off the target_name as a key for groupBy
@@ -47,7 +47,6 @@ export const commMessageToAction = (msg) => ({ type: 'COMM_GENERIC', msg });
 export const commListenEpic = (action$, store) =>
   action$.ofType('NEW_KERNEL')
     // We have a new channel
-    // TODO: Open comms will need to be deleted from state
     .switchMap(action =>
       action.channels.iopub
         .ofMessageType(['comm_open', 'comm_msg', 'comm_close'])
@@ -60,7 +59,7 @@ export const commListenEpic = (action$, store) =>
             // If we don't have the matching target_name we need to close the comm
             if (!state.comms.hasIn(['targets', targetComm$.key])) {
               // Hey look, it's a side effect!
-              action.channels.shell.next(createCommCloseMessage(msg.comm_id));
+              action.channels.shell.next(createCommCloseMessage(msg.header, msg.comm_id));
               // TODO: We don't get this comm_close message back on IOPub though - we'll
               // need to close this observable off or emit the comm_close internally
               // Likely want to have a setup that returns either an Observable

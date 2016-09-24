@@ -52,11 +52,14 @@ describe('createCommOpenMessage', () => {
 
 describe('createCommCloseMessage', () => {
   it('creates a comm_msg', () => {
-    const commMessage = createCommCloseMessage('0000', { 'hey': 'is for horses' });
+    const parent_header = { id: '23' };
+
+    const commMessage = createCommCloseMessage(parent_header, '0000', { 'hey': 'is for horses' });
 
     expect(commMessage.content.data).to.deep.equal({ 'hey': 'is for horses' });
     expect(commMessage.content.comm_id).to.equal('0000');
     expect(commMessage.header.msg_type).to.equal('comm_close');
+    expect(commMessage.parent_header).to.deep.equal(parent_header);
   });
 });
 
