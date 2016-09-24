@@ -34,6 +34,13 @@ export const targetNameKey = (msg) => msg.content.target_name;
 // Pluck off the comm_id as a key for groupBy
 export const commIDKey = (msg) => msg.content.comm_id;
 
+export const createCommErrorAction = (error) =>
+  Rx.Observable.of({
+    type: 'COMM_ERROR',
+    payload: error,
+    error: true,
+  });
+
 export const commListenEpic = (action$, store) =>
   action$.ofType('NEW_KERNEL')
     // We have a new channel
@@ -69,10 +76,4 @@ export const commListenEpic = (action$, store) =>
     .mergeAll()
     // TODO: Something useful with the comms
     .map(msg => ({ type: 'COMM_GENERIC', msg }))
-    .catch(error =>
-      Rx.Observable.of({
-        type: 'COMM_ERROR',
-        payload: error,
-        error: true,
-      })
-    );
+    .catch(createCommErrorAction);

@@ -14,6 +14,7 @@ import {
   createCommOpenMessage,
   targetNameKey,
   commIDKey,
+  createCommErrorAction,
 } from '../../../src/notebook/epics/comm';
 
 describe('createCommMessage', () => {
@@ -67,5 +68,18 @@ describe('targetNameKey', () => {
 describe('commIDKey', () => {
   it('extracts comm_id off a message', () => {
     expect(commIDKey({ content: { comm_id: '95032' } })).to.equal('95032');
+  })
+})
+
+describe('createCommErrorAction', () => {
+  it('creates a COMM_ERROR action with an error', () => {
+    const err = new Error();
+    return createCommErrorAction(err)
+      .toPromise()
+      .then(action => {
+        expect(action.type).to.equal('COMM_ERROR');
+        expect(action.payload).to.equal(err);
+        expect(action.error).to.be.true;
+      })
   })
 })
