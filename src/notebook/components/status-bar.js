@@ -21,10 +21,11 @@ export default class StatusBar extends React.Component {
     return (
       <div className="status-bar">
         <span className="pull-right">
-        { this.props.lastSaved ?
-          <p> Last saved {moment(this.props.lastSaved).fromNow()} </p> :
-          <p> Not saved yet </p>
-        }
+          {
+            this.props.lastSaved ?
+              <p> Last saved {moment(this.props.lastSaved).fromNow()} </p> :
+              <p> Not saved yet </p>
+          }
         </span>
         <span className="pull-left">
           <p>{this.props.kernelSpecName} | {this.props.executionState}</p>
