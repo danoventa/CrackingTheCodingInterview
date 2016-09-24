@@ -20,7 +20,7 @@ function createSender(eventName, obj) {
   };
 }
 
-export function githubAuth() {
+export function githubAuth(item, focusedWindow) {
   const win = new BrowserWindow({show: false, webPreferences: {zoomFactor: .75}});
   win.webContents.on('dom-ready', () => {
     if( win.getURL().indexOf('callback?code=') != -1 ) {
@@ -29,7 +29,7 @@ export function githubAuth() {
         `);
       ipc.on('auth', (event, auth) => {
         auth = JSON.parse(auth)
-        createSender('menu:publish:auth', auth['access_token']);
+        send(focusedWindow, 'menu:publish:auth', auth['access_token']);
         win.close();
         return;
       });
@@ -95,7 +95,7 @@ export const fileSubMenus = {
     submenu: [
       {
         label: '&Authenticate',
-        click: () => githubAuth(),
+        click: githubAuth,
       },
       {
         label: '&Publish To Gist',
