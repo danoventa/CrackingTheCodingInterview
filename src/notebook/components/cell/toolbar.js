@@ -118,7 +118,7 @@ export default class Toolbar extends React.Component {
               <ul>
                 <li onClick={this.changeCellType} className="changeType" >
                   <a>
-                  Convert to {this.props.type === 'markdown' ? 'Code' : 'Markdown'} Cell
+                    Convert to {this.props.type === 'markdown' ? 'Code' : 'Markdown'} Cell
                   </a>
                 </li>
               </ul>

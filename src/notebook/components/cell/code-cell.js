@@ -67,7 +67,7 @@ class CodeCell extends React.Component {
       {
         this.props.pagers && !this.props.pagers.isEmpty() ?
           <div className="pagers">
-          {
+            {
             this.props.pagers.map((pager, key) =>
               <Pager
                 className="pager"

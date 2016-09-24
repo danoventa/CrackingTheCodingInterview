@@ -116,11 +116,12 @@ export default class MarkdownCell extends React.Component {
            tabIndex="0"
          >
            <LatexRenderer>
-           {mdRender(
-            this.state.source ?
-            this.state.source :
-               '*Empty markdown cell, double click me to add content.*')
-           }
+             {
+              mdRender(
+                this.state.source ?
+                this.state.source :
+                '*Empty markdown cell, double click me to add content.*')
+             }
            </LatexRenderer>
          </div> :
          <div onKeyDown={this.editorKeyDown}>
@@ -139,7 +140,7 @@ export default class MarkdownCell extends React.Component {
            </div>
            <div className="outputs">
              <LatexRenderer>
-            {mdRender(this.state.source)}
+               { mdRender(this.state.source) }
              </LatexRenderer>
            </div>
          </div>

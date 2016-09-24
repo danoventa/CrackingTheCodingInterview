@@ -30,3 +30,7 @@ export const MetadataRecord = new Immutable.Record({
   future: new Immutable.List(),
   filename: '',
 });
+
+export const CommsRecord = new Immutable.Record({
+  targets: new Immutable.Map(),
+});
