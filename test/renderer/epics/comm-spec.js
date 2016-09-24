@@ -1,0 +1,47 @@
+const chai = require('chai');
+
+const expect = chai.expect;
+
+import { dummyStore } from '../../utils';
+
+const Immutable = require('immutable');
+
+const Rx = require('rxjs/Rx');
+
+import {
+  createCommMessage,
+  createCommCloseMessage,
+  createCommOpenMessage,
+} from '../../../src/notebook/epics/comm';
+
+describe('createCommMessage', () => {
+  it('creates an comm_msg', () => {
+    const commMessage = createCommMessage('0000', { 'hey': 'is for horses' });
+
+    expect(commMessage.content.data).to.deep.equal({ 'hey': 'is for horses' });
+    expect(commMessage.content.comm_id).to.equal('0000');
+    expect(commMessage.header.msg_type).to.equal('comm_msg');
+  });
+});
+
+describe('createCommOpenMessage', () => {
+  it('creates an comm_open', () => {
+    const commMessage = createCommOpenMessage('0001', 'myTarget', { 'hey': 'is for horses' });
+
+    expect(commMessage.content).to.deep.equal({
+      comm_id: '0001',
+      target_name: 'myTarget',
+      data: { 'hey': 'is for horses' },
+    });
+  });
+  it('can specify a target_module', () => {
+    const commMessage = createCommOpenMessage('0001', 'myTarget', { 'hey': 'is for horses' }, 'Dr. Pepper');
+
+    expect(commMessage.content).to.deep.equal({
+      comm_id: '0001',
+      target_name: 'myTarget',
+      data: { 'hey': 'is for horses' },
+      target_module: 'Dr. Pepper',
+    });
+  });
+});

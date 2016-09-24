@@ -4,14 +4,6 @@ import {
   createMessage,
 } from '../kernel/messaging';
 
-export function createCommMessage(comm_id, data = {}) {
-  return createMessage('comm_msg', { content: { comm_id, data } });
-}
-
-export function createCommCloseMessage(comm_id, data = {}) {
-  return createMessage('comm_close', { content: { comm_id, data } });
-}
-
 /**
  * creates a comm open message
  * @param  {string} comm_id       uuid
@@ -21,7 +13,20 @@ export function createCommCloseMessage(comm_id, data = {}) {
  * @return {jmp.Message}          Message ready to send on the shell channel
  */
 export function createCommOpenMessage(comm_id, target_name, data = {}, target_module) {
-  return createMessage('comm_close', { content: { comm_id, target_name, data, target_module } });
+  const msg = createMessage('comm_open', { content: { comm_id, target_name, data } });
+  if (target_module) {
+    msg.content.target_module = target_module;
+  }
+  return msg;
+}
+
+// TODO: buffer/blob handling on comm messages
+export function createCommMessage(comm_id, data = {}) {
+  return createMessage('comm_msg', { content: { comm_id, data } });
+}
+
+export function createCommCloseMessage(comm_id, data = {}) {
+  return createMessage('comm_close', { content: { comm_id, data } });
 }
 
 export const commListenEpic = (action$, store) =>
