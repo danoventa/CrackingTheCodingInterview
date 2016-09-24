@@ -35,16 +35,30 @@ export const commListenEpic = (action$, store) =>
     // TODO: Open comms will need to be deleted from state
     .map(channels =>
       channels.iopub
+        /*
+        .ofMessageType(['comm_open'])
+        .groupBy(msg => msg.content.target_name)
+        .map(comm$ => {
+          const targetName = comm$.key;
+        })*/
         .ofMessageType(['comm_open', 'comm_msg', 'comm_close'])
         .do(x => console.warn(x.content.data))
-        .do(x => console.warn(x))
+        // .do(x => console.warn(x.blobs))
         .groupBy(msg => msg.content.comm_id)
         .map(comm$ => ({ type: 'NEW_COMM', comm$, id: comm$.key }))
       // IDEA: It would be very cool if comm we return here is a subject that
       //       sends comm messages with the right comm_id already attached, so
       //       they can send comm_msg or comm_close directly
+
     )
-    .mergeAll();
+    .mergeAll()
+    .catch(error =>
+      Rx.Observable.of({
+        type: 'COMM_ERROR',
+        payload: error,
+        error: true,
+      })
+    );
 
 
 // TODO: Close comms for which we don't have a matching target_name
