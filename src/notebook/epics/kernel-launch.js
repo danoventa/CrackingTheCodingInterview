@@ -106,6 +106,7 @@ export const watchExecutionStateEpic = action$ =>
 export const acquireKernelInfoEpic = action$ =>
   action$.ofType(NEW_KERNEL)
     .switchMap(action => {
+      /* istanbul ignore if -- used for interactive debugging */
       if (process.env.DEBUG) {
         window.channels = action.channels;
       }
