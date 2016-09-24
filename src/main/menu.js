@@ -22,26 +22,20 @@ function createSender(eventName, obj) {
 
 export function githubAuth() {
   const win = new BrowserWindow({show: false, webPreferences: {zoomFactor: .75}});
-  let count = 0;
   win.webContents.on('dom-ready', () => {
-    if(count == 1){
-      win.destroy();
-      return githubAuth();
-    }
-    if(win.getURL().match('authorize')) {
-      win.show();
-    }
-    else {
+    if( win.getURL().indexOf('callback?code=') != -1 ) {
       win.webContents.executeJavaScript(`
         require('electron').ipcRenderer.send('auth', document.body.textContent);
         `);
       ipc.on('auth', (event, auth) => {
-      // hacky parse of JSON
         auth = JSON.parse(auth)
-        console.log(auth['access_token']);
+        createSender('menu:publish:auth', auth['access_token']);
+        win.close();
+        return;
       });
+    } else {
+      win.show();
     }
-    count += 1;
   });
   win.loadURL('http://localhost:3010/login');
 }
