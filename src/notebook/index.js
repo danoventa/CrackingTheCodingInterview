@@ -18,12 +18,18 @@ import { initMenuHandlers } from './menu';
 import { initNativeHandlers } from './native-window';
 import { initGlobalHandlers } from './global-events';
 
-import { AppRecord, DocumentRecord, MetadataRecord } from './records';
+import {
+  AppRecord,
+  DocumentRecord,
+  MetadataRecord,
+  CommsRecord,
+} from './records';
 
 const store = configureStore({
   app: new AppRecord(),
   metadata: new MetadataRecord(),
   document: new DocumentRecord(),
+  comms: new CommsRecord(),
 }, reducers);
 
 // Register for debugging
