@@ -3,6 +3,7 @@ import { createStore, applyMiddleware } from 'redux';
 import middlewares from './middlewares';
 import rootReducer from './reducers';
 
+/* istanbul ignore if -- only used for debugging */
 if (process.env.DEBUG) {
   const logger = require('./logger'); // eslint-disable-line global-require
 
