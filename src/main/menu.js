@@ -33,12 +33,12 @@ export function githubAuth() {
     }
     else {
       win.webContents.executeJavaScript(`
-        require('electron').ipcRenderer.send('auth', document.body.innerHTML);
+        require('electron').ipcRenderer.send('auth', document.body.textContent);
         `);
       ipc.on('auth', (event, auth) => {
       // hacky parse of JSON
-        auth = auth.match(/"\w+"/g)[1].match(/[^"]/g).join('')
-        console.log(auth);
+        auth = JSON.parse(auth)
+        console.log(auth['access_token']);
       });
     }
     count += 1;
