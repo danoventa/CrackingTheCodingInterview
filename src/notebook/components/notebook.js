@@ -115,7 +115,9 @@ export class Notebook extends React.Component {
       // This is the notebook though, so hands off
       // We'll want to check for this existing later
       // and any other validation
-      require(`codemirror/mode/${language}/${language}`); // eslint-disable-line global-require
+      /* eslint-disable */
+      require(`codemirror/mode/${language}/${language}`);
+      /* eslint-enable */
     }
     return language;
   }
