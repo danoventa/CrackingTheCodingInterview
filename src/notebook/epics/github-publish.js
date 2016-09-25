@@ -131,8 +131,6 @@ export function publishNotebookObservable(github, notebook, filepath, notificati
   });
 }
 
-
-
 /**
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.

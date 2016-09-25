@@ -21,15 +21,16 @@ function createSender(eventName, obj) {
 }
 
 export function githubAuth(item, focusedWindow) {
-  const win = new BrowserWindow({show: false, webPreferences: {zoomFactor: .75}});
+  const win = new BrowserWindow({ show: false,
+                                  webPreferences: { zoomFactor: 0.75 } });
   win.webContents.on('dom-ready', () => {
-    if( win.getURL().indexOf('callback?code=') != -1 ) {
+    if (win.getURL().indexOf('callback?code=') !== -1) {
       win.webContents.executeJavaScript(`
         require('electron').ipcRenderer.send('auth', document.body.textContent);
         `);
       ipc.on('auth', (event, auth) => {
-        auth = JSON.parse(auth)
-        send(focusedWindow, 'menu:publish:auth', auth['access_token']);
+        const authorization = JSON.parse(auth);
+        send(focusedWindow, 'menu:publish:auth', authorization.access_token);
         win.close();
         return;
       });
