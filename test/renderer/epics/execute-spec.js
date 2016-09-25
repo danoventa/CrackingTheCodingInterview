@@ -22,8 +22,12 @@ import {
   createExecuteRequest,
   msgSpecToNotebookFormat,
   createPagerActions,
+  createSourceUpdateAction,
+  createCellAfterAction,
+  createCellStatusAction,
+  updateCellNumberingAction,
+  handleFormattableMessages,
 } from '../../../src/notebook/epics/execute';
-
 describe('executeCell', () => {
   it('returns an executeCell action', () => {
     expect(executeCell('0-0-0-0', 'import random; random.random()'))
@@ -151,12 +155,77 @@ describe('createPagerActions', () => {
       data: {'text/html': 'this is a test'},
     }]);
 
-    const pagerActions$ = createPagerActions('1', msgObs);
+    const pagerAction$ = createPagerActions('1', msgObs);
 
-    pagerActions$.subscribe((action) => {
+    pagerAction$.subscribe((action) => {
       const expected = [{ source: 'page', data: { 'text/html': 'this is a test' } } ];
       expect(action.id).to.equal('1');
       expect(action.pagers.toJS()).to.deep.equal(expected);
+      done();
+    });
+  });
+});
+
+describe('createCellAfterAction', () => {
+  it('emits a createCellAfter action', (done) => {
+    const msgObs = Rx.Observable.from([{
+      source: 'set_next_input',
+      text: 'This is some test text.',
+      relace: false,
+    }]);
+
+    const cellAction$ = createCellAfterAction('1', msgObs);
+
+    cellAction$.subscribe((action) => {
+      expect(action.id).to.equal('1');
+      done();
+    });
+  });
+});
+
+describe('createCellStatusAction', () => {
+  it('emits an updateCellStatus action', (done) => {
+    const msgObs = Rx.Observable.from([{
+      header: {
+        msg_id: '123',
+        msg_type: 'status',
+      },
+      parent_header: {},
+      content: {
+        'execution_state': 'idle',
+      },
+      metadata: {},
+    }]);
+
+    const cellAction$ = createCellStatusAction('1', msgObs);
+
+    cellAction$.subscribe((action) => {
+      expect(action.id).to.equal('1');
+      expect(action.status).to.equal('idle');
+      done();
+    });
+  });
+});
+
+describe('updateCellNumberingAction', () => {
+  it('emits updateCellExecutionCount action', (done) => {
+    const msgObs = Rx.Observable.from([{
+      header: {
+        msg_id: '123',
+        msg_type: 'execute_input',
+      },
+      parent_header: {},
+      content: {
+        'execution_count': 3,
+      },
+      metadata: {},
+    }]);
+
+    const cellAction$ = updateCellNumberingAction('1', msgObs);
+
+    cellAction$.subscribe((action) => {
+      expect(action.id).to.equal('1');
+      expect(action.count).to.equal(3);
       done();
     });
   });
