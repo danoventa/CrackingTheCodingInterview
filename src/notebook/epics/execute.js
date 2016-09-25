@@ -97,7 +97,6 @@ export function updateCellNumberingAction(id, cellMessages) {
     .pluck('content', 'execution_count')
     .first()
     .map(ct => updateCellExecutionCount(id, ct));
-
 }
 
 export function handleFormattableMessages(id, cellMessages) {
