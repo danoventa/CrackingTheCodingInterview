@@ -92,7 +92,7 @@ export function createCellStatusAction(id, cellMessages) {
     .map(status => updateCellStatus(id, status));
 }
 
-export function updateCellNumbering(id, cellMessages) {
+export function updateCellNumberingAction(id, cellMessages) {
   return cellMessages.ofMessageType(['execute_input'])
     .pluck('content', 'execution_count')
     .first()
@@ -148,7 +148,7 @@ export function executeCellObservable(channels, id, code) {
     // Set the cell status
     createCellStatusAction(id, cellMessages),
     // Update the input numbering: `[ ]`
-    updateCellNumbering(id, cellMessages),
+    updateCellNumberingAction(id, cellMessages),
     // Clear cell outputs
     Rx.Observable.of(updateCellOutputs(id, new Immutable.List())),
     // Handle all nbformattable messages
