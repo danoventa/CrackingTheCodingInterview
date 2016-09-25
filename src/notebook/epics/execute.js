@@ -74,6 +74,41 @@ export function createPagerActions(id, payloadStream) {
     .map((pagerDatas) => updateCellPagers(id, pagerDatas));
 }
 
+export function createSourceUpdateAction(id, setInputStream) {
+  return setInputStream.filter(x => x.replace)
+    .pluck('text')
+    .map(text => updateCellSource(id, text));
+}
+
+export function createCellAfterAction(id, setInputStream) {
+  return setInputStream.filter(x => !x.replace)
+    .pluck('text')
+    .map((text) => createCellAfter('code', id, text));
+}
+
+export function createCellStatusAction(id, cellMessages) {
+  return cellMessages.ofMessageType(['status'])
+    .pluck('content', 'execution_state')
+    .map(status => updateCellStatus(id, status));
+}
+
+export function updateCellNumberingAction(id, cellMessages) {
+  return cellMessages.ofMessageType(['execute_input'])
+    .pluck('content', 'execution_count')
+    .first()
+    .map(ct => updateCellExecutionCount(id, ct));
+}
+
+export function handleFormattableMessages(id, cellMessages) {
+  return cellMessages
+    .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
+    .map(msgSpecToNotebookFormat)
+    // Iteratively reduce on the outputs
+    .scan(reduceOutputs, emptyOutputs)
+    // Update the outputs with each change
+    .map(outputs => updateCellOutputs(id, outputs));
+}
+
 export function executeCellObservable(channels, id, code) {
   if (!channels || !channels.iopub || !channels.shell) {
     return Rx.Observable.throw(new Error('kernel not connected'));
@@ -102,36 +137,21 @@ export function executeCellObservable(channels, id, code) {
 
   const cellAction$ = Rx.Observable.merge(
     // Inline %load
-    setInputStream.filter(x => x.replace)
-      .pluck('text')
-      .map(text => updateCellSource(id, text)),
+    createSourceUpdateAction(id, setInputStream),
     // %load for the cell _after_
-    setInputStream.filter(x => !x.replace)
-      .pluck('text')
-      .map((text) => createCellAfter('code', id, text)),
+    createCellAfterAction(id, setInputStream),
     // Clear any old pager
     Rx.Observable.of(updateCellPagers(id, new Immutable.List())),
     // Update the doc/pager section with new bundles
     createPagerActions(id, payloadStream),
     // Set the cell status
-    cellMessages.ofMessageType(['status'])
-      .pluck('content', 'execution_state')
-      .map(status => updateCellStatus(id, status)),
+    createCellStatusAction(id, cellMessages),
     // Update the input numbering: `[ ]`
-    cellMessages.ofMessageType(['execute_input'])
-      .pluck('content', 'execution_count')
-      .first()
-      .map(ct => updateCellExecutionCount(id, ct)),
+    updateCellNumberingAction(id, cellMessages),
     // Clear cell outputs
     Rx.Observable.of(updateCellOutputs(id, new Immutable.List())),
     // Handle all nbformattable messages
-    cellMessages
-      .ofMessageType(['execute_result', 'display_data', 'stream', 'error', 'clear_output'])
-      .map(msgSpecToNotebookFormat)
-      // Iteratively reduce on the outputs
-      .scan(reduceOutputs, emptyOutputs)
-      // Update the outputs with each change
-      .map(outputs => updateCellOutputs(id, outputs))
+    handleFormattableMessages(id, cellMessages),
   );
 
   // On subscription, send the message
