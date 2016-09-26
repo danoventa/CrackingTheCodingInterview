@@ -16,6 +16,8 @@ import Immutable from 'immutable';
 
 import { AppRecord } from '../../../src/notebook/records';
 
+const Github = require('github');
+
 describe('cleanupKernel', () => {
   it('nullifies entries for the kernel in originalState', () => {
     const originalState = {
@@ -218,6 +220,25 @@ describe('newKernel', () => {
     expect(state.app.channels).to.equal('test_channels');
   });
 });
+
+describe('setGithubToken', () => {
+  it('calls setGithubToken', () => {
+    
+    const originalState = {
+      app: new AppRecord({
+        github: new Github(),
+      })
+    };
+
+    const action = {
+      type: constants.SET_GITHUB_TOKEN,
+      token: 'TOKEN'
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.github).to.not.be.null;
+  });
+})
 
 describe('exit', () => {
   it('calls cleanupKernel', () => {
