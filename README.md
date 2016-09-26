@@ -28,7 +28,7 @@ Head to the [Releases](https://github.com/nteract/nteract/releases) page and dow
 
 The contributors are listed in [contributors](https://github.com/nteract/nteract/graphs/contributors)
 
-nteract uses the [C4.1 (Collective Code Construction Contract)](http://rfc.zeromq.org/spec:22) process for contributions.
+nteract uses the [C4.1 (Collective Code Construction Contract)](http://rfc.zeromq.org/spec:22) process for contributions, with the caveat that we use the BSD-3-Clause to be in line with the rest of the scientific packages in NumFocus.
 
 This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report unacceptable behavior to rgbkrk@gmail.com.

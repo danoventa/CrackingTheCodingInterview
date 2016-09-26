@@ -46,7 +46,7 @@
     "data"
   ],
   "author": "nteract contributors",
-  "license": "MPL-2.0",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/nteract/nteract/issues"
   },
