@@ -34,6 +34,7 @@ import {
   cutCell,
   pasteCell,
   createCellAfter,
+  setGithubToken,
 } from './actions';
 
 import {
@@ -244,6 +245,11 @@ export function dispatchNewNotebook(store, event, kernelSpecName) {
   store.dispatch(newNotebook(kernelSpecName, home()));
 }
 
+export function dispatchPublishAuth(store, event, githubToken) {
+  store.dispatch(setGithubToken(githubToken));
+}
+
+
 export function initMenuHandlers(store) {
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
@@ -262,7 +268,7 @@ export function initMenuHandlers(store) {
   ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store));
   ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store));
   ipc.on('menu:theme', dispatchSetTheme.bind(null, store));
-
+  ipc.on('menu:publish:auth', dispatchPublishAuth.bind(null, store));
   // OCD: This is more like the registration of main -> renderer thread
   ipc.on('main:load', dispatchLoad.bind(null, store));
   ipc.on('main:new', dispatchNewNotebook.bind(null, store));

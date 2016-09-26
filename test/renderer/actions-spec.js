@@ -311,3 +311,12 @@ describe('changeCellType', () => {
     });
   });
 });
+
+describe('setGithubToken', () => {
+  it('create a SET_GITHUB_TOKEN action', () => {
+    expect(actions.setGithubToken('token_string')).to.deep.equal({
+      type: constants.SET_GITHUB_TOKEN,
+      githubToken: 'token_string',
+    });
+  });
+});
