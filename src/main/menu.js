@@ -92,7 +92,7 @@ export const fileSubMenus = {
     accelerator: 'CmdOrCtrl+Shift+S',
   },
   publish: {
-    label: '&Github',
+    label: '&Publish',
     submenu: [
       {
         label: '&Authenticate',
