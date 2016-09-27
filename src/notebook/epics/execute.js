@@ -26,8 +26,8 @@ const emptyOutputs = new Immutable.List();
  * Create an object that adheres to the jupyter notebook specification.
  * http://jupyter-client.readthedocs.io/en/latest/messaging.html
  *
- * @param {Object} msg - Message with the associated output type
- * @return {Object} msg  -
+ * @param {Object} msg - Blank message.
+ * @return {Object} formattedMsg  - Message with the associated output type
  */
 export function msgSpecToNotebookFormat(msg) {
   return Object.assign({}, msg.content, {
@@ -36,9 +36,9 @@ export function msgSpecToNotebookFormat(msg) {
 }
 
 /**
- * Insert the content requisite for a code request to a kernel message. 
+ * Insert the content requisite for a code request to a kernel message.
  *
- * @param {Object} code - Code to be executed in a message to the kernel.
+ * @param {String} code - Code to be executed in a message to the kernel.
  * @return {Object} msg - Message object containing the code to be sent.
  */
 export function createExecuteRequest(code) {
@@ -60,8 +60,8 @@ export function createExecuteRequest(code) {
  * into a reduced output.
  *
  * @param {Object} outputs - Kernel output messages
- * @param {Object} output -
- * @return {Object} updated_outputs -
+ * @param {Object} output - Outputted to be reduced into list of outputs
+ * @return {Object} updated_outputs - Outputs + Output
  */
 export function reduceOutputs(outputs, output) {
   if (output.output_type === 'clear_output') {
@@ -94,9 +94,11 @@ export function reduceOutputs(outputs, output) {
  * Reads a payloadStream and inspects it for pager actions dispatched upon
  * specific cell executions.
  *
- * @param {Object} id - Universally Unique ID of the cell message.
- * @param {Object} payloadStream -
- * @return {Object} filtered -
+ * @param {String} id - Universally Unique ID of the cell message.
+ * @param {Observable} payloadStream - Stream containing messages from the
+ * kernel.
+ * @return {Observable} pagerActionStream - Observable stream containing
+ * Pager actions.
  */
 export function createPagerActions(id, payloadStream) {
   return payloadStream.filter(p => p.source === 'page')
@@ -105,12 +107,12 @@ export function createPagerActions(id, payloadStream) {
 }
 
 /**
+ * Insert a create source update action into a group of messages.
  *
- *
- *
- * @param {Object} id - ID of the cell designated for source update.
- * @param {Observable} setInputStream -
- * @return {Object} updated_InputStream -
+ * @param {String} id -  Universally Unique Identifier of cell receiving
+ * messages.
+ * @param {Observable} setInputStream - Maybe rename this to something more indicative?
+ * @return {Observable} updateSourceStream - Stream of updateCellSource actions.
  */
 export function createSourceUpdateAction(id, setInputStream) {
   return setInputStream.filter(x => x.replace)
@@ -119,10 +121,10 @@ export function createSourceUpdateAction(id, setInputStream) {
 }
 
 /**
+ * Insert a create cell after action into a group of messages.
  *
- *
- *
- * @param {String} id - ID of the cell designated for creation of a cell after it.
+ * @param {String} id -  Universally Unique Identifier of cell to have a cell
+ * created after it.
  * @param {Object} setInputStream - Stream that contains a subset of messages
  * from the kernel that instruct the frontend what it should do.
  * @return {Object} updated_outputs -
@@ -134,11 +136,12 @@ export function createCellAfterAction(id, setInputStream) {
 }
 
 /**
+ * Insert a create cell status action into a group of messages.
  *
- *
- * @param {String} id -
- * @param {Object} output -
- * @return {Object} updated_outputs -
+ * @param {String} id -  Universally Unique Identifier of cell receiving
+ * an update in cell status.
+ * @param {Object} cellMessages - Messages to receive create cell status action.
+ * @return {Object} updatedCellMessages - Updated messages.
  */
 export function createCellStatusAction(id, cellMessages) {
   return cellMessages.ofMessageType(['status'])
@@ -151,9 +154,10 @@ export function createCellStatusAction(id, cellMessages) {
  * http://jupyter-client.readthedocs.io/en/latest/messaging.html#execution-counter-prompt-number
  * This code updates the cell numbering on the frontend.
  *
- * @param {String} id -
- * @param {Object} cellMessages -
- * @return {Object} cellMessages -
+ * @param {String} id -  Universally Unique Identifier of cell receiving an
+ * update to the execution count.
+ * @param {Object} cellMessages - Nessages to receive updates.
+ * @return {Object} cellMessages - Updated messages.
  */
 export function updateCellNumberingAction(id, cellMessages) {
   return cellMessages.ofMessageType(['execute_input'])
@@ -163,11 +167,13 @@ export function updateCellNumberingAction(id, cellMessages) {
 }
 
 /**
+ * If a message is formattable, give it the notebook format specification and
+ * reduce outputs.
  *
- *
- * @param {String} id -
- * @param {Object} cellMessages -
- * @return {Object} cellMessages -
+ * @param {String} id - Universally Unique Identifier of cell receiving
+ * messages.
+ * @param {Object} cellMessages - Set of sent cell messages.
+ * @return {Object} cellMessages - Set of updated cell messages.
  */
 export function handleFormattableMessages(id, cellMessages) {
   return cellMessages
@@ -180,13 +186,15 @@ export function handleFormattableMessages(id, cellMessages) {
 }
 
 /**
+ * Creates an observable containing information requisite to lead
+ * to the execution of a cell in the kernel.
  *
- *
- * @param {Object} channels - The standard channels specified in the jupyter
+ * @param {Object} channels - The standard channels specified in the Jupyter
  * specification.
- * @param {String} id -
- * @param {Object} code -
- * @return {Observable} updated_outputs -
+ * @param {String} id - Universally Unique Identifier of cell to be executed.
+ * @param {String} code - Source code to be executed.
+ * @return {Observable} updated_outputs - Observable containing information
+ * requisite to lead to the execution of a cell in the kernel.
  */
 export function executeCellObservable(channels, id, code) {
   if (!channels || !channels.iopub || !channels.shell) {
@@ -244,11 +252,11 @@ export function executeCellObservable(channels, id, code) {
 export const EXECUTE_CELL = 'EXECUTE_CELL';
 
 /**
- * TODO
+ * Execute Cell action.
  *
- * @param {Object} outputs -
- * @param {Object} output -
- * @return {Object} updated_outputs -
+ * @param {String} id - Universally Unique Identifier of cell to be executed.
+ * @param {Object} source - Source code to executed.
+ * @return {Object} executeCellAction - Action to be dispatched to reducer.
  */
 export function executeCell(id, source) {
   return {
