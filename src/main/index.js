@@ -10,6 +10,8 @@ import {
 
 import { defaultMenu, loadFullMenu } from './menu';
 
+import prepareEnv from './prepare-env';
+
 const log = require('electron-log');
 
 const kernelspecs = require('kernelspecs');
@@ -46,7 +48,10 @@ ipc.on('open-notebook', (event, filename) => {
   launch(resolve(filename));
 });
 
-const appReady$ = Rx.Observable.fromEvent(app, 'ready');
+const appReady$ = Rx.Observable.zip(
+  Rx.Observable.fromEvent(app, 'ready'),
+  prepareEnv
+).first();
 
 const openFile$ = Rx.Observable.fromEvent(
   app,
@@ -58,7 +63,9 @@ function openFileFromEvent({ event, path }) {
   launch(resolve(path));
 }
 
-const kernelSpecsPromise = kernelspecs.findAll();
+const kernelSpecsPromise = prepareEnv
+  .toPromise()
+  .then(() => kernelspecs.findAll());
 
 // Since we can't launch until app is ready
 // and OS X will send the open-file events early,
