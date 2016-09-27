@@ -51,7 +51,7 @@ ipc.on('open-notebook', (event, filename) => {
 const appReady$ = Rx.Observable.zip(
   Rx.Observable.fromEvent(app, 'ready'),
   prepareEnv
-).first()
+).first();
 
 const openFile$ = Rx.Observable.fromEvent(
   app,
