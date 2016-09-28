@@ -22,8 +22,8 @@ function createSender(eventName, obj) {
 export function authAndPublish(item, focusedWindow) {
   const win = new BrowserWindow({ show: false,
                                   webPreferences: { zoomFactor: 0.75 } });
-  if(process.env['AUTHENTICATED']) {
-    send(focusedWindow, 'menu:publish:gist')
+  if (process.env.AUTHENTICATED) {
+    send(focusedWindow, 'menu:publish:gist');
     return;
   }
   win.webContents.on('dom-ready', () => {
@@ -33,7 +33,7 @@ export function authAndPublish(item, focusedWindow) {
         `);
       ipc.on('auth', (event, auth) => {
         send(focusedWindow, 'menu:github:auth', JSON.parse(auth).access_token);
-        process.env['AUTHENTICATED'] = true;
+        process.env.AUTHENTICATED = true;
         win.close();
         return;
       });
