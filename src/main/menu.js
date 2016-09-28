@@ -1,10 +1,7 @@
 import { dialog, app, shell, Menu, ipcMain as ipc,
          BrowserWindow } from 'electron';
-         
 import * as path from 'path';
-
 import { launch, launchNewNotebook } from './launch';
-import { publishAuth, publishAuthObs} from './auth';
 
 const kernelspecs = require('kernelspecs');
 
@@ -22,7 +19,24 @@ function createSender(eventName, obj) {
   };
 }
 
-
+export function authAndPublish(item, focusedWindow) {
+  const win = new BrowserWindow({ show: false,
+                                  webPreferences: { zoomFactor: 0.75 } });
+  win.webContents.on('dom-ready', () => {
+    if (win.getURL().indexOf('callback?code=') !== -1) {
+      win.webContents.executeJavaScript(`
+        require('electron').ipcRenderer.send('auth', document.body.textContent);
+        `);
+      ipc.on('auth', (event, auth) => {
+        send(focusedWindow, 'menu:github:auth', JSON.parse(auth).access_token);
+        win.close();
+      });
+    } else {
+      win.show();
+    }
+  });
+  win.loadURL('https://oauth.nteract.io/github');
+}
 
 export const fileSubMenus = {
   new: {
@@ -79,7 +93,7 @@ export const fileSubMenus = {
     submenu: [
       {
         label: '&Authenticated Gist',
-        click: publishAuthObs,
+        click: authAndPublish,
       },
       {
         label: '&Anonymous Gist',

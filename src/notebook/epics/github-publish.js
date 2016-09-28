@@ -103,18 +103,16 @@ export function publishNotebookObservable(github, notebook, filepath,
     } else {
       filename = 'Untitled.ipynb';
     }
-
     const files = {};
     files[filename] = { content: notebookString };
     if (authenticated) {
-      const email = github.users.get({}, function(err, res) {
-        console.log(err, res);
-      });
-
-      notificationSystem.addNotification({
-        title: 'Authenticated',
-        message: 'Authenticated as `${ email}`',
-        level: 'info',
+      github.users.get({}, (err, res) => {
+        if (err) throw err;
+        notificationSystem.addNotification({
+          title: 'Authenticated',
+          message: `Authenticated as ${res.login}`,
+          level: 'info',
+        });
       });
     }
     notificationSystem.addNotification({
@@ -155,7 +153,7 @@ export const publishEpic = (action$, store) =>
       const filename = state.metadata.get('filename');
       const github = state.app.get('github');
       const notificationSystem = state.app.get('notificationSystem');
-      const authenticated = state.document.get('authenticated');
+      const authenticated = state.app.get('authenticated');
       return publishNotebookObservable(github, notebook, filename,
                                        notificationSystem, authenticated);
     })

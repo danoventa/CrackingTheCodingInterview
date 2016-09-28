@@ -245,8 +245,9 @@ export function dispatchNewNotebook(store, event, kernelSpecName) {
   store.dispatch(newNotebook(kernelSpecName, home()));
 }
 
-export function dispatchPublishAuth(store, event, githubToken) {
+export function dispatchAuthAndPublish(store, event, githubToken) {
   store.dispatch(setGithubToken(githubToken));
+  dispatchPublishGist(store);
 }
 
 
@@ -268,7 +269,7 @@ export function initMenuHandlers(store) {
   ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store));
   ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store));
   ipc.on('menu:theme', dispatchSetTheme.bind(null, store));
-  ipc.on('menu:publish:auth', dispatchPublishAuth.bind(null, store));
+  ipc.on('menu:github:auth', dispatchAuthAndPublish.bind(null, store));
   // OCD: This is more like the registration of main -> renderer thread
   ipc.on('main:load', dispatchLoad.bind(null, store));
   ipc.on('main:new', dispatchNewNotebook.bind(null, store));
