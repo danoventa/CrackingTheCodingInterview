@@ -66,7 +66,8 @@ export default handleActions({
   [constants.SET_GITHUB_TOKEN]: function setGithubToken(state, action) {
     const { githubToken } = action;
     const github = new Github();
-    github.authenticate({ type: 'oauth', token: githubToken }); // synchronous, returns immediately
-    return state.set('github', github);
+    github.authenticate({ type: 'oauth', token: githubToken });
+    return state.set('github', github)
+                .set('authenticated', true);
   }
 }, {});
