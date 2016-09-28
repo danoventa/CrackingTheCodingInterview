@@ -98,7 +98,7 @@ export const fileSubMenus = {
     label: '&Publish',
     submenu: [
       {
-        label: '&Authenticated Gist',
+        label: '&User Gist',
         click: authAndPublish,
       },
       {
