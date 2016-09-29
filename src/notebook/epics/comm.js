@@ -4,6 +4,13 @@ import {
   createMessage,
 } from '../kernel/messaging';
 
+import {
+  COMM_OPEN,
+  COMM_MESSAGE,
+  COMM_ERROR,
+  NEW_KERNEL,
+} from '../constants';
+
 /**
  * creates a comm open message
  * @param  {string} comm_id       uuid
@@ -20,62 +27,108 @@ export function createCommOpenMessage(comm_id, target_name, data = {}, target_mo
   return msg;
 }
 
-// TODO: buffer/blob handling on comm messages
-export function createCommMessage(comm_id, data = {}) {
-  return createMessage('comm_msg', { content: { comm_id, data } });
+/**
+ * creates a comm message for sending to a kernel
+ * @param  {string}     comm_id    unique identifier for the comm
+ * @param  {Object}     data       any data to send for the comm
+ * @param  {Uint8Array} buffers    arbitrary binary data to send on the comm
+ * @return {jmp.Message}           jupyter message for comm_msg
+ */
+export function createCommMessage(comm_id, data = {}, buffers = new Uint8Array()) {
+  return createMessage('comm_msg', { content: { comm_id, data }, buffers });
 }
 
+/**
+ * creates a comm close message for sending to a kernel
+ * @param  {Object} parent_header    header from a parent jupyter message
+ * @param  {string}     comm_id      unique identifier for the comm
+ * @param  {Object}     data         any data to send for the comm
+ * @return {jmp.Message}             jupyter message for comm_msg
+ */
 export function createCommCloseMessage(parent_header, comm_id, data = {}) {
   return createMessage('comm_close', { content: { comm_id, data }, parent_header });
 }
 
-// Pluck off the target_name as a key for groupBy
-export const targetNameKey = (msg) => msg.content.target_name;
-// Pluck off the comm_id as a key for groupBy
-export const commIDKey = (msg) => msg.content.comm_id;
-
+/**
+ * creates a comm error action
+ * @param  {error} error any type of error to pass on
+ * @return {Object}       Flux standard error action
+ */
 export const createCommErrorAction = (error) =>
   Rx.Observable.of({
-    type: 'COMM_ERROR',
+    type: COMM_ERROR,
     payload: error,
     error: true,
   });
 
-// TODO: Only leaving this in for prototyping
-export const commMessageToAction = (msg) => ({ type: 'COMM_GENERIC', msg });
+/**
+ * Action creator for comm_open messages
+ * @param  {jmp.Message} a comm_open message
+ * @return {Object}      COMM_OPEN action
+ */
+export function commOpenAction(message) {
+  // invariant: expects a comm_open message
+  return {
+    type: COMM_OPEN,
+    data: message.content.data,
+    metadata: message.content.metadata,
+    comm_id: message.content.comm_id,
+    target_name: message.content.target_name,
+    target_module: message.content.target_module,
+    // Pass through the buffers
+    buffers: message.blob || message.buffers,
+    // NOTE: Naming inconsistent between jupyter notebook and jmp
+    //       see https://github.com/n-riesco/jmp/issues/14
+    //       We just expect either one
+  };
+}
 
+/**
+ * Action creator for comm_msg messages
+ * @param  {jmp.Message} a comm_msg
+ * @return {Object}      COMM_MESSAGE action
+ */
+export function commMessageAction(message) {
+  return {
+    type: COMM_MESSAGE,
+    comm_id: message.content.comm_id,
+    data: message.content.data,
+    // Pass through the buffers
+    buffers: message.blob || message.buffers,
+    // NOTE: Naming inconsistent between jupyter notebook and jmp
+    //       see https://github.com/n-riesco/jmp/issues/14
+    //       We just expect either one
+  };
+}
+
+/**
+ * creates all comm related actions given a new kernel action
+ * @param  {Object} newKernelAction a NEW_KERNEL action
+ * @return {ActionsObservable}          all actions resulting from comm messages on this kernel
+ */
+export function commActionObservable(newKernelAction) {
+  const commOpenAction$ = newKernelAction.channels.iopub
+    .ofMessageType(['comm_open'])
+    .map(commOpenAction);
+
+  const commMessageAction$ = newKernelAction.channels.iopub
+    .ofMessageType(['comm_msg'])
+    .map(commMessageAction);
+
+  return Rx.Observable.merge(
+    commOpenAction$,
+    commMessageAction$
+  );
+}
+
+/**
+ * An epic that emits comm actions from the backend kernel
+ * @param  {ActionsObservable} action$ Action Observable from redux-observable
+ * @param  {redux.Store} store   the redux store
+ * @return {ActionsObservable}         Comm actions
+ */
 export const commListenEpic = (action$, store) =>
-  action$.ofType('NEW_KERNEL')
+  action$.ofType(NEW_KERNEL)
     // We have a new channel
-    .switchMap(action =>
-      action.channels.iopub
-        .ofMessageType(['comm_open', 'comm_msg', 'comm_close'])
-        // Group on the target_name (our "primary" key)
-        .groupBy(targetNameKey)
-        .map(targetComm$ =>
-          // Cancel target_name registrants here
-          targetComm$.do(msg => {
-            const state = store.getState();
-            // If we don't have the matching target_name we need to close the comm
-            if (!state.comms.hasIn(['targets', targetComm$.key])) {
-              // Hey look, it's a side effect!
-              action.channels.shell.next(createCommCloseMessage(msg.header, msg.comm_id));
-              // TODO: We don't get this comm_close message back on IOPub though - we'll
-              // need to close this observable off or emit the comm_close internally
-              // Likely want to have a setup that returns either an Observable
-              // with just the one message or a merge of just the one + the close message
-            }
-          })
-          // Group on the comm_id (our "secondary" key)
-          .groupBy(commIDKey)
-        )
-      // IDEA: It would be very cool if comm we return here is a subject that
-      //       sends comm messages with the right comm_id already attached, so
-      //       they can send comm_msg or comm_close directly
-    )
-    // We double grouped, so we double merge
-    .mergeAll()
-    .mergeAll()
-    // TODO: Something useful with the comms
-    .map(commMessageToAction)
+    .switchMap(commActionObservable)
     .catch(createCommErrorAction);
