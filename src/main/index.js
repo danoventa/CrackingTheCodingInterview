@@ -1,4 +1,4 @@
-import { Menu, dialog, app, ipcMain as ipc } from 'electron';
+import { Menu, dialog, app, ipcMain as ipc, BrowserWindow } from 'electron';
 import { resolve } from 'path';
 
 import Rx from 'rxjs/Rx';
@@ -11,6 +11,8 @@ import {
 import { defaultMenu, loadFullMenu } from './menu';
 
 import prepareEnv from './prepare-env';
+
+const path = require('path');
 
 const log = require('electron-log');
 
@@ -45,33 +47,70 @@ ipc.on('new-kernel', (event, newKernel) => {
 });
 
 ipc.on('open-notebook', (event, filename) => {
-  launch(resolve(filename));
+  launch(path.resolve(filename));
 });
 
-const appReady$ = Rx.Observable.zip(
-  Rx.Observable.fromEvent(app, 'ready'),
+const electronReady$ = Rx.Observable.fromEvent(app, 'ready');
+
+const fullAppReady$ = Rx.Observable.zip(
+  electronReady$,
   prepareEnv
 ).first();
-
-const openFile$ = Rx.Observable.fromEvent(
-  app,
-  'open-file', (event, path) => ({ event, path })
-);
-
-function openFileFromEvent({ event, path }) {
-  event.preventDefault();
-  launch(resolve(path));
-}
 
 const kernelSpecsPromise = prepareEnv
   .toPromise()
   .then(() => kernelspecs.findAll());
 
+/**
+ * Creates an Rx.Subscriber that will create a splash page onNext and close the
+ * splash page onComplete.
+ * @return {Rx.Subscriber} Splash Window subscriber
+ */
+export function createSplashSubscriber() {
+  let win;
+
+  return Rx.Subscriber.create(() => {
+    win = new BrowserWindow({
+      width: 900,
+      height: 400,
+      title: 'loading',
+      frame: false,
+    });
+
+    const index = path.join(__dirname, '..', '..', 'static', 'splash.html');
+    win.loadURL(`file://${index}`);
+    win.show();
+  }, null,
+  () => {
+    // Close the splash page when completed
+    if (win) {
+      win.close();
+    }
+  });
+}
+
+const splashSubscription = electronReady$
+  // TODO: Take until first window is shown
+  .takeUntil(Rx.Observable.zip(fullAppReady$, kernelSpecsPromise))
+  .subscribe(createSplashSubscriber());
+
+
+const openFile$ = Rx.Observable.fromEvent(
+  app,
+  'open-file', (event, filename) => ({ event, filename })
+);
+
+function openFileFromEvent({ event, filename }) {
+  event.preventDefault();
+  launch(path.resolve(filename));
+}
+
+
 // Since we can't launch until app is ready
 // and OS X will send the open-file events early,
 // buffer those that come early.
 openFile$
-  .buffer(appReady$) // Form an array of open-file events from before app-ready
+  .buffer(fullAppReady$) // Form an array of open-file events from before app-ready
   .first() // Should only be the first
   .subscribe(buffer => {
     // Now we can choose whether to open the default notebook
@@ -111,10 +150,10 @@ openFile$
 
 // All open file events after app is ready
 openFile$
-  .skipUntil(appReady$)
+  .skipUntil(fullAppReady$)
   .subscribe(openFileFromEvent);
 
-appReady$
+fullAppReady$
   .subscribe(() => {
     kernelSpecsPromise.then(kernelSpecs => {
       if (Object.keys(kernelSpecs).length !== 0) {
