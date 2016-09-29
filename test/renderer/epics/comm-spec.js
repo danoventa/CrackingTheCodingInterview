@@ -12,10 +12,10 @@ import {
   createCommMessage,
   createCommCloseMessage,
   createCommOpenMessage,
-  targetNameKey,
-  commIDKey,
   createCommErrorAction,
-  commMessageToAction,
+  commOpenAction,
+  commMessageAction,
+  commActionObservable,
 } from '../../../src/notebook/epics/comm';
 
 describe('createCommMessage', () => {
@@ -63,18 +63,6 @@ describe('createCommCloseMessage', () => {
   });
 });
 
-describe('targetNameKey', () => {
-  it('extracts target_name off a message', () => {
-    expect(targetNameKey({ content: { target_name: 'Meow'} })).to.equal('Meow');
-  })
-})
-
-describe('commIDKey', () => {
-  it('extracts comm_id off a message', () => {
-    expect(commIDKey({ content: { comm_id: '95032' } })).to.equal('95032');
-  })
-})
-
 describe('createCommErrorAction', () => {
   it('creates a COMM_ERROR action with an error', () => {
     const err = new Error();
@@ -88,8 +76,112 @@ describe('createCommErrorAction', () => {
   })
 })
 
-describe('commMessageToAction', () => {
-  it('creates the COMM_GENERIC action', () => {
-    expect(commMessageToAction('hey')).to.deep.equal({ type: 'COMM_GENERIC', msg: 'hey' })
+describe('commOpenAction', () => {
+  it('creates a COMM_OPEN action', () => {
+    const message = {
+      content: {
+        data: 'DATA',
+        metadata: '0',
+        comm_id: '0123',
+        target_name: 'daredevil',
+        target_module: 'murdock',
+      },
+      buffers: new Uint8Array(),
+    };
+    const action = commOpenAction(message)
+
+    expect(action).to.deep.equal({
+      type: 'COMM_OPEN',
+      data: 'DATA',
+      metadata: '0',
+      comm_id: '0123',
+      target_name: 'daredevil',
+      target_module: 'murdock',
+      buffers: new Uint8Array(),
+    })
+  })
+})
+
+
+describe('commMessageAction', () => {
+  it('creates a COMM_MESSAGE action', () => {
+    const message = {
+      content: {
+        data: 'DATA',
+        comm_id: '0123',
+      },
+      buffers: new Uint8Array(),
+    };
+    const action = commMessageAction(message)
+
+    expect(action).to.deep.equal({
+      type: 'COMM_MESSAGE',
+      data: 'DATA',
+      comm_id: '0123',
+      buffers: new Uint8Array(),
+    })
+  })
+})
+
+describe('commActionObservable', () => {
+  it('emits COMM_OPEN and COMM_MESSAGE given the right messages', (done) => {
+    const commOpenMessage = {
+      header: {
+        msg_type: 'comm_open',
+      },
+      content: {
+        data: 'DATA',
+        metadata: '0',
+        comm_id: '0123',
+        target_name: 'daredevil',
+        target_module: 'murdock',
+      },
+      buffers: new Uint8Array(),
+    };
+
+    const commMessage = {
+      header: {
+        msg_type: 'comm_msg',
+      },
+      content: {
+        data: 'DATA',
+        comm_id: '0123',
+      },
+      buffers: new Uint8Array(),
+    };
+
+    const newKernelAction = {
+      channels: {
+        iopub: Rx.Observable.of(commOpenMessage, commMessage),
+      },
+    };
+
+    const actionBuffer = [];
+    const commActions = commActionObservable(newKernelAction)
+      .subscribe((action) => {
+        actionBuffer.push(action);
+      },
+      (err) => expect.fail(err, null), // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([
+          {
+            type: 'COMM_OPEN',
+            data: 'DATA',
+            metadata: '0',
+            comm_id: '0123',
+            target_name: 'daredevil',
+            target_module: 'murdock',
+            buffers: new Uint8Array(),
+          },
+          {
+            type: 'COMM_MESSAGE',
+            data: 'DATA',
+            comm_id: '0123',
+            buffers: new Uint8Array(),
+          }
+        ]);
+
+        done();
+      });
   })
 })
