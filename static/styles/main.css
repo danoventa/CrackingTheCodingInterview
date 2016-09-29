@@ -66,7 +66,7 @@ th {
 
 blockquote{
   padding: .75em .5em .75em 1em;
-  background: white;
+  background: var(--main-bg-color);
   border-left: 0.5em solid #DDD;
 }
 
@@ -76,7 +76,7 @@ blockquote::before {
   content: "“";
   margin-left: -.95em;
   font: italic 400%/1 Open Serif,Georgia,"Times New Roman", serif;
-  color: #999;
+  color: solid var(--primary-border);
 }
 
 /* for nested paragraphs in block quotes */
