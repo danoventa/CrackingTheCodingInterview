@@ -67,6 +67,15 @@ Requires [node 6.x and npm 3](https://docs.npmjs.com/getting-started/installing-
 4. `npm install`
 5. `npm run start`
 
+#### Build Documentation
+You can run nteract's documentation generator by running
+
+```
+npm run build:docs
+```
+
+And then opening `docs/index.html` in your favorite browser.
+
 #### Troubleshooting
 
 > I upgraded my developer installation and things are broken!
