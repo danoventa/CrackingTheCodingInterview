@@ -64,6 +64,26 @@ th {
     text-align: left;
 }
 
+blockquote{
+  padding: .75em .5em .75em 1em;
+  background: var(--main-bg-color);
+  border-left: 0.5em solid #DDD;
+}
+
+blockquote::before {
+  display: block;
+  height: 0;
+  content: "“";
+  margin-left: -.95em;
+  font: italic 400%/1 Open Serif,Georgia,"Times New Roman", serif;
+  color: solid var(--primary-border);
+}
+
+/* for nested paragraphs in block quotes */
+blockquote p {
+  display: inline;
+}
+
 /*
   Notebook
  */
