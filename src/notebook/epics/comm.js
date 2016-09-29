@@ -27,15 +27,33 @@ export function createCommOpenMessage(comm_id, target_name, data = {}, target_mo
   return msg;
 }
 
-// TODO: buffer/blob handling on comm messages
-export function createCommMessage(comm_id, data = {}) {
-  return createMessage('comm_msg', { content: { comm_id, data } });
+/**
+ * creates a comm message for sending to a kernel
+ * @param  {string}     comm_id    unique identifier for the comm
+ * @param  {Object}     data       any data to send for the comm
+ * @param  {Uint8Array} buffers    arbitrary binary data to send on the comm
+ * @return {jmp.Message}           jupyter message for comm_msg
+ */
+export function createCommMessage(comm_id, data = {}, buffers = new Uint8Array()) {
+  return createMessage('comm_msg', { content: { comm_id, data }, buffers });
 }
 
+/**
+ * creates a comm close message for sending to a kernel
+ * @param  {Object} parent_header    header from a parent jupyter message
+ * @param  {string}     comm_id      unique identifier for the comm
+ * @param  {Object}     data         any data to send for the comm
+ * @return {jmp.Message}             jupyter message for comm_msg
+ */
 export function createCommCloseMessage(parent_header, comm_id, data = {}) {
   return createMessage('comm_close', { content: { comm_id, data }, parent_header });
 }
 
+/**
+ * creates a comm error action
+ * @param  {error} error any type of error to pass on
+ * @return {Object}       Flux standard error action
+ */
 export const createCommErrorAction = (error) =>
   Rx.Observable.of({
     type: COMM_ERROR,
@@ -43,6 +61,11 @@ export const createCommErrorAction = (error) =>
     error: true,
   });
 
+/**
+ * Action creator for comm_open messages
+ * @param  {jmp.Message} a comm_open message
+ * @return {Object}      COMM_OPEN action
+ */
 export function commOpenAction(message) {
   // invariant: expects a comm_open message
   return {
@@ -60,6 +83,11 @@ export function commOpenAction(message) {
   };
 }
 
+/**
+ * Action creator for comm_msg messages
+ * @param  {jmp.Message} a comm_msg
+ * @return {Object}      COMM_MESSAGE action
+ */
 export function commMessageAction(message) {
   return {
     type: COMM_MESSAGE,
@@ -73,6 +101,11 @@ export function commMessageAction(message) {
   };
 }
 
+/**
+ * creates all comm related actions given a new kernel action
+ * @param  {Object} newKernelAction a NEW_KERNEL action
+ * @return {ActionsObservable}          all actions resulting from comm messages on this kernel
+ */
 export function commActionObservable(newKernelAction) {
   const commOpenAction$ = newKernelAction.channels.iopub
     .ofMessageType(['comm_open'])
@@ -88,6 +121,12 @@ export function commActionObservable(newKernelAction) {
   );
 }
 
+/**
+ * An epic that emits comm actions from the backend kernel
+ * @param  {ActionsObservable} action$ Action Observable from redux-observable
+ * @param  {redux.Store} store   the redux store
+ * @return {ActionsObservable}         Comm actions
+ */
 export const commListenEpic = (action$, store) =>
   action$.ofType(NEW_KERNEL)
     // We have a new channel
