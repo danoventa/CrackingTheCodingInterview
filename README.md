@@ -2,6 +2,7 @@
 
 [![codecov.io](https://codecov.io/github/nteract/nteract/coverage.svg?branch=master)](https://codecov.io/github/nteract/nteract?branch=master)
 [![Build Status](https://travis-ci.org/nteract/nteract.svg)](https://travis-ci.org/nteract/nteract) [![slack in](http://slack.nteract.in/badge.svg)](http://slack.nteract.in)
+![Documentation Coverage](https://doc.esdoc.org/github.com/nteract/nteract/badge.svg)
 
 ## Overview
 
