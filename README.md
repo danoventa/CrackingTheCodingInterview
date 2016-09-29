@@ -2,6 +2,7 @@
 
 [![codecov.io](https://codecov.io/github/nteract/nteract/coverage.svg?branch=master)](https://codecov.io/github/nteract/nteract?branch=master)
 [![Build Status](https://travis-ci.org/nteract/nteract.svg)](https://travis-ci.org/nteract/nteract) [![slack in](http://slack.nteract.in/badge.svg)](http://slack.nteract.in)
+![Documentation Coverage](https://doc.esdoc.org/github.com/nteract/nteract/badge.svg)
 
 ## Overview
 
@@ -65,6 +66,15 @@ Requires [node 6.x and npm 3](https://docs.npmjs.com/getting-started/installing-
 3. `cd` to where you `clone`d it
 4. `npm install`
 5. `npm run start`
+
+#### Build Documentation
+You can run nteract's documentation generator by running
+
+```
+npm run build:docs
+```
+
+And then opening `docs/index.html` in your favorite browser.
 
 #### Troubleshooting
 
