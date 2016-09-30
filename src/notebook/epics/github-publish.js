@@ -86,7 +86,8 @@ export function createGistCallback(firstTimePublish, observer, filename, notific
  * @param {function} notificationSystem - To be passed information for
  * notification of the user that the gist has been published.
  */
-export function publishNotebookObservable(github, notebook, filepath, notificationSystem) {
+export function publishNotebookObservable(github, notebook, filepath,
+                                          notificationSystem, authenticated) {
   return Rx.Observable.create((observer) => {
     const notebookString = JSON.stringify(
       commutable.toJS(notebook.update('cellMap', cells =>
@@ -102,10 +103,18 @@ export function publishNotebookObservable(github, notebook, filepath, notificati
     } else {
       filename = 'Untitled.ipynb';
     }
-
     const files = {};
     files[filename] = { content: notebookString };
-
+    if (authenticated) {
+      github.users.get({}, (err, res) => {
+        if (err) throw err;
+        notificationSystem.addNotification({
+          title: 'Authenticated',
+          message: `Authenticated as ${res.login}`,
+          level: 'info',
+        });
+      });
+    }
     notificationSystem.addNotification({
       title: 'Uploading gist...',
       message: 'Your notebook is being uploaded as a GitHub gist',
@@ -144,8 +153,9 @@ export const publishEpic = (action$, store) =>
       const filename = state.metadata.get('filename');
       const github = state.app.get('github');
       const notificationSystem = state.app.get('notificationSystem');
-
-      return publishNotebookObservable(github, notebook, filename, notificationSystem);
+      const authenticated = state.app.get('authenticated');
+      return publishNotebookObservable(github, notebook, filename,
+                                       notificationSystem, authenticated);
     })
     .catch((err) => {
       const state = store.getState();

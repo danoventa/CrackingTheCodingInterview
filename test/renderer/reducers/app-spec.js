@@ -223,10 +223,11 @@ describe('newKernel', () => {
 
 describe('setGithubToken', () => {
   it('calls setGithubToken', () => {
-    
+
     const originalState = {
       app: new AppRecord({
         github: new Github(),
+        authenticated: false,
       })
     };
 
@@ -236,7 +237,9 @@ describe('setGithubToken', () => {
     };
 
     const state = reducers(originalState, action);
+    // this is a crappy way of testing this
     expect(state.app.github).to.not.be.null;
+    expect(state.app.authenticated).to.be.true;
   });
 })
 
