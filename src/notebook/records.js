@@ -6,6 +6,7 @@ export const AppRecord = new Immutable.Record({
   executionState: 'not connected',
   github: new Github(),
   token: null,
+  publishAsUser: false,
   channels: null,
   spawn: null,
   connectionFile: null,

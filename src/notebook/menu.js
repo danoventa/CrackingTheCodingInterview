@@ -35,7 +35,7 @@ import {
   pasteCell,
   createCellAfter,
   setGithub,
-  setGithubToken
+  setGithubToken,
 } from './actions';
 
 import {

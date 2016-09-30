@@ -65,13 +65,15 @@ export default handleActions({
   },
   [constants.SET_GITHUB]: function setGithub(state) {
     const github = new Github();
-    return state.set('github', github);
+    return state.set('github', github)
+                .set('publishAsUser', false);
   },
   [constants.SET_GITHUB_TOKEN]: function setGithubToken(state, action) {
     const { githubToken } = action;
     const github = new Github();
     github.authenticate({ type: 'oauth', token: githubToken });
     return state.set('github', github)
-                .set('token', githubToken);
+                .set('token', githubToken)
+                .set('publishAsUser', true);
   }
 }, {});
