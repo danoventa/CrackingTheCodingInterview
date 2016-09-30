@@ -37,7 +37,9 @@ export function dummyStore(config) {
       executionState: 'not connected',
       notificationSystem: {
         addNotification: sinon.spy(),
-      }
+      },
+      publishAsUser: false,
+      token: 'TOKEN',
     }),
     metadata: MetadataRecord({
       filename: (config && config.noFilename) ? null : 'dummy-store-nb.ipynb',
