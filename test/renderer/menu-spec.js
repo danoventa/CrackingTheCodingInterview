@@ -178,21 +178,24 @@ describe('menu', () => {
     });
   });
 
-  describe('dispatchPublishGist', () => {
+  describe('dispatchPublishAnonGist', () => {
     const store = dummyStore();
     store.dispatch = sinon.spy();
 
-    menu.dispatchPublishGist(store);
+    menu.dispatchPublishAnonGist(store);
 
     expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'SET_ANON_GITHUB',
+    });
+    expect(store.dispatch.secondCall).to.be.calledWith({
       type: 'PUBLISH_GIST',
     });
   });
 
-  describe('dispatchAuthAndPublish', () => {
+  describe('dispatchPublishUserGist', () => {
     const dispatch = sinon.spy();
     const store = { dispatch };
-    menu.dispatchAuthAndPublish(store, {}, 'TOKEN');
+    menu.dispatchPublishUserGist(store, {}, 'TOKEN');
     const expectedAction = { type: 'SET_GITHUB_TOKEN', githubToken: 'TOKEN' };
     expect(dispatch).to.have.been.calledWith(expectedAction);
   });
