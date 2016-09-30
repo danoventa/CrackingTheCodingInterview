@@ -34,6 +34,8 @@ import {
   cutCell,
   pasteCell,
   createCellAfter,
+  setAnonGithub,
+  setUserGithub,
   setGithubToken,
 } from './actions';
 
@@ -156,8 +158,9 @@ export function dispatchNewKernel(store, evt, name) {
   store.dispatch(newKernel(name, spawnOptions));
 }
 
-export function dispatchPublishGist(store) {
-  store.dispatch({ type: PUBLISH_GIST });
+export function dispatchPublishAnonGist(store) {
+  store.dispatch(setAnonGithub());
+  store.dispatch({ type: 'PUBLISH_GIST' });
 }
 
 export function dispatchRunAll(store) {
@@ -245,9 +248,16 @@ export function dispatchNewNotebook(store, event, kernelSpecName) {
   store.dispatch(newNotebook(kernelSpecName, home()));
 }
 
-export function dispatchAuthAndPublish(store, event, githubToken) {
-  store.dispatch(setGithubToken(githubToken));
-  dispatchPublishGist(store);
+export function dispatchPublishUserGist(store, event, githubToken) {
+  if (githubToken) {
+    store.dispatch(setGithubToken(githubToken));
+  } else {
+    const state = store.getState();
+    const token = state.app.get('token');
+    store.dispatch(setGithubToken(token));
+  }
+  store.dispatch(setUserGithub());
+  store.dispatch({ type: 'PUBLISH_GIST' });
 }
 
 
@@ -265,11 +275,11 @@ export function initMenuHandlers(store) {
   ipc.on('menu:interrupt-kernel', dispatchInterruptKernel.bind(null, store));
   ipc.on('menu:restart-kernel', dispatchRestartKernel.bind(null, store));
   ipc.on('menu:restart-and-clear-all', dispatchRestartClearAll.bind(null, store));
-  ipc.on('menu:publish:gist', dispatchPublishGist.bind(null, store));
+  ipc.on('menu:publish:gist', dispatchPublishAnonGist.bind(null, store));
   ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store));
   ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store));
   ipc.on('menu:theme', dispatchSetTheme.bind(null, store));
-  ipc.on('menu:github:auth', dispatchAuthAndPublish.bind(null, store));
+  ipc.on('menu:github:auth', dispatchPublishUserGist.bind(null, store));
   // OCD: This is more like the registration of main -> renderer thread
   ipc.on('main:load', dispatchLoad.bind(null, store));
   ipc.on('main:new', dispatchNewNotebook.bind(null, store));

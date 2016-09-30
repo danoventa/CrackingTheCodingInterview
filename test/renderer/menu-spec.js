@@ -178,23 +178,44 @@ describe('menu', () => {
     });
   });
 
-  describe('dispatchPublishGist', () => {
+  describe('dispatchPublishAnonGist', () => {
     const store = dummyStore();
     store.dispatch = sinon.spy();
 
-    menu.dispatchPublishGist(store);
+    menu.dispatchPublishAnonGist(store);
 
     expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'SET_ANON_GITHUB',
+    });
+    expect(store.dispatch.secondCall).to.be.calledWith({
       type: 'PUBLISH_GIST',
     });
   });
 
-  describe('dispatchAuthAndPublish', () => {
-    const dispatch = sinon.spy();
-    const store = { dispatch };
-    menu.dispatchAuthAndPublish(store, {}, 'TOKEN');
-    const expectedAction = { type: 'SET_GITHUB_TOKEN', githubToken: 'TOKEN' };
-    expect(dispatch).to.have.been.calledWith(expectedAction);
+  describe('dispatchPublishUserGist', () => {
+    it('sets github token if token provided', () => {
+      const store = dummyStore();
+      store.dispatch = sinon.spy();
+      menu.dispatchPublishUserGist(store, {}, 'TOKEN');
+      const expectedAction = { type: 'SET_GITHUB_TOKEN', githubToken: 'TOKEN' };
+      expect(store.dispatch).to.have.been.calledWith(expectedAction);
+    });
+    it('gets token from state if none provided', () => {
+      const store = dummyStore();
+      store.dispatch = sinon.spy();
+      menu.dispatchPublishUserGist(store, {});
+      const expectedAction = { type: 'SET_GITHUB_TOKEN', githubToken: 'TOKEN' };
+      expect(store.dispatch).to.have.been.calledWith(expectedAction);
+    });
+    it('dispatches setUserGithub and publishes gist', () => {
+      const store = dummyStore();
+      store.dispatch = sinon.spy();
+      menu.dispatchPublishUserGist(store, {});
+      const expectedSecondAction = { type: 'SET_USER_GITHUB' };
+      const expectedThirdAction = { type: 'PUBLISH_GIST' };
+      expect(store.dispatch).to.have.been.calledWith(expectedSecondAction);
+      expect(store.dispatch).to.have.been.calledWith(expectedThirdAction);
+    });
   });
 
   describe('dispatchNewKernel', () => {

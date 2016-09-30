@@ -227,7 +227,7 @@ describe('setGithubToken', () => {
     const originalState = {
       app: new AppRecord({
         github: new Github(),
-        authenticated: false,
+        token: null,
       })
     };
 
@@ -239,9 +239,41 @@ describe('setGithubToken', () => {
     const state = reducers(originalState, action);
     // this is a crappy way of testing this
     expect(state.app.github).to.not.be.null;
-    expect(state.app.authenticated).to.be.true;
+    expect(state.app.token).to.not.be.null;
   });
 })
+
+describe('setAuthGithub', () => {
+  it('changes publishAsUser', () => {
+
+    const originalState = {
+      app: new AppRecord({
+        publishAsUser: false,
+      })
+    }
+    const action = {
+      type: constants.SET_USER_GITHUB,
+    }
+    const state = reducers(originalState, action);
+    expect(state.app.publishAsUser).to.be.true;
+  });
+});
+
+describe('setAnonGithub', () => {
+  it('changes PublishAsUser', () => {
+
+    const originalState = {
+      app: new AppRecord({
+        publishAsUser: true,
+      })
+    }
+    const action = {
+      type: constants.SET_ANON_GITHUB,
+    }
+    const state = reducers(originalState, action);
+    expect(state.app.publishAsUser).to.be.false;
+  });
+});
 
 describe('exit', () => {
   it('calls cleanupKernel', () => {
