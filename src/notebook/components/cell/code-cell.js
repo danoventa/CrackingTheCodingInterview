@@ -23,6 +23,7 @@ class CodeCell extends React.Component {
     running: React.PropTypes.bool,
     focusAbove: React.PropTypes.func,
     focusBelow: React.PropTypes.func,
+    tabSize: React.PropTypes.number,
   };
 
   static defaultProps = {
