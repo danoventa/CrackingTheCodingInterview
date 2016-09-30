@@ -16,8 +16,13 @@ Object.keys(document.defaultView).forEach((property) => {
 // For some reason, this property does not get set above.
 global.Image = global.window.Image;
 
+// React assumes console.debug can/should be used when the userAgent matches Chrome
+// For tests, we want these debug statements suppressed
+global.console.debug = () => {};
+
 global.navigator = {
-  userAgent: 'node.js'
+  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) nteract/0.0.12 Chrome/50.0.2661.102 Electron/1.1.3 Safari/537.36',
+  platform: 'MacIntel',
 };
 
 // HACK: Polyfil that allows codemirror to render in a JSDOM env.
