@@ -158,8 +158,8 @@ export function dispatchNewKernel(store, evt, name) {
 }
 
 export function dispatchPublishGist(store) {
-  store.dispatch(setGithub);
-  store.dispatch({ type: PUBLISH_GIST });
+  store.dispatch(setGithub());
+  store.dispatch({ type: 'PUBLISH_GIST' });
 }
 
 export function dispatchRunAll(store) {
@@ -248,8 +248,9 @@ export function dispatchNewNotebook(store, event, kernelSpecName) {
 }
 
 export function dispatchAuthAndPublish(store, event, githubToken) {
-  if (githubToken) { store.dispatch(setGithubToken(githubToken)) }
-  else {
+  if (githubToken) {
+    store.dispatch(setGithubToken(githubToken));
+  } else {
     const state = store.getState();
     const token = state.app.get('token');
     store.dispatch(setGithubToken(token));
