@@ -97,7 +97,7 @@
     "spawnteract": "^2.2.0",
     "transformime-react": "^1.1.0",
     "uuid": "^2.0.3",
-    "yargs": "^5.0.0"
+    "yargs": "^6.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.14.0",
