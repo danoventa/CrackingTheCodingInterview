@@ -9,6 +9,14 @@ import Rx from 'rxjs/Rx';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/anyword-hint';
 
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/css/css';
+import 'codemirror/mode/julia/julia';
+import 'codemirror/mode/r/r';
+import 'codemirror/mode/markdown/markdown';
+
+import './codemirror-ipython';
+
 import { codeComplete, pick, formChangeObject } from './complete';
 
 import { updateCellSource } from '../../../actions';

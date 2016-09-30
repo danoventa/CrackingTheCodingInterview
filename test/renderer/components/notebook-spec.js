@@ -29,7 +29,7 @@ const dummyCellStatuses = dummyCommutable.get('cellOrder')
         statuses.set(cellID, Immutable.fromJS({ outputHidden: false, inputHidden: false })),
       new Immutable.Map());
 
-import { Notebook, ConnectedNotebook } from '../../../src/notebook/components/notebook';
+import { Notebook, ConnectedNotebook, getLanguageMode } from '../../../src/notebook/components/notebook';
 
 // Boilerplate test to make sure the testing setup is configured
 describe('Notebook', () => {
@@ -75,29 +75,11 @@ describe('Notebook', () => {
 
   describe('getLanguageMode', () => {
     it('determines the right language from the notebook metadata', () => {
-      const focusedCell = dummyCommutable.getIn(['cellOrder', 0]);
+      const lang = getLanguageMode(dummyCommutable);
+      expect(lang).to.equal('ipython');
 
-      const context = {
-        store: dummyStore(),
-      }
-
-      context.store.dispatch = sinon.spy();
-
-      const component = shallow(
-        <Notebook
-          notebook={dummyCommutable}
-          cellPagers={new Immutable.Map()}
-          cellStatuses={dummyCellStatuses}
-          stickyCells={(new Immutable.Map())}
-          CellComponent={Cell}
-          focusedCell={focusedCell}
-        />, { context });
-
-      const inst = component.instance();
-
-      const lang = inst.getLanguageMode()
-
-      expect(lang).to.equal('python');
+      const lang2 = getLanguageMode(dummyCommutable.setIn(['metadata', 'language_info', 'codemirror_mode', 'name'], 'r'))
+      expect(lang2).to.equal('r');
     });
   });
 
