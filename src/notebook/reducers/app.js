@@ -63,11 +63,15 @@ export default handleActions({
   [constants.SET_THEME]: function setTheme(state, action) {
     return state.set('theme', action.theme);
   },
+  [constants.SET_GITHUB]: function setGithub(state) {
+    const github = new Github();
+    return state.set('github', github);
+  },
   [constants.SET_GITHUB_TOKEN]: function setGithubToken(state, action) {
     const { githubToken } = action;
     const github = new Github();
     github.authenticate({ type: 'oauth', token: githubToken });
     return state.set('github', github)
-                .set('authenticated', true);
+                .set('token', githubToken);
   }
 }, {});

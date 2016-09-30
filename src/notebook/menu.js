@@ -34,7 +34,8 @@ import {
   cutCell,
   pasteCell,
   createCellAfter,
-  setGithubToken,
+  setGithub,
+  setGithubToken
 } from './actions';
 
 import {
@@ -157,6 +158,7 @@ export function dispatchNewKernel(store, evt, name) {
 }
 
 export function dispatchPublishGist(store) {
+  store.dispatch(setGithub);
   store.dispatch({ type: PUBLISH_GIST });
 }
 
@@ -246,8 +248,13 @@ export function dispatchNewNotebook(store, event, kernelSpecName) {
 }
 
 export function dispatchAuthAndPublish(store, event, githubToken) {
-  store.dispatch(setGithubToken(githubToken));
-  dispatchPublishGist(store);
+  if (githubToken) { store.dispatch(setGithubToken(githubToken)) }
+  else {
+    const state = store.getState();
+    const token = state.app.get('token');
+    store.dispatch(setGithubToken(token));
+  }
+  store.dispatch({type:'PUBLISH_GIST'})
 }
 
 

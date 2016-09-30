@@ -23,7 +23,7 @@ export function authAndPublish(item, focusedWindow) {
   const win = new BrowserWindow({ show: false,
                                   webPreferences: { zoomFactor: 0.75 } });
   if (process.env.AUTHENTICATED) {
-    send(focusedWindow, 'menu:publish:gist');
+    send(focusedWindow, 'menu:github:auth');
     return;
   }
   win.webContents.on('dom-ready', () => {

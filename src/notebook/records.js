@@ -5,7 +5,7 @@ const Github = require('github');
 export const AppRecord = new Immutable.Record({
   executionState: 'not connected',
   github: new Github(),
-  authenticated: false,
+  token: null,
   channels: null,
   spawn: null,
   connectionFile: null,
