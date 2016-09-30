@@ -116,7 +116,7 @@ export default class Editor extends React.Component {
       })
       .subscribe(event => {
         if (!event.cm.state.completionActive && store.getState().app.executionState === 'idle') {
-          event.cm.execCommand('autocomplete');
+          event.cm.execCommand('autocomplete', { completeSingle: false });
         }
       }, error => {
         console.error(error);
