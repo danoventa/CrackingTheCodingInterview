@@ -35,13 +35,6 @@ const notebooks = argv._
   .filter(x => x !== '.'); // Ignore the `electron .`
                            // TODO: Consider opening something for directories
 
-app.on('window-all-closed', () => {
-  // On OS X, we want to keep the app and menu bar active
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
 ipc.on('new-kernel', (event, newKernel) => {
   launchNewNotebook(newKernel);
 });
@@ -51,6 +44,7 @@ ipc.on('open-notebook', (event, filename) => {
 });
 
 const electronReady$ = Rx.Observable.fromEvent(app, 'ready');
+
 
 const fullAppReady$ = Rx.Observable.zip(
   electronReady$,
@@ -89,11 +83,23 @@ export function createSplashSubscriber() {
   });
 }
 
+const appAndKernelSpecsReady = Rx.Observable.zip(fullAppReady$, kernelSpecsPromise);
+
 const splashSubscription = electronReady$
   // TODO: Take until first window is shown
-  .takeUntil(Rx.Observable.zip(fullAppReady$, kernelSpecsPromise))
+  .takeUntil(appAndKernelSpecsReady)
   .subscribe(createSplashSubscriber());
 
+function closeAppOnNonDarwin() {
+  // On OS X, we want to keep the app and menu bar active
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+}
+const windowAllClosed = Rx.Observable.fromEvent(app, 'window-all-closed');
+const windowClosedSubscription = windowAllClosed
+  .skipUntil(appAndKernelSpecsReady)
+  .subscribe(closeAppOnNonDarwin);
 
 const openFile$ = Rx.Observable.fromEvent(
   app,
