@@ -189,10 +189,10 @@ describe('menu', () => {
     });
   });
 
-  describe('dispatchPublishAuth', () => {
+  describe('dispatchAuthAndPublish', () => {
     const dispatch = sinon.spy();
     const store = { dispatch };
-    menu.dispatchPublishAuth(store, {}, 'TOKEN');
+    menu.dispatchAuthAndPublish(store, {}, 'TOKEN');
     const expectedAction = { type: 'SET_GITHUB_TOKEN', githubToken: 'TOKEN' };
     expect(dispatch).to.have.been.calledWith(expectedAction);
   });
@@ -280,7 +280,7 @@ describe('menu', () => {
         'menu:restart-kernel',
         'menu:restart-and-clear-all',
         'menu:publish:gist',
-        'menu:publish:auth',
+        'menu:github:auth',
         'menu:zoom-in',
         'menu:zoom-out',
         'menu:theme',
