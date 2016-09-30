@@ -76,6 +76,6 @@ export default handleActions({
     const github = new Github();
     github.authenticate({ type: 'oauth', token: githubToken });
     return state.set('github', github)
-                .set('token', githubToken)
+                .set('token', githubToken);
   },
 }, {});

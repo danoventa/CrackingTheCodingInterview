@@ -257,7 +257,7 @@ export function dispatchPublishUserGist(store, event, githubToken) {
     store.dispatch(setGithubToken(token));
   }
   store.dispatch(setAuthGithub());
-  store.dispatch({type:'PUBLISH_GIST'});
+  store.dispatch({ type: 'PUBLISH_GIST' });
 }
 
 
