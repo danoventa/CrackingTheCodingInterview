@@ -27,6 +27,33 @@ import { executeCell } from '../epics/execute';
 // Always set up the markdown mode
 require('codemirror/mode/markdown/markdown');
 
+export function getLanguageMode(notebook) {
+  // The syntax highlighting language should be set in the language info
+  // object.  First try codemirror_mode, then name, and fallback on 'null'.
+  const language =
+    notebook.getIn(['metadata', 'language_info', 'codemirror_mode', 'name'],
+    notebook.getIn(['metadata', 'language_info', 'codemirror_mode'],
+    notebook.getIn(['metadata', 'language_info', 'name'],
+    'text')));
+
+  if (language !== 'ipython' && language !== 'text') {
+    // HACK: This should give you the heeby-jeebies
+    // Mostly because language could be ../../../../whatever
+    // This is the notebook though, so hands off
+    // We'll want to check for this existing later
+    // and any other validation
+    try {
+      /* eslint-disable */
+      require(`codemirror/mode/${language}/${language}`);
+      /* eslint-enable */
+    } catch (err) {
+      /* istanbul ignore next */
+      console.error(err);
+    }
+  }
+  return language;
+}
+
 const mapStateToProps = (state) => ({
   theme: state.app.theme,
   lastSaved: state.app.get('lastSaved'),
@@ -66,7 +93,6 @@ export class Notebook extends React.Component {
   constructor() {
     super();
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.languageCache = {};
     this.createCellElement = this.createCellElement.bind(this);
     this.createStickyCellElement = this.createStickyCellElement.bind(this);
     this.keyDown = this.keyDown.bind(this);
@@ -93,34 +119,6 @@ export class Notebook extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.keyDown);
-  }
-
-  getLanguageMode() {
-    // The syntax highlighting language should be set in the language info
-    // object.  First try codemirror_mode, then name, and fallback on 'null'.
-    const language =
-      this.props.notebook.getIn(['metadata', 'language_info', 'codemirror_mode', 'name'],
-      this.props.notebook.getIn(['metadata', 'language_info', 'codemirror_mode'],
-      this.props.notebook.getIn(['metadata', 'language_info', 'name'],
-      'text')));
-
-    if (language !== 'ipython' && language !== 'text' && !this.languageCache[language]) {
-      this.languageCache[language] = true;
-
-      // HACK: This should give you the heeby-jeebies
-      // Mostly because language could be ../../../../whatever
-      // This is the notebook though, so hands off
-      // We'll want to check for this existing later
-      // and any other validation
-      /* eslint-disable */
-      try {
-        require(`codemirror/mode/${language}/${language}`);
-      } catch(err) {
-        console.error(err);
-      }
-      /* eslint-enable */
-    }
-    return language;
   }
 
   moveCell(sourceId, destinationId, above) {
@@ -193,7 +191,7 @@ export class Notebook extends React.Component {
     return {
       id,
       cell,
-      language: this.getLanguageMode(),
+      language: getLanguageMode(this.props.notebook),
       key: id,
       ref: id,
       displayOrder: this.props.displayOrder,
