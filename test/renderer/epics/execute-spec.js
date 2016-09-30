@@ -171,7 +171,7 @@ describe('createCellAfterAction', () => {
     const msgObs = Rx.Observable.from([{
       source: 'set_next_input',
       text: 'This is some test text.',
-      relace: false,
+      replace: false,
     }]);
 
     const cellAction$ = createCellAfterAction('1', msgObs);
@@ -226,6 +226,23 @@ describe('updateCellNumberingAction', () => {
     cellAction$.subscribe((action) => {
       expect(action.id).to.equal('1');
       expect(action.count).to.equal(3);
+      done();
+    });
+  });
+});
+
+describe('createSourceUpdateAction', () => {
+  it('emits updateCellSource action', (done) => {
+    const msgObs = Rx.Observable.from([{
+      source: 'set_next_input',
+      text: 'This is some test text.',
+      replace: true,
+    }]);
+
+    const cellAction$ = createSourceUpdateAction('1', msgObs);
+
+    cellAction$.subscribe((action) => {
+      expect(action.source).to.equal('This is some test text.');
       done();
     });
   });
