@@ -63,10 +63,13 @@ export default handleActions({
   [constants.SET_THEME]: function setTheme(state, action) {
     return state.set('theme', action.theme);
   },
-  [constants.SET_GITHUB]: function setGithub(state) {
+  [constants.SET_ANON_GITHUB]: function setAnonGithub(state) {
     const github = new Github();
     return state.set('github', github)
                 .set('publishAsUser', false);
+  },
+  [constants.SET_AUTH_GITHUB]: function setAuthGithub(state) {
+    return state.set('publishAsUser', true);
   },
   [constants.SET_GITHUB_TOKEN]: function setGithubToken(state, action) {
     const { githubToken } = action;
@@ -74,6 +77,5 @@ export default handleActions({
     github.authenticate({ type: 'oauth', token: githubToken });
     return state.set('github', github)
                 .set('token', githubToken)
-                .set('publishAsUser', true);
-  }
+  },
 }, {});

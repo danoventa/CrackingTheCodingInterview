@@ -232,9 +232,14 @@ export function changeCellType(id, to) {
     to,
   };
 }
-export function setGithub() {
+export function setAnonGithub() {
   return {
-    type: constants.SET_GITHUB,
+    type: constants.SET_ANON_GITHUB,
+  };
+}
+export function setAuthGithub() {
+  return {
+    type: constants.SET_AUTH_GITHUB,
   };
 }
 export function setGithubToken(githubToken) {
