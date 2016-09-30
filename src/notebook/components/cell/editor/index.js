@@ -35,6 +35,60 @@ function goLineDownOrEmit(editor) {
   }
 }
 
+const excludedIntelliSenseTriggerKeys = {
+  8: 'backspace',
+  9: 'tab',
+  13: 'enter',
+  16: 'shift',
+  17: 'ctrl',
+  18: 'alt',
+  19: 'pause',
+  20: 'capslock',
+  27: 'escape',
+  32: 'space',
+  33: 'pageup',
+  34: 'pagedown',
+  35: 'end',
+  36: 'home',
+  37: 'left',
+  38: 'up',
+  39: 'right',
+  40: 'down',
+  45: 'insert',
+  46: 'delete',
+  91: 'left window key',
+  92: 'right window key',
+  93: 'select',
+  107: 'add',
+  109: 'subtract',
+  110: 'decimal point',
+  111: 'divide',
+  112: 'f1',
+  113: 'f2',
+  114: 'f3',
+  115: 'f4',
+  116: 'f5',
+  117: 'f6',
+  118: 'f7',
+  119: 'f8',
+  120: 'f9',
+  121: 'f10',
+  122: 'f11',
+  123: 'f12',
+  144: 'numlock',
+  145: 'scrolllock',
+  186: 'semicolon',
+  187: 'equalsign',
+  188: 'comma',
+  189: 'dash',
+  // 190: 'period',
+  // 191: 'slash',
+  192: 'graveaccent',
+  220: 'backslash',
+  222: 'quote',
+};
+
+
 CM.keyMap.basic.Up = 'goLineUpOrEmit';
 CM.keyMap.basic.Down = 'goLineDownOrEmit';
 CM.commands.goLineUpOrEmit = goLineUpOrEmit;
@@ -93,33 +147,21 @@ export default class Editor extends React.Component {
     cm.on('topBoundary', this.props.focusAbove);
     cm.on('bottomBoundary', this.props.focusBelow);
 
-    const inputEvents = Rx.Observable.fromEvent(cm,
-      'change', formChangeObject)
-      .filter(x => x.change.origin === '+input');
+    const keyupEvents = Rx.Observable.fromEvent(cm, 'keyup', (editor, ev) => ({ editor, ev }));
 
-    // TODO: The subscription created here needs to be cleaned up when the cell
-    //       is deleted
-    //       Suggestion: trigger off of a codemirror event
-    inputEvents
-      .switchMap(i => Rx.Observable.of(i)) // Not sure how to do this without identity function
-      // Pass through changes that aren't newlines
-      .filter(event => event.change.text.length === 1 ||
-                       (event.change.text.length === 2 &&
-                       !(event.change.text[0] === '' && event.change.text[1] === ''))
-      )
-      // Pass through only partial tokens that are composed of words
-      .filter((event) => {
-        const editor = event.cm;
-        const tokenRange = editor.findWordAt(editor.getCursor());
-        const token = editor.getRange(tokenRange.anchor, tokenRange.head);
-        return /(\w|\.)/.test(token);
-      })
-      .subscribe(event => {
-        if (!event.cm.state.completionActive && store.getState().app.executionState === 'idle') {
-          event.cm.execCommand('autocomplete');
+    keyupEvents
+      .switchMap(i => Rx.Observable.of(i))
+      .subscribe(({ editor, ev }) => {
+        const cursor = editor.getDoc().getCursor();
+        const token = editor.getTokenAt(cursor);
+
+        if (!editor.state.completionActive &&
+            !excludedIntelliSenseTriggerKeys[(ev.keyCode || ev.which).toString()] &&
+            (token.type === 'tag' || token.type === 'variable' || token.string === ' ' ||
+             token.string === '<' || token.string === '/') &&
+            store.getState().app.executionState === 'idle') {
+          editor.execCommand('autocomplete', { completeSingle: false });
         }
-      }, error => {
-        console.error(error);
       });
   }
 
