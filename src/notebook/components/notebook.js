@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 
 import Immutable from 'immutable';
 
+import './cell/editor/codemirror-ipython';
+
 import {
   defaultDisplayOrder as displayOrder,
   defaultTransforms as transforms,
@@ -96,18 +98,13 @@ export class Notebook extends React.Component {
   getLanguageMode() {
     // The syntax highlighting language should be set in the language info
     // object.  First try codemirror_mode, then name, and fallback on 'null'.
-    let language =
+    const language =
       this.props.notebook.getIn(['metadata', 'language_info', 'codemirror_mode', 'name'],
       this.props.notebook.getIn(['metadata', 'language_info', 'codemirror_mode'],
       this.props.notebook.getIn(['metadata', 'language_info', 'name'],
       'text')));
 
-    // TODO: Load the ipython codemirror mode from somewhere
-    if (language === 'ipython') {
-      language = 'python';
-    }
-
-    if (language !== 'text' && !this.languageCache[language]) {
+    if (language !== 'ipython' && language !== 'text' && !this.languageCache[language]) {
       this.languageCache[language] = true;
 
       // HACK: This should give you the heeby-jeebies
@@ -116,7 +113,11 @@ export class Notebook extends React.Component {
       // We'll want to check for this existing later
       // and any other validation
       /* eslint-disable */
-      require(`codemirror/mode/${language}/${language}`);
+      try {
+        require(`codemirror/mode/${language}/${language}`);
+      } catch(err) {
+        console.error(err);
+      }
       /* eslint-enable */
     }
     return language;

@@ -97,7 +97,7 @@ describe('Notebook', () => {
 
       const lang = inst.getLanguageMode()
 
-      expect(lang).to.equal('python');
+      expect(lang).to.equal('ipython');
     });
   });
 
