@@ -65,7 +65,6 @@ describe('createGistCallback', () => {
       dummyCommutable, './test.ipynb', notificationSystem);
     const callback = createGistCallback(true, publishNotebookObs,
       './test.ipynb', notificationSystem);
-    console.log(callback);
     expect((typeof(callback))).to.equal('function');
   });
 });
