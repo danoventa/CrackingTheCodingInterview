@@ -108,6 +108,7 @@ export default class Editor extends React.Component {
     input: React.PropTypes.any,
     completion: React.PropTypes.bool,
     language: React.PropTypes.string,
+    tabSize: React.PropTypes.number,
     lineNumbers: React.PropTypes.bool,
     lineWrapping: React.PropTypes.bool,
     onChange: React.PropTypes.func,
@@ -233,6 +234,8 @@ export default class Editor extends React.Component {
       extraKeys: {
         'Ctrl-Space': 'autocomplete',
       },
+      indentUnit: this.props.tabSize,
+      tabSize: this.props.tabSize,
     };
     return (
       <div className="input">

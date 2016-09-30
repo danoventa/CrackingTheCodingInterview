@@ -23,11 +23,13 @@ class CodeCell extends React.Component {
     running: React.PropTypes.bool,
     focusAbove: React.PropTypes.func,
     focusBelow: React.PropTypes.func,
+    tabSize: React.PropTypes.number,
   };
 
   static defaultProps = {
     pagers: new Immutable.List(),
     running: false,
+    tabSize: 4,
   };
 
   constructor(props) {
@@ -55,6 +57,7 @@ class CodeCell extends React.Component {
             <Editor
               completion
               id={this.props.id}
+              tabSize={this.props.tabSize}
               input={this.props.cell.get('source')}
               language={this.props.language}
               focused={this.props.focused}
