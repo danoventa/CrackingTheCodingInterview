@@ -35,7 +35,7 @@ import {
   pasteCell,
   createCellAfter,
   setAnonGithub,
-  setAuthGithub,
+  setUserGithub,
   setGithubToken,
 } from './actions';
 
@@ -256,7 +256,7 @@ export function dispatchPublishUserGist(store, event, githubToken) {
     const token = state.app.get('token');
     store.dispatch(setGithubToken(token));
   }
-  store.dispatch(setAuthGithub());
+  store.dispatch(setUserGithub());
   store.dispatch({ type: 'PUBLISH_GIST' });
 }
 

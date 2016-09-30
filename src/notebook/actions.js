@@ -237,9 +237,9 @@ export function setAnonGithub() {
     type: constants.SET_ANON_GITHUB,
   };
 }
-export function setAuthGithub() {
+export function setUserGithub() {
   return {
-    type: constants.SET_AUTH_GITHUB,
+    type: constants.SET_USER_GITHUB,
   };
 }
 export function setGithubToken(githubToken) {

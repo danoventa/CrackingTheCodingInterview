@@ -251,9 +251,8 @@ describe('setAuthGithub', () => {
         publishAsUser: false,
       })
     }
-
     const action = {
-      type: constants.SET_AUTH_GITHUB,
+      type: constants.SET_USER_GITHUB,
     }
     const state = reducers(originalState, action);
     expect(state.app.publishAsUser).to.be.true;

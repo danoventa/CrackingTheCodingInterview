@@ -68,7 +68,7 @@ export default handleActions({
     return state.set('github', github)
                 .set('publishAsUser', false);
   },
-  [constants.SET_AUTH_GITHUB]: function setAuthGithub(state) {
+  [constants.SET_USER_GITHUB]: function setUserGithub(state) {
     return state.set('publishAsUser', true);
   },
   [constants.SET_GITHUB_TOKEN]: function setGithubToken(state, action) {

@@ -313,10 +313,26 @@ describe('changeCellType', () => {
 });
 
 describe('setGithubToken', () => {
-  it('create a SET_GITHUB_TOKEN action', () => {
+  it('creates a SET_GITHUB_TOKEN action', () => {
     expect(actions.setGithubToken('token_string')).to.deep.equal({
       type: constants.SET_GITHUB_TOKEN,
       githubToken: 'token_string',
+    });
+  });
+});
+
+describe('setAuthGithub', () => {
+  it('creates a SET_ANON_GITHUB action', () => {
+    expect(actions.setAnonGithub()).to.deep.equal({
+      type: constants.SET_ANON_GITHUB,
+    });
+  });
+});
+
+describe('setUserGithub', () => {
+  it('creates a SET_USER_GITHUB action', () => {
+    expect(actions.setUserGithub()).to.deep.equal({
+      type: constants.SET_USER_GITHUB,
     });
   });
 });
