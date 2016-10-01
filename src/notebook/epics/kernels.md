@@ -119,9 +119,10 @@ get their own namespace that they can register, which would be used as part of
 the menu.
 
 * `native-jupyter`
+* `default-python`
 * `builtin-ijs`
+* `direct-electron`
 * `conda`
-* `default`
 
 Right now we use kernelspecs in two places:
 
@@ -132,3 +133,8 @@ For native kernels, we could be shutting them down in the main thread instead of
 the browser windows which would make cleanup more consistent. We're stuck with
 a synchronous response on window close - kernels have to close immediately and
 they may not actually be able to.
+
+We could be pushing the connection config across the inter process boundary for
+`native-jupyter`, `default-python`, and `conda` when the user selects them from
+the main menu. However, that cuts out our future with websocket transported
+kernels (or does it?).
