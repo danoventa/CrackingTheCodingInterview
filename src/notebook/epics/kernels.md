@@ -84,6 +84,18 @@ Given that we have direct access to node, we could run a kernel in a webworker
 or via another process with ipc. This requires _no_ ZMQ and could be glorious
 out of the box.
 
+Likely way to support this: [`nel`](https://github.com/n-riesco/nel).
+
+```
+> var session = new nel.Session();
+> session.execute('console.log("nice")', { onSuccess: console.log, onError: console.error })
+undefined
+> { mime: { 'text/plain': 'undefined' } }
+```
+
+That's simple enough we could wrap it with Rx and jupyter messaging protocol
+sans ZMQ.
+
 ### Built-in ijavascript kernel using Electron/nteract session
 
 We could likely provide a kernel that is executing in the context of the current
