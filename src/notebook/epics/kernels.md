@@ -122,3 +122,13 @@ the menu.
 * `builtin-ijs`
 * `conda`
 * `default`
+
+Right now we use kernelspecs in two places:
+
+* The menu loading (main process)
+* Launching kernels in the notebook window (renderer process)
+
+For native kernels, we could be shutting them down in the main thread instead of
+the browser windows which would make cleanup more consistent. We're stuck with
+a synchronous response on window close - kernels have to close immediately and
+they may not actually be able to.
