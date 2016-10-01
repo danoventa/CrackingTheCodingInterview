@@ -551,4 +551,5 @@ li:only-child {
     font-size: 12px;
     line-height: 0.5em;
     background: var(--status-bar);
+    z-index: 99;
 }
