@@ -8,6 +8,10 @@ import Rx from 'rxjs/Rx';
 
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/anyword-hint';
+import 'codemirror/addon/search/search';
+import 'codemirror/addon/search/searchcursor';
+
+import 'codemirror/addon/dialog/dialog';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
