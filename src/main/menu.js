@@ -195,6 +195,10 @@ const theme_menu = [
     label: 'Classic',
     click: createSender('menu:theme', 'classic'),
   },
+  {
+    label: 'nteract',
+    click: createSender('menu:theme', 'nteract'),
+  },
 ];
 
 const today = new Date();
