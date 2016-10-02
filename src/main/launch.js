@@ -7,14 +7,9 @@ export function deferURL(event, url) {
   shell.openExternal(url);
 }
 
-export function launch(filename) {
-  let iconPath = '';
-  if (process.argv[0].match(/electron/i)) {
-    iconPath = './static/icon.png';
-  } else {
-    iconPath = '.cd/resources/app/static/icon.png';
-  }
+const iconPath = path.join(__dirname, '../../static/icon.png');
 
+export function launch(filename) {
   let win = new BrowserWindow({
     width: 800,
     height: 1000,
