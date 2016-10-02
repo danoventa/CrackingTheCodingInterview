@@ -224,6 +224,7 @@ export function executeCellObservable(channels, id, code) {
     );
 
   const cellAction$ = Rx.Observable.merge(
+    Rx.Observable.of(updateCellStatus(id, 'busy')),
     // Inline %load
     createSourceUpdateAction(id, setInputStream),
     // %load for the cell _after_
