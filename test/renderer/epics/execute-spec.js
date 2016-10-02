@@ -104,10 +104,11 @@ describe('executeCellObservable', () => {
     const action$ = executeCellObservable(channels, '0', 'import this');
 
     action$
-      .bufferCount(2)
+      .bufferCount(3)
       .subscribe(messages => {
         expect(messages).to.deep.equal([
           // TODO: Order doesn't actually matter here
+          { type: 'UPDATE_CELL_STATUS', id: '0', status: 'busy' },
           { type: 'UPDATE_CELL_PAGERS', id: '0', pagers: Immutable.List() },
           { type: 'UPDATE_CELL_OUTPUTS', id: '0', outputs: Immutable.List() },
         ]);
