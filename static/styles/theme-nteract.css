@@ -44,7 +44,7 @@
   --cm-hint-bg: var(--main-bg-color);
   --cm-hint-bg-active: var(--pager-bg);
 
-  --status-bar: transparent;
+  --status-bar: var(--main-bg-color);
 }
 
 /* -------------------- */
@@ -312,10 +312,4 @@ a,
 tr
 {
   transition: all 0.1s ease-in-out;
-}
-
-.status-bar
-{
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.5)) !important;
-  text-shadow: 0.1em 0.1em 0.3em #000;
 }
