@@ -1,12 +1,13 @@
+// @flow
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import CellCreatorButtons from './cell-creator-buttons';
 
 export default class CellCreator extends React.Component {
-  static propTypes = {
-    above: React.PropTypes.bool,
-    id: React.PropTypes.string,
+  props: {
+    above: boolean,
+    id: string,
   };
 
   constructor() {
