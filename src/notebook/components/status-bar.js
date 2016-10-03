@@ -1,13 +1,17 @@
+/* @flow weak */
+
 import React from 'react';
 import moment from 'moment';
 
+type Props = {
+    notebook: any,
+    lastSaved: typeof Date,
+    kernelSpecName: string,
+    executionState: string,
+};
+
 export default class StatusBar extends React.Component {
-  static propTypes = {
-    notebook: React.PropTypes.any,
-    lastSaved: React.PropTypes.instanceOf(Date),
-    kernelSpecName: React.PropTypes.string,
-    executionState: React.PropTypes.string,
-  };
+  props: Props;
 
   shouldComponentUpdate(nextProps) {
     if (this.props.notebook !== nextProps.notebook ||
