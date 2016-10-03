@@ -183,8 +183,8 @@ export default class Editor extends React.Component {
             store.getState().app.executionState === 'idle') {
           editor.execCommand('autocomplete', { completeSingle: false });
         }
-  });
-}
+      });
+  }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
