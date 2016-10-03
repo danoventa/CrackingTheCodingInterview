@@ -35,3 +35,6 @@ build/
 dist/
 
 test/*.ipynb
+
+# Ignore flow type definitions
+flow-typed/
