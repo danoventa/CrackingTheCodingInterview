@@ -11,6 +11,10 @@ import 'codemirror/addon/hint/anyword-hint';
 import 'codemirror/addon/search/search';
 import 'codemirror/addon/search/searchcursor';
 
+// matching & closing parentheses and quotations
+import 'codemirror/addon/edit/matchbrackets';
+import 'codemirror/addon/edit/closebrackets';
+
 import 'codemirror/addon/dialog/dialog';
 
 import 'codemirror/mode/javascript/javascript';
@@ -108,6 +112,7 @@ CM.commands.goLineDownOrEmit = goLineDownOrEmit;
 
 export default class Editor extends React.Component {
   static propTypes = {
+    autoCloseBrackets: React.PropTypes.bool,
     id: React.PropTypes.string,
     input: React.PropTypes.any,
     completion: React.PropTypes.bool,
@@ -116,6 +121,7 @@ export default class Editor extends React.Component {
     lineNumbers: React.PropTypes.bool,
     lineWrapping: React.PropTypes.bool,
     onChange: React.PropTypes.func,
+    matchBrackets: React.PropTypes.bool,
     theme: React.PropTypes.string,
     cmtheme: React.PropTypes.string,
     focused: React.PropTypes.bool,
@@ -128,8 +134,10 @@ export default class Editor extends React.Component {
   };
 
   static defaultProps = {
+    autoCloseBrackets: true, // automatically closes opening parens and quotations
     language: 'python',
     lineNumbers: false,
+    matchBrackets: true, // highlights parens that are paired
     cmtheme: 'composition',
     focused: false,
   };
@@ -173,10 +181,10 @@ export default class Editor extends React.Component {
             (token.type === 'tag' || token.type === 'variable' || token.string === ' ' ||
              token.string === '<' || token.string === '/') &&
             store.getState().app.executionState === 'idle') {
-          editor.execCommand('autocomplete', { completeSingle: false });
+          editor.execCommand('autocomplete', { completeSingle: false }); // maybe here
         }
-      });
-  }
+  });
+}
 
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -223,9 +231,11 @@ export default class Editor extends React.Component {
 
   render() {
     const options = {
+      autoCloseBrackets: this.props.autoCloseBrackets,
       mode: this.props.language,
       lineNumbers: this.props.lineNumbers,
       lineWrapping: this.props.lineWrapping,
+      matchBrackets: this.props.matchBrackets,
       theme: this.props.cmtheme,
       autofocus: false,
       hintOptions: {
