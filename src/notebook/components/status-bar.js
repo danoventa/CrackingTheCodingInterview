@@ -3,15 +3,13 @@
 import React from 'react';
 import moment from 'moment';
 
-type Props = {
+export default class StatusBar extends React.Component {
+  props: {
     notebook: any,
     lastSaved: typeof Date,
     kernelSpecName: string,
     executionState: string,
-};
-
-export default class StatusBar extends React.Component {
-  props: Props;
+  };
 
   shouldComponentUpdate(nextProps) {
     if (this.props.notebook !== nextProps.notebook ||

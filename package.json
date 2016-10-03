@@ -105,6 +105,7 @@
     "babel-core": "^6.16.0",
     "babel-eslint": "^7.0.0",
     "babel-plugin-transform-class-properties": "^6.10.2",
+    "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "babel-preset-es2015-node6": "^0.3.0",
     "babel-preset-react": "^6.11.1",
     "chai": "^3.4.1",
