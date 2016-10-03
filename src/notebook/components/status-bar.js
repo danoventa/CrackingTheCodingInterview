@@ -4,13 +4,6 @@ import React from 'react';
 import moment from 'moment';
 
 export default class StatusBar extends React.Component {
-  props: {
-    notebook: any,
-    lastSaved: typeof Date,
-    kernelSpecName: string,
-    executionState: string,
-  };
-
   shouldComponentUpdate(nextProps) {
     if (this.props.notebook !== nextProps.notebook ||
         this.props.lastSaved !== nextProps.lastSaved) {
@@ -18,6 +11,13 @@ export default class StatusBar extends React.Component {
     }
     return false;
   }
+
+  props: {
+    notebook: any,
+    lastSaved: typeof Date,
+    kernelSpecName: string,
+    executionState: string,
+  };
 
   render() {
     return (
