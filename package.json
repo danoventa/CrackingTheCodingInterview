@@ -78,7 +78,7 @@
     "mathjax-electron": "^1.1.1",
     "moment": "^2.15.0",
     "normalize.css": "^5.0.0",
-    "nteract-assets": "^2.0.1",
+    "nteract-assets": "^2.1.0",
     "plotly.js": "^1.17.3",
     "react": "^15.3.2",
     "react-addons-pure-render-mixin": "^15.3.2",
