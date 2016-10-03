@@ -181,7 +181,7 @@ export default class Editor extends React.Component {
             (token.type === 'tag' || token.type === 'variable' || token.string === ' ' ||
              token.string === '<' || token.string === '/') &&
             store.getState().app.executionState === 'idle') {
-          editor.execCommand('autocomplete', { completeSingle: false }); // maybe here
+          editor.execCommand('autocomplete', { completeSingle: false });
         }
   });
 }
