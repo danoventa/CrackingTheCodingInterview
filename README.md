@@ -61,6 +61,8 @@ python3 -m ipykernel install --user
 
 Requires [node 6.x and npm 3](https://docs.npmjs.com/getting-started/installing-node).
 
+On windows you additionally need [Visual Studio 2013](https://www.microsoft.com/en-US/download/details.aspx?id=44914) and Python 2.
+
 1. Fork this repo
 2. Clone it `git clone https://github.com/nteract/nteract`
 3. `cd` to where you `clone`d it
