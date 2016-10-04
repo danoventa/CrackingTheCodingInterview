@@ -1,9 +1,17 @@
 #!/usr/bin/env node
-const exec = require('child_process').exec;
-
 if (process.platform === 'win32') {
-  exec('npm rebuild zmq-prebuilt --runtime=electron --target=1.1.3 --disturl=https://atom.io/download/atom-shell --build-from-source',
-  function(err, stdout, stderr) {
+  var exec = require('child_process').exec;
+  var deps = require('../package.json').devDependencies;
+  var version = deps.electron || deps['electron-prebuilt'];
+
+  if (typeof version != 'string' || version.search(/>|<|~|\*|x/) > -1) {
+    throw Error('No explicit electron version in package.json found.')
+  };
+
+  var cmd = 'npm rebuild zmq-prebuilt --runtime=electron --target=' + version +
+    ' --disturl=https://atom.io/download/atom-shell --build-from-source'
+
+  exec(cmd, function(err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
     if (err) {
