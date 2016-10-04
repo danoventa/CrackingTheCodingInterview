@@ -46,7 +46,7 @@ class CodeCell extends React.Component {
   }
 
   render() {
-    return (<div>
+    return (<div className={this.props && this.props.running ? 'cell-running' : ''} >
       {
         !this.isInputHidden() ?
           <div className="input-container">
