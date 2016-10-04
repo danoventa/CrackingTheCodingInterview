@@ -47,6 +47,12 @@
   --status-bar: var(--main-bg-color);
 }
 
+/*
+  General note on this theme: the class "notebook" is used before several
+  selectors to override collisions with the main stylesheet. Instead of adding
+  !important on al the things, .notebook makes these selectors more specific.
+*/
+
 /* -------------------- */
 /* Focus on Active Card */
 /* -------------------- */
@@ -55,12 +61,14 @@
 .notebook .cell:focus,
 .notebook .cell.focused
 {
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16),
+              0 3px 6px rgba(0,0,0,0.23);
 }
 
 .notebook .cell:hover
 {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19),
+              0 6px 6px rgba(0,0,0,0.23);
 }
 
 .cell:focus .cm-s-composition.CodeMirror,
@@ -92,7 +100,8 @@
 
 .cell.focused .input-container
 {
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 
+              0 3px 6px rgba(0,0,0,0.23);
 }
 
 /* -------------------------- */
@@ -189,7 +198,17 @@ tr:hover
 {
   content: '';
   background-color: var(--cm-special);
-  background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(27, 42, 62, 0.2) 5px, rgba(27, 42, 62, 0.2) 10px);
+  background-size: 10px 10px;
+  background-image: linear-gradient(
+                    45deg, 
+                    rgba(27, 42, 62, 0.2) 25%, 
+                    transparent 25%, 
+                    transparent 50%, 
+                    rgba(27, 42, 62, 0.2) 50%, 
+                    rgba(27, 42, 62, 0.2) 75%, 
+                    transparent 75%, 
+                    transparent
+                  );
   width: 0.75rem;
   height: 100%;
   display: block;
@@ -239,13 +258,15 @@ ul li::before
 .cell-toolbar
 {
   padding: 0.125em 0.25em;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16),
+              0 3px 6px rgba(0,0,0,0.23);
 }
 
 .notebook .cell-creator:hover,
 .cell-toolbar:hover
 {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);  
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19),
+              0 6px 6px rgba(0,0,0,0.23);  
 }
 
 .notebook .cell-creator
@@ -268,7 +289,8 @@ ul li::before
 {
   padding-top: 0;
   padding-bottom: 0;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19),
+              0 6px 6px rgba(0,0,0,0.23);
   z-index: 2000;
 }
 
@@ -289,11 +311,39 @@ ul li::before
   color: var(--cm-special);
 }
 
-/* Thanks, Lea Verou! http://lea.verou.me/css3patterns/#diagonal-stripes */
+/* ------------- */
+/* Running Cells */
+/* ------------- */
 
-.sticky-cell-container .prompt
+@keyframes striperunner
 {
-  background-image: repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,0.1) 15px, rgba(255, 255, 255, 0.1) 30px);
+  from { background-position: 0 0; }
+  to   { background-position: 60px 30px; }
+}
+
+/*
+  This value is declared here to avoid a weird display blip where the size is
+  set on .cell-running .prompt AFTER the gradient is applied, resulting in
+  huge stripes
+*/
+.cell .prompt
+{
+  background-size: 30px 30px;
+}
+
+.cell-running .prompt
+{
+  background-image: linear-gradient(
+                    45deg, 
+                    rgba(255, 255, 255, 0.1) 25%, 
+                    transparent 25%, 
+                    transparent 50%, 
+                    rgba(255, 255, 255, 0.1) 50%, 
+                    rgba(255, 255, 255, 0.1) 75%, 
+                    transparent 75%, 
+                    transparent
+                  );
+  animation: striperunner 1.5s linear infinite;
 }
 
 /* -------------------- */
