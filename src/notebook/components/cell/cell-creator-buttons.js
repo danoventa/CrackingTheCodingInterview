@@ -1,5 +1,5 @@
 /* eslint class-methods-use-this: 0 */
-
+// @flow
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
@@ -12,11 +12,6 @@ import {
 } from '../../actions';
 
 export class CellCreatorButtons extends React.Component {
-  static propTypes = {
-    above: React.PropTypes.bool,
-    id: React.PropTypes.string,
-  };
-
   static contextTypes = {
     store: React.PropTypes.object,
   };
@@ -33,6 +28,11 @@ export class CellCreatorButtons extends React.Component {
   shouldComponentUpdate() {
     return false;
   }
+
+  props: {
+    above: boolean,
+    id: string,
+  };
 
   createCell(type) {
     if (!this.props.id) {
