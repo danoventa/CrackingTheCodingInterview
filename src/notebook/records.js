@@ -36,3 +36,8 @@ export const MetadataRecord = new Immutable.Record({
 export const CommsRecord = new Immutable.Record({
   targets: new Immutable.Map(),
 });
+
+export const ConfigRecord = new Immutable.Record({
+  theme: null,
+  sendMetrics: null,
+});
