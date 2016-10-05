@@ -22,13 +22,20 @@ import {
 
 const sinon = require('sinon');
 
+function hideCells(notebook) {
+  return notebook
+    .update('cellMap', (cells) => notebook
+      .get('cellOrder')
+      .reduce((acc, id) => acc.setIn([id, 'inputHidden'], true), cells));
+}
+
 export function dummyStore(config) {
   const notebook = appendCell(emptyNotebook, emptyCodeCell).setIn([
     'metadata', 'kernelspec', 'name',
   ], 'python2');
   return createStore({
     document: DocumentRecord({
-      notebook,
+      notebook: (config && config.hideAll) ? hideCells(notebook) : notebook,
       cellPagers: new Immutable.Map(),
       stickyCells: new Immutable.Map(),
       outputStatuses: new Immutable.Map(),

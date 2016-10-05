@@ -245,6 +245,10 @@ blockquote p {
     flex-direction: row;
 }
 
+.cell .input-container.invisible {
+    height: 34px;
+}
+
 .cell .prompt
 {
     font-family: monospace;
