@@ -210,7 +210,7 @@ if (month === 12) {
       label: 'Hohoho',
       click: createSender('menu:theme', 'christmas'),
     });
-} else if (month === 10 && day === 31) {
+} else if (month === 10) {
   theme_menu.push({
     label: 'Mwaaahahahhah',
     click: createSender('menu:theme', 'halloween'),
