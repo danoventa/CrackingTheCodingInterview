@@ -1,7 +1,16 @@
+Oh, hello there! You're probably reading this because you are interested in
+contributing to nteract. That's great to hear! This document will help you
+through your journey of open source. Love it, cherish it, take it out to
+dinner, but most importantly: read it thoroughly!
+
 ## What do I need to know to help?
 
-You'll need knowledge of JavaScript (ES6), React, RxJS, and CSS to help out
-with this project.
+You'll need knowledge of JavaScript (ES6), React, RxJS, and Redux to help out
+with this project. That's a whole lot of cool stuff! But don't worry, we've
+got some resources to help you out.
+* [Building a voting app with Redux and React](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html)
+* [The RxJS Tutorial](https://xgrommx.github.io/rx-book/index.html)
+* 
 
 ## How do I make a contribution?
 
@@ -20,21 +29,12 @@ feature that you want to add.
 7. Push the changes to the remote repository using `git push origin
 branch-name-here`.
 8. Submit a pull request to the upstream repository.
-9. Title the pull request with "Problem: issue or feature addressed".
-10. Set the description of the pull request with "Solution: fix provided or
-feature added".
+9. Title the pull request per the requirements outlined in the section below.
+10. Set the description of the pull request with a brief description of what you
+did and any questions you might have about what you did.
 11. Wait for the pull request to be reviewed by a maintainer.
 12. Make changes to the pull request if the reviewing maintainer recommends them.
 13. Celebrate your success after your pull request is merged! :tada:
-
-## What does C4.1 mean for me?
-
-You might not have heard of C4.1, or the Collective Code Construction Contract.
-Have no fear! Here's a quick rundown of what C4.1 means for you as a contributor.
-* Everyone can be a contributor to the project.
-* A contributor who has a pull request successfully merged can be invited to be
-a maintainer.
-* Maintainers have the ability to review and merge pull requests.
 
 ## How should I write my commit messages and PR titles?
 
@@ -44,5 +44,34 @@ for writing our commit messages and PR titles. Why do we do this? The standard
 comes in really handy when we need to determine what kinds of information should
 go into our release documentation (as the word changelog in the title might suggest!).
 Good release messages means more informed users means a better project to use. Yay!
+
+Note that this standard applies to both your commit messages and PR titles so you'll
+need to draft the appropriate commit message when you run `git commit -m` or use the
+interface on your visual git interface.
+
+You can use the following verbs as part of your commit messages/PR titles.
+* fix: For when you have fixed a bug.
+* feat: For when you have added a new future.
+* chore: For when you've done a small chore on the repository such as updating
+a script in package.json.
+* docs: For when you've added documentation.
+
+In addition to the active verb, you'll also need to include the affected component
+in the commit message or PR title. The structure for this is as follows.
+* If you've made the change to a React component, use the components name, such as
+`CodeCell`.
+* If you've made a change to the overall application, such as the Electron code, use
+ the `app` name.
+* If you've made a change to a reducer, use the name of the reducer, such as `document`
+or `app`.
+* If you've made a change to an epic, use the name of the epic exported, such as
+`executeCellEpic`.
+
+## How fast will my PR be merged?
+
+Your pull request will be merged as soon as there are maintainers to review it and
+after tests have passed. You might have to make some changes before your PR is merged
+but as long as you adhere to the steps above and try your best, you should have no problem
+getting your PR merged.
 
 That's it! You're good to go!
