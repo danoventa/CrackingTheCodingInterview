@@ -31,6 +31,18 @@
                 "ignoreUrls": true,
                 "ignoreTemplateLiterals": true
             }
+        ],
+        "react/sort-comp": [
+          1,
+          {
+            order: [
+              'type-annotations',
+              'static-methods',
+              'lifecycle',
+              'everything-else',
+              'render'
+            ]
+          }
         ]
   },
   "settings": {

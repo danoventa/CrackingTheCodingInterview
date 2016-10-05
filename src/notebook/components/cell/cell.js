@@ -28,6 +28,7 @@ type Props = {
 };
 
 export class Cell extends React.Component {
+  props: Props;
 
   static contextTypes = {
     store: React.PropTypes.object,
@@ -41,8 +42,6 @@ export class Cell extends React.Component {
     this.focusBelowCell = this.focusBelowCell.bind(this);
     this.setCellHoverState = this.setCellHoverState.bind(this);
   }
-
-  props: Props;
 
   state = {
     hoverCell: false,

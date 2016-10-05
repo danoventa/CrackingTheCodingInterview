@@ -4,8 +4,13 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import CellCreatorButtons from './cell-creator-buttons';
 
-export default class CellCreator extends React.Component {
+type Props = {
+    above: boolean,
+    id: string,
+};
 
+export default class CellCreator extends React.Component {
+  props: Props;
 
   constructor() {
     super();
@@ -33,11 +38,6 @@ export default class CellCreator extends React.Component {
   setHoverElement(el) {
     this.hoverElement = el;
   }
-
-  props: {
-    above: boolean,
-    id: string,
-  };
 
   updateVisibility(mouseEvent) {
     if (this.hoverElement) {
