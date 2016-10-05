@@ -11,7 +11,7 @@ Edit code cells, write markdown, visualize!
 
 ![nteract geojson](https://cloud.githubusercontent.com/assets/836375/18421299/d95ad398-783b-11e6-8b23-d54cf7caad1e.png)
 
-Note: this isn't feature complete yet. There will be :bug:s and quirks. Please come tell us about them!
+Note:There will be :bug:s and quirks. Please come tell us about them!
 
 ### Installing
 
