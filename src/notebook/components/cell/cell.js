@@ -1,8 +1,9 @@
+/* @flow weak */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import Immutable from 'immutable';
+import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import CodeCell from './code-cell';
 import MarkdownCell from './markdown-cell';
@@ -14,18 +15,19 @@ import {
   focusNextCell,
 } from '../../actions';
 
+type Props = {
+  cell: any,
+  displayOrder: ImmutableList<any>,
+  id: string,
+  focusedCell: string,
+  language: string,
+  running: boolean,
+  theme: string,
+  pagers: ImmutableList<any>,
+  transforms: ImmutableMap<any>,
+};
+
 export class Cell extends React.Component {
-  static propTypes = {
-    cell: React.PropTypes.any,
-    displayOrder: React.PropTypes.instanceOf(Immutable.List),
-    id: React.PropTypes.string,
-    focusedCell: React.PropTypes.string,
-    language: React.PropTypes.string,
-    running: React.PropTypes.bool,
-    theme: React.PropTypes.string,
-    pagers: React.PropTypes.instanceOf(Immutable.List),
-    transforms: React.PropTypes.instanceOf(Immutable.Map),
-  };
 
   static contextTypes = {
     store: React.PropTypes.object,
@@ -39,6 +41,8 @@ export class Cell extends React.Component {
     this.focusBelowCell = this.focusBelowCell.bind(this);
     this.setCellHoverState = this.setCellHoverState.bind(this);
   }
+
+  props: Props;
 
   state = {
     hoverCell: false,
