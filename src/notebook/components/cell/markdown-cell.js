@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Editor from './editor';
@@ -12,15 +13,6 @@ const renderer = new MarkdownRenderer();
 const mdRender = input => renderer.render(parser.parse(input));
 
 export default class MarkdownCell extends React.Component {
-  static propTypes = {
-    cell: React.PropTypes.any,
-    id: React.PropTypes.string,
-    theme: React.PropTypes.string,
-    focusAbove: React.PropTypes.func,
-    focusBelow: React.PropTypes.func,
-    focused: React.PropTypes.bool,
-  };
-
   static contextTypes = {
     store: React.PropTypes.object,
   };
@@ -55,6 +47,15 @@ export default class MarkdownCell extends React.Component {
   componentDidUpdate() {
     this.updateRenderedElement();
   }
+
+  props: {
+    cell: any,
+    id: string,
+    theme: string,
+    focusAbove: Function,
+    focusBelow: Function,
+    focused: boolean,
+  };
 
   updateRenderedElement() {
     // On first load, if focused, focus rendered view
