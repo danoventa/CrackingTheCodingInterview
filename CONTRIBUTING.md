@@ -53,7 +53,7 @@ You can use the following verbs as part of your commit messages/PR titles.
 * fix: For when you have fixed a bug.
 * feat: For when you have added a new future.
 * chore: For when you've done a small chore on the repository such as updating
-a script in package.json.
+a script in package.json or changing your code based on feedback from the linter.
 * docs: For when you've added documentation.
 
 In addition to the active verb, you'll also need to include the affected component
