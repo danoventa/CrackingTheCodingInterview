@@ -6,7 +6,7 @@ const L = require('leaflet');
 
 L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images/';
 
-const MIMETYPE = 'application/vnd.geo+json';
+const MIMETYPE = 'application/geo+json';
 
 export class GeoJSONTransform extends React.Component {
 
