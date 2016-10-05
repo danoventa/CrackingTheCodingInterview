@@ -11,7 +11,14 @@ import {
   mergeCellAfter,
 } from '../../actions';
 
+type Props = {
+  above: boolean,
+  id: string,
+};
+
 export class CellCreatorButtons extends React.Component {
+  props: Props;
+
   static contextTypes = {
     store: React.PropTypes.object,
   };
@@ -28,11 +35,6 @@ export class CellCreatorButtons extends React.Component {
   shouldComponentUpdate() {
     return false;
   }
-
-  props: {
-    above: boolean,
-    id: string,
-  };
 
   createCell(type) {
     if (!this.props.id) {
