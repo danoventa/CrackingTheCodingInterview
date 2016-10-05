@@ -37,6 +37,7 @@ import {
   setAnonGithub,
   setUserGithub,
   setGithubToken,
+  changeInputVisibility,
 } from './actions';
 
 import {
@@ -183,6 +184,15 @@ export function dispatchClearAll(store) {
   notebook.get('cellOrder').map((value) => store.dispatch(clearCellOutput(value)));
 }
 
+export function dispatchUnhideAll(store) {
+  const state = store.getState();
+  const notebook = state.document.get('notebook');
+  const cells = notebook.get('cellMap');
+  notebook.get('cellOrder')
+    .filter((cellID) => cells.getIn([cellID, 'inputHidden']))
+    .map((cellID) => store.dispatch(changeInputVisibility(cellID)));
+}
+
 export function dispatchKillKernel(store) {
   store.dispatch(killKernel);
 }
@@ -265,6 +275,7 @@ export function initMenuHandlers(store) {
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store));
+  ipc.on('menu:unhide-all', dispatchUnhideAll.bind(null, store));
   ipc.on('menu:save', dispatchSave.bind(null, store));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store));
   ipc.on('menu:new-code-cell', dispatchCreateCellAfter.bind(null, store));

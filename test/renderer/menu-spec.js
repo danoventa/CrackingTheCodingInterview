@@ -178,6 +178,19 @@ describe('menu', () => {
     });
   });
 
+  describe('dispatchUnhideAll', () => {
+    it('dispatches changeInputVisibility for hidden code cells', () => {
+      const store = dummyStore({ hideAll: true });
+      store.dispatch = sinon.spy();
+
+      menu.dispatchUnhideAll(store);
+
+      const first = store.getState().document.getIn(['notebook', 'cellOrder']).first();
+      const expectedAction = { type: 'CHANGE_INPUT_VISIBILITY', id: first };
+      expect(store.dispatch.firstCall).to.be.calledWith(expectedAction);
+    });
+  });
+
   describe('dispatchPublishAnonGist', () => {
     const store = dummyStore();
     store.dispatch = sinon.spy();
@@ -290,6 +303,7 @@ describe('menu', () => {
         'menu:new-kernel',
         'menu:run-all',
         'menu:clear-all',
+        'menu:unhide-all',
         'menu:save',
         'menu:save-as',
         'menu:new-code-cell',

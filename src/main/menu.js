@@ -180,6 +180,10 @@ export const cell = {
       label: 'Clear All',
       click: createSender('menu:clear-all'),
     },
+    {
+      label: 'Unhide All',
+      click: createSender('menu:unhide-all'),
+    }
   ],
 };
 const theme_menu = [

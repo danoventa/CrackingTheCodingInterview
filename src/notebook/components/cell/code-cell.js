@@ -65,7 +65,7 @@ class CodeCell extends React.Component {
               focusAbove={this.props.focusAbove}
               focusBelow={this.props.focusBelow}
             />
-          </div> : null
+          </div> : <div className="input-container invisible" />
       }
       {
         this.props.pagers && !this.props.pagers.isEmpty() ?
