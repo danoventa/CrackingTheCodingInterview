@@ -81,4 +81,4 @@ export const COMM_MESSAGE = 'COMM_MESSAGE';
 export const COMM_ERROR = 'COMM_ERROR';
 
 export const SET_KEY = 'SET_KEY';
-export const SET_CONFIG = 'SET_CONFIG';
+export const MERGE_CONFIG = 'MERGE_CONFIG';

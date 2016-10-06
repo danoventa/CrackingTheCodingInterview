@@ -3,7 +3,7 @@ const Observable = Rx.Observable;
 
 const jupyterPaths = require('jupyter-paths');
 
-import { SET_CONFIG } from '../constants';
+import { MERGE_CONFIG } from '../constants';
 
 export const LOAD_CONFIG = 'LOAD_CONFIG';
 export const loadConfig = () => ({type: LOAD_CONFIG });
@@ -21,7 +21,7 @@ const readFileObservable = (filename, ...args) =>
   });
 
 export const configLoaded = (config) => ({
-  type: SET_CONFIG,
+  type: MERGE_CONFIG,
   config,
 });
 

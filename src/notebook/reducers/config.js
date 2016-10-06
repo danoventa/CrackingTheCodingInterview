@@ -8,7 +8,7 @@ export default handleActions({
     const { key, value } = action;
     return state.set(key, value);
   },
-  [constants.SET_CONFIG]: function setConfig(state, action) {
+  [constants.MERGE_CONFIG]: function mergeConfig(state, action) {
     const { config } = action;
     return state.merge(config);
   },

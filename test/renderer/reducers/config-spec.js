@@ -19,15 +19,15 @@ describe('setKey', () => {
   });
 });
 
-describe('setConfig', () => {
+describe('mergeConfig', () => {
   it('sets the config', () => {
     const initialState = {
       config: new ConfigRecord(),
     };
 
-    const config = { theme: 'light', sendMetrics: false };
-    const state = reducers(initialState, { type: constants.SET_CONFIG, config });
-    expect(state.config.get('theme')).to.equal('light');
-    expect(state.config.get('sendMetrics')).to.be.false;
+    const config = { theme: 'dark', sendMetrics: true };
+    const state = reducers(initialState, { type: constants.MERGE_CONFIG, config });
+    expect(state.config.get('theme')).to.equal('dark');
+    expect(state.config.get('sendMetrics')).to.be.true;
   });
 });
