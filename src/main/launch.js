@@ -2,9 +2,20 @@ import path from 'path';
 
 import { shell, BrowserWindow } from 'electron';
 
+let launchIpynb;
+
+export function getPath(url) {
+  const nUrl = url.substring(url.indexOf('static'), path.length);
+  return path.join(__dirname, '..', '..', nUrl.replace('static/', ''));
+}
+
 export function deferURL(event, url) {
   event.preventDefault();
-  shell.openExternal(url);
+  if (!url.startsWith('file:')) {
+    shell.openExternal(url);
+  } else if (url.endsWith('.ipynb')) {
+    launchIpynb(getPath(url));
+  }
 }
 
 const iconPath = path.join(__dirname, '../../static/icon.png');
@@ -36,6 +47,7 @@ export function launch(filename) {
   });
   return win;
 }
+launchIpynb = launch;
 
 export function launchNewNotebook(kernelSpecName) {
   const win = launch();
