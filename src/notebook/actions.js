@@ -251,3 +251,11 @@ export function setGithubToken(githubToken) {
     githubToken,
   };
 }
+
+export function setKey(key, value) {
+  return {
+    type: constants.SET_CONFIG,
+    key,
+    value,
+  };
+}
