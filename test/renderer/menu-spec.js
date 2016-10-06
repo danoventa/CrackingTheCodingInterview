@@ -87,6 +87,19 @@ describe('menu', () => {
     });
   });
 
+  describe('dispatchLoadConfig', () => {
+    it('dispatches a LOAD_CONFIG action', () => {
+      const store = dummyStore();
+      store.dispatch = sinon.spy();
+
+      menu.dispatchLoadConfig(store);
+
+      expect(store.dispatch.firstCall).to.be.calledWith({
+        type: 'LOAD_CONFIG',
+      });
+    });
+  });
+
   describe('dispatchZoomOut', () => {
     it('executes zoom out', () => {
       const setZoomLevel = sinon.spy(webFrame, 'setZoomLevel');
