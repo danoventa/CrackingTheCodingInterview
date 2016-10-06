@@ -26,7 +26,7 @@ export const configLoaded = (config) => ({
 });
 
 export const getConfigFilePath = () => {
-  // jupyterPath()[0]/nteract.json
+  `${jupyterPaths.dataDir()[0]}/nteract.json`
 }
 
 export const loadConfigEpic = actions =>
