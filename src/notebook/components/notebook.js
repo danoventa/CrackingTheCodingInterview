@@ -11,8 +11,8 @@ import Immutable from 'immutable';
 import './cell/editor/codemirror-ipython';
 
 import {
-  defaultDisplayOrder as displayOrder,
-  defaultTransforms as transforms,
+  displayOrder,
+  transforms,
 } from './transforms';
 
 import Cell from './cell/cell';
