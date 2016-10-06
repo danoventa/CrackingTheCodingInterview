@@ -1,12 +1,12 @@
-const Rx = require('rxjs/Rx');
-const Observable = Rx.Observable;
-
-const jupyterPaths = require('jupyter-paths');
-
 import { MERGE_CONFIG } from '../constants';
 
+const Rx = require('rxjs/Rx');
+const jupyterPaths = require('jupyter-paths');
+
+const Observable = Rx.Observable;
+
 export const LOAD_CONFIG = 'LOAD_CONFIG';
-export const loadConfig = () => ({type: LOAD_CONFIG });
+export const loadConfig = () => ({ type: LOAD_CONFIG });
 
 const readFileObservable = (filename, ...args) =>
   Observable.create(observer => {
@@ -17,7 +17,7 @@ const readFileObservable = (filename, ...args) =>
         observer.next(data);
         observer.complete();
       }
-    })
+    });
   });
 
 export const configLoaded = (config) => ({
@@ -25,17 +25,14 @@ export const configLoaded = (config) => ({
   config,
 });
 
-export const getConfigFilePath = () => {
-  `${jupyterPaths.dataDir()[0]}/nteract.json`
-}
+export const CONFIG_FILE_PATH = `${jupyterPaths.dataDirs()[0]}/nteract.json`;
 
 export const loadConfigEpic = actions =>
   actions.ofType(LOAD_CONFIG)
     .do(action =>
-      readFileObservable(getConfigFilePath())
+      readFileObservable(CONFIG_FILE_PATH)
         .map(JSON.parse)
         .map(configLoaded(config))
-        )
         .catch((err) =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
