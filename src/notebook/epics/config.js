@@ -1,6 +1,7 @@
 import { MERGE_CONFIG } from '../constants';
 
 const Rx = require('rxjs/Rx');
+const fs = require('fs');
 const jupyterPaths = require('jupyter-paths');
 
 const Observable = Rx.Observable;
@@ -29,11 +30,11 @@ export const CONFIG_FILE_PATH = `${jupyterPaths.dataDirs()[0]}/nteract.json`;
 
 export const loadConfigEpic = actions =>
   actions.ofType(LOAD_CONFIG)
-    .do(action =>
+    .switchMap(action =>
       readFileObservable(CONFIG_FILE_PATH)
         .map(JSON.parse)
-        .map(configLoaded(config))
+        .map(configLoaded)
         .catch((err) =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
-      );
+    );
