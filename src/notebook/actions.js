@@ -252,9 +252,9 @@ export function setGithubToken(githubToken) {
   };
 }
 
-export function setKey(key, value) {
+export function setConfigKey(key, value) {
   return {
-    type: constants.SET_KEY,
+    type: constants.SET_CONFIG_KEY,
     key,
     value,
   };
