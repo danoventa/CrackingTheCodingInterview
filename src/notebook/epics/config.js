@@ -34,10 +34,7 @@ export const loadConfigEpic = actions =>
     .do(action =>
       readFileObservable(getConfigFilePath())
         .map(JSON.parse)
-        .flatMap(({ config }) =>
-          Observable.of(
-            configLoaded(config),
-          )
+        .map(configLoaded(config))
         )
         .catch((err) =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
