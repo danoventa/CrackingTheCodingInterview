@@ -19,11 +19,6 @@ import {
 } from './execute';
 
 import {
-  getStoredThemeEpic,
-  setThemeEpic,
-} from './theming';
-
-import {
   publishEpic,
 } from './github-publish';
 
@@ -38,8 +33,6 @@ import {
 const epics = [
   commListenEpic,
   publishEpic,
-  getStoredThemeEpic,
-  setThemeEpic,
   saveEpic,
   saveAsEpic,
   loadEpic,
