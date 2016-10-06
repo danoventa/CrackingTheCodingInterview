@@ -61,7 +61,7 @@ export const loadConfigEpic = actions =>
 
 export const saveConfigOnChangeEpic = actions =>
   actions.ofType(SET_CONFIG_KEY)
-    .mapTo({type: SAVE_CONFIG });
+    .mapTo({ type: SAVE_CONFIG });
 
 export const saveConfigEpic = actions =>
   actions.ofType(SAVE_CONFIG)
