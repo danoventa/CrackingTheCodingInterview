@@ -14,7 +14,6 @@ export const AppRecord = new Immutable.Record({
   kernelSpecName: null,
   isSaving: false,
   lastSaved: null,
-  theme: 'light',
   error: null,
 });
 
