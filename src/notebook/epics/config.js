@@ -60,8 +60,8 @@ export const saveConfigOnChangeEpic = actions =>
 
 export const saveConfigEpic = actions =>
   actions.ofType(SAVE_CONFIG)
-    .mergeAll(action =>
-      writeFileObservable(CONFIG_FILE_PATH, store.getState().config.toJS())
+    .mergeMap(action =>
+      writeFileObservable(CONFIG_FILE_PATH, JSON.stringify(store.getState().config.toJS()))
       .catch((err) =>
         Observable.of({ type: 'ERROR', payload: err, error: true })
       )
