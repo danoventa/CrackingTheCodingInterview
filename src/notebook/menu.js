@@ -26,6 +26,10 @@ import {
 } from './epics/loading';
 
 import {
+  loadConfig,
+} from './epics/config';
+
+import {
   clearCellOutput,
   newKernel,
   killKernel,
@@ -270,6 +274,9 @@ export function dispatchPublishUserGist(store, event, githubToken) {
   store.dispatch({ type: 'PUBLISH_GIST' });
 }
 
+export function dispatchLoadConfig(store) {
+  store.dispatch(loadConfig());
+}
 
 export function initMenuHandlers(store) {
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
@@ -293,5 +300,6 @@ export function initMenuHandlers(store) {
   ipc.on('menu:github:auth', dispatchPublishUserGist.bind(null, store));
   // OCD: This is more like the registration of main -> renderer thread
   ipc.on('main:load', dispatchLoad.bind(null, store));
+  ipc.on('main:load-config', dispatchLoadConfig.bind(null, store));
   ipc.on('main:new', dispatchNewNotebook.bind(null, store));
 }
