@@ -31,6 +31,10 @@ import {
   commListenEpic,
 } from './comm';
 
+import {
+  loadConfigEpic,
+} from './config';
+
 const epics = [
   commListenEpic,
   publishEpic,
@@ -44,6 +48,7 @@ const epics = [
   newKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
+  loadConfigEpic,
 ];
 
 export default epics;
