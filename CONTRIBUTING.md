@@ -10,7 +10,7 @@ with this project. That's a whole lot of cool stuff! But don't worry, we've
 got some resources to help you out.
 * [Building a voting app with Redux and React](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html)
 * [The RxJS Tutorial](https://xgrommx.github.io/rx-book/index.html)
-* 
+*
 
 ## How do I make a contribution?
 
@@ -55,6 +55,7 @@ You can use the following verbs as part of your commit messages/PR titles.
 * chore: For when you've done a small chore on the repository such as updating
 a script in package.json or changing your code based on feedback from the linter.
 * docs: For when you've added documentation.
+* refactor: For when you've refactored a portion of the application.
 
 In addition to the active verb, you'll also need to include the affected component
 in the commit message or PR title. The structure for this is as follows.
