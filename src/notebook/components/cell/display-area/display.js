@@ -2,7 +2,7 @@ import React from 'react';
 
 import Immutable from 'immutable';
 
-import { transforms, displayOrder } from 'transformime-react';
+import { transforms, displayOrder } from '../../transforms';
 
 import Output from './output';
 
