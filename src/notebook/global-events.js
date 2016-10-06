@@ -2,6 +2,10 @@ import {
   forceShutdownKernel,
 } from './kernel/shutdown';
 
+import {
+  saveConfig,
+} from './epics/config';
+
 /**
 export function beforeUnload(store, dispatch, e) {
 }
@@ -14,6 +18,7 @@ export function unload(store) {
     spawn: state.app.spawn,
     connectionFile: state.app.connectionFile,
   };
+  saveConfig(state.config);
   forceShutdownKernel(kernel);
 }
 
