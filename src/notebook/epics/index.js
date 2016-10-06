@@ -29,6 +29,7 @@ import {
 import {
   loadConfigEpic,
   saveConfigEpic,
+  saveConfigOnChangeEpic,
 } from './config';
 
 const epics = [
@@ -44,6 +45,7 @@ const epics = [
   watchExecutionStateEpic,
   loadConfigEpic,
   saveConfigEpic,
+  saveConfigOnChangeEpic,
 ];
 
 export default epics;
