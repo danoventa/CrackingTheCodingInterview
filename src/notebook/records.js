@@ -38,6 +38,6 @@ export const CommsRecord = new Immutable.Record({
 });
 
 export const ConfigRecord = new Immutable.Record({
-  theme: null,
-  sendMetrics: null,
+  theme: 'light',
+  sendMetrics: false,
 });
