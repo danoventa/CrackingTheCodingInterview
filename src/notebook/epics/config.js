@@ -1,4 +1,8 @@
-import { MERGE_CONFIG, SET_CONFIG_KEY } from '../constants';
+import {
+  MERGE_CONFIG,
+  SET_CONFIG_KEY,
+  DONE_SAVING_CONFIG,
+} from '../constants';
 
 const Rx = require('rxjs/Rx');
 const fs = require('fs');
@@ -11,6 +15,7 @@ export const loadConfig = () => ({ type: LOAD_CONFIG });
 
 export const SAVE_CONFIG = 'SAVE_CONFIG';
 export const saveConfig = () => ({ type: SAVE_CONFIG });
+export const doneSavingConfig = () => ({ type: DONE_SAVING_CONFIG });
 
 const readFileObservable = (filename, ...args) =>
   Observable.create(observer => {
@@ -62,6 +67,7 @@ export const saveConfigEpic = actions =>
   actions.ofType(SAVE_CONFIG)
     .mergeMap(action =>
       writeFileObservable(CONFIG_FILE_PATH, JSON.stringify(store.getState().config.toJS()))
+      .map(doneSavingConfig)
       .catch((err) =>
         Observable.of({ type: 'ERROR', payload: err, error: true })
       )

@@ -57,6 +57,9 @@ export default handleActions({
     return state.set('isSaving', false)
                 .set('lastSaved', new Date());
   },
+  [constants.DONE_SAVING_CONFIG]: function doneSavingConfig(state) {
+    return state.set('configLastSaved', new Date());
+  },
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
     return state.set('notificationSystem', action.notificationSystem);
   },
