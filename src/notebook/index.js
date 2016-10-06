@@ -23,6 +23,7 @@ import {
   DocumentRecord,
   MetadataRecord,
   CommsRecord,
+  ConfigRecord,
 } from './records';
 
 const store = configureStore({
@@ -30,6 +31,7 @@ const store = configureStore({
   metadata: new MetadataRecord(),
   document: new DocumentRecord(),
   comms: new CommsRecord(),
+  config: new ConfigRecord(),
 }, reducers);
 
 // Register for debugging

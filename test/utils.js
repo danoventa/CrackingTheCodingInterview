@@ -13,7 +13,7 @@ import createStore from '../src/notebook/store';
 import { reducers } from '../src/notebook/reducers';
 import { acquireKernelInfo } from '../src/notebook/epics/kernel-launch';
 
-import { AppRecord, DocumentRecord, MetadataRecord } from '../src/notebook/records';
+import { AppRecord, DocumentRecord, MetadataRecord, ConfigRecord } from '../src/notebook/records';
 
 import {
   createExecuteRequest,
@@ -52,6 +52,10 @@ export function dummyStore(config) {
       filename: (config && config.noFilename) ? null : 'dummy-store-nb.ipynb',
       past: new Immutable.List(),
       future: new Immutable.List(),
+    }),
+    config: ConfigRecord({
+      theme: 'light',
+      sendMetrics: false,
     }),
   }, reducers);
 }

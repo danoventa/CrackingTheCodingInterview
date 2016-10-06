@@ -14,7 +14,7 @@ export const AppRecord = new Immutable.Record({
   kernelSpecName: null,
   isSaving: false,
   lastSaved: null,
-  theme: 'light',
+  configLastSaved: null,
   error: null,
 });
 
@@ -35,4 +35,9 @@ export const MetadataRecord = new Immutable.Record({
 
 export const CommsRecord = new Immutable.Record({
   targets: new Immutable.Map(),
+});
+
+export const ConfigRecord = new Immutable.Record({
+  theme: 'light',
+  sendMetrics: false,
 });

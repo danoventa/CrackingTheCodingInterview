@@ -73,15 +73,29 @@ describe('menu', () => {
   });
 
   describe('dispatchSetTheme', () => {
-    it('dispatches a SET_THEME action', () => {
+    it('dispatches a SET_CONFIG_KEY action', () => {
       const store = dummyStore();
       store.dispatch = sinon.spy();
 
       menu.dispatchSetTheme(store, {}, 'test_theme');
 
       expect(store.dispatch.firstCall).to.be.calledWith({
-        type: constants.SET_THEME,
-        theme: 'test_theme',
+        type: constants.SET_CONFIG_KEY,
+        key: 'theme',
+        value: 'test_theme',
+      });
+    });
+  });
+
+  describe('dispatchLoadConfig', () => {
+    it('dispatches a LOAD_CONFIG action', () => {
+      const store = dummyStore();
+      store.dispatch = sinon.spy();
+
+      menu.dispatchLoadConfig(store);
+
+      expect(store.dispatch.firstCall).to.be.calledWith({
+        type: 'LOAD_CONFIG',
       });
     });
   });

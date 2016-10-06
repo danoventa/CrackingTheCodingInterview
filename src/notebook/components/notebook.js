@@ -56,7 +56,7 @@ export function getLanguageMode(notebook) {
 }
 
 const mapStateToProps = (state) => ({
-  theme: state.app.theme,
+  theme: state.config.theme,
   lastSaved: state.app.get('lastSaved'),
   kernelSpecName: state.app.get('kernelSpecName'),
   notebook: state.document.get('notebook'),
