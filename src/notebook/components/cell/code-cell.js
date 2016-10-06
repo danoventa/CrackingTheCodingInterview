@@ -1,6 +1,7 @@
+// @flow
 import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Immutable from 'immutable';
+import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
+import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import Inputs from './inputs';
 import { TogglableDisplay } from './display-area';
@@ -10,42 +11,45 @@ import LatexRenderer from '../latex';
 
 import Pager from './pager';
 
+type Props = {
+  cell: ImmutableMap<string, any>,
+  displayOrder: ImmutableList<any>,
+  id: string,
+  language: string,
+  theme: string,
+  transforms: ImmutableMap<string, any>,
+  focused: boolean,
+  pagers: ImmutableList<any>,
+  running: boolean,
+  focusAbove: Function,
+  focusBelow: Function,
+  tabSize: number,
+};
+
 class CodeCell extends React.Component {
-  static propTypes = {
-    cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-    displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    id: React.PropTypes.string,
-    language: React.PropTypes.string,
-    theme: React.PropTypes.string,
-    transforms: React.PropTypes.instanceOf(Immutable.Map),
-    focused: React.PropTypes.bool,
-    pagers: React.PropTypes.instanceOf(Immutable.List),
-    running: React.PropTypes.bool,
-    focusAbove: React.PropTypes.func,
-    focusBelow: React.PropTypes.func,
-    tabSize: React.PropTypes.number,
-  };
+  props: Props;
+  shouldComponentUpdate: (p: Props, s: any) => boolean;
 
   static defaultProps = {
-    pagers: new Immutable.List(),
+    pagers: new ImmutableList(),
     running: false,
     tabSize: 4,
   };
 
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  constructor(): void {
+    super();
+    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
   }
 
-  isOutputHidden() {
+  isOutputHidden(): any {
     return this.props.cell.get('outputHidden');
   }
 
-  isInputHidden() {
+  isInputHidden(): any {
     return this.props.cell.get('inputHidden');
   }
 
-  render() {
+  render(): ?React.Element<any> {
     return (<div className={this.props && this.props.running ? 'cell-running' : ''} >
       {
         !this.isInputHidden() ?
