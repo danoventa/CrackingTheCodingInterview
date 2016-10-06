@@ -14,7 +14,11 @@ describe('setKey', () => {
       }),
     };
 
-    const state = reducers(initialState, { type: constants.SET_KEY, key: 'theme', value: 'light' });
+    const state = reducers(initialState, {
+      type: constants.SET_CONFIG_KEY,
+      key: 'theme',
+      value: 'light'
+    });
     expect(state.config.get('theme')).to.equal('light');
   });
 });

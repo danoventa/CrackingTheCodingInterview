@@ -4,7 +4,7 @@ import { handleActions } from 'redux-actions';
 import * as constants from '../constants';
 
 export default handleActions({
-  [constants.SET_KEY]: function setKey(state, action) {
+  [constants.SET_CONFIG_KEY]: function setConfigKey(state, action) {
     const { key, value } = action;
     return state.set(key, value);
   },
