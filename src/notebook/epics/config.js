@@ -9,6 +9,9 @@ const Observable = Rx.Observable;
 export const LOAD_CONFIG = 'LOAD_CONFIG';
 export const loadConfig = () => ({ type: LOAD_CONFIG });
 
+export const SAVE_CONFIG = 'SAVE_CONFIG';
+export const saveConfig = (config) => ({ type: SAVE_CONFIG, config })
+
 const readFileObservable = (filename, ...args) =>
   Observable.create(observer => {
     fs.readFile(filename, ...args, (error, data) => {
@@ -16,6 +19,18 @@ const readFileObservable = (filename, ...args) =>
         observer.error(error);
       } else {
         observer.next(data);
+        observer.complete();
+      }
+    });
+  });
+
+const writeFileObservable = (filename, data, ...args) =>
+  Observable.create(observer => {
+    fs.writeFile(filename, data, ...args, error => {
+      if (error) {
+        observer.error(error);
+      } else {
+        observer.next({ filename, data });
         observer.complete();
       }
     });
@@ -37,4 +52,13 @@ export const loadConfigEpic = actions =>
         .catch((err) =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
+    );
+
+export const saveConfigEpic = actions =>
+  actions.ofType(SAVE_CONFIG)
+    .mergeMap(action =>
+      writeFileObservable(CONFIG_FILE_PATH, action.config.toJS())
+      .catch((err) =>
+        Observable.of({ type: 'ERROR', payload: err, error: true })
+      )
     );
