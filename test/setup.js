@@ -25,6 +25,9 @@ global.navigator = {
   platform: 'MacIntel',
 };
 
+global.Range = function Range() {
+}
+
 // HACK: Polyfil that allows codemirror to render in a JSDOM env.
 global.window.document.createRange = function createRange() {
   return {
@@ -35,7 +38,12 @@ global.window.document.createRange = function createRange() {
     },
     getClientRects: () => {
       return []
-    }
+    },
+    createContextualFragment: (html) => {
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.children[0]; // so hokey it's not even funny
+    },
   }
 };
 

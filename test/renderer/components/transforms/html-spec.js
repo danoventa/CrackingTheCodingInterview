@@ -6,13 +6,14 @@ import { mount } from 'enzyme';
 import HTMLDisplay from '../../../../src/notebook/components/transforms/html';
 
 describe('HTMLDisplay', () => {
-  it.skip('renders direct HTML', () => {
+  it('renders direct HTML', () => {
     const component = mount(
       <HTMLDisplay data={'<b>woo</b>'} />
     );
 
     expect(component.html()).to.equal('<div><b>woo</b></div>');
   });
+  // We can't test this since we need to use Range
   it.skip('executes embedded <script> tags', (done) => {
     const originalCreateRange = global.document.createRange;
     global.document.createRange = () => {
