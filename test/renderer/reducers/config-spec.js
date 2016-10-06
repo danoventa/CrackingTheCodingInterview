@@ -18,3 +18,16 @@ describe('setKey', () => {
     expect(state.config.get('theme')).to.equal('light');
   });
 });
+
+describe('setConfig', () => {
+  it('sets the config', () => {
+    const initialState = {
+      config: new ConfigRecord(),
+    };
+
+    const config = { theme: 'light', sendMetrics: false };
+    const state = reducers(initialState, { type: constants.SET_CONFIG, config });
+    expect(state.config.get('theme')).to.equal('light');
+    expect(state.config.get('sendMetrics')).to.be.false;
+  });
+});
