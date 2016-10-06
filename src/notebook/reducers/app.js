@@ -60,9 +60,6 @@ export default handleActions({
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
     return state.set('notificationSystem', action.notificationSystem);
   },
-  [constants.SET_THEME]: function setTheme(state, action) {
-    return state.set('theme', action.theme);
-  },
   [constants.SET_ANON_GITHUB]: function setAnonGithub(state) {
     const github = new Github();
     return state.set('github', github)

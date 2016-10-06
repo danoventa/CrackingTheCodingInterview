@@ -259,3 +259,7 @@ export function setConfigKey(key, value) {
     value,
   };
 }
+
+export function setTheme(theme) {
+  return setConfigKey('theme', theme);
+}

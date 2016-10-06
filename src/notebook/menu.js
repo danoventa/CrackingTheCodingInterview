@@ -13,10 +13,6 @@ import { tildify } from './native-window';
 import { executeCell } from './epics/execute';
 
 import {
-  setTheme,
-} from './epics/theming';
-
-import {
   PUBLISH_GIST,
 } from './epics/github-publish';
 
@@ -42,6 +38,7 @@ import {
   setUserGithub,
   setGithubToken,
   changeInputVisibility,
+  setTheme,
 } from './actions';
 
 import {
