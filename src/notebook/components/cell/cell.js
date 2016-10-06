@@ -23,7 +23,7 @@ type Props = {
   running: boolean,
   theme: string,
   pagers: ImmutableList<any>,
-  transforms: ImmutableMap<any>,
+  transforms: ImmutableMap<string, any>,
 };
 
 type State = {
