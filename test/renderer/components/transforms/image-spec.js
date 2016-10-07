@@ -24,6 +24,25 @@ describe('ImageDisplay', () => {
   });
 });
 
+describe('ImageDisplay', () => {
+  it.only('accepts metadata for the size', () => {
+    const component = shallow(
+      <ImageDisplay data={imageData} mimetype="image/png" metadata={{ width: '200' }} />
+    );
+
+    const img = component.find('img');
+    expect(img.prop('width')).to.equal('200');
+
+    const component2 = shallow(
+      <ImageDisplay data={imageData} mimetype="image/png" metadata={{ width: '200', height: '300' }} />
+    );
+
+    const img2 = component2.find('img');
+    expect(img2.prop('width')).to.equal('200');
+    expect(img2.prop('height')).to.equal('300');
+  });
+});
+
 describe('PNGDisplay', () => {
   it('renders a single image base64 inline', () => {
     const component = shallow(

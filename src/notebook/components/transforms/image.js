@@ -9,7 +9,8 @@ export default class ImageDisplay extends React.Component {
     let size = {};
 
     if (this.props.metadata) {
-      size = { width, height } = this.props.metadata;
+      const { width, height } = this.props.metadata;
+      size = { width, height };
     }
 
     return (
