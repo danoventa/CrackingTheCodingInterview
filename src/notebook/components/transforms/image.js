@@ -6,8 +6,14 @@ export default class ImageDisplay extends React.Component {
   }
 
   render() {
+    let size = {};
+
+    if (this.props.metadata) {
+      size = { width, height } = this.props.metadata;
+    }
+
     return (
-      <img role="presentation" src={`data:${this.props.mimetype};base64,${this.props.data}`} />
+      <img role="presentation" src={`data:${this.props.mimetype};base64,${this.props.data}`} {...size} />
     );
   }
 }
@@ -15,6 +21,7 @@ export default class ImageDisplay extends React.Component {
 ImageDisplay.propTypes = {
   data: React.PropTypes.string.isRequired,
   mimetype: React.PropTypes.string.isRequired,
+  metadata: React.PropTypes.any,
 };
 
 export function PNGDisplay(props) {
