@@ -1,11 +1,10 @@
-/* @flow weak */
-
+/* @flow */
 import React from 'react';
 import moment from 'moment';
 
 type Props = {
   notebook: any,
-  lastSaved: typeof Date,
+  lastSaved: Date,
   kernelSpecName: string,
   executionState: string,
 };
@@ -13,7 +12,7 @@ type Props = {
 export default class StatusBar extends React.Component {
   props: Props;
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: Props): boolean {
     if (this.props.notebook !== nextProps.notebook ||
         this.props.lastSaved !== nextProps.lastSaved) {
       return true;
@@ -21,7 +20,7 @@ export default class StatusBar extends React.Component {
     return false;
   }
 
-  render() {
+  render(): ?React.Element<any> {
     return (
       <div className="status-bar">
         <span className="pull-right">

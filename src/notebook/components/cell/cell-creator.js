@@ -17,8 +17,8 @@ export default class CellCreator extends React.Component {
   props: Props;
   state: State;
   shouldComponentUpdate: (p: Props, s: State) => boolean;
-  setHoverElement: (el: Object) => void;
-  updateVisibility: (mouseEvent: Object) => void;
+  setHoverElement: (el: HTMLElement) => void;
+  updateVisibility: (mouseEvent: MouseEvent) => void;
   hoverElement: Object;
 
   constructor(): void {
@@ -44,11 +44,11 @@ export default class CellCreator extends React.Component {
     document.removeEventListener('mousemove', this.updateVisibility);
   }
 
-  setHoverElement(el: Object): void {
+  setHoverElement(el: HTMLElement): void {
     this.hoverElement = el;
   }
 
-  updateVisibility(mouseEvent: Object): void {
+  updateVisibility(mouseEvent: MouseEvent): void {
     if (this.hoverElement) {
       const x = mouseEvent.clientX;
       const y = mouseEvent.clientY;
