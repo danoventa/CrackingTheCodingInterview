@@ -4,7 +4,7 @@ import { shallow, mount } from 'enzyme';
 
 import Immutable from 'immutable';
 
-import { displayOrder, transforms } from 'transformime-react';
+import { displayOrder, transforms } from '../../../src/notebook/components/transforms';
 
 const TestBackend = require('react-dnd-test-backend');
 import { DragDropContext } from 'react-dnd';

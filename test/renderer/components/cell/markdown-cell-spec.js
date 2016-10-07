@@ -14,7 +14,7 @@ import {
 } from '../../../../src/notebook/actions';
 
 import * as commutable from 'commutable';
-import { displayOrder, transforms } from 'transformime-react';
+import { displayOrder, transforms } from '../../../../src/notebook/components/transforms';
 
 import { dummyStore } from '../../../utils';
 

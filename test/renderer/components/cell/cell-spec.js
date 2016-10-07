@@ -12,7 +12,7 @@ chai.use(sinonChai);
 
 import { Cell } from '../../../../src/notebook/components/cell/cell';
 import * as commutable from 'commutable';
-import { displayOrder, transforms } from 'transformime-react';
+import { displayOrder, transforms } from '../../../../src/notebook/components/transforms';
 
 const sharedProps = { displayOrder, transforms };
 describe('Cell', () => {
