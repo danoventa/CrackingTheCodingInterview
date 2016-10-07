@@ -11,7 +11,7 @@ chai.use(sinonChai);
 
 import RichestMime from '../../../../../src/notebook/components/cell/display-area/richest-mime'
 import * as commutable from 'commutable';
-import { displayOrder, transforms } from 'transformime-react';
+import { displayOrder, transforms } from '../../../../../src/notebook/components/transforms';
 
 describe('RichestMime', () => {
   it('renders a mimebundle', () => {
