@@ -1,4 +1,3 @@
-/* eslint-disable no-return-assign */
 /* @flow */
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -258,11 +257,11 @@ export class Notebook extends React.Component {
         <div className="notebook" ref="cells">
           <div
             className="sticky-cells-placeholder"
-            ref={(ref) => this.stickyCellsPlaceholder = ref}
+            ref={(ref) => { this.stickyCellsPlaceholder = ref; }}
           />
           <div
             className="sticky-cell-container"
-            ref={(ref) => this.stickyCellContainer = ref}
+            ref={(ref) => { this.stickyCellContainer = ref; }}
           >
             {cellOrder
               .filter(id => this.props.stickyCells.get(id))
