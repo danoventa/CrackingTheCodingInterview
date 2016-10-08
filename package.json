@@ -5,7 +5,7 @@
   },
   "license": "BSD-3-Clause",
   "scripts": {
-    "postinstall": "node scripts/check-deps.js && install-app-deps && node scripts/rebuild.js",
+    "postinstall": "node scripts/check-deps.js && install-app-deps",
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=development electron .",
     "prepublish": "npm run build",
