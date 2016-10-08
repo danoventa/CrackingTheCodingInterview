@@ -12,18 +12,24 @@ import { AppRecord, DocumentRecord, MetadataRecord } from '../../src/notebook/re
 
 chai.use(sinonChai);
 
+const path = require('path');
+
+import {
+  remote,
+} from 'electron';
+
 import { dummyStore } from '../utils';
 
 import { dummyCommutable } from '../utils';
 
-const electron = require('electron')
+const electron = require('electron');
 
 describe('tildify', () => {
   it('returns an empty string if given no path', () => {
     expect(nativeWindow.tildify()).to.equal('');
   });
   it('replaces the user directory with ~', () => {
-    const result = nativeWindow.tildify('/Users/jean-tester/test-notebooks');
+    const result = nativeWindow.tildify(path.join(remote.app.getPath('home'), 'test-notebooks'));
     expect(result).to.have.string('~');
   });
 });

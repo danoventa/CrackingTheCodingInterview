@@ -71,6 +71,14 @@ mock('electron', {
     'openExternal': function(url) { },
   },
   'remote': {
+    'app': {
+      getPath: function(key) {
+        if(key === 'home') {
+          return require('home-dir')();
+        }
+        throw Error('wat');
+      }
+    },
     'require': function(module) {
       if (module === 'electron') {
         return {
@@ -102,10 +110,6 @@ mock('electron', {
   'ipcRenderer': {
     'on': function() {},
   },
-});
-
-mock('home-dir', function () {
-  return '/Users/jean-tester';
 });
 
 mock('github', function () {

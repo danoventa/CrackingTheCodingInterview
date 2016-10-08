@@ -6,8 +6,6 @@ import {
 
 import * as path from 'path';
 
-import home from 'home-dir';
-
 import { tildify } from './native-window';
 
 import { executeCell } from './epics/execute';
@@ -46,6 +44,11 @@ import {
   saveAs,
 } from './epics/saving';
 
+import {
+  defaultPathFallback,
+  cwdKernelFallback,
+} from './path';
+
 const BrowserWindow = remote.BrowserWindow;
 
 export function dispatchSaveAs(store, evt, filename) {
@@ -59,11 +62,12 @@ const dialog = remoteElectron.dialog;
 
 export function showSaveAsDialog(defaultPath) {
   return new Promise((resolve) => {
-    const filename = dialog.showSaveDialog({
+    const opts = Object.assign({
       title: 'Save Notebook',
-      defaultPath,
       filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
-    });
+    }, defaultPathFallback());
+
+    const filename = dialog.showSaveDialog(opts);
 
     if (filename && path.extname(filename) === '') {
       resolve(`${filename}.ipynb`);
@@ -85,13 +89,14 @@ export function triggerWindowRefresh(store, filename) {
 export function dispatchRestartKernel(store) {
   const state = store.getState();
   const notificationSystem = state.app.get('notificationSystem');
-  const spawnOptions = {};
+
+  let cwd = cwdKernelFallback();
   if (state && state.document && state.metadata.get('filename')) {
-    spawnOptions.cwd = path.dirname(path.resolve(state.metadata.filename));
+    cwd = path.dirname(path.resolve(state.metadata.filename));
   }
 
   store.dispatch(killKernel);
-  store.dispatch(newKernel(state.app.kernelSpecName, spawnOptions));
+  store.dispatch(newKernel(state.app.kernelSpecName, cwd));
 
   notificationSystem.addNotification({
     title: 'Kernel Restarted',
@@ -119,7 +124,7 @@ export function triggerKernelRefresh(store) {
 }
 
 export function triggerSaveAs(store) {
-  showSaveAsDialog(remote.app.getPath('home'))
+  showSaveAsDialog()
     .then(filename => {
       triggerWindowRefresh(store, filename);
       triggerKernelRefresh(store);
@@ -153,14 +158,16 @@ export function dispatchSave(store) {
 
 export function dispatchNewKernel(store, evt, name) {
   const state = store.getState();
-  const spawnOptions = {};
+  let cwd = cwdKernelFallback();
   if (state && state.document && state.metadata.get('filename')) {
-    spawnOptions.cwd = path.dirname(path.resolve(state.metadata.get('filename')));
+    cwd = path.dirname(path.resolve(state.metadata.get('filename')));
   }
-  store.dispatch(newKernel(name, spawnOptions));
+  store.dispatch(newKernel(name, cwd));
 }
 
 export function dispatchPublishAnonGist(store) {
+  // TODO: Create a PUBLISH_ANONYMOUS_GIST action, don't rely on setting the
+  //       github field in the state tree
   store.dispatch(setAnonGithub());
   store.dispatch({ type: 'PUBLISH_GIST' });
 }
@@ -260,7 +267,7 @@ export function dispatchLoad(store, event, filename) {
 }
 
 export function dispatchNewNotebook(store, event, kernelSpecName) {
-  store.dispatch(newNotebook(kernelSpecName, home()));
+  store.dispatch(newNotebook(kernelSpecName, cwdKernelFallback()));
 }
 
 export function dispatchPublishUserGist(store, event, githubToken) {

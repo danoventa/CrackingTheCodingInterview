@@ -1,13 +1,10 @@
 import { remote } from 'electron';
 
-import home from 'home-dir';
 import path from 'path';
 
 import Rx from 'rxjs/Rx';
 
-
-const HOME = home();
-const { getCurrentWindow } = remote;
+const HOME = remote.app.getPath('home');
 
 /**
  * Turn a path like /Users/n/mine.ipynb to ~/mine.ipynb
@@ -26,7 +23,7 @@ export function setTitleFromAttributes(attributes) {
   const filename = tildify(attributes.fullpath);
   const { executionState } = attributes;
 
-  const win = getCurrentWindow();
+  const win = remote.getCurrentWindow();
   // TODO: Investigate if setRepresentedFilename() is a no-op on non-OS X
   if (filename && win.setRepresentedFilename) {
     win.setRepresentedFilename(attributes.fullpath);

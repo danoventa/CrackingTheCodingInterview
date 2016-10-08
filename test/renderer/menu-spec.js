@@ -263,7 +263,7 @@ describe('menu', () => {
     expect(store.dispatch.firstCall).to.be.calledWith({
       type: constants.LAUNCH_KERNEL,
       kernelSpecName: 'python2',
-      cwd: { 'cwd': process.cwd() },
+      cwd: process.cwd(),
     });
   });
 
@@ -306,15 +306,17 @@ describe('menu', () => {
   });
 
   describe('dispatchNewNotebook', () => {
-    const store = dummyStore();
-    store.dispatch = sinon.spy();
+    it('dispatches a NEW_NOTEBOOK action', () => {
+      const store = dummyStore();
+      store.dispatch = sinon.spy();
 
-    menu.dispatchNewNotebook(store, {}, 'perl');
-    expect(store.dispatch.firstCall).to.be.calledWith({
-      type: 'NEW_NOTEBOOK',
-      kernelSpecName: 'perl',
-      cwd: require('home-dir')(),
-    });
+      menu.dispatchNewNotebook(store, {}, 'perl');
+      expect(store.dispatch.firstCall).to.be.calledWith({
+        type: 'NEW_NOTEBOOK',
+        kernelSpecName: 'perl',
+        cwd: process.cwd(),
+      });
+    })
   });
 
   describe('initMenuHandlers', () => {
