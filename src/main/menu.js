@@ -273,6 +273,11 @@ export const view = {
       click: createSender('menu:zoom-out'),
     },
     {
+      label: 'Zoom Reset',
+      accelerator: 'CmdOrCtrl+0',
+      click: createSender('menu:zoom-reset'),
+    },
+    {
       label: 'Theme',
       submenu: theme_menu,
     },
