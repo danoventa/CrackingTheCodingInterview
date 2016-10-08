@@ -10,6 +10,9 @@ addons:
 node_js:
 - '6'
 env:
+  global:
+  - CXX=g++-4.9
+  - CC=gcc-4.9
   matrix:
   - GROUP=coverage
   - GROUP=functional
