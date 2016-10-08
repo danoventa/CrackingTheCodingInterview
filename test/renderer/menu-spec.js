@@ -118,6 +118,15 @@ describe('menu', () => {
     });
   });
 
+  describe('dispatchZoomReset', () => {
+    it('executes zoom reset', () => {
+      const setZoomLevel = sinon.spy(webFrame, 'setZoomLevel');
+      menu.dispatchZoomReset();
+      setZoomLevel.restore();
+      expect(setZoomLevel).to.be.called;
+    });
+  });
+
   describe('dispatchRestartClearAll', () => {
     it('dispatches KILL_KERNEL and CLEAR_CELL_OUTPUT actions', () => {
       const store = dummyStore();
