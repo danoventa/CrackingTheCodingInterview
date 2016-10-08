@@ -1,4 +1,9 @@
 {
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nteract/nteract.git"
+  },
+  "license": "BSD-3-Clause",
   "scripts": {
     "postinstall": "node scripts/check-deps.js && install-app-deps && node scripts/rebuild.js",
     "prestart": "npm run build",
