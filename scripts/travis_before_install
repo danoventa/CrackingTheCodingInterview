@@ -1,3 +1,8 @@
+if [ "${GROUP}" == "lint" ] || [ "${GROUP}" == "flow" ] ; then
+  echo "skipping mega-install"
+  return
+fi
+
 if [ "${GROUP}" == "lint" ]; then
   echo "skipping mega-install"
   return
