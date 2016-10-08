@@ -74,9 +74,9 @@ mock('electron', {
     'app': {
       getPath: function(key) {
         if(key === 'home') {
-          return require('home-dir')();
+          return '/home/home/on/the/range';
         }
-        throw Error('wat');
+        throw Error('not mocked');
       }
     },
     'require': function(module) {
