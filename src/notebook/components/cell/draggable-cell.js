@@ -1,22 +1,44 @@
+// @flow
 import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { DragSource, DropTarget } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
 
-import Immutable from 'immutable';
+import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import Cell from './cell';
 import { focusCell } from '../../actions';
 
+type Props = {
+  cell: ImmutableMap<string, any>,
+  connectDragPreview: (img: Image) => void,
+  connectDragSource: (el: ?React.Element<any>) => void,
+  connectDropTarget: (el: ?React.Element<any>) => void,
+  displayOrder: ImmutableList<any>,
+  id: string,
+  isDragging: boolean,
+  isOver: boolean,
+  focusedCell: string,
+  transforms: ImmutableMap<string, any>,
+  language: string,
+  running: boolean,
+  theme: string,
+  pagers: ImmutableList<any>,
+};
+
+type State = {
+  hoverUpperHalf: boolean,
+}
+
 const cellSource = {
-  beginDrag(props) {
+  beginDrag(props: Props) {
     return {
       id: props.id,
     };
   },
 };
 
-function isDragUpper(props, monitor, component) {
+function isDragUpper(props: Props, monitor, component): boolean {
   const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
   const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
@@ -37,7 +59,7 @@ const cellTarget = {
   },
 };
 
-function collectSource(connect, monitor) {
+function collectSource(connect, monitor): Object {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
@@ -45,7 +67,7 @@ function collectSource(connect, monitor) {
   };
 }
 
-function collectTarget(connect, monitor) {
+function collectTarget(connect, monitor): Object {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
@@ -53,30 +75,18 @@ function collectTarget(connect, monitor) {
 }
 
 class DraggableCell extends React.Component {
-  static propTypes = {
-    cell: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-    connectDragPreview: React.PropTypes.func.isRequired,
-    connectDragSource: React.PropTypes.func.isRequired,
-    connectDropTarget: React.PropTypes.func.isRequired,
-    displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    id: React.PropTypes.string,
-    isDragging: React.PropTypes.bool.isRequired,
-    isOver: React.PropTypes.bool.isRequired,
-    focusedCell: React.PropTypes.string,
-    transforms: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-    language: React.PropTypes.string,
-    running: React.PropTypes.bool,
-    theme: React.PropTypes.string,
-    pagers: React.PropTypes.instanceOf(Immutable.List),
-  };
+  props: Props;
+  state: State;
+  shouldComponentUpdate: (p: Props, s: State) => boolean;
+  selectCell: () => void;
 
   static contextTypes = {
     store: React.PropTypes.object,
   };
 
-  constructor() {
+  constructor(): void {
     super();
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.selectCell = this.selectCell.bind(this);
   }
 
@@ -84,7 +94,7 @@ class DraggableCell extends React.Component {
     hoverUpperHalf: true,
   };
 
-  componentDidMount() {
+  componentDidMount(): void {
     const connectDragPreview = this.props.connectDragPreview;
     const img = new window.Image();
     img.src = [
@@ -113,11 +123,11 @@ class DraggableCell extends React.Component {
     };
   }
 
-  selectCell() {
+  selectCell(): void {
     this.context.store.dispatch(focusCell(this.props.id));
   }
 
-  render() {
+  render(): ?React.Element<any> {
     return this.props.connectDropTarget(
       <div
         style={{

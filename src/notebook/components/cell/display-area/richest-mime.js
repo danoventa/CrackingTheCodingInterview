@@ -1,7 +1,7 @@
 import React from 'react';
 import Immutable from 'immutable';
 
-import { richestMimetype, transforms, displayOrder } from 'transformime-react';
+import { richestMimetype, transforms, displayOrder } from '../../transforms';
 
 export default class RichestMime extends React.Component {
   static propTypes = {

@@ -79,3 +79,7 @@ export const SET_USER_GITHUB = 'SET_USER_GITHUB';
 export const COMM_OPEN = 'COMM_OPEN';
 export const COMM_MESSAGE = 'COMM_MESSAGE';
 export const COMM_ERROR = 'COMM_ERROR';
+
+export const SET_CONFIG_KEY = 'SET_CONFIG_KEY';
+export const MERGE_CONFIG = 'MERGE_CONFIG';
+export const DONE_SAVING_CONFIG = 'DONE_SAVING_CONFIG';

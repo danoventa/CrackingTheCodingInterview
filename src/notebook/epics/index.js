@@ -19,11 +19,6 @@ import {
 } from './execute';
 
 import {
-  getStoredThemeEpic,
-  setThemeEpic,
-} from './theming';
-
-import {
   publishEpic,
 } from './github-publish';
 
@@ -31,11 +26,15 @@ import {
   commListenEpic,
 } from './comm';
 
+import {
+  loadConfigEpic,
+  saveConfigEpic,
+  saveConfigOnChangeEpic,
+} from './config';
+
 const epics = [
   commListenEpic,
   publishEpic,
-  getStoredThemeEpic,
-  setThemeEpic,
   saveEpic,
   saveAsEpic,
   loadEpic,
@@ -44,6 +43,9 @@ const epics = [
   newKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
+  loadConfigEpic,
+  saveConfigEpic,
+  saveConfigOnChangeEpic,
 ];
 
 export default epics;

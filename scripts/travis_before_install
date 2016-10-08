@@ -1,8 +1,11 @@
+if [ "${GROUP}" == "lint" ] || [ "${GROUP}" == "flow" ] ; then
+  echo "skipping mega-install"
+  return
+fi
+
 if [ "${GROUP}" == "lint" ]; then
   echo "skipping mega-install"
   return
 fi
 
-pip install jupyter_console --user
-pip install ipywidgets --user
-jupyter kernelspec install-self --user
+npm install -g inodejs

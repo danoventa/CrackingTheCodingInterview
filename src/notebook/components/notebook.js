@@ -1,17 +1,18 @@
+/* @flow */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
 
-import Immutable from 'immutable';
+import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import './cell/editor/codemirror-ipython';
 
 import {
-  defaultDisplayOrder as displayOrder,
-  defaultTransforms as transforms,
+  displayOrder,
+  transforms,
 } from './transforms';
 
 import Cell from './cell/cell';
@@ -24,10 +25,27 @@ import {
 } from '../actions';
 import { executeCell } from '../epics/execute';
 
+import type { CellProps } from './cell/cell';
+
 // Always set up the markdown mode
 require('codemirror/mode/markdown/markdown');
 
-export function getLanguageMode(notebook) {
+
+type Props = {
+  displayOrder: ImmutableList<any>,
+  notebook: any,
+  transforms: ImmutableMap<string, any>,
+  cellPagers: ImmutableMap<string, any>,
+  stickyCells: ImmutableMap<string, any>,
+  focusedCell: string,
+  theme: string,
+  lastSaved: Date,
+  kernelSpecName: string,
+  CellComponent: any,
+  executionState: string,
+};
+
+export function getLanguageMode(notebook: any): string {
   // The syntax highlighting language should be set in the language info
   // object.  First try codemirror_mode, then name, and fallback on 'null'.
   const language =
@@ -55,7 +73,7 @@ export function getLanguageMode(notebook) {
 }
 
 const mapStateToProps = (state) => ({
-  theme: state.app.theme,
+  theme: state.config.theme,
   lastSaved: state.app.get('lastSaved'),
   kernelSpecName: state.app.get('kernelSpecName'),
   notebook: state.document.get('notebook'),
@@ -66,19 +84,14 @@ const mapStateToProps = (state) => ({
 });
 
 export class Notebook extends React.Component {
-  static propTypes = {
-    displayOrder: React.PropTypes.instanceOf(Immutable.List),
-    notebook: React.PropTypes.any,
-    transforms: React.PropTypes.instanceOf(Immutable.Map),
-    cellPagers: React.PropTypes.instanceOf(Immutable.Map),
-    stickyCells: React.PropTypes.instanceOf(Immutable.Map),
-    focusedCell: React.PropTypes.string,
-    theme: React.PropTypes.string,
-    lastSaved: React.PropTypes.instanceOf(Date),
-    kernelSpecName: React.PropTypes.string,
-    CellComponent: React.PropTypes.any,
-    executionState: React.PropTypes.string,
-  };
+  props: Props;
+  shouldComponentUpdate: (p: Props, s: any) => boolean;
+  createCellElement: (s: string) => ?React.Element<any>;
+  createStickyCellElement: (s: string) => ?React.Element<any>;
+  keyDown: (e: KeyboardEvent) => void;
+  moveCell: (source: string, dest: string, above: string) => void;
+  stickyCellsPlaceholder: HTMLElement;
+  stickyCellContainer: HTMLElement;
 
   static defaultProps = {
     displayOrder,
@@ -90,41 +103,41 @@ export class Notebook extends React.Component {
     store: React.PropTypes.object,
   };
 
-  constructor() {
+  constructor(): void {
     super();
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.createCellElement = this.createCellElement.bind(this);
     this.createStickyCellElement = this.createStickyCellElement.bind(this);
     this.keyDown = this.keyDown.bind(this);
     this.moveCell = this.moveCell.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     document.addEventListener('keydown', this.keyDown);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props): void {
     if (nextProps.focusedCell !== this.props.focusedCell) {
       this.resolveScrollPosition(nextProps.focusedCell);
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(): void {
     // Make sure the document is vertically shifted so the top non-stickied
     // cell is always visible.
     this.stickyCellsPlaceholder.style.height =
       `${this.stickyCellContainer.clientHeight}px`;
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     document.removeEventListener('keydown', this.keyDown);
   }
 
-  moveCell(sourceId, destinationId, above) {
+  moveCell(sourceId: string, destinationId: string, above: string): void {
     this.context.store.dispatch(moveCell(sourceId, destinationId, above));
   }
 
-  keyDown(e) {
+  keyDown(e: KeyboardEvent): void {
     if (e.keyCode !== 13) {
       return;
     }
@@ -158,7 +171,7 @@ export class Notebook extends React.Component {
     }
   }
 
-  resolveScrollPosition(id) {
+  resolveScrollPosition(id: string): void {
     const viewportHeight = window.innerHeight;
     const viewportOffset = document.body.scrollTop;
 
@@ -186,7 +199,7 @@ export class Notebook extends React.Component {
     }
   }
 
-  createCellProps(id, cell) {
+  createCellProps(id: string, cell: any): CellProps {
     return {
       id,
       cell,
@@ -205,7 +218,7 @@ export class Notebook extends React.Component {
     };
   }
 
-  createCellElement(id) {
+  createCellElement(id: string): ?React.Element<any> {
     const cellMap = this.props.notebook.get('cellMap');
     const cell = cellMap.get(id);
     const isStickied = this.props.stickyCells.get(id);
@@ -223,7 +236,7 @@ export class Notebook extends React.Component {
       </div>);
   }
 
-  createStickyCellElement(id) {
+  createStickyCellElement(id: string): ?React.Element<any> {
     const cellMap = this.props.notebook.get('cellMap');
     const cell = cellMap.get(id);
     return (
@@ -232,7 +245,7 @@ export class Notebook extends React.Component {
       </div>);
   }
 
-  render() {
+  render(): ?React.Element<any> {
     if (!this.props.notebook) {
       return (
         <div className="notebook" />

@@ -297,3 +297,20 @@ describe('exit', () => {
     expect(state.app.executionState).to.equal('not connected');
   });
 });
+
+describe('doneSavingConfig', () => {
+  it('updates when the config was saved', () => {
+    const originalState = {
+      app: new AppRecord({
+        configLastSaved: null,
+      }),
+    };
+
+    const action = {
+      type: constants.DONE_SAVING_CONFIG,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.app.configLastSaved).to.be.a('Date');
+  });
+});

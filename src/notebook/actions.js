@@ -232,19 +232,34 @@ export function changeCellType(id, to) {
     to,
   };
 }
+
 export function setAnonGithub() {
   return {
     type: constants.SET_ANON_GITHUB,
   };
 }
+
 export function setUserGithub() {
   return {
     type: constants.SET_USER_GITHUB,
   };
 }
+
 export function setGithubToken(githubToken) {
   return {
     type: constants.SET_GITHUB_TOKEN,
     githubToken,
   };
+}
+
+export function setConfigKey(key, value) {
+  return {
+    type: constants.SET_CONFIG_KEY,
+    key,
+    value,
+  };
+}
+
+export function setTheme(theme) {
+  return setConfigKey('theme', theme);
 }

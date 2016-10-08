@@ -60,8 +60,11 @@ export const fileSubMenus = {
         properties: [
           'openFile',
         ],
-        defaultPath: app.getPath('home'),
       };
+      if (process.cwd() === '/') {
+        opts.defaultPath = app.getPath('home');
+      }
+
       dialog.showOpenDialog(opts, (fname) => {
         if (fname) {
           launch(fname[0]);
@@ -81,8 +84,12 @@ export const fileSubMenus = {
       const opts = {
         title: 'Save Notebook As',
         filters: [{ name: 'Notebooks', extensions: ['ipynb'] }],
-        defaultPath: app.getPath('home'),
       };
+
+      if (process.cwd() === '/') {
+        opts.defaultPath = app.getPath('home');
+      }
+
       dialog.showSaveDialog(opts, (filename) => {
         if (!filename) {
           return;
@@ -261,6 +268,11 @@ export const view = {
           focusedWindow.toggleDevTools();
         }
       },
+    },
+    {
+      label: 'Actual Size',
+      accelerator: 'CmdOrCtrl+0',
+      click: createSender('menu:zoom-reset'),
     },
     {
       label: 'Zoom In',

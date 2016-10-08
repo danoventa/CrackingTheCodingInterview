@@ -100,7 +100,7 @@ Core tech behind the scenes:
 These are our suggested tutorials and background to help you get up to speed:
 
 * [Build your own REPL with enchannel](https://github.com/nteract/docs/blob/master/enchannel/build-your-own-repl.md)
-* [The introduction to Reactive Programming you've been missing](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754)
+* [Learn RxJS](https://www.learnrxjs.io/)
 * [Full Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html)
 
 Depending on where you plug yourself in, you may find the introduction to Reactive

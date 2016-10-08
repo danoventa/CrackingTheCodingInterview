@@ -35,6 +35,7 @@ export function launch(filename) {
     if (filename) {
       win.webContents.send('main:load', filename);
     }
+    win.webContents.send('main:load-config');
     // TODO: else, we assume it's an empty notebook
     //       assumption right now is that launchNewNotebook will handle the follow on
   });
@@ -56,3 +57,4 @@ export function launchNewNotebook(kernelSpecName) {
   });
   return win;
 }
+
