@@ -1,2 +1,2 @@
 // Necessary for bootstrapping electron, must be ES5
-require('./build/main/index.js')
+require('./app/build/main/index.js');
