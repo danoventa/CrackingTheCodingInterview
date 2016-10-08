@@ -1,7 +1,7 @@
 /* eslint class-methods-use-this: 0 */
-
+// @flow
 import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 
 import { executeCell } from '../../epics/execute';
@@ -15,20 +15,29 @@ import {
   changeCellType,
 } from '../../actions';
 
+type Props = {
+  cell: any,
+  id: string,
+  type: string,
+}
+
 export default class Toolbar extends React.Component {
-  static propTypes = {
-    cell: React.PropTypes.any,
-    id: React.PropTypes.string,
-    type: React.PropTypes.string,
-  };
+  shouldComponentUpdate: (p: Props, s: any) => boolean;
+  removeCell: () => void;
+  executeCell: () => void;
+  clearCellOutput: () => void;
+  toggleStickyCell: () => void;
+  changeInputVisibility: () => void;
+  changeOutputVisibility: () => void;
+  changeCellType: () => void;
 
   static contextTypes = {
     store: React.PropTypes.object,
   };
 
-  constructor(props) {
+  constructor(props: Props): void {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.removeCell = this.removeCell.bind(this);
     this.executeCell = this.executeCell.bind(this);
     this.clearCellOutput = this.clearCellOutput.bind(this);
@@ -38,46 +47,46 @@ export default class Toolbar extends React.Component {
     this.changeCellType = this.changeCellType.bind(this);
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(): boolean {
     return false;
   }
 
-  toggleStickyCell() {
+  toggleStickyCell(): void {
     this.context.store.dispatch(toggleStickyCell(this.props.id));
   }
 
-  removeCell() {
+  removeCell(): void {
     this.context.store.dispatch(removeCell(this.props.id));
   }
 
-  executeCell() {
+  executeCell(): void {
     this.context.store.dispatch(executeCell(
                                       this.props.id,
                                       this.props.cell.get('source')));
   }
 
-  clearCellOutput() {
+  clearCellOutput(): void {
     this.refs.dropdown.hide();
     this.context.store.dispatch(clearCellOutput(this.props.id));
   }
 
-  changeInputVisibility() {
+  changeInputVisibility(): void {
     this.refs.dropdown.hide();
     this.context.store.dispatch(changeInputVisibility(this.props.id));
   }
 
-  changeOutputVisibility() {
+  changeOutputVisibility(): void {
     this.refs.dropdown.hide();
     this.context.store.dispatch(changeOutputVisibility(this.props.id));
   }
 
-  changeCellType() {
+  changeCellType(): void {
     this.refs.dropdown.hide();
     const to = this.props.type === 'markdown' ? 'code' : 'markdown';
     this.context.store.dispatch(changeCellType(this.props.id, to));
   }
 
-  render() {
+  render(): ?React.Element<any> {
     const showPlay = this.props.type !== 'markdown';
     return (
       <div className="cell-toolbar-mask" ref="mask">

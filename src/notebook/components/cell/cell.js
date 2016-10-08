@@ -1,4 +1,4 @@
-/* @flow weak */
+/* @flow */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
@@ -14,7 +14,7 @@ import {
   focusNextCell,
 } from '../../actions';
 
-type Props = {
+export type CellProps = {
   cell: any,
   displayOrder: ImmutableList<any>,
   id: string,
@@ -31,13 +31,13 @@ type State = {
 }
 
 export class Cell extends React.Component {
-  props: Props;
+  props: CellProps;
   state: State;
-  shouldComponentUpdate: (p: Props, s: State) => boolean;
+  shouldComponentUpdate: (p: CellProps, s: State) => boolean;
   selectCell: () => void;
   focusAboveCell: () => void;
   focusBelowCell: () => void;
-  setCellHoverState: (mouseEvent: Object) => void;
+  setCellHoverState: (mouseEvent: MouseEvent) => void;
 
   static contextTypes = {
     store: React.PropTypes.object,
@@ -68,7 +68,7 @@ export class Cell extends React.Component {
     document.removeEventListener('mousemove', this.setCellHoverState);
   }
 
-  setCellHoverState(mouseEvent: Object): void {
+  setCellHoverState(mouseEvent: MouseEvent): void {
     if (this.refs.cell) {
       const cell = ReactDOM.findDOMNode(this.refs.cell);
       if (cell) {
