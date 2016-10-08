@@ -8,5 +8,4 @@ if [ "${GROUP}" == "lint" ]; then
   return
 fi
 
-python -m pip install ipykernel --user
-python -m ipykernel install --user
+npm install -g inodejs
