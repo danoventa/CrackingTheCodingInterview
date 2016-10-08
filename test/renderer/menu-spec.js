@@ -123,7 +123,7 @@ describe('menu', () => {
       const setZoomLevel = sinon.spy(webFrame, 'setZoomLevel');
       menu.dispatchZoomReset();
       setZoomLevel.restore();
-      expect(setZoomLevel).to.be.called;
+      expect(setZoomLevel).to.be.calledWith(1);
     });
   });
 
