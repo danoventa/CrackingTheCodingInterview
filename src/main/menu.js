@@ -270,6 +270,11 @@ export const view = {
       },
     },
     {
+      label: 'Actual Size',
+      accelerator: 'CmdOrCtrl+0',
+      click: createSender('menu:zoom-reset'),
+    },
+    {
       label: 'Zoom In',
       accelerator: 'CmdOrCtrl+=',
       click: createSender('menu:zoom-in'),

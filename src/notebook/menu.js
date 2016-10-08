@@ -225,6 +225,10 @@ export function dispatchZoomOut() {
   webFrame.setZoomLevel(webFrame.getZoomLevel() - 1);
 }
 
+export function dispatchZoomReset() {
+  webFrame.setZoomLevel(1);
+}
+
 export function dispatchSetTheme(store, evt, theme) {
   store.dispatch(setTheme(theme));
 }
@@ -293,6 +297,7 @@ export function initMenuHandlers(store) {
   ipc.on('menu:publish:gist', dispatchPublishAnonGist.bind(null, store));
   ipc.on('menu:zoom-in', dispatchZoomIn.bind(null, store));
   ipc.on('menu:zoom-out', dispatchZoomOut.bind(null, store));
+  ipc.on('menu:zoom-reset', dispatchZoomReset.bind(null, store));
   ipc.on('menu:theme', dispatchSetTheme.bind(null, store));
   ipc.on('menu:github:auth', dispatchPublishUserGist.bind(null, store));
   // OCD: This is more like the registration of main -> renderer thread
