@@ -66,6 +66,8 @@ mock('plotly.js/dist/plotly', {
   'newPlot': function(data, layout, config) {},
 })
 
+mock('enchannel-zmq-backend', {})
+
 mock('electron', {
   'shell': {
     'openExternal': function(url) { },
