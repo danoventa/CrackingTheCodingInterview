@@ -263,6 +263,11 @@ export const view = {
       },
     },
     {
+      label: 'Actual Size',
+      accelerator: 'CmdOrCtrl+0',
+      click: createSender('menu:zoom-reset'),
+    },
+    {
       label: 'Zoom In',
       accelerator: 'CmdOrCtrl+=',
       click: createSender('menu:zoom-in'),
@@ -271,11 +276,6 @@ export const view = {
       label: 'Zoom Out',
       accelerator: 'CmdOrCtrl+-',
       click: createSender('menu:zoom-out'),
-    },
-    {
-      label: 'Zoom Reset',
-      accelerator: 'CmdOrCtrl+0',
-      click: createSender('menu:zoom-reset'),
     },
     {
       label: 'Theme',
