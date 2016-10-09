@@ -69,6 +69,7 @@ You can use the following verbs as part of your commit messages/PR titles.
 * chore: For when you've done a small chore on the repository such as updating
 a script in package.json or changing your code based on feedback from the linter.
 * docs: For when you've added documentation.
+* style: For changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc).
 * refactor: For when you've refactored a portion of the application.
 
 In addition to the active verb, you'll also need to include the affected component
