@@ -5,12 +5,26 @@ dinner, but most importantly: read it thoroughly!
 
 ## What do I need to know to help?
 
+### JavaScript side
+
 You'll need knowledge of JavaScript (ES6), React, RxJS, and Redux to help out
 with this project. That's a whole lot of cool stuff! But don't worry, we've
 got some resources to help you out.
 * [Building a voting app with Redux and React](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html)
 * [The RxJS Tutorial](https://xgrommx.github.io/rx-book/index.html)
-*
+
+### Jupyter and ZeroMQ (Optional)
+
+While not a strict pre-requisite, familiarity with the protocol that Jupyter
+provides for creating rich notebooks like nteract (and other consoles/REPLs) is
+advised to understand the overall system.
+
+* [Jupyter Messaging](http://jupyter-client.readthedocs.org/en/latest/messaging.html)
+* [ZeroMQ](http://zguide.zeromq.org/page:all)
+
+If you want a gentle guide to Rx + Jupyter messaging at the same time, we have
+a [build your own REPL with enchannel](https://github.com/nteract/docs/blob/master/enchannel/build-your-own-repl.md) tutorial. This allows you to work without React while learning concepts, leading to implementing a light version of [ick](https://github.com/nteract/ick),
+an interactive console.
 
 ## How do I make a contribution?
 
