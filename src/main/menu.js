@@ -223,7 +223,7 @@ if (month === 12) {
     });
 } else if (month === 10) {
   theme_menu.push({
-    label: 'Mwaaahahahhah',
+    label: 'Pumpkin Spice',
     click: createSender('menu:theme', 'halloween'),
   });
 }
