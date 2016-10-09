@@ -13,7 +13,7 @@ const Observable = Rx.Observable;
 
 const Github = require('github');
 
-export const PUBLISH_USER_GIST  = 'PUBLISH_USER_GIST';
+export const PUBLISH_USER_GIST = 'PUBLISH_USER_GIST';
 export const PUBLISH_ANONYMOUS_GIST = 'PUBLISH_ANONYMOUS_GIST';
 
 /**
@@ -143,13 +143,13 @@ export const publishEpic = (action$, store) =>
       const github = new Github();
       const state = store.getState();
       const notebook = state.document.get('notebook');
-      const filename = state.metadata.get('filename')
+      const filename = state.metadata.get('filename');
       const notificationSystem = state.app.get('notificationSystem');
       let publishAsUser = false;
       if (action.type === 'PUBLISH_USER_GIST') {
-         const githubToken = state.app.get('token');
-         github.authenticate({ type: 'oauth', token: githubToken });
-         publishAsUser = true;
+        const githubToken = state.app.get('token');
+        github.authenticate({ type: 'oauth', token: githubToken });
+        publishAsUser = true;
       }
       return publishNotebookObservable(github, notebook, filename,
                                        notificationSystem, publishAsUser);
