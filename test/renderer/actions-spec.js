@@ -320,19 +320,3 @@ describe('setGithubToken', () => {
     });
   });
 });
-
-describe('setAuthGithub', () => {
-  it('creates a SET_ANON_GITHUB action', () => {
-    expect(actions.setAnonGithub()).to.deep.equal({
-      type: constants.SET_ANON_GITHUB,
-    });
-  });
-});
-
-describe('setUserGithub', () => {
-  it('creates a SET_USER_GITHUB action', () => {
-    expect(actions.setUserGithub()).to.deep.equal({
-      type: constants.SET_USER_GITHUB,
-    });
-  });
-});
