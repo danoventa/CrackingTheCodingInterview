@@ -16,28 +16,6 @@ const Github = require('github');
 export const PUBLISH_USER_GIST = 'PUBLISH_USER_GIST';
 export const PUBLISH_ANONYMOUS_GIST = 'PUBLISH_ANONYMOUS_GIST';
 
-/**
- * Handle user vs. anonymous gist actions in mergeMap
- * @param {action} action - The action being processed by the epic.
- * @param {store} reduxStore - The store containing state data.
- * return {Observable} publishNotebookObservable with appropriate parameters.
-*/
-export function handleGistAction(action, store) {
-  const github = new Github();
-  const state = store.getState();
-  const notebook = state.document.get('notebook');
-  const filename = state.metadata.get('filename');
-  const notificationSystem = state.app.get('notificationSystem');
-  let publishAsUser = false;
-  if (action.type === 'PUBLISH_USER_GIST') {
-    const githubToken = state.app.get('token');
-    github.authenticate({ type: 'oauth', token: githubToken });
-    publishAsUser = true;
-  }
-  return publishNotebookObservable(github, notebook, filename,
-                                   notificationSystem, publishAsUser);
-}
-
 
 /**
  * Notify the notebook user that it has been published as a gist.
@@ -154,6 +132,28 @@ export function publishNotebookObservable(github, notebook, filepath,
         createGistCallback(true, observer, filename, notificationSystem));
     }
   });
+}
+
+/**
+ * Handle user vs. anonymous gist actions in publishEpic
+ * @param {action} action - The action being processed by the epic.
+ * @param {store} reduxStore - The store containing state data.
+ * return {Observable} publishNotebookObservable with appropriate parameters.
+*/
+export function handleGistAction(action, store) {
+  const github = new Github();
+  const state = store.getState();
+  const notebook = state.document.get('notebook');
+  const filename = state.metadata.get('filename');
+  const notificationSystem = state.app.get('notificationSystem');
+  let publishAsUser = false;
+  if (action.type === 'PUBLISH_USER_GIST') {
+    const githubToken = state.app.get('token');
+    github.authenticate({ type: 'oauth', token: githubToken });
+    publishAsUser = true;
+  }
+  return publishNotebookObservable(github, notebook, filename,
+                                   notificationSystem, publishAsUser);
 }
 
 /**
