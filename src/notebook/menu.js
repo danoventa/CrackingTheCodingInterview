@@ -11,7 +11,8 @@ import { tildify } from './native-window';
 import { executeCell } from './epics/execute';
 
 import {
-  PUBLISH_GIST,
+  PUBLISH_USER_GIST,
+  PUBLISH_ANONYMOUS_GIST,
 } from './epics/github-publish';
 
 import {
@@ -166,11 +167,16 @@ export function dispatchNewKernel(store, evt, name) {
 }
 
 export function dispatchPublishAnonGist(store) {
-  // TODO: Create a PUBLISH_ANONYMOUS_GIST action, don't rely on setting the
-  //       github field in the state tree
-  store.dispatch(setAnonGithub());
-  store.dispatch({ type: 'PUBLISH_GIST' });
+  store.dispatch({ type: 'PUBLISH_ANONYMOUS_GIST' });
 }
+
+export function dispatchPublishUserGist(store, event, githubToken) {
+  if (githubToken) {
+    store.dispatch(setGithubToken(githubToken));
+  }
+  store.dispatch({ type: 'PUBLISH_USER_GIST' });
+}
+
 
 export function dispatchRunAll(store) {
   const state = store.getState();
@@ -270,17 +276,6 @@ export function dispatchNewNotebook(store, event, kernelSpecName) {
   store.dispatch(newNotebook(kernelSpecName, cwdKernelFallback()));
 }
 
-export function dispatchPublishUserGist(store, event, githubToken) {
-  if (githubToken) {
-    store.dispatch(setGithubToken(githubToken));
-  } else {
-    const state = store.getState();
-    const token = state.app.get('token');
-    store.dispatch(setGithubToken(token));
-  }
-  store.dispatch(setUserGithub());
-  store.dispatch({ type: 'PUBLISH_GIST' });
-}
 
 export function dispatchLoadConfig(store) {
   store.dispatch(loadConfig());
