@@ -16,6 +16,25 @@ describe('JsonDisplay', () => {
     expect(component.find(JSONTree)).to.have.length(1);
   });
 
+  it('should not expand json tree by default', () => {
+    const data = { name: 'Octocat' };
+    const component = shallow(
+      <JsonDisplay data={data} theme='light' />
+    );
+    const instance = component.instance();
+    expect(instance.shouldExpandNode()).to.be.false;
+  });
+
+  it('should expand json tree if expanded metadata is true', () => {
+    const data = { name: 'Octocat' };
+    const metadata = { expanded: true };
+    const component = shallow(
+      <JsonDisplay data={data} theme='light' metadata={metadata} />
+    );
+    const instance = component.instance();
+    expect(instance.shouldExpandNode()).to.be.true;
+  });
+
   it('shouldComponentUpdate returns false if theme doesn\'t change', () => {
     const data = { name: 'Octocat' };
     const component = shallow(

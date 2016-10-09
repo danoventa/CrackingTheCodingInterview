@@ -46,10 +46,17 @@ function getTheme(themeName) {
 type Props = {
   data: Object;
   theme: string;
+  metadata: Object;
 }
 
 export default class JsonDisplay extends React.Component {
   props: Props;
+  shouldExpandNode: () => boolean;
+
+  constructor(props) {
+    super(props);
+    this.shouldExpandNode = this.shouldExpandNode.bind(this);
+  }
 
   shouldComponentUpdate(nextProps) {
     if (nextProps && nextProps.theme && this.props && nextProps.theme !== this.props.theme) {
@@ -58,8 +65,22 @@ export default class JsonDisplay extends React.Component {
     return false;
   }
 
+  shouldExpandNode() {
+    if (this.props.metadata && this.props.metadata.expanded) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     const theme = getTheme(this.props.theme);
-    return <JSONTree data={this.props.data} theme={theme} invertTheme={false} />;
+    return (
+      <JSONTree
+        data={this.props.data}
+        theme={theme}
+        invertTheme={false}
+        shouldExpandNode={this.shouldExpandNode}
+      />
+    );
   }
 }
