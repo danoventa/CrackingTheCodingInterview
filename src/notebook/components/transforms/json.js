@@ -51,8 +51,11 @@ type Props = {
 export default class JsonDisplay extends React.Component {
   props: Props;
 
-  shouldComponentUpdate() {
-    return true;
+  shouldComponentUpdate(nextProps) {
+    if (nextProps && nextProps.theme && this.props && nextProps.theme !== this.props.theme) {
+      return true;
+    }
+    return false;
   }
 
   render() {

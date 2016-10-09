@@ -11,17 +11,26 @@ describe('JsonDisplay', () => {
   it('renders a <JSONTree /> component', () => {
     const data = { name: 'Octocat' };
     const component = shallow(
-      <JsonDisplay data={data} />
+      <JsonDisplay data={data} theme='light' />
     );
     expect(component.find(JSONTree)).to.have.length(1);
   });
 
-  it('shouldComponentUpdate returns true', () => {
+  it('shouldComponentUpdate returns false if theme doesn\'t change', () => {
     const data = { name: 'Octocat' };
     const component = shallow(
-      <JsonDisplay data={data} />
+      <JsonDisplay data={data} theme='light' />
     );
     const instance = component.instance();
-    expect(instance.shouldComponentUpdate()).to.be.true;
-  })
+    expect(instance.shouldComponentUpdate({ theme: 'light' })).to.be.false;
+  });
+
+  it('shouldComponentUpdate returns true if theme changes', () => {
+    const data = { name: 'Octocat' };
+    const component = shallow(
+      <JsonDisplay data={data} theme='light'/>
+    );
+    const instance = component.instance();
+    expect(instance.shouldComponentUpdate({ theme: 'dark' })).to.be.true;
+  });
 });
