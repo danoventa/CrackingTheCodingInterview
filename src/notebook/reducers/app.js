@@ -63,19 +63,8 @@ export default handleActions({
   [constants.SET_NOTIFICATION_SYSTEM]: function setNotificationsSystem(state, action) {
     return state.set('notificationSystem', action.notificationSystem);
   },
-  [constants.SET_ANON_GITHUB]: function setAnonGithub(state) {
-    const github = new Github();
-    return state.set('github', github)
-                .set('publishAsUser', false);
-  },
-  [constants.SET_USER_GITHUB]: function setUserGithub(state) {
-    return state.set('publishAsUser', true);
-  },
   [constants.SET_GITHUB_TOKEN]: function setGithubToken(state, action) {
     const { githubToken } = action;
-    const github = new Github();
-    github.authenticate({ type: 'oauth', token: githubToken });
-    return state.set('github', github)
-                .set('token', githubToken);
+    return state.set('token', githubToken);
   },
 }, {});

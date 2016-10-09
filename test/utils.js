@@ -45,7 +45,6 @@ export function dummyStore(config) {
       notificationSystem: {
         addNotification: sinon.spy(),
       },
-      publishAsUser: false,
       token: 'TOKEN',
     }),
     metadata: MetadataRecord({

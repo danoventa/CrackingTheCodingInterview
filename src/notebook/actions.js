@@ -233,18 +233,6 @@ export function changeCellType(id, to) {
   };
 }
 
-export function setAnonGithub() {
-  return {
-    type: constants.SET_ANON_GITHUB,
-  };
-}
-
-export function setUserGithub() {
-  return {
-    type: constants.SET_USER_GITHUB,
-  };
-}
-
 export function setGithubToken(githubToken) {
   return {
     type: constants.SET_GITHUB_TOKEN,

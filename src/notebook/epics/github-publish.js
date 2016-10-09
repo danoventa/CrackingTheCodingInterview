@@ -13,15 +13,9 @@ const Observable = Rx.Observable;
 
 const Github = require('github');
 
-/**
- * In order to use authentication, you must go to your github settings >>
- * personal access tokens >> generate new token >> generate a token
- * with gist permissions. Then, when starting nteract, pass your token by
- * entering GITHUB_TOKEN=long_string_here npm run start in the command
- * line.
- */
+export const PUBLISH_USER_GIST = 'PUBLISH_USER_GIST';
+export const PUBLISH_ANONYMOUS_GIST = 'PUBLISH_ANONYMOUS_GIST';
 
-export const PUBLISH_GIST = 'PUBLISH_GIST';
 
 /**
  * Notify the notebook user that it has been published as a gist.
@@ -141,22 +135,34 @@ export function publishNotebookObservable(github, notebook, filepath,
 }
 
 /**
+ * Handle user vs. anonymous gist actions in publishEpic
+ * @param {action} action - The action being processed by the epic.
+ * @param {store} reduxStore - The store containing state data.
+ * return {Observable} publishNotebookObservable with appropriate parameters.
+*/
+export function handleGistAction(action, store) {
+  const github = new Github();
+  const state = store.getState();
+  const notebook = state.document.get('notebook');
+  const filename = state.metadata.get('filename');
+  const notificationSystem = state.app.get('notificationSystem');
+  let publishAsUser = false;
+  if (action.type === 'PUBLISH_USER_GIST') {
+    const githubToken = state.app.get('token');
+    github.authenticate({ type: 'oauth', token: githubToken });
+    publishAsUser = true;
+  }
+  return publishNotebookObservable(github, notebook, filename,
+                                   notificationSystem, publishAsUser);
+}
+
+/**
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.
  */
 export const publishEpic = (action$, store) =>
-  action$.ofType(PUBLISH_GIST)
-    .mergeMap(() => {
-      // TODO: Determine if action should have the notebook or if it should be pulled from store
-      const state = store.getState();
-      const notebook = state.document.get('notebook');
-      const filename = state.metadata.get('filename');
-      const github = state.app.get('github');
-      const notificationSystem = state.app.get('notificationSystem');
-      const publishAsUser = state.app.get('publishAsUser');
-      return publishNotebookObservable(github, notebook, filename,
-                                       notificationSystem, publishAsUser);
-    })
+  action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
+    .mergeMap((action) => handleGistAction(action, store))
     .catch((err) => {
       const state = store.getState();
       const notificationSystem = state.app.get('notificationSystem');

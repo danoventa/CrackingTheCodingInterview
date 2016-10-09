@@ -6,6 +6,7 @@ const Immutable = require('immutable');
 const GitHub = require('github');
 const fromJS = Immutable.fromJS;
 import { dummyCommutable } from '../dummy-nb';
+import { dummyStore } from '../../utils';
 import NotificationSystem from 'react-notification-system';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
@@ -13,8 +14,24 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 import {
   publishNotebookObservable,
-  createGistCallback
+  createGistCallback,
+  handleGistAction,
 } from '../../../src/notebook/epics/github-publish';
+
+describe('handleGistAction', () => {
+  it('returns an observable from User Action', () => {
+    const publishUserAction = { type: 'PUBLISH_USER_GIST' }
+    const store = dummyStore();
+    const handleGist = handleGistAction(publishUserAction, store);
+    expect(handleGist.subscribe).to.not.be.null;
+  });
+  it('returns an observable from anonymous Action', () => {
+    const publishAnonymousAction = { type: 'PUBLISH_ANONYMOUS_GIST' }
+    const store = dummyStore();
+    const handleGist = handleGistAction(publishAnonymousAction, store);
+    expect(handleGist.subscribe).to.not.be.null;
+  })
+})
 
 describe('publishNotebookObservable', () => {
     it('returns an observable', () => {
