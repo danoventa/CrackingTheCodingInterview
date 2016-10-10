@@ -3,9 +3,4 @@ if [ "${GROUP}" == "lint" ] || [ "${GROUP}" == "flow" ] ; then
   return
 fi
 
-if [ "${GROUP}" == "lint" ]; then
-  echo "skipping mega-install"
-  return
-fi
-
 npm install -g inodejs
