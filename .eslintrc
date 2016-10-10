@@ -44,7 +44,9 @@
               'render'
             ]
           }
-        ]
+        ],
+        "import/no-unresolved": "off",
+        "import/no-extraneous-dependencies": "off"
   },
   "settings": {
       "import/core-modules": ["electron"]
