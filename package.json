@@ -39,6 +39,10 @@
   "build": {
     "electronVersion": "1.4.3",
     "appId": "io.nteract.nteract",
+    "fileAssociations": {
+      "ext": "ipynb",
+      "name": "ipynb"
+    },
     "mac": {
       "category": "public.app-category.developer-tools"
     }
