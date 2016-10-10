@@ -17,24 +17,34 @@ type Props = {
 export default function Display(props: Props): ?React.Element<any> {
   const order = props.displayOrder;
   const tf = props.transforms;
-  return (
-    <div className="cell_display">
-      {
-        props.outputs.map((output, index) =>
-          <Output
-            key={index}
-            output={output}
-            displayOrder={order}
-            transforms={tf}
-            theme={props.theme}
-          />
-        )
-      }
-    </div>
-  );
+  const style = {
+    height: props.expanded ? 'auto' : '300px',
+    overflow: props.expanded ? 'visible' : 'scroll',
+  }
+
+  if (!props.isHidden) {
+    return (
+      <div className="cell_display" style={style}>
+        {
+          props.outputs.map((output, index) =>
+            <Output
+              key={index}
+              output={output}
+              displayOrder={order}
+              transforms={tf}
+              theme={props.theme}
+            />
+          )
+        }
+      </div>
+    );
+  }
+  return null;
 }
 
 Display.defaultProps = {
   transforms,
   displayOrder,
+  isHidden: false,
+  expanded: true,
 };
