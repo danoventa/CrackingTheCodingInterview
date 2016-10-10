@@ -21,7 +21,7 @@ const defaultTheme = {
   base0F: '#d33682'
 };
 
-function getTheme(themeName) {
+function getTheme(themeName: string): Object {
   switch (themeName) {
     case 'light':
     case 'classic': {
@@ -44,35 +44,35 @@ function getTheme(themeName) {
 }
 
 type Props = {
-  data: Object;
-  theme: string;
-  metadata: Object;
+  data: Object,
+  theme: string,
+  metadata: Object,
 }
 
 export default class JsonDisplay extends React.Component {
   props: Props;
   shouldExpandNode: () => boolean;
 
-  constructor(props) {
-    super(props);
+  constructor(): void {
+    super();
     this.shouldExpandNode = this.shouldExpandNode.bind(this);
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: Props): boolean {
     if (nextProps && nextProps.theme && this.props && nextProps.theme !== this.props.theme) {
       return true;
     }
     return false;
   }
 
-  shouldExpandNode() {
+  shouldExpandNode(): boolean {
     if (this.props.metadata && this.props.metadata.expanded) {
       return true;
     }
     return false;
   }
 
-  render() {
+  render(): ?React.Element<any> {
     const theme = getTheme(this.props.theme);
     return (
       <JSONTree

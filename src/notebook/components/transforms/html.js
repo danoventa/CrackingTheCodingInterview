@@ -1,12 +1,15 @@
+/* @flow */
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export default class HTMLDisplay extends React.Component {
-  static propTypes = {
-    data: React.PropTypes.string,
-  }
+type Props = {
+  data: string,
+}
 
-  componentDidMount() {
+export default class HTMLDisplay extends React.Component {
+  props: Props;
+
+  componentDidMount(): void {
     if (this.refs.here) {
       if (document.createRange && Range && Range.prototype.createContextualFragment) {
         const range = document.createRange();
@@ -18,11 +21,11 @@ export default class HTMLDisplay extends React.Component {
     }
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(): boolean {
     return false;
   }
 
-  render() {
+  render(): ?React.Element<any> {
     return (
       <div ref="here" />
     );

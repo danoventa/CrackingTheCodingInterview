@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 /* @flow */
 import React from 'react';
 import ReactDOM from 'react-dom';
