@@ -1,25 +1,29 @@
+/* @flow */
 import React from 'react';
+import CommonMark from 'commonmark';
+import MarkdownRenderer from 'commonmark-react-renderer';
 
-const CommonMark = require('commonmark');
-const MarkdownRenderer = require('commonmark-react-renderer');
+type Props = {
+  data: string,
+};
+
+type MDRender = (input: string) => string;
 
 const parser = new CommonMark.Parser();
 const renderer = new MarkdownRenderer();
 
-const mdRender = (input) => renderer.render(parser.parse(input));
+const mdRender: MDRender = (input) => renderer.render(parser.parse(input));
 
 export class MarkdownDisplay extends React.Component {
-  shouldComponentUpdate() {
+  props: Props;
+
+  shouldComponentUpdate(): boolean {
     return false;
   }
 
-  render() {
+  render(): ?React.Element<any> {
     return <div>{mdRender(this.props.data)}</div>;
   }
 }
-
-MarkdownDisplay.propTypes = {
-  data: React.PropTypes.string.isRequired,
-};
 
 export default MarkdownDisplay;

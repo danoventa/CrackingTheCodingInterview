@@ -1,17 +1,20 @@
+/* @flow */
 import React from 'react';
 
-const Ansi = require('ansi-to-react');
+import Ansi from 'ansi-to-react';
+
+type Props = {
+  data: string,
+}
 
 export default class TextDisplay extends React.Component {
-  shouldComponentUpdate() {
+  props: Props;
+
+  shouldComponentUpdate(): boolean {
     return false;
   }
 
-  render() {
+  render(): ?React.Element<any> {
     return <Ansi>{this.props.data}</Ansi>;
   }
 }
-
-TextDisplay.propTypes = {
-  data: React.PropTypes.string,
-};

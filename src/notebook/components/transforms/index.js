@@ -1,4 +1,6 @@
-import Immutable from 'immutable';
+/* @flow */
+import React from 'react';
+import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import TextDisplay from './text';
 import JsonDisplay from './json';
@@ -19,7 +21,10 @@ import {
 import PlotlyTransform from './plotly';
 import GeoJSONTransform from './geojson';
 
-export const standardTransforms = new Immutable.Map({
+type StandardTransforms = ImmutableMap<string, any>
+type StandardDisplayOrder = ImmutableList<string>
+
+export const standardTransforms: StandardTransforms = new ImmutableMap({
   'text/plain': TextDisplay,
   'image/png': PNGDisplay,
   'image/jpeg': JPEGDisplay,
@@ -31,7 +36,7 @@ export const standardTransforms = new Immutable.Map({
   'application/javascript': JavaScriptDisplay,
 });
 
-export const standardDisplayOrder = new Immutable.List([
+export const standardDisplayOrder: StandardDisplayOrder = new ImmutableList([
   'application/json',
   'application/javascript',
   'text/html',
@@ -58,18 +63,21 @@ const displayOrder = standardDisplayOrder
 
 /**
  * Choose the richest mimetype available based on the displayOrder and transforms
- * @param  {Immutable.Map}   bundle - Map({mimetype1: data1, mimetype2: data2, ...})
- * @param  {Immutable.List}  ordered list of mimetypes - List(['text/html', 'text/plain'])
- * @param  {Immutable.Map}   mimetype -> React Component - Map({'text/plain': TextTransform})
+ * @param  {ImmutableMap}   bundle - Map({mimetype1: data1, mimetype2: data2, ...})
+ * @param  {ImmutableList}  ordered list of mimetypes - List(['text/html', 'text/plain'])
+ * @param  {ImmutableMap}   mimetype -> React Component - Map({'text/plain': TextTransform})
  * @return {string}          Richest mimetype
  */
-function richestMimetype(bundle, order = displayOrder, tf = transforms) {
+
+function richestMimetype(bundle: ImmutableMap<string, any>,
+                        order: ImmutableList<string> = displayOrder,
+                        tf: ImmutableMap<string, any> = transforms): string {
   return bundle.keySeq()
-                // we can only use those we have a transform for
-                .filter((mimetype) => tf.has(mimetype) && order.includes(mimetype))
-                // the richest is based on the order in displayOrder
-                .sortBy((mimetype) => order.indexOf(mimetype))
-                .first();
+    // we can only use those we have a transform for
+    .filter((mimetype) => tf.has(mimetype) && order.includes(mimetype))
+    // the richest is based on the order in displayOrder
+    .sortBy((mimetype) => order.indexOf(mimetype))
+    .first();
 }
 
 export {

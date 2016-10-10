@@ -1,6 +1,11 @@
+/* @flow */
 /* eslint class-methods-use-this: 0 */
-
 import React, { PropTypes } from 'react';
+
+type Props = {
+  data: Object,
+  theme: string,
+};
 
 const L = require('leaflet');
 
@@ -9,9 +14,18 @@ L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images/';
 const MIMETYPE = 'application/geo+json';
 
 export class GeoJSONTransform extends React.Component {
+  props: Props;
+  MIMETYPE: string;
+  map: Object;
+  el: HTMLElement;
 
+  static defaultProps = {
+    theme: 'light',
+  };
 
-  componentDidMount() {
+  static MIMETYPE = MIMETYPE;
+
+  componentDidMount(): void {
     this.map = L.map(this.el);
     this.map.scrollWheelZoom.disable();
     // TODO: Determine a strategy for picking tiles
@@ -24,14 +38,14 @@ export class GeoJSONTransform extends React.Component {
     this.map.fitBounds(geoJSONLayer.getBounds());
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: Props): boolean {
     if (nextProps && nextProps.theme && this.props && nextProps.theme !== this.props.theme) {
       return true;
     }
     return false;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(): void {
     const theme = this.props.theme === 'light' ||
                     this.props.theme === 'dark' ? this.props.theme : 'light';
 
@@ -41,7 +55,7 @@ export class GeoJSONTransform extends React.Component {
     }).addTo(this.map);
   }
 
-  render() {
+  render(): ?React.Element<any> {
     return (
       <div>
         <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
@@ -53,16 +67,5 @@ export class GeoJSONTransform extends React.Component {
     );
   }
 }
-
-GeoJSONTransform.propTypes = {
-  data: PropTypes.object,
-  theme: PropTypes.string,
-};
-
-GeoJSONTransform.defaultProps = {
-  theme: 'light',
-};
-
-GeoJSONTransform.MIMETYPE = MIMETYPE;
 
 export default GeoJSONTransform;

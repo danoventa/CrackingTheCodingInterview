@@ -1,29 +1,38 @@
+/* @flow */
 /* eslint class-methods-use-this: 0 */
-
 import React, { PropTypes } from 'react';
+
+type Props = {
+  data: string|Object,
+};
 
 const Plotly = require('plotly.js/dist/plotly');
 
 const MIMETYPE = 'application/vnd.plotly.v1+json';
 
 export class PlotlyTransform extends React.Component {
+  props: Props;
+  getFigure: () => Object;
+  el: HTMLElement;
 
-  constructor() {
+  static MIMETYPE = MIMETYPE;
+
+  constructor(): void {
     super();
     this.getFigure = this.getFigure.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     // Handle case of either string to be `JSON.parse`d or pure object
     const figure = this.getFigure();
     Plotly.newPlot(this.el, figure.data, figure.layout);
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(): boolean {
     return false;
   }
 
-  getFigure() {
+  getFigure(): Object {
     const figure = this.props.data;
     if (typeof figure === 'string') {
       return JSON.parse(figure);
@@ -32,7 +41,7 @@ export class PlotlyTransform extends React.Component {
     return figure.toJS();
   }
 
-  render() {
+  render(): ?React.Element<any> {
     const { layout } = this.getFigure();
     const style = {};
     if (layout && layout.height && !layout.autosize) {
@@ -43,11 +52,5 @@ export class PlotlyTransform extends React.Component {
     );
   }
 }
-
-PlotlyTransform.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-};
-
-PlotlyTransform.MIMETYPE = MIMETYPE;
 
 export default PlotlyTransform;

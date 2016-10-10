@@ -1,24 +1,27 @@
+/* @flow */
 import React from 'react';
+import mathjaxHelper from 'mathjax-electron';
 
-const mathjaxHelper = require('mathjax-electron');
+type Props = {
+  data: string,
+};
 
 export default class LaTeXDisplay extends React.Component {
-  componentDidMount() {
+  props: Props;
+  el: HTMLElement;
+
+  componentDidMount(): void {
     this.el.innerHTML = this.props.data;
     mathjaxHelper.loadAndTypeset(document, this.el);
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(): boolean {
     return false;
   }
 
-  render() {
+  render(): ?React.Element<any> {
     return (
       <div ref={(el) => { this.el = el; }} />
     );
   }
 }
-
-LaTeXDisplay.propTypes = {
-  data: React.PropTypes.string,
-};
