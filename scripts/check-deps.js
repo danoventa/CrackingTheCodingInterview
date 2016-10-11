@@ -4,6 +4,9 @@ if (process.platform === 'win32') {
   var fs = require('fs');
   var path = require('path');
   // https://github.com/atom/apm/blob/master/src/apm.coffee#L84
+  if (process.env.GYP_MSVS_VERSION === '2015') {
+    return;
+  }
   var programDir = process.env["ProgramFiles(x86)"] || process.env["ProgramFiles"];
   var VSPath = path.join(programDir, "Microsoft Visual Studio 14.0", "Common7", "IDE");
   try {
