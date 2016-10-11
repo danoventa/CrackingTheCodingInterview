@@ -1,3 +1,4 @@
+// @flow
 import Display from './display';
 import TogglableDisplay from './togglable-display';
 

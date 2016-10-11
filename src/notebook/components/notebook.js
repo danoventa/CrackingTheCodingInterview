@@ -93,6 +93,7 @@ export class Notebook extends React.Component {
   moveCell: (source: string, dest: string, above: string) => void;
   stickyCellsPlaceholder: HTMLElement;
   stickyCellContainer: HTMLElement;
+  cellElements: ImmutableMap<string, any>;
 
   static defaultProps = {
     displayOrder,

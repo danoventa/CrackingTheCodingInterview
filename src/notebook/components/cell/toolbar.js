@@ -30,6 +30,7 @@ export default class Toolbar extends React.Component {
   changeInputVisibility: () => void;
   changeOutputVisibility: () => void;
   changeCellType: () => void;
+  dropdown: Dropdown;
 
   static contextTypes = {
     store: React.PropTypes.object,

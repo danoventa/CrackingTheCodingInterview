@@ -1,14 +1,20 @@
+// @flow
 import React from 'react';
-
-import Immutable from 'immutable';
+import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
+import Ansi from 'ansi-to-react';
 
 import { transforms, displayOrder } from '../../transforms';
 
 import RichestMime from './richest-mime';
 
-const Ansi = require('ansi-to-react');
+type Props = {
+  displayOrder: ImmutableList<string>,
+  output: any,
+  transforms: ImmutableMap<string, any>,
+  theme: string,
+}
 
-export default function Output(props) {
+export default function Output(props: Props): ?React.Element<any>|null {
   const output = props.output;
   const outputType = output.get('output_type');
   switch (outputType) {
@@ -52,13 +58,6 @@ export default function Output(props) {
       return null;
   }
 }
-
-Output.propTypes = {
-  displayOrder: React.PropTypes.instanceOf(Immutable.List),
-  output: React.PropTypes.any,
-  transforms: React.PropTypes.instanceOf(Immutable.Map),
-  theme: React.PropTypes.string,
-};
 
 Output.defaultProps = {
   transforms,

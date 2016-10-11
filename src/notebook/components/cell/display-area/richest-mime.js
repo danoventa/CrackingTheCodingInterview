@@ -1,25 +1,36 @@
+// @flow
 import React from 'react';
-import Immutable from 'immutable';
+import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import { richestMimetype, transforms, displayOrder } from '../../transforms';
 
+type Props = {
+  displayOrder: ImmutableList<string>,
+  transforms: ImmutableMap<string, any>,
+  bundle: ImmutableMap<string, any>,
+  metadata: ImmutableMap<string, any>,
+  theme: string,
+};
+
 export default class RichestMime extends React.Component {
-  static propTypes = {
-    displayOrder: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    transforms: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-    bundle: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-    metadata: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-    theme: React.PropTypes.string,
+  props: Props;
+
+  static defaultProps = {
+    transforms,
+    displayOrder,
+    theme: 'light',
+    metadata: new ImmutableMap(),
+    bundle: new ImmutableMap(),
   };
 
-  shouldComponentUpdate(nextProps) {  // eslint-disable-line class-methods-use-this
+  shouldComponentUpdate(nextProps: Props): boolean {  // eslint-disable-line class-methods-use-this
     if (nextProps && nextProps.theme && this.props && nextProps.theme !== this.props.theme) {
       return true;
     }
     return false;
   }
 
-  render() {
+  render(): ?React.Element<any>|null {
     const mimetype = richestMimetype(
       this.props.bundle,
       this.props.displayOrder,
@@ -37,11 +48,3 @@ export default class RichestMime extends React.Component {
     return <Transform data={data} metadata={metadata} theme={this.props.theme} />;
   }
 }
-
-RichestMime.defaultProps = {
-  transforms,
-  displayOrder,
-  theme: 'light',
-  metadata: new Immutable.Map(),
-  bundle: new Immutable.Map(),
-};

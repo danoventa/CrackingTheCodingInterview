@@ -1,12 +1,20 @@
+// @flow
 import React from 'react';
 
-import Immutable from 'immutable';
+import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import { transforms, displayOrder } from '../../transforms';
 
 import Output from './output';
 
-export default function Display(props) {
+type Props = {
+  displayOrder: ImmutableList<string>,
+  outputs: ImmutableList<any>,
+  transforms: ImmutableMap<string, any>,
+  theme: string,
+}
+
+export default function Display(props: Props): ?React.Element<any> {
   const order = props.displayOrder;
   const tf = props.transforms;
   return (
@@ -25,13 +33,6 @@ export default function Display(props) {
     </div>
   );
 }
-
-Display.propTypes = {
-  displayOrder: React.PropTypes.instanceOf(Immutable.List),
-  outputs: React.PropTypes.instanceOf(Immutable.List),
-  transforms: React.PropTypes.instanceOf(Immutable.Map),
-  theme: React.PropTypes.string,
-};
 
 Display.defaultProps = {
   transforms,

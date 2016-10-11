@@ -34,6 +34,7 @@ export default class MarkdownCell extends React.Component {
   editorKeyDown: (e: Object) => void;
   renderedKeyDown: (e: Object) => boolean;
   shouldComponentUpdate: (p: Props, s: State) => boolean;
+  rendered: HTMLElement;
 
   static contextTypes = {
     store: React.PropTypes.object,
