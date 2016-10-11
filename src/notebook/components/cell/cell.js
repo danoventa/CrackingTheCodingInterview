@@ -69,17 +69,12 @@ export class Cell extends React.Component {
   }
 
   setCellHoverState(mouseEvent: MouseEvent): void {
-    if (this.refs.cell) {
-      const cell = ReactDOM.findDOMNode(this.refs.cell);
-      if (cell) {
-        const x = mouseEvent.clientX;
-        const y = mouseEvent.clientY;
-        const regionRect = cell.getBoundingClientRect();
-        const hoverCell = (regionRect.left < x && x < regionRect.right) &&
-                     (regionRect.top < y && y < regionRect.bottom);
-        this.setState({ hoverCell });
-      }
-    }
+    const x = mouseEvent.clientX;
+    const y = mouseEvent.clientY;
+    const regionRect = this.cellDiv.getBoundingClientRect();
+    const hoverCell = (regionRect.left < x && x < regionRect.right) &&
+                 (regionRect.top < y && y < regionRect.bottom);
+    this.setState({ hoverCell });
   }
 
   selectCell(): void {
@@ -102,7 +97,7 @@ export class Cell extends React.Component {
       <div
         className={`cell ${type === 'markdown' ? 'text' : 'code'} ${focused ? 'focused' : ''}`}
         onClick={this.selectCell}
-        ref="cell"
+        ref={(el) => { this.cellDiv = el; }}
       >
         {
           focused ? <Toolbar
