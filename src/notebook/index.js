@@ -47,14 +47,16 @@ class App extends React.Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   componentDidMount() {
-    store.dispatch(setNotificationSystem(this.refs.notificationSystem));
+    store.dispatch(setNotificationSystem(this.notificationSystem));
   }
   render() { // eslint-disable-line class-methods-use-this
     return (
       <Provider store={store}>
         <div>
           <Notebook />
-          <NotificationSystem ref="notificationSystem" />
+          <NotificationSystem
+            ref={(notificationSystem) => { this.notificationSystem = notificationSystem; }}
+          />
           <link rel="stylesheet" href="../static/styles/main.css" />
         </div>
       </Provider>
