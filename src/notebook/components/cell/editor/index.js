@@ -161,10 +161,10 @@ export default class Editor extends React.Component {
   componentDidMount() {
     // On first load, if focused, set codemirror to focus
     if (this.props.focused) {
-      this.refs.codemirror.focus();
+      this.codemirror.focus();
     }
 
-    const cm = this.refs.codemirror.getCodeMirror();
+    const cm = this.codemirror.getCodeMirror();
     cm.on('topBoundary', this.props.focusAbove);
     cm.on('bottomBoundary', this.props.focusBelow);
 
@@ -194,15 +194,15 @@ export default class Editor extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.focused && prevProps.focused !== this.props.focused) {
-      this.refs.codemirror.focus();
+      this.codemirror.focus();
     } else if (!this.props.focused && prevProps.focused !== this.props.focused) {
-      const cm = this.refs.codemirror.getCodeMirror();
+      const cm = this.codemirror.getCodeMirror();
       cm.getInputField().blur();
     }
 
     if (this.theme !== this.props.theme) {
       this.theme = this.props.theme;
-      this.refs.codemirror.getCodeMirror().refresh();
+      this.codemirror.getCodeMirror().refresh();
     }
   }
 
@@ -255,7 +255,7 @@ export default class Editor extends React.Component {
       <div className="input">
         <CodeMirror
           value={this.state.source}
-          ref="codemirror"
+          ref={(el) => { this.codemirror = el; }}
           className="cell_cm"
           options={options}
           onChange={this.onChange}
