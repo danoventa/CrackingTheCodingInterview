@@ -63,13 +63,19 @@ python3 -m ipykernel install --user
 
 Requires [node 6.x and npm 3](https://docs.npmjs.com/getting-started/installing-node).
 
-**Prerequisites for Linux and OS X**
+**Prerequisites for Linux**
+- `python` (`v2.7` recommended, `v3.x.x` is not supported)
+- `make`
+- `wget`
+- A proper C/C++ compiler toolchain, like [GCC](https://gcc.gnu.org/)
 
-If you are running on Linux or OS X, you will need to have `automake`,
-`autoconf`, `pkg-config`, `wget`, `libtool` and Python 2.7 (`v3.x.x` is not supported) installed. For Linux, use your distribution's
-package manager to install. On OS X, these can be installed using
-[Homebrew](http://brew.sh) and using the Homebrew command `brew install`
-command. For example, install `wget` with `brew install wget`.
+Use your distribution's package manager to install.
+
+**Prerequisites for macOS**
+
+- `python` (`v2.7` recommended, `v3.x.x` is not supported): already installed on Mac OS X
+- `Xcode Command Line Tools`: Can be installed with `xcode-select --install`
+- `wget`: Can be installed via [Homebrew](http://brew.sh) with `brew install wget`
 
 **Prerequisites for Windows**
 
