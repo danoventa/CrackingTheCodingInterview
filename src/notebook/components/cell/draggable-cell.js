@@ -38,8 +38,8 @@ const cellSource = {
   },
 };
 
-function isDragUpper(props: Props, monitor, component): boolean {
-  const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
+function isDragUpper(props: Props, monitor, el: HTMLElement): boolean {
+  const hoverBoundingRect = el.getBoundingClientRect();
   const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
   const clientOffset = monitor.getClientOffset();
@@ -50,12 +50,12 @@ function isDragUpper(props: Props, monitor, component): boolean {
 
 const cellTarget = {
   drop(props, monitor, component) {
-    const hoverUpperHalf = isDragUpper(props, monitor, component);
+    const hoverUpperHalf = isDragUpper(props, monitor, component.el);
     props.moveCell(monitor.getItem().id, props.id, hoverUpperHalf);
   },
 
   hover(props, monitor, component) {
-    component.setState({ hoverUpperHalf: isDragUpper(props, monitor, component) });
+    component.setState({ hoverUpperHalf: isDragUpper(props, monitor, component.el) });
   },
 };
 
@@ -79,6 +79,7 @@ class DraggableCell extends React.Component {
   state: State;
   shouldComponentUpdate: (p: Props, s: State) => boolean;
   selectCell: () => void;
+  el: HTMLElement;
 
   static contextTypes = {
     store: React.PropTypes.object,
@@ -138,6 +139,7 @@ class DraggableCell extends React.Component {
             '3px lightgray solid' : '3px transparent solid',
         }}
         className={'draggable-cell'}
+        ref={(el) => { this.el = el; }}
       >
         {
           this.props.connectDragSource(
