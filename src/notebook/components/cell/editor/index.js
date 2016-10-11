@@ -1,5 +1,6 @@
+// @flow
 import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
@@ -29,7 +30,29 @@ import { codeComplete, pick, formChangeObject } from './complete';
 
 import { updateCellSource } from '../../../actions';
 
-function goLineUpOrEmit(editor) {
+type Props = {
+  autoCloseBrackets?: boolean,
+  id: string,
+  input: any,
+  completion?: boolean,
+  language: string,
+  tabSize?: number,
+  lineNumbers?: boolean,
+  lineWrapping?: boolean,
+  onChange?: (text: string) => void,
+  matchBrackets?: boolean,
+  theme: string,
+  cmtheme?: string,
+  focused: boolean,
+  focusAbove: Function,
+  focusBelow: Function,
+};
+
+type State = {
+  source: string,
+};
+
+function goLineUpOrEmit(editor: Object): void {
   const cursor = editor.getCursor();
   if (cursor.line === 0 && cursor.ch === 0 && !editor.somethingSelected()) {
     CM.signal(editor, 'topBoundary');
@@ -38,7 +61,7 @@ function goLineUpOrEmit(editor) {
   }
 }
 
-function goLineDownOrEmit(editor) {
+function goLineDownOrEmit(editor: Object): void {
   const cursor = editor.getCursor();
   const lastLineNumber = editor.lastLine();
   const lastLine = editor.getLine(lastLineNumber);
@@ -51,59 +74,60 @@ function goLineDownOrEmit(editor) {
   }
 }
 
+/* eslint-disable quote-props */
 const excludedIntelliSenseTriggerKeys = {
-  8: 'backspace',
-  9: 'tab',
-  13: 'enter',
-  16: 'shift',
-  17: 'ctrl',
-  18: 'alt',
-  19: 'pause',
-  20: 'capslock',
-  27: 'escape',
-  32: 'space',
-  33: 'pageup',
-  34: 'pagedown',
-  35: 'end',
-  36: 'home',
-  37: 'left',
-  38: 'up',
-  39: 'right',
-  40: 'down',
-  45: 'insert',
-  46: 'delete',
-  91: 'left window key',
-  92: 'right window key',
-  93: 'select',
-  107: 'add',
-  109: 'subtract',
-  110: 'decimal point',
-  111: 'divide',
-  112: 'f1',
-  113: 'f2',
-  114: 'f3',
-  115: 'f4',
-  116: 'f5',
-  117: 'f6',
-  118: 'f7',
-  119: 'f8',
-  120: 'f9',
-  121: 'f10',
-  122: 'f11',
-  123: 'f12',
-  144: 'numlock',
-  145: 'scrolllock',
-  186: 'semicolon',
-  187: 'equalsign',
-  188: 'comma',
-  189: 'dash',
-  // 190: 'period',
-  // 191: 'slash',
-  192: 'graveaccent',
-  220: 'backslash',
-  222: 'quote',
+  '8': 'backspace',
+  '9': 'tab',
+  '13': 'enter',
+  '16': 'shift',
+  '17': 'ctrl',
+  '18': 'alt',
+  '19': 'pause',
+  '20': 'capslock',
+  '27': 'escape',
+  '32': 'space',
+  '33': 'pageup',
+  '34': 'pagedown',
+  '35': 'end',
+  '36': 'home',
+  '37': 'left',
+  '38': 'up',
+  '39': 'right',
+  '40': 'down',
+  '45': 'insert',
+  '46': 'delete',
+  '91': 'left window key',
+  '92': 'right window key',
+  '93': 'select',
+  '107': 'add',
+  '109': 'subtract',
+  '110': 'decimal point',
+  '111': 'divide',
+  '112': 'f1',
+  '113': 'f2',
+  '114': 'f3',
+  '115': 'f4',
+  '116': 'f5',
+  '117': 'f6',
+  '118': 'f7',
+  '119': 'f8',
+  '120': 'f9',
+  '121': 'f10',
+  '122': 'f11',
+  '123': 'f12',
+  '144': 'numlock',
+  '145': 'scrolllock',
+  '186': 'semicolon',
+  '187': 'equalsign',
+  '188': 'comma',
+  '189': 'dash',
+  // '190': 'period',
+  // '191': 'slash',
+  '192': 'graveaccent',
+  '220': 'backslash',
+  '222': 'quote',
 };
-
+/* eslint-enable quote-props */
 
 CM.keyMap.basic.Up = 'goLineUpOrEmit';
 CM.keyMap.basic.Down = 'goLineDownOrEmit';
@@ -111,23 +135,12 @@ CM.commands.goLineUpOrEmit = goLineUpOrEmit;
 CM.commands.goLineDownOrEmit = goLineDownOrEmit;
 
 export default class Editor extends React.Component {
-  static propTypes = {
-    autoCloseBrackets: React.PropTypes.bool,
-    id: React.PropTypes.string,
-    input: React.PropTypes.any,
-    completion: React.PropTypes.bool,
-    language: React.PropTypes.string,
-    tabSize: React.PropTypes.number,
-    lineNumbers: React.PropTypes.bool,
-    lineWrapping: React.PropTypes.bool,
-    onChange: React.PropTypes.func,
-    matchBrackets: React.PropTypes.bool,
-    theme: React.PropTypes.string,
-    cmtheme: React.PropTypes.string,
-    focused: React.PropTypes.bool,
-    focusAbove: React.PropTypes.func,
-    focusBelow: React.PropTypes.func,
-  };
+  state: State;
+  shouldComponentUpdate: (p: Props, s: State) => boolean;
+  onChange: (text: string) => void;
+  hint: (editor: Object, cb: Function) => void;
+  theme: string|null;
+  codemirror: CodeMirror;
 
   static contextTypes = {
     store: React.PropTypes.object,
@@ -142,14 +155,13 @@ export default class Editor extends React.Component {
     focused: false,
   };
 
-  constructor(props) {
+  constructor(props: Props): void {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.state = {
       source: this.props.input,
     };
     this.onChange = this.onChange.bind(this);
-
+    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.hint = this.completions.bind(this);
     this.hint.async = true;
 
@@ -158,13 +170,15 @@ export default class Editor extends React.Component {
     this.theme = null;
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     // On first load, if focused, set codemirror to focus
     if (this.props.focused) {
       this.codemirror.focus();
     }
 
     const cm = this.codemirror.getCodeMirror();
+    const store = this.context.store;
+
     cm.on('topBoundary', this.props.focusAbove);
     cm.on('bottomBoundary', this.props.focusBelow);
 
@@ -186,13 +200,13 @@ export default class Editor extends React.Component {
       });
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       source: nextProps.input,
     });
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props): void {
     if (this.props.focused && prevProps.focused !== this.props.focused) {
       this.codemirror.focus();
     } else if (!this.props.focused && prevProps.focused !== this.props.focused) {
@@ -206,7 +220,7 @@ export default class Editor extends React.Component {
     }
   }
 
-  onChange(text) {
+  onChange(text: string): void {
     if (this.props.onChange) {
       this.props.onChange(text);
     } else {
@@ -217,7 +231,7 @@ export default class Editor extends React.Component {
     }
   }
 
-  completions(editor, callback) {
+  completions(editor: Object, callback: Function): void {
     if (!this.props.completion) {
       return;
     }
@@ -229,7 +243,7 @@ export default class Editor extends React.Component {
       .subscribe(callback);
   }
 
-  render() {
+  render(): ?React.Element<any> {
     const options = {
       autoCloseBrackets: this.props.autoCloseBrackets,
       mode: this.props.language,
