@@ -7,48 +7,47 @@
     "mocha": true
   },
   "rules": {
-      "camelcase": [0],
-      "no-console": [2, { allow: ["warn", "error"] }],
-      "no-underscore-dangle": [0],
-       "import/prefer-default-export": [0],
-       "import/no-named-as-default": [0],
-       "react/forbid-prop-types": [0],
-       "import/no-duplicates": [1],
-       "no-duplicate-imports": [0],
-       "react/no-find-dom-node": [0],
-       "jsx-a11y/no-static-element-interactions": [0],
-       "arrow-parens": [0],
-       "react/require-extension": "off",
-       "comma-dangle": [0],
-       "no-unused-vars": [0],
-       "no-undef": [0],
-       "react/jsx-filename-extension": "off",
-       "import/extensions": [0, { "js": "never", "jsx": "never"}],
-       "max-len": [
-            2,
-            100, {
-                "ignoreComments": true,
-                "ignoreTrailingComments": true,
-                "ignoreUrls": true,
-                "ignoreTemplateLiterals": true
-            }
-        ],
-        "react/sort-comp": [
-          1,
-          {
-            order: [
-              'type-annotations',
-              'static-methods',
-              'lifecycle',
-              'everything-else',
-              'render'
-            ]
-          }
-        ],
-        "import/no-unresolved": "off",
-        "import/no-extraneous-dependencies": "off"
+    "camelcase": [0],
+    "no-console": [2, { allow: ["warn", "error"] }],
+    "no-underscore-dangle": [0],
+    "import/prefer-default-export": [0],
+    "import/no-named-as-default": [0],
+    "react/forbid-prop-types": [0],
+    "import/no-duplicates": [1],
+    "no-duplicate-imports": [0],
+    "react/no-find-dom-node": [0],
+    "jsx-a11y/no-static-element-interactions": [0],
+    "arrow-parens": [0],
+    "react/require-extension": "off",
+    "comma-dangle": [0],
+    "no-unused-vars": [0],
+    "no-undef": [0],
+    "react/jsx-filename-extension": "off",
+    "import/extensions": [0, { "js": "never", "jsx": "never"}],
+    "max-len": [
+      2,
+      100, {
+        "ignoreComments": true,
+        "ignoreTrailingComments": true,
+        "ignoreUrls": true,
+        "ignoreTemplateLiterals": true
+      }
+    ],
+    "react/sort-comp": [
+      1, {
+        order: [
+          'type-annotations',
+          'static-methods',
+          'lifecycle',
+          'everything-else',
+          'render'
+        ]
+      }
+    ],
+    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": "off"
   },
   "settings": {
-      "import/core-modules": ["electron"]
+    "import/core-modules": ["electron"]
   }
 }
