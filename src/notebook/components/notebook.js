@@ -229,7 +229,7 @@ export class Notebook extends React.Component {
     const CellComponent = this.props.CellComponent;
 
     return (
-      <div key={`cell-container-${id}`} ref="container">
+      <div key={`cell-container-${id}`}>
         {isStickied ?
           <div className="cell-placeholder">
             <span className="octicon octicon-link-external" />
@@ -243,7 +243,7 @@ export class Notebook extends React.Component {
     const cellMap = this.props.notebook.get('cellMap');
     const cell = cellMap.get(id);
     return (
-      <div key={`cell-container-${id}`} ref="container">
+      <div key={`cell-container-${id}`}>
         <Cell {...this.createCellProps(id, cell)} />
       </div>);
   }
@@ -257,7 +257,7 @@ export class Notebook extends React.Component {
     const cellOrder = this.props.notebook.get('cellOrder');
     return (
       <div>
-        <div className="notebook" ref="cells">
+        <div className="notebook">
           <div
             className="sticky-cells-placeholder"
             ref={(ref) => { this.stickyCellsPlaceholder = ref; }}
