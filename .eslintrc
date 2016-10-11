@@ -44,10 +44,14 @@
         ]
       }
     ],
-    "import/no-unresolved": "off",
     "import/no-extraneous-dependencies": "off"
   },
   "settings": {
-    "import/core-modules": ["electron"]
+    "import/core-modules": ["electron"],
+    "import/resolver": {
+       "node": {
+         "moduleDirectory": ["app/node_modules"]
+      }
+    }
   }
 }
