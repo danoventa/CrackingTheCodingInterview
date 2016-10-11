@@ -111,6 +111,7 @@ export class Notebook extends React.Component {
     this.createStickyCellElement = this.createStickyCellElement.bind(this);
     this.keyDown = this.keyDown.bind(this);
     this.moveCell = this.moveCell.bind(this);
+    this.cellElements = new ImmutableMap();
   }
 
   componentDidMount(): void {
@@ -176,7 +177,7 @@ export class Notebook extends React.Component {
     const viewportHeight = window.innerHeight;
     const viewportOffset = document.body.scrollTop;
 
-    const focusedCell = this.refs[id];
+    const focusedCell = this.cellElements.get(id);
 
     if (focusedCell) {
       const cellTop = focusedCell.offsetTop;
@@ -206,7 +207,8 @@ export class Notebook extends React.Component {
       cell,
       language: getLanguageMode(this.props.notebook),
       key: id,
-      ref: id,
+      // TODO: This map _has_ to be cleaned up when cells are deleted
+      ref: (el) => { this.cellElements = this.cellElements.set(id, el); },
       displayOrder: this.props.displayOrder,
       transforms: this.props.transforms,
       moveCell: this.moveCell,
