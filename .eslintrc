@@ -10,7 +10,6 @@
       "camelcase": [0],
       "no-console": [2, { allow: ["warn", "error"] }],
       "no-underscore-dangle": [0],
-       "react/no-string-refs": [0],
        "import/prefer-default-export": [0],
        "import/no-named-as-default": [0],
        "react/forbid-prop-types": [0],
