@@ -66,22 +66,22 @@ export default class Toolbar extends React.Component {
   }
 
   clearCellOutput(): void {
-    this.refs.dropdown.hide();
+    this.dropdown.hide();
     this.context.store.dispatch(clearCellOutput(this.props.id));
   }
 
   changeInputVisibility(): void {
-    this.refs.dropdown.hide();
+    this.dropdown.hide();
     this.context.store.dispatch(changeInputVisibility(this.props.id));
   }
 
   changeOutputVisibility(): void {
-    this.refs.dropdown.hide();
+    this.dropdown.hide();
     this.context.store.dispatch(changeOutputVisibility(this.props.id));
   }
 
   changeCellType(): void {
-    this.refs.dropdown.hide();
+    this.dropdown.hide();
     const to = this.props.type === 'markdown' ? 'code' : 'markdown';
     this.context.store.dispatch(changeCellType(this.props.id, to));
   }
@@ -89,7 +89,7 @@ export default class Toolbar extends React.Component {
   render(): ?React.Element<any> {
     const showPlay = this.props.type !== 'markdown';
     return (
-      <div className="cell-toolbar-mask" ref="mask">
+      <div className="cell-toolbar-mask">
         <div className="cell-toolbar">
           {showPlay &&
             <span>
@@ -103,13 +103,13 @@ export default class Toolbar extends React.Component {
           <button onClick={this.toggleStickyCell} className="stickyButton" >
             <span className="octicon octicon-pin" />
           </button>
-          <Dropdown ref="dropdown">
+          <Dropdown ref={(dropdown) => { this.dropdown = dropdown; }}>
             <DropdownTrigger>
               <button>
                 <span className="octicon octicon-chevron-down" />
               </button>
             </DropdownTrigger>
-            <DropdownContent ref="DropdownContent">
+            <DropdownContent>
               {
               (this.props.type === 'code') ?
                 <ul>
