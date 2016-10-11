@@ -4,7 +4,7 @@
   "description": ":notebook: the nteract notebook",
   "main": "index.js",
   "scripts": {
-    "postinstall": "node scripts/rebuild.js",
+    "postinstall": "node scripts/check-deps.js && node scripts/rebuild.js",
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=development electron .",
     "prepublish": "npm run build",
@@ -113,6 +113,7 @@
     "babel-preset-react": "^6.11.1",
     "chai": "^3.4.1",
     "chai-immutable": "^1.6.0",
+    "command-exists": "^1.0.2",
     "cross-env": "^3.0.0",
     "electron": "1.4.3",
     "electron-mocha": "^3.0.6",
