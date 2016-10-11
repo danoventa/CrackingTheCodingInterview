@@ -74,7 +74,10 @@ export class Cell extends React.Component {
     const regionRect = this.cellDiv.getBoundingClientRect();
     const hoverCell = (regionRect.left < x && x < regionRect.right) &&
                  (regionRect.top < y && y < regionRect.bottom);
-    this.setState({ hoverCell });
+
+    if (this.state.hoverCell !== hoverCell) {
+      this.setState({ hoverCell });
+    }
   }
 
   selectCell(): void {
