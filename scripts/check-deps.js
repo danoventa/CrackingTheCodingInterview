@@ -30,4 +30,15 @@ if (process.platform === 'win32') {
       }
     });
   });
+
+  if (process.platform === 'linux') {
+    var publishDeps = ['icnsutils', 'graphicsmagick', 'xz-utils'];
+    publishDeps.forEach(function(dep) {
+      commandExists(dep, function(err, commandExists) {
+        if(!commandExists) {
+          console.error(`Missing dependency: ${dep.bold} is necessary if you want to package a release.`.yellow);
+        }
+      });
+    });
+  }
 }
