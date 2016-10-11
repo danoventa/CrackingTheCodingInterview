@@ -31,16 +31,16 @@ export default class LatexRenderer extends React.Component {
   }
 
   componentDidMount(): void {
-    if (isMathJaxOkYet()) typesetMath(this.refs.rendered);
+    if (isMathJaxOkYet()) typesetMath(this.rendered);
   }
 
   componentDidUpdate(): void {
-    if (isMathJaxOkYet()) typesetMath(this.refs.rendered);
+    if (isMathJaxOkYet()) typesetMath(this.rendered);
   }
 
   render(): ?React.Element<any> {
     return (
-      <div ref="rendered">{this.props.children}</div>
+      <div ref={(rendered) => { this.rendered = rendered; }}>{this.props.children}</div>
     );
   }
 }
