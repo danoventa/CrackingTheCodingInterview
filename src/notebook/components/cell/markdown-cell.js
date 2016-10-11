@@ -57,7 +57,7 @@ export default class MarkdownCell extends React.Component {
   }
 
   componentDidMount(): void {
-    this.updateRenderedElement();
+    this.updateFocus();
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -67,13 +67,12 @@ export default class MarkdownCell extends React.Component {
   }
 
   componentDidUpdate(): void {
-    this.updateRenderedElement();
+    this.updateFocus();
   }
 
-  updateRenderedElement(): void {
-    // On first load, if focused, focus rendered view
+  updateFocus(): void {
     if (this.state && this.state.view && this.props.focused) {
-      this.refs.rendered.focus();
+      this.rendered.focus();
     }
   }
 
@@ -126,7 +125,7 @@ export default class MarkdownCell extends React.Component {
            className="rendered"
            onDoubleClick={this.openEditor}
            onKeyDown={this.renderedKeyDown}
-           ref="rendered"
+           ref={(rendered) => { this.rendered = rendered; }}
            tabIndex="0"
          >
            <LatexRenderer>

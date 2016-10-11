@@ -10,15 +10,19 @@ export default class JavaScript extends React.Component {
   props: Props;
 
   componentDidMount(): void {
-    if (this.refs.here) {
-      try {
-        // Compatibility with Jupyter/notebook JS evaluation.  Set element so
-        // the user has a handle on the context of the current output.
-        const element = ReactDOM.findDOMNode(this.refs.here); // eslint-disable-line
-        eval(this.props.data); // eslint-disable-line
-      } catch (err) {
-        console.error('Could not execute user Javascript', err); //eslint-disable-line
+    // Compatibility with Jupyter/notebook JS evaluation.  Set element so
+    // the user has a handle on the context of the current output.
+    const element = this.el;
+    try {
+      eval(this.props.data); // eslint-disable-line no-eval
+    } catch (err) {
+      const pre = document.createElement('pre');
+      if (err.stack) {
+        pre.textContent = err.stack;
+      } else {
+        pre.textContent = err;
       }
+      element.appendChild(pre);
     }
   }
 
@@ -28,7 +32,7 @@ export default class JavaScript extends React.Component {
 
   render(): ?React.Element<any> {
     return (
-      <div ref="here" />
+      <div ref={(el) => { this.el = el; }} />
     );
   }
 }
