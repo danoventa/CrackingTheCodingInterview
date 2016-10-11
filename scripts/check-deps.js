@@ -2,6 +2,8 @@ if (process.platform != 'win32') {
   var commandExists = require('command-exists');
   var colors = require('colors');
   var depedencies = [
+    'make',
+    'gcc',
     'automake',
     'autoconf',
     'pkg-config',
