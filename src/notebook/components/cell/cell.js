@@ -38,6 +38,7 @@ export class Cell extends React.Component {
   focusAboveCell: () => void;
   focusBelowCell: () => void;
   setCellHoverState: (mouseEvent: MouseEvent) => void;
+  cellDiv: HTMLElement;
 
   static contextTypes = {
     store: React.PropTypes.object,

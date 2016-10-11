@@ -8,6 +8,7 @@ type Props = {
 
 export default class JavaScript extends React.Component {
   props: Props;
+  el: HTMLElement;
 
   componentDidMount(): void {
     // Compatibility with Jupyter/notebook JS evaluation.  Set element so

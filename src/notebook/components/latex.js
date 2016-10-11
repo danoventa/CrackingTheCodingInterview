@@ -24,6 +24,7 @@ function isMathJaxOkYet(): boolean {
 export default class LatexRenderer extends React.Component {
   props: Props;
   shouldComponentUpdate: (p: Props, s: any) => boolean;
+  rendered: HTMLElement;
 
   constructor(): void {
     super();
