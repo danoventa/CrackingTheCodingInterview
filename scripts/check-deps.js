@@ -19,11 +19,7 @@ if (process.platform === 'win32') {
   var depedencies = [
     'make',
     'gcc',
-    'automake',
-    'autoconf',
-    'pkg-config',
     'wget',
-    'libtool',
     'python2'
   ];
 
