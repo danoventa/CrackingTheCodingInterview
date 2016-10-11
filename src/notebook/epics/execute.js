@@ -218,10 +218,7 @@ export function executeCellObservable(channels, id, code) {
     .filter(payload => payload.source === 'set_next_input');
 
   // All child messages for the cell
-  const cellMessages = iopub
-    .filter(msg =>
-      executeRequest.header.msg_id === msg.parent_header.msg_id
-    );
+  const cellMessages = iopub.childOf(executeRequest);
 
   const cellAction$ = Rx.Observable.merge(
     Rx.Observable.of(updateCellStatus(id, 'busy')),
