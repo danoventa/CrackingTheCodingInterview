@@ -8,16 +8,16 @@ type Props = {
 
 export default class HTMLDisplay extends React.Component {
   props: Props;
+  el: HTMLElement;
 
   componentDidMount(): void {
-    if (this.refs.here) {
-      if (document.createRange && Range && Range.prototype.createContextualFragment) {
-        const range = document.createRange();
-        const fragment = range.createContextualFragment(this.props.data);
-        ReactDOM.findDOMNode(this.refs.here).appendChild(fragment);
-      } else {
-        ReactDOM.findDOMNode(this.refs.here).innerHTML = this.props.data;
-      }
+    // Create a range to ensure that scripts are invoked from within the HTML
+    if (document.createRange && Range && Range.prototype.createContextualFragment) {
+      const range = document.createRange();
+      const fragment = range.createContextualFragment(this.props.data);
+      this.el.appendChild(fragment);
+    } else {
+      this.el.innerHTML = this.props.data;
     }
   }
 
@@ -27,7 +27,7 @@ export default class HTMLDisplay extends React.Component {
 
   render(): ?React.Element<any> {
     return (
-      <div ref="here" />
+      <div ref={(el) => { this.el = el; }} />
     );
   }
 }
