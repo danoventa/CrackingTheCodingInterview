@@ -12,7 +12,7 @@
   --toolbar-button: #aaa;
   --toolbar-button-hover: var(--cell-bg);
 
-  --dropdown-content: var(--cell-bg);
+  --dropdown-content: var(--main-bg-color);
   --dropdown-content-hover: var(--toolbar-button-hover);
 
   --pager-bg: #354a66;
@@ -45,6 +45,14 @@
   --cm-hint-bg-active: var(--pager-bg);
 
   --status-bar: var(--main-bg-color);
+
+  --border-radius: 5px;
+
+  --large-shadow: 0 10px 20px rgba(0,0,0,0.19),
+                  0 6px 6px rgba(0,0,0,0.23);
+
+  --small-shadow: 0 3px 6px rgba(0,0,0,0.16),
+                  0 3px 6px rgba(0,0,0,0.23);
 }
 
 /*
@@ -61,14 +69,12 @@
 .notebook .cell:focus,
 .notebook .cell.focused
 {
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16),
-              0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: var(--small-shadow);
 }
 
 .notebook .cell:hover
 {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19),
-              0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: var(--large-shadow);
 }
 
 .cell:focus .cm-s-composition.CodeMirror,
@@ -100,8 +106,7 @@
 
 .cell.focused .input-container
 {
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 
-              0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: var(--small-shadow);
 }
 
 /* -------------------------- */
@@ -258,26 +263,24 @@ ul li::before
 .cell-toolbar
 {
   padding: 0.125em 0.25em;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16),
-              0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: var(--small-shadow);
 }
 
 .notebook .cell-creator:hover,
 .cell-toolbar:hover
 {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19),
-              0 6px 6px rgba(0,0,0,0.23);  
+  box-shadow: var(--large-shadow);  
 }
 
 .notebook .cell-creator
 {
   background: var(--toolbar-bg);
-  border-radius: 5px;
+  border-radius: var(--border-radius);
 }
 
 .cell-toolbar
 {
-  border-radius: 0 0 0 5px;
+  border-radius: 0 0 0 var(--border-radius);
   padding: 0.125em 0.25em;
 }
 
@@ -289,8 +292,7 @@ ul li::before
 {
   padding-top: 0;
   padding-bottom: 0;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19),
-              0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: var(--large-shadow);
   z-index: 2000;
 }
 
@@ -344,6 +346,32 @@ ul li::before
                     transparent
                   );
   animation: striperunner 1.5s linear infinite;
+}
+
+/* ---------------- */
+/* Dropdown Content */
+/* ---------------- */
+
+.dropdown__content {
+  right: 0;
+  top: 0.75rem;
+  left: initial;
+  padding: 0 !important;
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  box-shadow: var(--small-shadow);
+}
+
+.dropdown__content ul {
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown__content li {
+  padding: 0.5rem;
+}
+
+.dropdown__content li:before {
+  display: none;
 }
 
 /* -------------------- */
