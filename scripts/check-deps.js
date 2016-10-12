@@ -20,7 +20,7 @@ if (process.platform === 'win32') {
     'make',
     'gcc',
     'wget',
-    'python2'
+    'python2.7'
   ];
 
   depedencies.forEach(function(dep) {
