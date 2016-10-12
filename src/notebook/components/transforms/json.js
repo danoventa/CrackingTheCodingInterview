@@ -66,7 +66,7 @@ export default class JsonDisplay extends React.Component {
   }
 
   shouldExpandNode(): boolean {
-    if (this.props.metadata && this.props.metadata.expanded) {
+    if (this.props.metadata && this.props.metadata.get('expanded')) {
       return true;
     }
     return false;
