@@ -1,4 +1,5 @@
 import React from 'react';
+import Immutable from 'immutable';
 
 import { expect } from 'chai';
 
@@ -27,7 +28,7 @@ describe('JsonDisplay', () => {
 
   it('should expand json tree if expanded metadata is true', () => {
     const data = { name: 'Octocat' };
-    const metadata = { expanded: true };
+    const metadata = Immutable.fromJS({ expanded: true });
     const component = shallow(
       <JsonDisplay data={data} theme='light' metadata={metadata} />
     );
