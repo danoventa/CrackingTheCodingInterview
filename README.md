@@ -120,22 +120,26 @@ And then opening `docs/index.html` in your favorite browser.
 ### Bump the version
 
 ```
+cd app
 npm version {major|minor|patch}
+cd ..
 git push
 git push --tags
-npm publish
 ```
 
-### OS X release
+### Create the package
+
+To package a release run:
+```
+npm run dist
+```
+
+This needs to be done on every platform we like to ship.
 
 The OS X release has to be signed with an Apple developer key. Currently only
-Kyle (@rgbkrk) has this set up. The process he runs through is as follows:
+Kyle (@rgbkrk) has this set up.
 
-```
-npm run dist:osx:signed
-```
-
-Then verify that the copy of nteract in `dist/nteract-darwin-x64/` works
+Then verify that the copy of nteract in `dist/` works
 properly (mostly ad-hoc basic notebook loading and execution).
 
 ## Sponsors
