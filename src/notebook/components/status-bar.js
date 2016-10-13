@@ -27,7 +27,7 @@ export default class StatusBar extends React.Component {
           {
             this.props.lastSaved ?
               <p> Last saved {moment(this.props.lastSaved).fromNow()} </p> :
-              <p> Not saved yet </p>
+                <p> Not saved yet </p>
           }
         </span>
         <span className="pull-left">
