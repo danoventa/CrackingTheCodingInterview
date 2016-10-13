@@ -4,7 +4,7 @@ import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import Inputs from './inputs';
-import { TogglableDisplay } from './display-area';
+import Display from './display-area';
 
 import Editor from './editor';
 import LatexRenderer from '../latex';
@@ -49,6 +49,10 @@ class CodeCell extends React.Component {
     return this.props.cell.get('inputHidden');
   }
 
+  isOutputExpanded() {
+    return this.props.cell.get('outputExpanded');
+  }
+
   render(): ?React.Element<any> {
     return (<div className={this.props && this.props.running ? 'cell-running' : ''} >
       {
@@ -90,13 +94,14 @@ class CodeCell extends React.Component {
       }
       <LatexRenderer>
         <div className="outputs">
-          <TogglableDisplay
+          <Display
             className="outputs-display"
             outputs={this.props.cell.get('outputs')}
-            isHidden={this.isOutputHidden()}
             displayOrder={this.props.displayOrder}
             transforms={this.props.transforms}
             theme={this.props.theme}
+            expanded={this.isOutputExpanded()}
+            isHidden={this.isOutputHidden()}
           />
         </div>
       </LatexRenderer>

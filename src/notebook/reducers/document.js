@@ -12,6 +12,7 @@ export default handleActions({
         cells.map((value) =>
           value.set('inputHidden', false)
                 .set('outputHidden', false)
+                .set('outputExpanded', false)
                 .set('status', '')));
 
     return state.set('notebook', notebook)
@@ -239,5 +240,11 @@ export default handleActions({
     return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
       .delete(['notebook', 'cellMap', id, 'execution_count'])
       .delete(['notebook', 'cellMap', id, 'outputs']);
+  },
+  [constants.TOGGLE_OUTPUT_EXPANSION]: function toggleOutputExpansion(state, action) {
+    const { id } = action;
+
+    return state.updateIn(['notebook', 'cellMap'], (cells) => cells.setIn([id, 'outputExpanded'],
+      !cells.getIn([id, 'outputExpanded'])));
   },
 }, {});

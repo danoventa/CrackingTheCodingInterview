@@ -13,6 +13,7 @@ import {
   changeOutputVisibility,
   changeInputVisibility,
   changeCellType,
+  toggleOutputExpansion,
 } from '../../actions';
 
 type Props = {
@@ -46,6 +47,7 @@ export default class Toolbar extends React.Component {
     this.changeInputVisibility = this.changeInputVisibility.bind(this);
     this.changeOutputVisibility = this.changeOutputVisibility.bind(this);
     this.changeCellType = this.changeCellType.bind(this);
+    this.toggleOutputExpansion = this.toggleOutputExpansion.bind(this);
   }
 
   shouldComponentUpdate(): boolean {
@@ -87,17 +89,21 @@ export default class Toolbar extends React.Component {
     this.context.store.dispatch(changeCellType(this.props.id, to));
   }
 
+  toggleOutputExpansion() {
+    this.context.store.dispatch(toggleOutputExpansion(this.props.id));
+  }
+
   render(): ?React.Element<any> {
     const showPlay = this.props.type !== 'markdown';
     return (
       <div className="cell-toolbar-mask">
         <div className="cell-toolbar">
           {showPlay &&
-            <span>
-              <button onClick={this.executeCell} className="executeButton" >
-                <span className="octicon octicon-triangle-right" />
-              </button>
-            </span>}
+          <span>
+            <button onClick={this.executeCell} className="executeButton" >
+              <span className="octicon octicon-triangle-right" />
+            </button>
+          </span>}
           <button onClick={this.removeCell} className="deleteButton" >
             <span className="octicon octicon-trashcan" />
           </button>
@@ -122,6 +128,9 @@ export default class Toolbar extends React.Component {
                   </li>
                   <li onClick={this.changeOutputVisibility} className="outputVisibility" >
                     <a>Toggle Output Visibility</a>
+                  </li>
+                  <li onClick={this.toggleOutputExpansion} className="outputExpanded" >
+                    <a>Toggle Expanded Output</a>
                   </li>
                 </ul> : null
               }
