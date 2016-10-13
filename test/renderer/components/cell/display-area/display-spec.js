@@ -11,18 +11,43 @@ import {
   createRenderer
 } from 'react-addons-test-utils';
 
-import TogglableDisplay from '../../../../../src/notebook/components/cell/display-area/togglable-display';
+import Display from '../../../../../src/notebook/components/cell/display-area';
+import { displayOrder, transforms } from '../../../../../src/notebook/components/transforms';
 
-describe('TogglableDisplay', () => {
+describe('Display', () => {
   it('does not display when status is hidden', () => {
     const renderer = createRenderer();
-    renderer.render(<TogglableDisplay isHidden={true} />);
+    const outputs = Immutable.fromJS([{
+      output_type: 'display_data',
+      data: {
+        'text/html': 'Test content',
+      }
+    }]);
+    renderer.render(<Display
+      outputs={outputs}
+      isHidden={true}
+      theme={"light"}
+      displayOrder={displayOrder}
+      transforms={transforms}
+    />);
     const component = renderer.getRenderOutput();
     expect(component).to.be.null;
   });
   it('displays status when it is not hidden', () => {
     const renderer = createRenderer();
-    renderer.render(<TogglableDisplay isHidden={false} />);
+    const outputs = Immutable.fromJS([{
+      output_type: 'display_data',
+      data: {
+        'text/html': 'Test content',
+      }
+    }]);
+    renderer.render(<Display
+      outputs={outputs}
+      isHidden={false}
+      theme={"light"}
+      displayOrder={displayOrder}
+      transforms={transforms}
+    />);
     const component = renderer.getRenderOutput();
     expect(component).to.not.be.null;
   });
