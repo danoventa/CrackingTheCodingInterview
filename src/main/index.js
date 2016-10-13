@@ -28,12 +28,7 @@ const argv = require('yargs')
   .version(version)
   .parse(process.argv.slice(sliceAt));
 
-const notebooks = argv._
-  .filter(Boolean)
-  .filter(x => /^(?!-psn)/.test(x)) // Ignore strangeness on OS X first launch
-                                 // see #805
-  .filter(x => x !== '.'); // Ignore the `electron .`
-                           // TODO: Consider opening something for directories
+const notebooks = argv._.filter(x => /(.ipynb)$/.test(x));
 
 ipc.on('new-kernel', (event, newKernel) => {
   launchNewNotebook(newKernel);
