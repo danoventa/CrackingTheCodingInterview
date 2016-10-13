@@ -5,7 +5,7 @@
   --primary-border: #495F7D;
 
   --cell-bg: #334863;
-  --cell-bg-hover: #495F7D;
+  --cell-bg-hover: var(--primary-border);
   --cell-bg-focus: #5e7697;
 
   --toolbar-bg: #fff;
@@ -13,7 +13,7 @@
   --toolbar-button-hover: var(--cell-bg);
 
   --dropdown-content: var(--main-bg-color);
-  --dropdown-content-hover: var(--toolbar-button-hover);
+  --dropdown-content-hover: var(--cm-background);
 
   --pager-bg: #354a66;
   --input-color: #fafafa;
@@ -352,21 +352,13 @@ ul li::before
 /* Dropdown Content */
 /* ---------------- */
 
-.dropdown__content {
-  right: 0;
+.notebook .dropdown__content {
   top: 0.75rem;
-  left: initial;
-  padding: 0 !important;
   border-radius: var(--border-radius) 0 0 var(--border-radius);
   box-shadow: var(--small-shadow);
 }
 
-.dropdown__content ul {
-  padding: 0;
-  margin: 0;
-}
-
-.dropdown__content li {
+.notebook .dropdown__content li {
   padding: 0.5rem;
 }
 

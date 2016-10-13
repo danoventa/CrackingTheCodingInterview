@@ -12,8 +12,8 @@
   --toolbar-button: #aaa;
   --toolbar-button-hover: #555;
 
-  --dropdown-content: white;
-  --dropdown-content-hover: var(--toolbar-button-hover);
+  --dropdown-content: var(--cm-background);
+  --dropdown-content-hover: #eee;
 
   --pager-bg: white;
   --input-color: #3241a0;
@@ -137,4 +137,8 @@
   border-color: #66bb6a;
   border-left-width: 0px;
   background: linear-gradient(to right, #66bb6a -40px, #66bb6a 5px, transparent 5px, transparent 100%);
+}
+
+.dropdown__content ul {
+  box-shadow: -1px 1px 5px rgba(0,0,0,0.2);
 }
