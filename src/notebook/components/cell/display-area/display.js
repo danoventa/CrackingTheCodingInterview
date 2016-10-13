@@ -12,6 +12,8 @@ type Props = {
   outputs: ImmutableList<any>,
   transforms: ImmutableMap<string, any>,
   theme: string,
+  expanded: boolean,
+  isHidden: boolean,
 }
 
 export default function Display(props: Props): ?React.Element<any> {
@@ -20,7 +22,7 @@ export default function Display(props: Props): ?React.Element<any> {
   const style = {
     height: props.expanded ? '300px' : 'auto',
     overflow: props.expanded ? 'scroll' : 'overflow',
-  }
+  };
 
   if (!props.isHidden) {
     return (
