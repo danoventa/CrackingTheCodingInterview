@@ -4,7 +4,7 @@ import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import Inputs from './inputs';
-import { Display } from './display-area';
+import Display from './display-area';
 
 import Editor from './editor';
 import LatexRenderer from '../latex';
