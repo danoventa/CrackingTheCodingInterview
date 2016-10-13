@@ -9,10 +9,10 @@
   --cell-bg-focus: #E26710;
 
   --toolbar-bg: rgba(255,255,255,0.3);
-  --toolbar-button: #aaa;
-  --toolbar-button-hover: #555;
+  --toolbar-button: rgba(255,255,255,0.75);
+  --toolbar-button-hover: #fff;
 
-  --dropdown-content: white;
+  --dropdown-content: rgba(255,255,255,0.85);
   --dropdown-content-hover:  var(--toolbar-button-hover);
 
   --pager-bg: #fafafa;

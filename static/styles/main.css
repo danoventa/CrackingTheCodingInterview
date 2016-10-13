@@ -420,7 +420,6 @@ code {
 /* Overwrite some of the hint Styling */
 
 .CodeMirror-hints {
-
   -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
   -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
   box-shadow: 2px 3px 5px rgba(0,0,0,.2);
@@ -455,12 +454,12 @@ li.CodeMirror-hint-active {
     display: none;
     opacity:  1.0;
     position: absolute;
-    left: 8px;
+    top: 0.2em;
+    right: 0;
     border-style: none;
-    padding: 10px;
-    padding-top: 0px;
-    padding-right: 0px;
+    padding: 0;
     font-size: 11px;
+    line-height: 1.5;
     margin: 20px 0;
     background-color: var(--dropdown-content);
 }
@@ -468,11 +467,16 @@ li.CodeMirror-hint-active {
 .dropdown__content ul {
     list-style: none;
     text-align: left;
-    padding-left: 5px;
+    padding: 0;
+    margin: 0;
     opacity: 1.0;
 }
 
-.dropdown__content ul li:hover {
+.dropdown__content li {
+  padding: 0.5rem;
+}
+
+.dropdown__content li:hover {
     background-color: var(--dropdown-content-hover);
     cursor: pointer;
 }

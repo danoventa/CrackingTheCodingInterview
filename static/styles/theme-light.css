@@ -12,8 +12,8 @@
   --toolbar-button: #aaa;
   --toolbar-button-hover: #555;
 
-  --dropdown-content: white;
-  --dropdown-content-hover: rgb(210,210,210);
+  --dropdown-content: var(--cell-bg-hover);
+  --dropdown-content-hover: var(--cell-bg-focus);
 
   --pager-bg: #fafafa;
   --input-color: #8c8a8e;
