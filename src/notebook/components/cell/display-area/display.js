@@ -18,8 +18,8 @@ export default function Display(props: Props): ?React.Element<any> {
   const order = props.displayOrder;
   const tf = props.transforms;
   const style = {
-    height: props.expanded ? 'auto' : '300px',
-    overflow: props.expanded ? 'visible' : 'scroll',
+    height: props.expanded ? '300px' : 'auto',
+    overflow: props.expanded ? 'scroll' : 'overflow',
   }
 
   if (!props.isHidden) {
