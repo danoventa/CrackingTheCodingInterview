@@ -31,7 +31,7 @@ node_modules
 .ipynb_checkpoints
 
 # Ignore compiled output
-build/
+app/build/
 dist/
 
 test/*.ipynb
