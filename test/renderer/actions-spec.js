@@ -320,3 +320,12 @@ describe('setGithubToken', () => {
     });
   });
 });
+
+describe('toggleOutputExpansion', () => {
+  it('creates a TOGGLE_OUTPUT_EXPANSION action', () => {
+    expect(actions.toggleOutputExpansion('235')).to.deep.equal({
+      type: constants.TOGGLE_OUTPUT_EXPANSION,
+      id: '235',
+    });
+  });
+});
