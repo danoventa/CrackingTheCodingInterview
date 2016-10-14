@@ -6,6 +6,8 @@ import { installShellCommand } from './cli';
 
 const kernelspecs = require('kernelspecs');
 
+const exampleNotebooksDirectory = path.join(__dirname, '..', '..', 'example-notebooks');
+
 function send(focusedWindow, eventName, obj) {
   if (!focusedWindow) {
     console.error('renderer window not in focus (are your devtools open?)');
@@ -92,7 +94,7 @@ export const fileSubMenus = {
                   'openFile',
                 ],
               };
-              launch('example-notebooks/geojson.ipynb');
+              launch(path.join(exampleNotebooksDirectory, 'geojson.ipynb'));
             },
           },
           {
@@ -107,11 +109,11 @@ export const fileSubMenus = {
                   'openFile',
                 ],
               };
-              launch('example-notebooks/plotly.ipynb');
+              launch(path.join(exampleNotebooksDirectory, 'plotly.ipynb'));
             },
           },
           {
-            label: '&Pandas to GeoJson',
+            label: '&Pandas to GeoJSON',
             click: () => {
               const opts = {
                 title: 'Open a notebook',
@@ -122,7 +124,7 @@ export const fileSubMenus = {
                   'openFile',
                 ],
               };
-              launch('example-notebooks/pandas-to-geojson.ipynb');
+              launch(path.join(exampleNotebooksDirectory, 'pandas-to-geojson.ipynb'));
             },
           },
           {
@@ -137,7 +139,7 @@ export const fileSubMenus = {
                   'openFile',
                 ],
               };
-              launch('example-notebooks/download-stats.ipynb');
+              launch(path.join(exampleNotebooksDirectory, 'download-stats.ipynb'));
             },
           },
           {
@@ -152,7 +154,7 @@ export const fileSubMenus = {
                   'openFile',
                 ],
               };
-              launch('example-notebooks/plotlyr.ipynb');
+              launch(path.join(exampleNotebooksDirectory, 'plotlyr.ipynb'));
             },
           },
           {
@@ -167,7 +169,7 @@ export const fileSubMenus = {
                   'openFile',
                 ],
               };
-              launch('example-notebooks/intro.ipynb');
+              launch(path.join(exampleNotebooksDirectory, 'intro.ipynb'));
             },
           }
         ]
