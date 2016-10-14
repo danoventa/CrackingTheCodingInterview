@@ -52,27 +52,127 @@ export const fileSubMenus = {
   },
   open: {
     label: '&Open',
-    click: () => {
-      const opts = {
-        title: 'Open a notebook',
-        filters: [
-          { name: 'Notebooks', extensions: ['ipynb'] },
-        ],
-        properties: [
-          'openFile',
-        ],
-      };
-      if (process.cwd() === '/') {
-        opts.defaultPath = app.getPath('home');
-      }
+    submenu: [
+      {
+        label: '&Open',
+        click: () => {
+          const opts = {
+            title: 'Open a notebook',
+            filters: [
+              { name: 'Notebooks', extensions: ['ipynb'] },
+            ],
+            properties: [
+              'openFile',
+            ],
+          };
+          if (process.cwd() === '/') {
+            opts.defaultPath = app.getPath('home');
+          }
 
-      dialog.showOpenDialog(opts, (fname) => {
-        if (fname) {
-          launch(fname[0]);
-        }
-      });
-    },
-    accelerator: 'CmdOrCtrl+O',
+          dialog.showOpenDialog(opts, (fname) => {
+            if (fname) {
+              launch(fname[0]);
+            }
+          });
+        },
+        accelerator: 'CmdOrCtrl+O',
+      },
+      {
+        label: '&Example Notebooks',
+        submenu: [
+          {
+            label: '&Geojson',
+            click: () => {
+              const opts = {
+                title: 'Open a notebook',
+                filters: [
+                  { name: 'Notebooks', extensions: ['ipynb'] },
+                ],
+                properties: [
+                  'openFile',
+                ],
+              };
+              launch('example-notebooks/geojson.ipynb');
+            },
+          },
+          {
+            label: '&Plotly',
+            click: () => {
+              const opts = {
+                title: 'Open a notebook',
+                filters: [
+                  { name: 'Notebooks', extensions: ['ipynb'] },
+                ],
+                properties: [
+                  'openFile',
+                ],
+              };
+              launch('example-notebooks/plotly.ipynb');
+            },
+          },
+          {
+            label: '&Pandas to GeoJson',
+            click: () => {
+              const opts = {
+                title: 'Open a notebook',
+                filters: [
+                  { name: 'Notebooks', extensions: ['ipynb'] },
+                ],
+                properties: [
+                  'openFile',
+                ],
+              };
+              launch('example-notebooks/pandas-to-geojson.ipynb');
+            },
+          },
+          {
+            label: '&Download Stats',
+            click: () => {
+              const opts = {
+                title: 'Open a notebook',
+                filters: [
+                  { name: 'Notebooks', extensions: ['ipynb'] },
+                ],
+                properties: [
+                  'openFile',
+                ],
+              };
+              launch('example-notebooks/download-stats.ipynb');
+            },
+          },
+          {
+            label: '&Plotlyr',
+            click: () => {
+              const opts = {
+                title: 'Open a notebook',
+                filters: [
+                  { name: 'Notebooks', extensions: ['ipynb'] },
+                ],
+                properties: [
+                  'openFile',
+                ],
+              };
+              launch('example-notebooks/plotlyr.ipynb');
+            },
+          },
+          {
+            label: '&Intro',
+            click: () => {
+              const opts = {
+                title: 'Open a notebook',
+                filters: [
+                  { name: 'Notebooks', extensions: ['ipynb'] },
+                ],
+                properties: [
+                  'openFile',
+                ],
+              };
+              launch('example-notebooks/intro.ipynb');
+            },
+          }
+        ]
+      }
+    ]
   },
   save: {
     label: '&Save',
