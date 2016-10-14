@@ -25,7 +25,7 @@ export default class Display extends React.Component {
     transforms,
     displayOrder,
     isHidden: false,
-    expanded: true,
+    expanded: false,
   };
 
   constructor() {
@@ -51,6 +51,12 @@ export default class Display extends React.Component {
       return true;
     }
 
+    // Since expanded is a boolean, we need to make sure it's a property directly.
+    if ({}.hasOwnProperty.call(nextProps, 'expanded') &&
+      nextProps.expanded !== this.props.expanded) {
+      return true;
+    }
+
     return false;
   }
 
@@ -59,7 +65,7 @@ export default class Display extends React.Component {
   }
 
   recomputeStyle() {
-    if (this.el.scrollHeight > DEFAULT_SCROLL_HEIGHT) {
+    if (!this.props.expanded && this.el.scrollHeight > DEFAULT_SCROLL_HEIGHT) {
       this.el.style.height = `${DEFAULT_SCROLL_HEIGHT}px`;
       this.el.style.overflowY = 'scroll';
       return;
