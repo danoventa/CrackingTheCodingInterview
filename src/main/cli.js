@@ -11,7 +11,7 @@ function getStartCommand() {
   }
   const dir = join(process.resourcesPath, '..', subdir);
   const nteractPath = join(dir, 'nteract');
-  const electronPath = join(dir, 'Electron');
+  const electronPath = join(dir, 'electron');
 
   if (existsSync(nteractPath)) {
     return nteractPath;
@@ -34,8 +34,14 @@ function writeExecutable(installDir, script, callback) {
 
 export function installShellCommand() {
   const installDir = join('/usr/local/bin', 'nteract');
+  const installDirUbuntu = join(process.env.HOME, '.local', 'bin', 'nteract');
   const script = `#!/bin/bash\nnohup ${getStartCommand()} "$@" > /dev/null 2>&1 &`;
   writeExecutable(installDir, script, (err) => {
-    console.error(err);
+    if (err) {
+      writeExecutable(installDirUbuntu, script, (error) => {
+        console.error(err);
+        console.error(error);
+      });
+    }
   });
 }

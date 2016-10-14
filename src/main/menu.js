@@ -324,34 +324,27 @@ if (process.platform === 'darwin') {
 
 export const window = windowDraft;
 
-export const help = {
-  label: 'Help',
-  role: 'help',
-  submenu: [
-    {
-      label: 'Learn More',
-      click: () => { shell.openExternal('http://github.com/nteract/nteract'); },
-    },
-  ],
+const shellCommands = {
+  label: 'Install Shell Commands',
+  click: () => installShellCommand(),
 };
 
-export const helpLinux = {
+const helpDraft = {
   label: 'Help',
   role: 'help',
   submenu: [
     {
-      label: 'Install Shell Commands',
-      click: () => installShellCommand(),
-    },
-    {
       label: 'Learn More',
-      click: () => { shell.openExternal('http://github.com/nteract/nteract'); },
-    },
-    {
-      type: 'separator',
+      click: () => { shell.openExternal('http://github.com/nteract/nteract'); }
     }
-  ],
+  ]
 };
+
+if (process.platform === 'linux') {
+  helpDraft.submenu.unshift(shellCommands, { type: 'separator' });
+}
+
+export const help = helpDraft;
 
 const name = 'nteract';
 app.setName(name);
@@ -366,10 +359,7 @@ export const named = {
     {
       type: 'separator',
     },
-    {
-      label: 'Install Shell Commands',
-      click: () => installShellCommand(),
-    },
+    shellCommands,
     {
       type: 'separator',
     },
@@ -417,11 +407,7 @@ export function generateDefaultTemplate() {
   template.push(edit);
   template.push(view);
   template.push(window);
-  if (process.platform === 'linux') {
-    template.push(helpLinux);
-  } else {
-    template.push(help);
-  }
+  template.push(help);
 
   return template;
 }
