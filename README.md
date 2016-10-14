@@ -7,7 +7,7 @@
 ![Documentation Coverage](https://doc.esdoc.org/github.com/nteract/nteract/badge.svg)
 [![slack in](http://slack.nteract.in/badge.svg)](http://slack.nteract.in)
 
-[**Users**](#installation--users) | [**Contributors and Development**](#installation---contributors-and-development) | [**Maintainers**](#for-maintainers-creating-a-release)
+[**Users**](#installation---users) | [**Contributors and Development**](#installation---contributors-and-development) | [**Maintainers**](#for-maintainers-creating-a-release)
 
 
 ## Overview
