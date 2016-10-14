@@ -655,3 +655,29 @@ describe('changeCellType', () => {
     expect(state.document).to.equal(originalState.document);
   });
 });
+
+describe('toggleOutputExpansion', () => {
+  it('changes outputExpanded set', () => {
+    let cellStatuses = new Map();
+    monocellDocument.getIn(['notebook', 'cellOrder']).map((cellID) => {
+      cellStatuses = cellStatuses.setIn([cellID, 'outputExpanded'], false)
+      return cellStatuses;
+    });
+
+    const docWithStatuses = monocellDocument.set('cellStatuses', cellStatuses);
+
+    const originalState = {
+      document: docWithStatuses,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+ 
+    const action = {
+      type: constants.TOGGLE_OUTPUT_EXPANSION,
+      id: id,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'outputExpanded'])).to.be.true;
+  });
+});
