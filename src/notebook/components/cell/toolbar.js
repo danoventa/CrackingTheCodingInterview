@@ -32,6 +32,7 @@ export default class Toolbar extends React.Component {
   changeOutputVisibility: () => void;
   changeCellType: () => void;
   dropdown: Dropdown;
+  toggleOutputExpansion: () => void;
 
   static contextTypes = {
     store: React.PropTypes.object,
@@ -89,7 +90,7 @@ export default class Toolbar extends React.Component {
     this.context.store.dispatch(changeCellType(this.props.id, to));
   }
 
-  toggleOutputExpansion() {
+  toggleOutputExpansion(): void {
     this.context.store.dispatch(toggleOutputExpansion(this.props.id));
   }
 
