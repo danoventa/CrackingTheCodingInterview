@@ -340,7 +340,7 @@ const helpDraft = {
   ]
 };
 
-if (process.platform === 'linux') {
+if (process.platform !== 'darwin') {
   helpDraft.submenu.unshift(shellCommands, { type: 'separator' });
 }
 
