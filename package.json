@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "node scripts/check-deps.js && install-app-deps",
     "prestart": "npm run build",
-    "start": "cross-env NODE_ENV=development ./node_modules/electron/cli.js .",
+    "start": "cross-env NODE_ENV=development ./node_modules/electron/cli.js ./app/",
     "prepublish": "npm run build",
     "clean": "rimraf ./app/build dist",
     "lint": "eslint src",

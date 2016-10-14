@@ -16,7 +16,7 @@ function getStartCommand() {
     return [nteractPath, dir];
   } else if (existsSync(electronPath)) {
     // Developer install
-    const mainDir = dir.split('node_modules')[0];
+    const mainDir = join(dir.split('node_modules')[0], 'app');
     return [`${electronPath} ${mainDir}`, mainDir];
   }
   return [null, null];
