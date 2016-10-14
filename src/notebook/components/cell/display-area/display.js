@@ -27,7 +27,20 @@ export default class Display extends React.Component {
   };
 
   shouldComponentUpdate(nextProps: Props): boolean {
-    return true;
+    if (!nextProps || !this.props) {
+      return false;
+    }
+
+    const themeChanged = nextProps.theme && nextProps.theme !== this.props.theme;
+    if (themeChanged) {
+      return true;
+    }
+
+    if (nextProps.outputs && !nextProps.outputs.equals(this.props.outputs)) {
+      return true;
+    }
+
+    return false;
   }
 
   render() {
