@@ -25,9 +25,9 @@ function getStartCommand() {
 
 function writeExecutable(installDir, script, callback) {
   writeFile(installDir, script, (err) => {
-    if (err) callback(err);
-    chmod(installDir, '755', (error) => {
-      if (error) callback(error);
+    if (err) return callback(err);
+    return chmod(installDir, '755', (error) => {
+      callback(error);
     });
   });
 }
