@@ -6,7 +6,9 @@ import { installShellCommand } from './cli';
 
 const kernelspecs = require('kernelspecs');
 
-const exampleNotebooksDirectory = path.join(__dirname, '..', '..', 'example-notebooks');
+const exampleNotebooksDirectory = path.resolve(
+  path.join(__dirname, '..', '..', 'example-notebooks')
+);
 
 function send(focusedWindow, eventName, obj) {
   if (!focusedWindow) {
