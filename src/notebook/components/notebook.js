@@ -73,7 +73,7 @@ export function getLanguageMode(notebook: any): string {
   return language;
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: Object) => ({
   theme: state.config.theme,
   lastSaved: state.app.get('lastSaved'),
   kernelSpecName: state.app.get('kernelSpecName'),
@@ -90,7 +90,7 @@ export class Notebook extends React.Component {
   createCellElement: (s: string) => ?React.Element<any>;
   createStickyCellElement: (s: string) => ?React.Element<any>;
   keyDown: (e: KeyboardEvent) => void;
-  moveCell: (source: string, dest: string, above: string) => void;
+  moveCell: (source: string, dest: string, above: boolean) => void;
   stickyCellsPlaceholder: HTMLElement;
   stickyCellContainer: HTMLElement;
   cellElements: ImmutableMap<string, any>;
@@ -136,7 +136,7 @@ export class Notebook extends React.Component {
     document.removeEventListener('keydown', this.keyDown);
   }
 
-  moveCell(sourceId: string, destinationId: string, above: string): void {
+  moveCell(sourceId: string, destinationId: string, above: boolean): void {
     this.context.store.dispatch(moveCell(sourceId, destinationId, above));
   }
 
