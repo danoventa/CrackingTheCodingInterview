@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
+import Immutable, { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import { transforms, displayOrder } from '../../transforms';
 
@@ -16,37 +16,45 @@ type Props = {
   isHidden: boolean,
 }
 
-export default function Display(props: Props): ?React.Element<any> {
-  const order = props.displayOrder;
-  const tf = props.transforms;
-  const style = {
-    height: props.expanded ? '300px' : 'auto',
-    overflow: props.expanded ? 'scroll' : 'overflow',
+export default class Display extends React.Component {
+  props: Props;
+
+  static defaultProps = {
+    transforms,
+    displayOrder,
+    isHidden: false,
+    expanded: true,
   };
 
-  if (!props.isHidden) {
-    return (
-      <div className="cell_display" style={style}>
-        {
-          props.outputs.map((output, index) =>
-            <Output
-              key={index}
-              output={output}
-              displayOrder={order}
-              transforms={tf}
-              theme={props.theme}
-            />
-          )
-        }
-      </div>
-    );
+  shouldComponentUpdate(nextProps: Props): boolean {
+    return true;
   }
-  return null;
-}
 
-Display.defaultProps = {
-  transforms,
-  displayOrder,
-  isHidden: false,
-  expanded: true,
-};
+  render() {
+    const order = this.props.displayOrder;
+    const tf = this.props.transforms;
+    const style = {
+      height: this.props.expanded ? '300px' : 'auto',
+      overflow: this.props.expanded ? 'scroll' : 'overflow',
+    };
+
+    if (!this.props.isHidden) {
+      return (
+        <div className="cell_display" style={style}>
+          {
+            this.props.outputs.map((output, index) =>
+              <Output
+                key={index}
+                output={output}
+                displayOrder={order}
+                transforms={tf}
+                theme={this.props.theme}
+              />
+            )
+          }
+        </div>
+      );
+    }
+    return null;
+  }
+}
