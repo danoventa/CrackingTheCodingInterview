@@ -18,15 +18,12 @@ const log = require('electron-log');
 
 const kernelspecs = require('kernelspecs');
 
-const version = require('../../package.json').version;
-
-log.info('args', process.argv);
-
-const sliceAt = process.argv[0].match('nteract') ? 1 : 2;
-
 const argv = require('yargs')
-  .version(version)
-  .parse(process.argv.slice(sliceAt));
+  .alias('k', 'kernel')
+  .default('kernel', 'python3')
+  .argv;
+
+log.info('args', argv);
 
 const notebooks = argv._.filter(x => /(.ipynb)$/.test(x));
 
@@ -119,11 +116,10 @@ openFile$
     if (notebooks.length <= 0 && buffer.length <= 0) {
       log.info('launching an empty notebook by default');
       kernelSpecsPromise.then(specs => {
-        const defaultKernel = 'python3';
-        let kernel = defaultKernel;
+        let kernel;
 
-        if ('python3' in specs) {
-          kernel = 'python3';
+        if (argv.kernel in specs) {
+          kernel = argv.kernel;
         } else if ('python2' in specs) {
           kernel = 'python2';
         } else {
