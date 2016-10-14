@@ -2,6 +2,7 @@ import { dialog, app, shell, Menu, ipcMain as ipc,
          BrowserWindow } from 'electron';
 import * as path from 'path';
 import { launch, launchNewNotebook } from './launch';
+import { installShellCommand } from './cli';
 
 const kernelspecs = require('kernelspecs');
 
@@ -334,6 +335,24 @@ export const help = {
   ],
 };
 
+export const helpLinux = {
+  label: 'Help',
+  role: 'help',
+  submenu: [
+    {
+      label: 'Install Shell Commands',
+      click: () => installShellCommand(),
+    },
+    {
+      label: 'Learn More',
+      click: () => { shell.openExternal('http://github.com/nteract/nteract'); },
+    },
+    {
+      type: 'separator',
+    }
+  ],
+};
+
 const name = 'nteract';
 app.setName(name);
 
@@ -343,6 +362,13 @@ export const named = {
     {
       label: `About ${name}`,
       role: 'about',
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Install Shell Commands',
+      click: () => installShellCommand(),
     },
     {
       type: 'separator',
@@ -391,7 +417,11 @@ export function generateDefaultTemplate() {
   template.push(edit);
   template.push(view);
   template.push(window);
-  template.push(help);
+  if (process.platform === 'linux') {
+    template.push(helpLinux);
+  } else {
+    template.push(help);
+  }
 
   return template;
 }
