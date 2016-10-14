@@ -194,3 +194,26 @@ describe('Toolbar.changeCellType', () => {
     });
   });
 });
+
+describe('Toolbar.toggleOutputExpansion', () => {
+  it('dispatches a TOGGLE_OUTPUT_EXPANSION action', () => {
+    const cell = commutable.emptyCodeCell;
+    const store = dummyStore();
+    store.dispatch = sinon.spy();
+
+    const toolbar = mount(
+      <Toolbar id={'0-1-2-3'} cell={cell} type={'code'} />,
+      { context: { store } }
+    );
+
+    const button = toolbar
+      .find('.outputExpanded');
+
+    button.simulate('click');
+
+    expect(store.dispatch.firstCall).to.be.calledWith({
+      type: 'TOGGLE_OUTPUT_EXPANSION',
+      id: '0-1-2-3',
+    });
+  });
+});
