@@ -16,6 +16,8 @@ type Props = {
   isHidden: boolean,
 }
 
+const DEFAULT_SCROLL_HEIGHT = 300;
+
 export default class Display extends React.Component {
   props: Props;
 
@@ -25,6 +27,15 @@ export default class Display extends React.Component {
     isHidden: false,
     expanded: true,
   };
+
+  constructor() {
+    super();
+    this.recomputeStyle = this.recomputeStyle.bind(this);
+  }
+
+  componentDidMount() {
+    this.recomputeStyle();
+  }
 
   shouldComponentUpdate(nextProps: Props): boolean {
     if (!nextProps || !this.props) {
@@ -43,17 +54,28 @@ export default class Display extends React.Component {
     return false;
   }
 
+  componentDidUpdate() {
+    this.recomputeStyle();
+  }
+
+  recomputeStyle() {
+    if (this.el.scrollHeight > DEFAULT_SCROLL_HEIGHT) {
+      this.el.style.height = `${DEFAULT_SCROLL_HEIGHT}px`;
+      this.el.style.overflowY = 'scroll';
+      return;
+    }
+
+    this.el.style.height = 'auto';
+    this.el.style.overflowY = 'overflow';
+  }
+
   render() {
     const order = this.props.displayOrder;
     const tf = this.props.transforms;
-    const style = {
-      height: this.props.expanded ? '300px' : 'auto',
-      overflow: this.props.expanded ? 'scroll' : 'overflow',
-    };
 
     if (!this.props.isHidden) {
       return (
-        <div className="cell_display" style={style}>
+        <div className="cell_display" ref={(el) => { this.el = el; }}>
           {
             this.props.outputs.map((output, index) =>
               <Output
