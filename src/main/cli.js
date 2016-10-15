@@ -9,14 +9,14 @@ function getStartCommand() {
   const ext = (process.platform === 'win32') ? '.exe' : '';
   const dir = join(process.resourcesPath, '..', subdir);
 
-  const nteractPath = join(dir, 'nteract', ext);
-  const electronPath = join(dir, 'electron', ext);
+  const nteractPath = join(dir, `nteract${ext}`);
+  const electronPath = join(dir, `electron${ext}`);
 
   if (existsSync(nteractPath)) {
     return [nteractPath, dir];
   } else if (existsSync(electronPath)) {
     // Developer install
-    const mainDir = dir.split('node_modules')[0];
+    const mainDir = join(dir.split('node_modules')[0], 'app');
     return [`${electronPath} ${mainDir}`, mainDir];
   }
   return [null, null];
