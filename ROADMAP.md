@@ -5,14 +5,14 @@ We focus on small, lean, and iterative releases. This document will give you
 the sense of our overall vision and future work on the project.
 
 ## Pre-alpha (Completed)
-We want to start making packaged releases so that we can begin evaluating the 
+We want to start making packaged releases so that we can begin evaluating the
 desktop experience more fully. In other words, to be able to start testing the
-usability of our notebook. It is expected that we'll make lots of pre-alpha 
+usability of our notebook. It is expected that we'll make lots of pre-alpha
 "releases" to get the shipping flow down.
 
 * Packaging and Installation
     * Ability to open and run a notebook from the desktop
-    * Packaged release of "nteract-lite" (no bundled kernel) for OS X and Linux
+    * Packaged release of "nteract-lite" (no bundled kernel) for macOS and Linux
 * Specification Compliance
     * Full compliance with Notebook format v4
     * Full compliance with message spec v5
@@ -21,7 +21,7 @@ usability of our notebook. It is expected that we'll make lots of pre-alpha
 ## Alpha
 
 * Packaging and Installation
-    * ~~OS X and Linux packaged release~~
+    * ~~macOS and Linux packaged release~~
 * ~~Specification Compliance~~
     * ~~Read compliance with Notebook format v3 (v4 is already supported)~~
 * ~~Notebook Functionality~~
@@ -33,7 +33,7 @@ usability of our notebook. It is expected that we'll make lots of pre-alpha
 * ~~Testing coverage > 70%i~~
 
 A big part of the notebook is the ecosystem of libraries that rely on it. We need
-to make sure that we support many of the common libraries in use across Python, 
+to make sure that we support many of the common libraries in use across Python,
 Julia, R, and JavaScript. We need to insure that we are supporting the following
 libraries.
 
@@ -44,7 +44,7 @@ libraries.
 * Julia's Gadfly
 
 ## Beta
-Beta should be feature-complete (relative to the Jupyter Notebook) and stable 
+Beta should be feature-complete (relative to the Jupyter Notebook) and stable
 enough for a wide class of users to trust with running their notebooks in.
 
 * Testing coverage >= 90%
@@ -62,8 +62,8 @@ enough for a wide class of users to trust with running their notebooks in.
 
 ## Parking Lot
 
-The parking lot contains features we've talked about, discussed, and even put 
-time towards designing. The priority can shift of course, these are included 
+The parking lot contains features we've talked about, discussed, and even put
+time towards designing. The priority can shift of course, these are included
 in order for us to be explicit about goals.
 
 * Real time collaboration

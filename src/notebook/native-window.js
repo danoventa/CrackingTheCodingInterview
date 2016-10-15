@@ -24,7 +24,7 @@ export function setTitleFromAttributes(attributes) {
   const { executionState } = attributes;
 
   const win = remote.getCurrentWindow();
-  // TODO: Investigate if setRepresentedFilename() is a no-op on non-OS X
+  // TODO: Investigate if setRepresentedFilename() is a no-op on non-macOS
   if (filename && win.setRepresentedFilename) {
     win.setRepresentedFilename(attributes.fullpath);
     win.setDocumentEdited(attributes.modified);

@@ -83,7 +83,7 @@ const splashSubscription = electronReady$
   .subscribe(createSplashSubscriber());
 
 function closeAppOnNonDarwin() {
-  // On OS X, we want to keep the app and menu bar active
+  // On macOS, we want to keep the app and menu bar active
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -105,7 +105,7 @@ function openFileFromEvent({ event, filename }) {
 
 
 // Since we can't launch until app is ready
-// and OS X will send the open-file events early,
+// and macOS will send the open-file events early,
 // buffer those that come early.
 openFile$
   .buffer(fullAppReady$) // Form an array of open-file events from before app-ready
