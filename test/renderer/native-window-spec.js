@@ -29,8 +29,13 @@ describe('tildify', () => {
     expect(nativeWindow.tildify()).to.equal('');
   });
   it('replaces the user directory with ~', () => {
-    const result = nativeWindow.tildify(path.join(remote.app.getPath('home'), 'test-notebooks'));
-    expect(result).to.have.string('~');
+    const fixture = path.join(remote.app.getPath('home'), 'test-notebooks');
+    const result = nativeWindow.tildify(fixture);
+    if (process.platform === 'win32') {
+      expect(result).to.equal(fixture);
+    } else {
+      expect(result).to.have.string('~');
+    }
   });
 });
 

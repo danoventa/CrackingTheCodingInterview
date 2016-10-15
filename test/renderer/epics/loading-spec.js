@@ -15,44 +15,57 @@ import {
 
 import Immutable from 'immutable';
 
+const path = require('path');
+
 describe('load', () => {
-  expect(load('mytest.ipynb')).to.deep.equal({ type: 'LOAD', filename: 'mytest.ipynb' })
+  it('loads a notebook', () => {
+    expect(load('mytest.ipynb'))
+      .to.deep.equal({ type: 'LOAD', filename: 'mytest.ipynb' })
+  })
 })
 
 describe('newNotebook', () => {
-  expect(newNotebook('python3', '/tmp'))
-    .to.deep.equal({
-      type: 'NEW_NOTEBOOK',
-      kernelSpecName: 'python3',
-      cwd: '/tmp',
-    })
+  it('creates a new notebook', () => {
+    expect(newNotebook('python3', '/tmp'))
+      .to.deep.equal({
+        type: 'NEW_NOTEBOOK',
+        kernelSpecName: 'python3',
+        cwd: '/tmp',
+      })
+  })
 })
 
 describe('notebookLoaded', () => {
-  expect(notebookLoaded('test', dummyCommutable))
-    .to.deep.equal({
-      type: 'SET_NOTEBOOK',
-      filename: 'test',
-      notebook: dummyCommutable,
-    })
+  it('sets a notebook', () => {
+    expect(notebookLoaded('test', dummyCommutable))
+      .to.deep.equal({
+        type: 'SET_NOTEBOOK',
+        filename: 'test',
+        notebook: dummyCommutable,
+      })
+  })
 })
 
 describe('extractNewKernel', () => {
-  expect(extractNewKernel('/tmp/test.ipynb', dummyCommutable)).to.deep.equal({
-    type: 'LAUNCH_KERNEL',
-    kernelSpecName: 'python3',
-    cwd: '/tmp',
+  it('extracts and launches the kernel from a notebook', () => {
+    expect(extractNewKernel('/tmp/test.ipynb', dummyCommutable)).to.deep.equal({
+      type: 'LAUNCH_KERNEL',
+      kernelSpecName: 'python3',
+      cwd: path.resolve('/tmp'),
+    })
   })
 })
 
 describe('convertRawNotebook', () => {
-  const converted = convertRawNotebook({
-    filename: '/tmp/test.ipynb',
-    data: dummy,
-  });
-  expect(converted.filename).to.equal('/tmp/test.ipynb');
+  it('converts a raw notebook', () => {
+    const converted = convertRawNotebook({
+      filename: '/tmp/test.ipynb',
+      data: dummy,
+    });
+    expect(converted.filename).to.equal('/tmp/test.ipynb');
 
-  const notebook = converted.notebook;
-  expect(dummyCommutable.get('metadata').equals(notebook.get('metadata')))
-    .to.be.true;
+    const notebook = converted.notebook;
+    expect(dummyCommutable.get('metadata').equals(notebook.get('metadata')))
+      .to.be.true;
+  })
 })
