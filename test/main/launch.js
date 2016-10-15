@@ -9,13 +9,14 @@ describe('launch', () => {
     // Note that we can't use => functions because we need `this` to be mocha's
     this.timeout(10000);
 
+    let win;
     ipc.on('nteract:ping:kernel', (event, kernel) => {
       win.close();
-      expect(kernel).to.equal('python3');
+      expect(kernel === 'inodejs' || kernel === 'python3').to.be.true;
       done();
     });
 
-    const win = launch('example-notebooks/intro.ipynb');
+    win = launch('example-notebooks/intro.ipynb');
     win.hide(); // To make it nicer to run locally
 
     setTimeout(() => {

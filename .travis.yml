@@ -15,7 +15,6 @@ env:
   - CC=gcc-4.9
   matrix:
   - GROUP=coverage
-  - GROUP=functional
   - GROUP=lint
   - GROUP=flow
 
