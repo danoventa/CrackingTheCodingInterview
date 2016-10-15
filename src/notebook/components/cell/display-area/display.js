@@ -1,7 +1,9 @@
 // @flow
 import React from 'react';
 
-import Immutable, { List as ImmutableList, Map as ImmutableMap } from 'immutable';
+import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
+
+import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 
 import { transforms, displayOrder } from '../../transforms';
 
@@ -20,6 +22,9 @@ const DEFAULT_SCROLL_HEIGHT = 300;
 
 export default class Display extends React.Component {
   props: Props;
+  shouldComponentUpdate: (p: Props, s: any) => boolean;
+  recomputeStyle: () => void;
+  el: HTMLElement;
 
   static defaultProps = {
     transforms,
@@ -31,40 +36,18 @@ export default class Display extends React.Component {
   constructor() {
     super();
     this.recomputeStyle = this.recomputeStyle.bind(this);
+    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
   }
 
   componentDidMount() {
     this.recomputeStyle();
   }
 
-  shouldComponentUpdate(nextProps: Props): boolean {
-    if (!nextProps || !this.props) {
-      return false;
-    }
-
-    const themeChanged = nextProps.theme && nextProps.theme !== this.props.theme;
-    if (themeChanged) {
-      return true;
-    }
-
-    if (nextProps.outputs && !nextProps.outputs.equals(this.props.outputs)) {
-      return true;
-    }
-
-    // Since expanded is a boolean, we need to make sure it's a property directly.
-    if ({}.hasOwnProperty.call(nextProps, 'expanded') &&
-      nextProps.expanded !== this.props.expanded) {
-      return true;
-    }
-
-    return false;
-  }
-
   componentDidUpdate() {
     this.recomputeStyle();
   }
 
-  recomputeStyle() {
+  recomputeStyle(): void {
     if (!this.props.expanded && this.el.scrollHeight > DEFAULT_SCROLL_HEIGHT) {
       this.el.style.height = `${DEFAULT_SCROLL_HEIGHT}px`;
       this.el.style.overflowY = 'scroll';
