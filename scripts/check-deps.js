@@ -19,7 +19,6 @@ if (process.platform === 'win32') {
   var depedencies = [
     'make',
     'gcc',
-    'wget',
     'python2.7'
   ];
 
