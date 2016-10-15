@@ -24,7 +24,7 @@
             process.env.NODE_ENV = 'production';
         }
         try {
-          require('../build/notebook/index');
+          require('../build/webpacked-notebook')
         } catch(err) {
           const el = document.querySelector('body');
           el.innerHTML = '';
