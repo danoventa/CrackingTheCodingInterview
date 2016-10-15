@@ -9,8 +9,8 @@ function getStartCommand() {
   const ext = (process.platform === 'win32') ? '.exe' : '';
   const dir = join(process.resourcesPath, '..', subdir);
 
-  const nteractPath = join(dir, 'nteract', ext);
-  const electronPath = join(dir, 'electron', ext);
+  const nteractPath = join(dir, `nteract${ext}`);
+  const electronPath = join(dir, `electron${ext}`);
 
   if (existsSync(nteractPath)) {
     return [nteractPath, dir];
