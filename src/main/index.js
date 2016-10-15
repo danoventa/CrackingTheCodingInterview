@@ -19,8 +19,15 @@ const log = require('electron-log');
 const kernelspecs = require('kernelspecs');
 
 const argv = require('yargs')
-  .alias('k', 'kernel')
+  .version()
+  .usage('Usage: nteract <notebooks> [options]')
+  .example('nteract notebook1.ipynb notebook2.ipynb', 'Open notebooks')
+  .example('nteract --kernel javascript', 'Launch a kernel')
+  .describe('kernel', 'Launch a kernel')
   .default('kernel', 'python3')
+  .alias('k', 'kernel')
+  .describe('verbose', 'Display debug information')
+  .help('help')
   .argv;
 
 log.info('args', argv);
