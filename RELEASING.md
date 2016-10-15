@@ -40,7 +40,7 @@ babbly
 babby
 ```
 
-## OS X
+## macOS
 
 In order to build a signed copy, you will need to join the Apple developer program and get a certificate. The [Electron docs have a document on submitting your app to the app store](https://github.com/electron/electron/blob/master/docs/tutorial/mac-app-store-submission-guide.md), you only have to get through to the certificate step.
 
