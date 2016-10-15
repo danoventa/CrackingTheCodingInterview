@@ -15,6 +15,8 @@ import {
 
 import Immutable from 'immutable';
 
+const path = require('path');
+
 describe('load', () => {
   it('loads a notebook', () => {
     expect(load('mytest.ipynb'))
@@ -49,7 +51,7 @@ describe('extractNewKernel', () => {
     expect(extractNewKernel('/tmp/test.ipynb', dummyCommutable)).to.deep.equal({
       type: 'LAUNCH_KERNEL',
       kernelSpecName: 'python3',
-      cwd: '/tmp',
+      cwd: path.resolve('/tmp'),
     })
   })
 })
