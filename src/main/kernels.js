@@ -25,9 +25,6 @@ export function condaInfoObservable() {
     .map(info => JSON.parse(info));
 }
 
-// var condak = require('./src/notebook/epics/conda-kernel-provider-epic');
-// var envy = condak.condaEnvsObservable(condak.condaInfoObservable());
-
 export function condaEnvsObservable(condaInfo$) {
   return condaInfo$.map(info => {
     const envs = info.envs.map(env => ({ name: path.basename(env), prefix: env }));
