@@ -17,7 +17,7 @@ const getStartCommand = () => {
   const electronPath = join(dir, `electron${ext}`);
 
   if (fs.existsSync(nteractPath)) {
-    return [nteractPath, '', join(dir, 'bin', win)];
+    return [nteractPath, '', join(process.resourcesPath, 'bin', win)];
   } else if (fs.existsSync(electronPath)) {
     // Developer install
     const rootDir = dir.split('node_modules')[0];

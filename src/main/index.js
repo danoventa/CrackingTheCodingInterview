@@ -30,7 +30,7 @@ const argv = require('yargs')
   .alias('h', 'help')
   .describe('verbose', 'Display debug information')
   .help('help')
-  .argv;
+  .parse(process.argv.slice(1));
 
 log.info('args', argv);
 
