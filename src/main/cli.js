@@ -68,11 +68,19 @@ const createSymlinkObservable = (target, path) =>
   unlinkObservable(path)
     .switchMap(() => createNewSymlinkObservable(target, path));
 
-const linkScriptObservable = (target) =>
-  Rx.Observable.catch(
-    createSymlinkObservable(target, '/usr/local/bin/nteract'),
-    createSymlinkObservable(target, join(process.env.HOME, '.local', 'bin', 'nteract'))
-  );
+const installShellCommandsObservable = (cmd, binDir) =>
+  writeFileObservable(join(binDir, 'nteract-env'), `NTERACT_CMD="${cmd}"`)
+    .switchMap(() => {
+      if (process.platform === 'win32') {
+        return setWinPathObservable(binDir);
+      }
+      const target = join(binDir, 'nteract.sh');
+      return createSymlinkObservable(target, '/usr/local/bin/nteract')
+        .catch(() => {
+          const dest = join(process.env.HOME, '.local/bin/nteract');
+          return createSymlinkObservable(target, dest);
+        });
+    });
 
 export const installShellCommand = () => {
   const [cmd, binDir] = getStartCommand();
@@ -84,15 +92,7 @@ export const installShellCommand = () => {
     return;
   }
 
-  writeFileObservable(join(binDir, 'nteract-env'), `NTERACT_CMD="${cmd}"`)
-    // why does this throw "Observable.catch is not a function"?
-    // .map(() => linkScriptObservable(join(binDir, 'nteract.sh')))
-    .switchMap(() => {
-      if (process.platform === 'win32') {
-        return setWinPathObservable(binDir);
-      }
-      return createSymlinkObservable(join(binDir, 'nteract.sh'), '/usr/local/bin/nteract');
-    })
+  installShellCommandsObservable(cmd, binDir)
     .subscribe(
       () => {},
       (err) => dialog.showErrorBox('Could not write shell script.', err.message),
