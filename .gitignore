@@ -40,4 +40,3 @@ test/*.ipynb
 flow-typed/
 
 bin/nteract-env
-bin/win/nteract-env
