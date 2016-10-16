@@ -62,9 +62,9 @@ const setWinPathObservable = (exe, rootDir, binDir) => {
     .filter((item, index, array) => array.indexOf(item) === index);
   env.push(binDir);
   const envPath = env.join(';');
-  return spawn('SETX', ['PATH', `"${envPath}`])
-    .map('SETX', ['NTERACT_EXE', `"${exe}"`])
-    .map('SETX', ['NTERACT_DIR', `"${rootDir}"`]);
+  return spawn('SETX', ['PATH', `${envPath}`])
+    .switchMap(() => spawn('SETX', ['NTERACT_EXE', exe]))
+    .switchMap(() => spawn('SETX', ['NTERACT_DIR', rootDir]));
 };
 
 const createSymlinkObservable = (target, path) =>
