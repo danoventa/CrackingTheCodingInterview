@@ -48,7 +48,8 @@
     },
     "win": {
       "target": "nsis"
-    }
+    },
+    "extraResources": "bin"
   },
   "greenkeeper": {
     "ignore": [
