@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable react/no-unused-prop-types */
 import React from 'react';
 import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { DragSource, DropTarget } from 'react-dnd';
@@ -24,11 +25,12 @@ type Props = {
   running: boolean,
   theme: string,
   pagers: ImmutableList<any>,
+  moveCell: (source: string, dest: string, above: boolean) => Object,
 };
 
 type State = {
   hoverUpperHalf: boolean,
-}
+};
 
 const cellSource = {
   beginDrag(props: Props) {
@@ -38,7 +40,7 @@ const cellSource = {
   },
 };
 
-function isDragUpper(props: Props, monitor, el: HTMLElement): boolean {
+function isDragUpper(props: Props, monitor: Object, el: HTMLElement): boolean {
   const hoverBoundingRect = el.getBoundingClientRect();
   const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
@@ -49,17 +51,22 @@ function isDragUpper(props: Props, monitor, el: HTMLElement): boolean {
 }
 
 const cellTarget = {
-  drop(props, monitor, component) {
-    const hoverUpperHalf = isDragUpper(props, monitor, component.el);
-    props.moveCell(monitor.getItem().id, props.id, hoverUpperHalf);
+  drop(props: Props, monitor: Object|void, component: any): void {
+    if (monitor) {
+      const hoverUpperHalf = isDragUpper(props, monitor, component.el);
+      // DropTargetSpec monitor definition could be undefined. we'll need a check for monitor in order to pass validation.
+      props.moveCell(monitor.getItem().id, props.id, hoverUpperHalf);
+    }
   },
 
-  hover(props, monitor, component) {
-    component.setState({ hoverUpperHalf: isDragUpper(props, monitor, component.el) });
+  hover(props: Props, monitor: Object|void, component: any): void {
+    if (monitor) {
+      component.setState({ hoverUpperHalf: isDragUpper(props, monitor, component.el) });
+    }
   },
 };
 
-function collectSource(connect, monitor): Object {
+function collectSource(connect: Object, monitor: Object): Object {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
@@ -67,7 +74,7 @@ function collectSource(connect, monitor): Object {
   };
 }
 
-function collectTarget(connect, monitor): Object {
+function collectTarget(connect: Object, monitor: Object): Object {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
@@ -167,6 +174,9 @@ class DraggableCell extends React.Component {
   }
 }
 
-const source = new DragSource('CELL', cellSource, collectSource);
-const target = new DropTarget('CELL', cellTarget, collectTarget);
+type Source = DragSource<any, Props, State, DraggableCell>;
+type Target = DropTarget<any, Props, State, DraggableCell>;
+
+const source: Source = new DragSource('CELL', cellSource, collectSource);
+const target: Target = new DropTarget('CELL', cellTarget, collectTarget);
 export default source(target(DraggableCell));
