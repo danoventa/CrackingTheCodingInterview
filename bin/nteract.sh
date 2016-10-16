@@ -75,10 +75,10 @@ if [ $REDIRECT_STDERR ]; then
 fi
 
 if [ $EXPECT_OUTPUT ]; then
-  $NTERACT_CMD "$@"
+  $NTERACT_EXE $NTERACT_DIR "$@"
 else
   (
-  nohup $NTERACT_CMD "$@" > "/tmp/nteract-nohup.out" 2>&1
+  nohup $NTERACT_EXE $NTERACT_DIR "$@" > "/tmp/nteract-nohup.out" 2>&1
   if [ $? -ne 0 ]; then
     cat "/tmp/nteract-nohup.out"
   fi

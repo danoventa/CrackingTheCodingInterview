@@ -10,19 +10,20 @@ const fs = require('fs');
 const getStartCommand = () => {
   const subdir = (process.platform === 'darwin') ? 'MacOS' : '';
   const ext = (process.platform === 'win32') ? '.exe' : '';
+  const win = (process.platform === 'win32') ? 'win' : '';
   const dir = join(process.resourcesPath, '..', subdir);
 
   const nteractPath = join(dir, `nteract${ext}`);
   const electronPath = join(dir, `electron${ext}`);
 
   if (fs.existsSync(nteractPath)) {
-    return [nteractPath, join(dir, 'bin')];
+    return [nteractPath, '', join(dir, 'bin', win)];
   } else if (fs.existsSync(electronPath)) {
     // Developer install
     const rootDir = dir.split('node_modules')[0];
-    return [`${electronPath} ${join(rootDir, 'app')}`, join(rootDir, 'bin')];
+    return [electronPath, join(rootDir, 'app'), join(rootDir, 'bin', win)];
   }
-  return [null, null];
+  return [null, null, null];
 };
 
 const createNewSymlinkObservable = (target, path) =>
@@ -54,26 +55,29 @@ const unlinkObservable = (path) =>
     }
   });
 
-const setWinPathObservable = (binDir) => {
+const setWinPathObservable = (exe, rootDir, binDir) => {
   // Remove duplicates because SETX throws a error if path is to long
   const env = process.env.PATH.split(';')
     .filter(item => !/nteract/.test(item))
     .filter((item, index, array) => array.indexOf(item) === index);
   env.push(binDir);
   const envPath = env.join(';');
-  return spawn('SETX', ['PATH', `"${envPath}"`]);
+  return spawn('SETX', ['PATH', `"${envPath}`])
+    .map('SETX', ['NTERACT_EXE', `"${exe}"`])
+    .map('SETX', ['NTERACT_DIR', `"${rootDir}"`]);
 };
 
 const createSymlinkObservable = (target, path) =>
   unlinkObservable(path)
     .switchMap(() => createNewSymlinkObservable(target, path));
 
-const installShellCommandsObservable = (cmd, binDir) =>
-  writeFileObservable(join(binDir, 'nteract-env'), `NTERACT_CMD="${cmd}"`)
+const installShellCommandsObservable = (exe, rootDir, binDir) => {
+  if (process.platform === 'win32') {
+    return setWinPathObservable(exe, rootDir, binDir);
+  }
+  const envFile = join(binDir, 'nteract-env');
+  return writeFileObservable(envFile, `NTERACT_EXE="${exe}"\nNTERACT_DIR="${rootDir}"`)
     .switchMap(() => {
-      if (process.platform === 'win32') {
-        return setWinPathObservable(binDir);
-      }
       const target = join(binDir, 'nteract.sh');
       return createSymlinkObservable(target, '/usr/local/bin/nteract')
         .catch(() => {
@@ -81,10 +85,11 @@ const installShellCommandsObservable = (cmd, binDir) =>
           return createSymlinkObservable(target, dest);
         });
     });
+};
 
 export const installShellCommand = () => {
-  const [cmd, binDir] = getStartCommand();
-  if (!cmd) {
+  const [exe, rootDir, binDir] = getStartCommand();
+  if (!exe) {
     dialog.showErrorBox(
       'nteract application not found.',
       'Could not locate nteract executable.'
@@ -92,7 +97,7 @@ export const installShellCommand = () => {
     return;
   }
 
-  installShellCommandsObservable(cmd, binDir)
+  installShellCommandsObservable(exe, rootDir, binDir)
     .subscribe(
       () => {},
       (err) => dialog.showErrorBox('Could not write shell script.', err.message),
