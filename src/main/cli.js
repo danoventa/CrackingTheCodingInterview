@@ -1,6 +1,7 @@
 import Rx from 'rxjs/Rx';
 import { join } from 'path';
 import { dialog } from 'electron';
+import { spawn } from 'spawn-rx';
 // We probably want to move this function
 import { writeFileObservable } from '../notebook/epics/config';
 
@@ -53,16 +54,25 @@ const unlinkObservable = (path) =>
     }
   });
 
+const setWinPathObservable = (binDir) => {
+  // Remove duplicates because SETX throws a error if path is to long
+  const env = process.env.PATH.split(';')
+    .filter(item => !/nteract/.test(item))
+    .filter((item, index, array) => array.indexOf(item) === index);
+  env.push(binDir);
+  const envPath = env.join(';');
+  return spawn('SETX', ['PATH', `"${envPath}"`]);
+};
+
 const createSymlinkObservable = (target, path) =>
   unlinkObservable(path)
     .switchMap(() => createNewSymlinkObservable(target, path));
 
-const linkScriptObservable = (target) => {
+const linkScriptObservable = (target) =>
   Rx.Observable.catch(
     createSymlinkObservable(target, '/usr/local/bin/nteract'),
     createSymlinkObservable(target, join(process.env.HOME, '.local', 'bin', 'nteract'))
   );
-};
 
 export const installShellCommand = () => {
   const [cmd, binDir] = getStartCommand();
@@ -77,7 +87,12 @@ export const installShellCommand = () => {
   writeFileObservable(join(binDir, 'nteract-env'), `NTERACT_CMD="${cmd}"`)
     // why does this throw "Observable.catch is not a function"?
     // .map(() => linkScriptObservable(join(binDir, 'nteract.sh')))
-    .switchMap(() => createSymlinkObservable(join(binDir, 'nteract.sh'), '/usr/local/bin/nteract'))
+    .switchMap(() => {
+      if (process.platform === 'win32') {
+        return setWinPathObservable(binDir);
+      }
+      return createSymlinkObservable(join(binDir, 'nteract.sh'), '/usr/local/bin/nteract');
+    })
     .subscribe(
       () => {},
       (err) => dialog.showErrorBox('Could not write shell script.', err.message),
@@ -87,32 +102,3 @@ export const installShellCommand = () => {
         )
     );
 };
-
-
-// function writeWinExecutable(mainDir, bashScript, winScript, callback) {
-//   const binDir = join(mainDir, 'bin');
-//   if (!existsSync(binDir)) {
-//     mkdirSync(binDir);
-//   }
-//   writeExecutable(join(binDir, 'nteract'), bashScript, (err) => {
-//     if (err) {
-//       callback(err);
-//     } else {
-//       writeExecutable(join(binDir, 'nteract.cmd'), winScript, (error) => {
-//         if (error) {
-//           callback(error);
-//         } else {
-//           // Remove duplicates because SETX throws a error if path is to long
-//           const env = process.env.PATH.split(';')
-//             .filter(item => !/nteract/.test(item))
-//             .filter((item, index, array) => array.indexOf(item) === index);
-//           env.push(binDir);
-//           const envPath = env.join(';');
-//           exec(`SETX PATH "${envPath}`, (e, stdout, stderr) => {
-//             callback(e || stderr);
-//           });
-//         }
-//       });
-//     }
-//   });
-// }

@@ -1,3 +1,3 @@
 @echo off
-%~dp0\nteract-env
-%NTERACT_CMD %*
+set /p < %~dp0nteract-env
+%NTERACT_CMD% %*
