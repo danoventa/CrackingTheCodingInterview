@@ -32,9 +32,10 @@ const setWinPathObservable = (exe, rootDir, binDir) => {
     .filter((item, index, array) => array.indexOf(item) === index);
   env.push(binDir);
   const envPath = env.join(';');
-  return spawn('SETX', ['PATH', `${envPath}`])
-    .switchMap(() => spawn('SETX', ['NTERACT_EXE', exe]))
-    .switchMap(() => spawn('SETX', ['NTERACT_DIR', rootDir]));
+  return Rx.Observable.merge(
+    spawn('SETX', ['PATH', `${envPath}`]),
+    spawn('SETX', ['NTERACT_EXE', exe]),
+    spawn('SETX', ['NTERACT_DIR', rootDir]));
 };
 
 const installShellCommandsObservable = (exe, rootDir, binDir) => {
@@ -43,7 +44,7 @@ const installShellCommandsObservable = (exe, rootDir, binDir) => {
   }
   const envFile = join(binDir, 'nteract-env');
   return writeFileObservable(envFile, `NTERACT_EXE="${exe}"\nNTERACT_DIR="${rootDir}"`)
-    .switchMap(() => {
+    .flatMap(() => {
       const target = join(binDir, 'nteract.sh');
       return createSymlinkObservable(target, '/usr/local/bin/nteract')
         .catch(() => {
