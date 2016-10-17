@@ -68,9 +68,11 @@ export const installShellCommand = () => {
     .subscribe(
       () => {},
       (err) => dialog.showErrorBox('Could not write shell script.', err.message),
-      () => dialog.showErrorBox(
-        'Command installed.',
-        'The shell command "nteract" is installed.\nOpen notebooks with "nteract notebook.ipynb".'
-        )
+      () => dialog.showMessageBox({
+        title: 'Command installed.',
+        message: 'The shell command "nteract" is installed.',
+        detail: 'Get help with "nteract --help".',
+        buttons: ['OK']
+      })
     );
 };
