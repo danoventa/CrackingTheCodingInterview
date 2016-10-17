@@ -37,7 +37,7 @@ export const extractNewKernel = (filename, notebook) => {
   return newKernel(kernelName, cwd);
 };
 
-export const convertRawNotebook = ({ filename, data }) => ({
+export const convertRawNotebook = (filename, data) => ({
   filename,
   notebook: commutable.fromJS(JSON.parse(data)),
 });
@@ -55,7 +55,7 @@ export const loadEpic = actions =>
     // Switch map since we want the last load request to be the lead
     .switchMap(action =>
       readFileObservable(action.filename)
-        .map(convertRawNotebook)
+        .map((data) => convertRawNotebook(action.filename, data))
         .flatMap(({ filename, notebook }) =>
           Observable.of(
             notebookLoaded(filename, notebook),

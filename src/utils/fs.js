@@ -1,6 +1,5 @@
 import Rx from 'rxjs/Rx';
-
-const fs = require('fs');
+import * as fs from 'fs';
 
 export const unlinkObservable = (path) =>
   Rx.Observable.create(observer => {
@@ -9,52 +8,25 @@ export const unlinkObservable = (path) =>
         if (error) {
           observer.error(error);
         } else {
-          observer.next({ path });
+          observer.next();
           observer.complete();
         }
       });
     } else {
-      observer.next({ path });
+      observer.next();
       observer.complete();
     }
   });
 
-export const createNewSymlinkObservable = (target, path) =>
-  Rx.Observable.create(observer => {
-    fs.symlink(target, path, (error) => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next({ target, path });
-        observer.complete();
-      }
-    });
-  });
+export const createNewSymlinkObservable =
+  Rx.Observable.bindNodeCallback(fs.symlink);
 
 export const createSymlinkObservable = (target, path) =>
   unlinkObservable(path)
-    .switchMap(() => createNewSymlinkObservable(target, path));
+    .flatMap(() => createNewSymlinkObservable(target, path));
 
-export const readFileObservable = (filename, ...args) =>
-  Rx.Observable.create(observer => {
-    fs.readFile(filename, ...args, (error, data) => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next({ filename, data });
-        observer.complete();
-      }
-    });
-  });
+export const readFileObservable =
+  Rx.Observable.bindNodeCallback(fs.readFile);
 
-export const writeFileObservable = (filename, data, ...args) =>
-  Rx.Observable.create(observer => {
-    fs.writeFile(filename, data, ...args, error => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next({ filename, data });
-        observer.complete();
-      }
-    });
-  });
+export const writeFileObservable =
+  Rx.Observable.bindNodeCallback(fs.writeFile);

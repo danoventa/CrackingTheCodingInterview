@@ -58,10 +58,7 @@ describe('extractNewKernel', () => {
 
 describe('convertRawNotebook', () => {
   it('converts a raw notebook', () => {
-    const converted = convertRawNotebook({
-      filename: '/tmp/test.ipynb',
-      data: dummy,
-    });
+    const converted = convertRawNotebook('/tmp/test.ipynb', dummy);
     expect(converted.filename).to.equal('/tmp/test.ipynb');
 
     const notebook = converted.notebook;
