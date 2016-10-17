@@ -2,8 +2,7 @@ import Rx from 'rxjs/Rx';
 import { join } from 'path';
 import { dialog } from 'electron';
 import { spawn } from 'spawn-rx';
-// We probably want to move this function
-import { writeFileObservable } from '../notebook/epics/config';
+import { writeFileObservable, createSymlinkObservable } from '../utils/fs';
 
 const fs = require('fs');
 
@@ -26,35 +25,6 @@ const getStartCommand = () => {
   return [null, null, null];
 };
 
-const createNewSymlinkObservable = (target, path) =>
-  Rx.Observable.create(observer => {
-    fs.symlink(target, path, (error) => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next({ target, path });
-        observer.complete();
-      }
-    });
-  });
-
-const unlinkObservable = (path) =>
-  Rx.Observable.create(observer => {
-    if (fs.existsSync(path)) {
-      fs.unlink(path, (error) => {
-        if (error) {
-          observer.error(error);
-        } else {
-          observer.next({ path });
-          observer.complete();
-        }
-      });
-    } else {
-      observer.next({ path });
-      observer.complete();
-    }
-  });
-
 const setWinPathObservable = (exe, rootDir, binDir) => {
   // Remove duplicates because SETX throws a error if path is to long
   const env = process.env.PATH.split(';')
@@ -66,10 +36,6 @@ const setWinPathObservable = (exe, rootDir, binDir) => {
     .switchMap(() => spawn('SETX', ['NTERACT_EXE', exe]))
     .switchMap(() => spawn('SETX', ['NTERACT_DIR', rootDir]));
 };
-
-const createSymlinkObservable = (target, path) =>
-  unlinkObservable(path)
-    .switchMap(() => createNewSymlinkObservable(target, path));
 
 const installShellCommandsObservable = (exe, rootDir, binDir) => {
   if (process.platform === 'win32') {

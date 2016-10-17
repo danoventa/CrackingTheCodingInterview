@@ -1,28 +1,13 @@
 import { emptyNotebook, emptyCodeCell, appendCell } from 'commutable';
-
-import {
-  newKernel,
-} from '../actions';
+import { readFileObservable } from '../../utils/fs';
+import { newKernel } from '../actions';
 
 const Rx = require('rxjs/Rx');
-const fs = require('fs');
 const commutable = require('commutable');
 
 const path = require('path');
 
 const Observable = Rx.Observable;
-
-const readFileObservable = (filename, ...args) =>
-  Observable.create(observer => {
-    fs.readFile(filename, ...args, (error, data) => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next({ filename, data });
-        observer.complete();
-      }
-    });
-  });
 
 export const LOAD = 'LOAD';
 export const SET_NOTEBOOK = 'SET_NOTEBOOK';

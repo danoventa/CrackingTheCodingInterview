@@ -4,8 +4,9 @@ import {
   DONE_SAVING_CONFIG,
 } from '../constants';
 
+import { readFileObservable, writeFileObservable } from '../../utils/fs';
+
 const Rx = require('rxjs/Rx');
-const fs = require('fs');
 const jupyterPaths = require('jupyter-paths');
 
 const Observable = Rx.Observable;
@@ -16,30 +17,6 @@ export const loadConfig = () => ({ type: LOAD_CONFIG });
 export const SAVE_CONFIG = 'SAVE_CONFIG';
 export const saveConfig = () => ({ type: SAVE_CONFIG });
 export const doneSavingConfig = () => ({ type: DONE_SAVING_CONFIG });
-
-export const readFileObservable = (filename, ...args) =>
-  Observable.create(observer => {
-    fs.readFile(filename, ...args, (error, data) => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next(data);
-        observer.complete();
-      }
-    });
-  });
-
-export const writeFileObservable = (filename, data, ...args) =>
-  Observable.create(observer => {
-    fs.writeFile(filename, data, ...args, error => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next({ filename, data });
-        observer.complete();
-      }
-    });
-  });
 
 export const configLoaded = (config) => ({
   type: MERGE_CONFIG,
@@ -52,8 +29,8 @@ export const loadConfigEpic = actions =>
   actions.ofType(LOAD_CONFIG)
     .switchMap(action =>
       readFileObservable(CONFIG_FILE_PATH)
-        .map(JSON.parse)
-        .map(configLoaded)
+        .map(({ filename, data }) => JSON.parse(data))
+        .map(({ filename, data }) => configLoaded(data))
         .catch((err) =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
