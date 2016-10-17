@@ -30,7 +30,7 @@ export const loadConfigEpic = actions =>
     .switchMap(action =>
       readFileObservable(CONFIG_FILE_PATH)
         .map(({ filename, data }) => JSON.parse(data))
-        .map(({ filename, data }) => configLoaded(data))
+        .map(configLoaded)
         .catch((err) =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
