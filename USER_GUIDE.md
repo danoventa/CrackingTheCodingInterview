@@ -18,17 +18,18 @@ A new notebook can be created by accessing the menu,
 ### Opening a Notebook
 There are several ways to open a notebook in nteract:
 
-1. From the menu:
+- From the menu:
 ```
   File
     ⮑  Open
-          ⮑  Open
 ```
-2. Double-click a notebook file :tada::  ***Note: currently this works only in macOS***
-
-3. From the Command Line (assuming you have shell commands installed), run `nteract notebook.ipynb`:
 
 *Keyboard shortcut ⌘O on macOS and Ctrl-O on Windows/Linux*
+
+- Double-click a notebook file :tada:  ***Note: currently this works only in macOS***
+
+- From the Command Line (assuming you have shell commands installed), run `nteract notebook.ipynb`:
+
 
 ### Saving a Notebook
 
