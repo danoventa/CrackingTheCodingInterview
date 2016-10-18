@@ -1,6 +1,6 @@
 # nteract
 
-nteract is a literate coding environment that supports Python, R, JavaScript and other Jupyter kernels. It wraps up the best of the web based Jupyter notebook and embeds it as a desktop application that allows you to open notebooks natively on your system. Double click a .ipynb on the desktop, use Spotlight on the Mac. It Just Works™
+nteract is a literate coding environment that supports Python, R, JavaScript and other [Jupyter kernels](https://github.com/ipython/ipython/wiki/IPython-kernels-for-other-languages). It wraps up the best of the web based Jupyter notebook and embeds it as a desktop application. Now, you can open notebooks natively on your system. Double-click on a .ipynb file to open and begin using the notebook. It Just Works™
 
 
 ## Installation
@@ -10,21 +10,21 @@ To get started, download the latest [release](https://github.com/nteract/nteract
 
 ### Create a New Notebook
 A new notebook can be created by accessing the menu,
-
-  File<br/>
-        &nbsp;&nbsp;&nbsp;⮑&nbsp;&nbsp;New<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⮑&nbsp;&nbsp;\<Language Kernel\> (e.g. Python 3, R, Julia etc.)
-
+```
+  File
+    ⮑  New
+          ⮑  <Language Kernel> (e.g. Python 3, R, Julia etc.)
+```
 ### Opening a Notebook
 There are several ways to open a notebook in nteract:
 
 1. From the menu:
-
-  File<br/>
-        &nbsp;&nbsp;&nbsp;⮑&nbsp;&nbsp;Open<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⮑&nbsp;&nbsp;Open<br/>
-
-2. Double-click a notebook file :tada::  
+```
+  File
+    ⮑  Open
+          ⮑  Open
+```
+2. Double-click a notebook file :tada::  ***Note: currently this works only in macOS***
 
 3. From the Command Line (assuming you have shell commands installed), run `nteract notebook.ipynb`:
 
@@ -34,13 +34,17 @@ There are several ways to open a notebook in nteract:
 
 A notebook can be saved in the following ways:
 
-File<br/>
-      &nbsp;&nbsp;&nbsp;⮑&nbsp;&nbsp;Save
+```
+  File
+    ⮑  Save
+```
 
 *Keyboard shortcut: ⌘S on macOS and Ctrl-S on Windows/Linux*
 
-File<br/>
-      &nbsp;&nbsp;&nbsp;⮑&nbsp;&nbsp;Save As
+```
+  File
+    ⮑  Save As
+```
 
 *Keyboard shortcut: ⇧⌘S on macOS and Shift-Ctrl-S on Windows/Linux*
 
@@ -51,23 +55,36 @@ File<br/>
 #### Code Cells
 A code cell can be created by accessing the menu,
 
-Edit<br/>
-      &nbsp;&nbsp;&nbsp;⮑&nbsp;&nbsp;New Code Cell
+```
+  Edit
+    ⮑  New Code Cell
+```
 
 *Keyboard shortcut: Shift ⌘N on macOS or Shift Ctrl-N on Windows/Linux*
 
-A code cell can also be created by clicking <> on the cell hover menu (what is the name of this?)
+A code cell can also be created by clicking <> on the cell hover menu.
 
 #### Text Cells
-A text (or markdown) cell can be created by clicking **M** on the cell hover menu (what is the name of this?)
+A text cell can be created by accessing the menu,
+
+```
+  Edit
+    ⮑  New Text Cell
+```
+
+*Keyboard shortcut: Shift ⌘M on macOS or Shift Ctrl-M on Windows/Linux*
+
+A text cell can also be created by clicking **M** on the cell hover menu.
 
 ### Running a Cell
 A cell can be run from the keyboard by pressing *Shift ⏎* or by selecting the ▶︎ button from the cell toolbar.
 
 ***N.B. To run all cells at once, access the menu:***
 
-Cell<br/>
-      &nbsp;&nbsp;&nbsp;⮑&nbsp;&nbsp;Run All
+```
+  Cell
+    ⮑  Run All
+```
 
 
 ### Moving a Cell
