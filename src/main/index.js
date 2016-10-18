@@ -1,5 +1,6 @@
 import { Menu, dialog, app, ipcMain as ipc, BrowserWindow } from 'electron';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
+import { existsSync } from 'fs';
 
 import Rx from 'rxjs/Rx';
 
@@ -11,8 +12,6 @@ import {
 import { defaultMenu, loadFullMenu } from './menu';
 
 import prepareEnv from './prepare-env';
-
-const path = require('path');
 
 const log = require('electron-log');
 
@@ -34,14 +33,16 @@ const argv = require('yargs')
 
 log.info('args', argv);
 
-const notebooks = argv._.filter(x => /(.ipynb)$/.test(x));
+const notebooks = argv._
+  .filter(x => /(.ipynb)$/.test(x))
+  .filter(x => existsSync(resolve(x)));
 
 ipc.on('new-kernel', (event, newKernel) => {
   launchNewNotebook(newKernel);
 });
 
 ipc.on('open-notebook', (event, filename) => {
-  launch(path.resolve(filename));
+  launch(resolve(filename));
 });
 
 const electronReady$ = Rx.Observable.fromEvent(app, 'ready');
@@ -72,7 +73,7 @@ export function createSplashSubscriber() {
       frame: false,
     });
 
-    const index = path.join(__dirname, '..', '..', 'static', 'splash.html');
+    const index = join(__dirname, '..', '..', 'static', 'splash.html');
     win.loadURL(`file://${index}`);
     win.show();
   }, null,
@@ -109,7 +110,7 @@ const openFile$ = Rx.Observable.fromEvent(
 
 function openFileFromEvent({ event, filename }) {
   event.preventDefault();
-  launch(path.resolve(filename));
+  launch(resolve(filename));
 }
 
 
