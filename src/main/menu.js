@@ -264,6 +264,11 @@ export const edit = {
       click: createSender('menu:new-code-cell'),
     },
     {
+      label: 'New Text Cell',
+      accelerator: 'CmdOrCtrl+Shift+M',
+      click: createSender('menu:new-text-cell'),
+    },
+    {
       label: 'Copy Cell',
       accelerator: 'CmdOrCtrl+Shift+C',
       click: createSender('menu:copy-cell'),
