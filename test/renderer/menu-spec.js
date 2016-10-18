@@ -31,6 +31,22 @@ describe('menu', () => {
     });
   });
 
+  describe('dispatchCreateTextCellAfter', () => {
+    it('dispatches a CREATE_TEXT_CELL_AFTER action', () => {
+      const store = dummyStore();
+      store.dispatch = sinon.spy();
+
+      menu.dispatchCreateTextCellAfter(store);
+
+      expect(store.dispatch.firstCall).to.be.calledWith({
+        type: constants.NEW_CELL_AFTER,
+        cellType: 'markdown',
+        source: '',
+        id: null,
+      });
+    });
+  });
+
   describe('dispatchPasteCell', () => {
     it('dispatches a PASTE_CELL action', () => {
       const store = dummyStore();

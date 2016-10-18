@@ -268,6 +268,12 @@ export function dispatchCreateCellAfter(store) {
   store.dispatch(createCellAfter('code', focused));
 }
 
+export function dispatchCreateTextCellAfter(store) {
+  const state = store.getState();
+  const focused = state.document.get('focusedCell');
+  store.dispatch(createCellAfter('markdown', focused));
+}
+
 export function dispatchLoad(store, event, filename) {
   store.dispatch(load(filename));
 }
@@ -289,6 +295,7 @@ export function initMenuHandlers(store) {
   ipc.on('menu:save', dispatchSave.bind(null, store));
   ipc.on('menu:save-as', dispatchSaveAs.bind(null, store));
   ipc.on('menu:new-code-cell', dispatchCreateCellAfter.bind(null, store));
+  ipc.on('menu:new-text-cell', dispatchCreateTextCellAfter.bind(null, store));
   ipc.on('menu:copy-cell', dispatchCopyCell.bind(null, store));
   ipc.on('menu:cut-cell', dispatchCutCell.bind(null, store));
   ipc.on('menu:paste-cell', dispatchPasteCell.bind(null, store));
