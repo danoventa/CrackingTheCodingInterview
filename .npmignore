@@ -35,4 +35,4 @@ dist/
 docs/
 test/*.ipynb
 
-bin/
+bin/nteract-env

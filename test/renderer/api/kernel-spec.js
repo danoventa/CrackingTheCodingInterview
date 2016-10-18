@@ -5,8 +5,6 @@ const sinonChai = require("sinon-chai");
 chai.use(sinonChai);
 const expect = chai.expect;
 
-const fs = require('fs');
-
 import {
   shutdownKernel,
   forceShutdownKernel,

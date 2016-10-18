@@ -1,28 +1,13 @@
 import { emptyNotebook, emptyCodeCell, appendCell } from 'commutable';
-
-import {
-  newKernel,
-} from '../actions';
+import { readFileObservable } from '../../utils/fs';
+import { newKernel } from '../actions';
 
 const Rx = require('rxjs/Rx');
-const fs = require('fs');
 const commutable = require('commutable');
 
 const path = require('path');
 
 const Observable = Rx.Observable;
-
-const readFileObservable = (filename, ...args) =>
-  Observable.create(observer => {
-    fs.readFile(filename, ...args, (error, data) => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next({ filename, data });
-        observer.complete();
-      }
-    });
-  });
 
 export const LOAD = 'LOAD';
 export const SET_NOTEBOOK = 'SET_NOTEBOOK';
@@ -52,7 +37,7 @@ export const extractNewKernel = (filename, notebook) => {
   return newKernel(kernelName, cwd);
 };
 
-export const convertRawNotebook = ({ filename, data }) => ({
+export const convertRawNotebook = (filename, data) => ({
   filename,
   notebook: commutable.fromJS(JSON.parse(data)),
 });
@@ -70,7 +55,7 @@ export const loadEpic = actions =>
     // Switch map since we want the last load request to be the lead
     .switchMap(action =>
       readFileObservable(action.filename)
-        .map(convertRawNotebook)
+        .map((data) => convertRawNotebook(action.filename, data))
         .flatMap(({ filename, notebook }) =>
           Observable.of(
             notebookLoaded(filename, notebook),

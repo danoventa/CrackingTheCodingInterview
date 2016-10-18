@@ -26,9 +26,11 @@ const argv = require('yargs')
   .describe('kernel', 'Launch a kernel')
   .default('kernel', 'python3')
   .alias('k', 'kernel')
+  .alias('v', 'version')
+  .alias('h', 'help')
   .describe('verbose', 'Display debug information')
   .help('help')
-  .argv;
+  .parse(process.argv.slice(1));
 
 log.info('args', argv);
 

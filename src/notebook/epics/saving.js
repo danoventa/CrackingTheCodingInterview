@@ -1,20 +1,9 @@
+import { writeFileObservable } from '../../utils/fs';
+
 const Rx = require('rxjs/Rx');
-const fs = require('fs');
 const commutable = require('commutable');
 
 const Observable = Rx.Observable;
-
-const writeFileObservable = (filename, data, ...args) =>
-  Observable.create(observer => {
-    fs.writeFile(filename, data, ...args, error => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next({ filename, data });
-        observer.complete();
-      }
-    });
-  });
 
 export const SAVE = 'SAVE';
 export const SAVE_AS = 'SAVE_AS';

@@ -4,8 +4,9 @@ import {
   DONE_SAVING_CONFIG,
 } from '../constants';
 
+import { readFileObservable, writeFileObservable } from '../../utils/fs';
+
 const Rx = require('rxjs/Rx');
-const fs = require('fs');
 const jupyterPaths = require('jupyter-paths');
 
 const Observable = Rx.Observable;
@@ -16,30 +17,6 @@ export const loadConfig = () => ({ type: LOAD_CONFIG });
 export const SAVE_CONFIG = 'SAVE_CONFIG';
 export const saveConfig = () => ({ type: SAVE_CONFIG });
 export const doneSavingConfig = () => ({ type: DONE_SAVING_CONFIG });
-
-const readFileObservable = (filename, ...args) =>
-  Observable.create(observer => {
-    fs.readFile(filename, ...args, (error, data) => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next(data);
-        observer.complete();
-      }
-    });
-  });
-
-const writeFileObservable = (filename, data, ...args) =>
-  Observable.create(observer => {
-    fs.writeFile(filename, data, ...args, error => {
-      if (error) {
-        observer.error(error);
-      } else {
-        observer.next({ filename, data });
-        observer.complete();
-      }
-    });
-  });
 
 export const configLoaded = (config) => ({
   type: MERGE_CONFIG,
