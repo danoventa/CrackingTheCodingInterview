@@ -16,7 +16,7 @@
     "build": "npm run build:renderer && npm run build:main",
     "build:renderer": "webpack --progress --colors",
     "build:renderer:watch": "npm run build:renderer -- --watch",
-    "build:main": "babel src/main --out-dir ./app/build/main",
+    "build:main": "babel src/main --out-dir ./app/build/main && babel src/utils --out-dir ./app/build/utils",
     "build:icon": "./scripts/make_icons.sh && cd static/icons && iconutil -c icns nteract.iconset && mv nteract.icns ../icon.icns",
     "build:docs": "esdoc -c esdoc.json",
     "test": "npm run test:unit",
