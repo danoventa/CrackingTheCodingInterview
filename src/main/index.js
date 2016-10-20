@@ -5,6 +5,12 @@ import { existsSync } from 'fs';
 import Rx from 'rxjs/Rx';
 
 import {
+  mkdirpObservable,
+  readFileObservable,
+  writeFileObservable,
+} from '../utils/fs';
+
+import {
   launch,
   launchNewNotebook,
 } from './launch';
@@ -16,6 +22,8 @@ import prepareEnv from './prepare-env';
 const log = require('electron-log');
 
 const kernelspecs = require('kernelspecs');
+const jupyterPaths = require('jupyter-paths');
+const path = require('path');
 
 const argv = require('yargs')
   .version()
@@ -53,7 +61,37 @@ const fullAppReady$ = Rx.Observable.zip(
   prepareEnv
 ).first();
 
-const kernelSpecsPromise = prepareEnv
+const jupyterConfigDir = path.join(app.getPath('home'), '.jupyter');
+const nteractConfigFilename = path.join(jupyterConfigDir, 'nteract.json');
+
+const prepJupyterObservable = prepareEnv
+  .mergeMap(() =>
+    // Create all the directories we need in parallel
+    Rx.Observable.forkJoin(
+      // Ensure the runtime Dir is setup for kernels
+      mkdirpObservable(jupyterPaths.runtimeDir()),
+      // Ensure the config directory is all set up
+      mkdirpObservable(jupyterConfigDir)
+    )
+  )
+  // Set up our configuration file
+  .mergeMap(() =>
+    readFileObservable(nteractConfigFilename)
+      .catch((err) => {
+        if (err.code === 'ENOENT') {
+          return writeFileObservable(nteractConfigFilename, JSON.stringify({
+            // TODO: Pull the default config from somewhere
+            theme: 'light',
+          }));
+        }
+        throw err;
+      })
+  );
+  // TODO: Should we re-map any errors to something more informative for the
+  //       dialog we create on error
+
+
+const kernelSpecsPromise = prepJupyterObservable
   .toPromise()
   .then(() => kernelspecs.findAll());
 

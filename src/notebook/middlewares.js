@@ -14,7 +14,7 @@ const errorMiddleware = store => next => action => {
   console.error(action);
   let errorText;
   if (action.payload) {
-    errorText = action.payload;
+    errorText = JSON.stringify(action.payload, 2, 2);
   } else {
     errorText = JSON.stringify(action, 2, 2);
   }

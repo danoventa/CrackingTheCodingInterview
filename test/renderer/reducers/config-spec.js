@@ -10,7 +10,6 @@ describe('setKey', () => {
     const initialState = {
       config: new ConfigRecord({
         theme: null,
-        sendMetrics: null,
       }),
     };
 
@@ -29,9 +28,8 @@ describe('mergeConfig', () => {
       config: new ConfigRecord(),
     };
 
-    const config = { theme: 'dark', sendMetrics: true };
+    const config = { theme: 'dark' };
     const state = reducers(initialState, { type: constants.MERGE_CONFIG, config });
     expect(state.config.get('theme')).to.equal('dark');
-    expect(state.config.get('sendMetrics')).to.be.true;
   });
 });
