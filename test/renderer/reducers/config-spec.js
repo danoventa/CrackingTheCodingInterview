@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { ConfigRecord } from '../../../src/notebook/records';
+import { Map } from 'immutable';
 
 import * as constants from '../../../src/notebook/constants';
 import reducers from '../../../src/notebook/reducers';
@@ -8,7 +8,7 @@ import reducers from '../../../src/notebook/reducers';
 describe('setKey', () => {
   it('sets the keys in the config', () => {
     const initialState = {
-      config: new ConfigRecord({
+      config: new Map({
         theme: null,
       }),
     };
@@ -25,7 +25,7 @@ describe('setKey', () => {
 describe('mergeConfig', () => {
   it('sets the config', () => {
     const initialState = {
-      config: new ConfigRecord(),
+      config: new Map(), 
     };
 
     const config = { theme: 'dark' };

@@ -31,7 +31,7 @@ const store = configureStore({
   metadata: new MetadataRecord(),
   document: new DocumentRecord(),
   comms: new CommsRecord(),
-  config: new ConfigRecord(),
+  config: ConfigRecord,
 }, reducers);
 
 // Register for debugging
