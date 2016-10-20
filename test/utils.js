@@ -52,7 +52,7 @@ export function dummyStore(config) {
       past: new Immutable.List(),
       future: new Immutable.List(),
     }),
-    config: ConfigRecord({
+    config: new Immutable.Map({
       theme: 'light',
     }),
   }, reducers);

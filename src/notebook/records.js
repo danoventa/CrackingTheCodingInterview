@@ -35,6 +35,6 @@ export const CommsRecord = new Immutable.Record({
   targets: new Immutable.Map(),
 });
 
-export const ConfigRecord = new Immutable.Record({
+export const ConfigRecord = new Immutable.Map({
   theme: 'light',
 });
