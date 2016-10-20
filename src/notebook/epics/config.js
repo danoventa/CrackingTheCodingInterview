@@ -1,3 +1,5 @@
+import { remote } from 'electron';
+
 import {
   MERGE_CONFIG,
   SET_CONFIG_KEY,
@@ -5,6 +7,8 @@ import {
 } from '../constants';
 
 import { readFileObservable, writeFileObservable } from '../../utils/fs';
+
+const path = require('path');
 
 const Rx = require('rxjs/Rx');
 const jupyterPaths = require('jupyter-paths');
@@ -23,7 +27,9 @@ export const configLoaded = (config) => ({
   config,
 });
 
-export const CONFIG_FILE_PATH = `${jupyterPaths.dataDirs()[0]}/nteract.json`;
+const HOME = remote.app.getPath('home');
+
+export const CONFIG_FILE_PATH = path.join(HOME, '.jupyter', 'nteract.json');
 
 export const loadConfigEpic = actions =>
   actions.ofType(LOAD_CONFIG)
