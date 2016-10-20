@@ -1,6 +1,8 @@
 import Rx from 'rxjs/Rx';
 import * as fs from 'fs';
 
+const mkdirp = require('mkdirp');
+
 export const unlinkObservable = (path) =>
   Rx.Observable.create(observer => {
     if (fs.existsSync(path)) {
@@ -30,3 +32,5 @@ export const readFileObservable =
 
 export const writeFileObservable =
   Rx.Observable.bindNodeCallback(fs.writeFile);
+
+export const mkdirpObservable = Rx.Observable.bindNodeCallback(mkdirp);

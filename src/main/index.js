@@ -4,6 +4,8 @@ import { existsSync } from 'fs';
 
 import Rx from 'rxjs/Rx';
 
+import { mkdirpObservable } from '../utils/fs';
+
 import {
   launch,
   launchNewNotebook,
@@ -16,6 +18,8 @@ import prepareEnv from './prepare-env';
 const log = require('electron-log');
 
 const kernelspecs = require('kernelspecs');
+const jupyterPaths = require('jupyter-paths');
+const path = require('path');
 
 const argv = require('yargs')
   .version()
@@ -53,7 +57,21 @@ const fullAppReady$ = Rx.Observable.zip(
   prepareEnv
 ).first();
 
-const kernelSpecsPromise = prepareEnv
+const prepJupyterObservable = prepareEnv
+  .mergeMap(() =>
+    // Create all the directories we need in parallel
+    Rx.Observable.forkJoin(
+      // Ensure the runtime Dir is setup for kernels
+      mkdirpObservable(jupyterPaths.runtimeDir()),
+      // Ensure the config directory is all set up
+      mkdirpObservable(path.join(app.getPath('home'), '.jupyter'))
+    )
+  );
+  // TODO: Create a config file if it doesn't exist
+  // TODO: Should we re-map any errors to something more informative for the
+  //       dialog we create on error
+
+const kernelSpecsPromise = prepJupyterObservable
   .toPromise()
   .then(() => kernelspecs.findAll());
 
