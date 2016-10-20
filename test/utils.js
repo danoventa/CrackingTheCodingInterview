@@ -54,7 +54,6 @@ export function dummyStore(config) {
     }),
     config: ConfigRecord({
       theme: 'light',
-      sendMetrics: false,
     }),
   }, reducers);
 }
