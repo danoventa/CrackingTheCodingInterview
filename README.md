@@ -111,7 +111,7 @@ And then opening `docs/index.html` in your favorite browser.
 
 > I upgraded my developer installation and things are broken!
 
-- Try `$ rm -rf node_modules` then `$ npm install`
+- Try `npm run reinstall`
 
 ## For maintainers: Creating a release
 
@@ -126,6 +126,8 @@ git push --tags
 ```
 
 ### Create the package
+
+It is recommended to run `npm run reinstall` before packaging a release.
 
 To package a release run:
 ```
