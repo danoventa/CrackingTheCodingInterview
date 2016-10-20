@@ -4,7 +4,11 @@ import { existsSync } from 'fs';
 
 import Rx from 'rxjs/Rx';
 
-import { mkdirpObservable } from '../utils/fs';
+import {
+  mkdirpObservable,
+  readFileObservable,
+  writeFileObservable,
+} from '../utils/fs';
 
 import {
   launch,
@@ -57,6 +61,9 @@ const fullAppReady$ = Rx.Observable.zip(
   prepareEnv
 ).first();
 
+const jupyterConfigDir = path.join(app.getPath('home'), '.jupyter');
+const nteractConfigFilename = path.join(jupyterConfigDir, 'nteract.json');
+
 const prepJupyterObservable = prepareEnv
   .mergeMap(() =>
     // Create all the directories we need in parallel
@@ -64,12 +71,25 @@ const prepJupyterObservable = prepareEnv
       // Ensure the runtime Dir is setup for kernels
       mkdirpObservable(jupyterPaths.runtimeDir()),
       // Ensure the config directory is all set up
-      mkdirpObservable(path.join(app.getPath('home'), '.jupyter'))
+      mkdirpObservable(jupyterConfigDir)
     )
+  )
+  // Set up our configuration file
+  .mergeMap(() =>
+    readFileObservable(nteractConfigFilename)
+      .catch((err) => {
+        if (err.code === 'ENOENT') {
+          return writeFileObservable(nteractConfigFilename, JSON.stringify({
+            // TODO: Pull the default config from somewhere
+            theme: 'light',
+          }));
+        }
+        throw err;
+      })
   );
-  // TODO: Create a config file if it doesn't exist
   // TODO: Should we re-map any errors to something more informative for the
   //       dialog we create on error
+
 
 const kernelSpecsPromise = prepJupyterObservable
   .toPromise()
