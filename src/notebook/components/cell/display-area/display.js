@@ -48,6 +48,9 @@ export default class Display extends React.Component {
   }
 
   recomputeStyle(): void {
+    if (!this.el) {
+      return;
+    }
     if (!this.props.expanded && this.el.scrollHeight > DEFAULT_SCROLL_HEIGHT) {
       this.el.style.height = `${DEFAULT_SCROLL_HEIGHT}px`;
       this.el.style.overflowY = 'scroll';
