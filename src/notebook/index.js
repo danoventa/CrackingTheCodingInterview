@@ -4,6 +4,8 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import { Provider } from 'react-redux';
 
+import Immutable from 'immutable';
+
 import NotificationSystem from 'react-notification-system';
 
 import configureStore from './store';
@@ -23,7 +25,6 @@ import {
   DocumentRecord,
   MetadataRecord,
   CommsRecord,
-  ConfigRecord,
 } from './records';
 
 const store = configureStore({
@@ -31,7 +32,9 @@ const store = configureStore({
   metadata: new MetadataRecord(),
   document: new DocumentRecord(),
   comms: new CommsRecord(),
-  config: ConfigRecord,
+  config: new Immutable.Map({
+    theme: 'light',
+  }),
 }, reducers);
 
 // Register for debugging
