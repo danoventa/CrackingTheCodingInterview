@@ -1,6 +1,6 @@
 {
   "name": "nteract",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Interactive literate coding notebook!",
   "main": "./build/main/index.js",
   "repository": {
