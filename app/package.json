@@ -33,7 +33,7 @@
     "github": "^5.0.0",
     "immutable": "^3.7.6",
     "jupyter-paths": "^1.0.2",
-    "kernelspecs": "^1.0.1",
+    "kernelspecs": "^1.0.3",
     "leaflet": "^1.0.1",
     "mathjax-electron": "^1.1.1",
     "mkdirp": "^0.5.1",
@@ -61,6 +61,6 @@
     "spawn-rx": "^2.0.3",
     "spawnteract": "^2.2.0",
     "uuid": "^2.0.3",
-    "yargs": "^6.0.0"
+    "yargs": "^6.3.0"
   }
 }
