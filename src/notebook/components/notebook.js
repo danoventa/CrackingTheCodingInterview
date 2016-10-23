@@ -28,9 +28,21 @@ import { executeCell } from '../epics/execute';
 
 import type { CellProps } from './cell/cell';
 
-// Always set up the markdown mode
+// Always set up the markdown modes
 require('codemirror/mode/markdown/markdown');
+require('codemirror/mode/gfm/gfm');
 
+// Common languages
+require('codemirror/mode/python/python');
+require('codemirror/mode/ruby/ruby');
+require('codemirror/mode/javascript/javascript');
+require('codemirror/mode/r/r');
+
+// Scala
+require('codemirror/mode/clike/clike');
+
+require('codemirror/mode/shell/shell');
+require('codemirror/mode/sql/sql');
 
 type Props = {
   displayOrder: ImmutableList<any>,
@@ -54,22 +66,6 @@ export function getLanguageMode(notebook: any): string {
     notebook.getIn(['metadata', 'language_info', 'codemirror_mode'],
     notebook.getIn(['metadata', 'language_info', 'name'],
     'text')));
-
-  if (language !== 'ipython' && language !== 'text') {
-    // HACK: This should give you the heeby-jeebies
-    // Mostly because language could be ../../../../whatever
-    // This is the notebook though, so hands off
-    // We'll want to check for this existing later
-    // and any other validation
-    try {
-      /* eslint-disable */
-      require(`codemirror/mode/${language}/${language}`);
-      /* eslint-enable */
-    } catch (err) {
-      /* istanbul ignore next */
-      console.error(err);
-    }
-  }
   return language;
 }
 
