@@ -37,6 +37,7 @@ require('codemirror/mode/python/python');
 require('codemirror/mode/ruby/ruby');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/r/r');
+require('codemirror/mode/julia/julia');
 
 // Scala
 require('codemirror/mode/clike/clike');
