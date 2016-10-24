@@ -20,6 +20,8 @@ export function deferURL(event, url) {
 
 const iconPath = path.join(__dirname, '..', '..', 'static', 'icon.png');
 
+const initContextMenu = require('electron-context-menu');
+
 export function launch(filename) {
   let win = new BrowserWindow({
     width: 800,
@@ -30,6 +32,8 @@ export function launch(filename) {
 
   const index = path.join(__dirname, '..', '..', 'static', 'index.html');
   win.loadURL(`file://${index}`);
+
+  initContextMenu();
 
   win.webContents.on('did-finish-load', () => {
     if (filename) {
