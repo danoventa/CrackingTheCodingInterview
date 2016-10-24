@@ -52,8 +52,7 @@
     "win": {
       "target": "nsis"
     },
-    "extraResources": "bin",
-    "asar": false
+    "extraResources": ["bin", "example-notebooks"]
   },
   "greenkeeper": {
     "ignore": [
