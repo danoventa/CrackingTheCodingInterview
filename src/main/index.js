@@ -105,8 +105,9 @@ export function createSplashSubscriber() {
 
   return Rx.Subscriber.create(() => {
     win = new BrowserWindow({
-      width: 900,
-      height: 400,
+      width: 565,
+      height: 233,
+      useContentSize: true,
       title: 'loading',
       frame: false,
       show: false
