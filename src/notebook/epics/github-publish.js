@@ -20,7 +20,6 @@ export const PUBLISH_ANONYMOUS_GIST = 'PUBLISH_ANONYMOUS_GIST';
 /**
  * Notify the notebook user that it has been published as a gist.
  * @param {string} filename - Filename of the notebook.
- * @param {string} gistURL - URL for the published gist.
  * @param {string} gistID - ID of the published gist, given after URL
  * @param {object} notificationSystem - To be passed information for
  * notification of the user that the gist has been published.
@@ -62,7 +61,7 @@ export function createGistCallback(firstTimePublish, observer, filename, notific
     const gistID = response.id;
     const gistURL = response.html_url;
 
-    notifyUser(filename, gistURL, gistID, notificationSystem);
+    notifyUser(filename, gistID, notificationSystem);
     if (firstTimePublish) {
       // TODO: Move this up and out to be handled as a return on the observable
       observer.next(overwriteMetadata('gist_id', gistID));
@@ -140,7 +139,7 @@ export function publishNotebookObservable(github, notebook, filepath,
  * @param  {Immutable.Record} store - Redux store containing current state.
  *
  */
-export function handleGistError(error, store) {
+export function handleGistError(store, error) {
   const state = store.getState();
   const notificationSystem = state.app.get('notificationSystem');
   // TODO: Let this go into the general error flow
@@ -195,7 +194,9 @@ export function handleGistAction(action, store) {
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.
  */
-export const publishEpic = (action$, store) =>
-  action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
+export const publishEpic = (action$, store) => {
+  const boundHandleGistError = handleGistError.bind(null, store);
+  return action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
     .mergeMap((action) => handleGistAction(action, store))
-    .catch((err) => handleGistError(err, store));
+    .catch(boundHandleGistError);
+};
