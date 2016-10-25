@@ -155,22 +155,18 @@ export function handleGistError(error, store) {
       });
       return;
     }
-    else {
-      notificationSystem.addNotification({
-        title: 'Publication Error',
-        message: githubError.message,
-        level: 'error',
-      });
-    }
-    return;
-  }
-  else {
     notificationSystem.addNotification({
-      title: 'Unknown Publication Error',
-      message: error.toString(),
+      title: 'Publication Error',
+      message: githubError.message,
       level: 'error',
     });
+    return;
   }
+  notificationSystem.addNotification({
+    title: 'Unknown Publication Error',
+    message: error.toString(),
+    level: 'error',
+  });
 }
 
 /**
