@@ -134,6 +134,40 @@ export function publishNotebookObservable(github, notebook, filepath,
   });
 }
 
+export function handleGistError(error, store) {
+  const state = store.getState();
+  const notificationSystem = state.app.get('notificationSystem');
+  console.log(error);
+  // TODO: Let this go into the general error flow
+  if (error.message) {
+    const githubError = JSON.parse(error.message);
+    if (githubError.message === 'Bad credentials') {
+      notificationSystem.addNotification({
+        title: 'Bad credentials',
+        message: 'Unable to authenticate with your credentials.\n' +
+                 'What do you have $GITHUB_TOKEN set to?',
+        level: 'error',
+      });
+      return;
+    }
+    else {
+      notificationSystem.addNotification({
+        title: 'Publication Error',
+        message: githubError.message,
+        level: 'error',
+      });
+    }
+    return;
+  }
+  else {
+    notificationSystem.addNotification({
+      title: 'Unknown Publication Error',
+      message: error.toString(),
+      level: 'error',
+    });
+  }
+}
+
 /**
  * Handle user vs. anonymous gist actions in publishEpic
  * @param {action} action - The action being processed by the epic.
@@ -163,31 +197,4 @@ export function handleGistAction(action, store) {
 export const publishEpic = (action$, store) =>
   action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
     .mergeMap((action) => handleGistAction(action, store))
-    .catch((err) => {
-      const state = store.getState();
-      const notificationSystem = state.app.get('notificationSystem');
-      // TODO: Let this go into the general error flow
-      if (err.message) {
-        const githubError = JSON.parse(err.message);
-        if (githubError.message === 'Bad credentials') {
-          notificationSystem.addNotification({
-            title: 'Bad credentials',
-            message: 'Unable to authenticate with your credentials.\n' +
-                     'What do you have $GITHUB_TOKEN set to?',
-            level: 'error',
-          });
-          return;
-        }
-        notificationSystem.addNotification({
-          title: 'Publication Error',
-          message: githubError.message,
-          level: 'error',
-        });
-        return;
-      }
-      notificationSystem.addNotification({
-        title: 'Unknown Publication Error',
-        message: err.toString(),
-        level: 'error',
-      });
-    });
+    .catch((err) => handleGistError(err, store));

@@ -16,6 +16,7 @@ import {
   publishNotebookObservable,
   createGistCallback,
   handleGistAction,
+  handleGistError,
 } from '../../../src/notebook/epics/github-publish';
 
 describe('handleGistAction', () => {
@@ -83,5 +84,39 @@ describe('createGistCallback', () => {
     const callback = createGistCallback(true, publishNotebookObs,
       './test.ipynb', notificationSystem);
     expect((typeof(callback))).to.equal('function');
+  });
+});
+
+describe('handleGistError', () => {
+  it('handles bad credentials', () => {
+    const store = dummyStore();
+    const notification = store.getState().app.notificationSystem.addNotification;
+    handleGistError('{ message: Bad credentials }', store);
+    expect(notification.calledWith({
+      title: 'Bad credentials',
+      message: 'Unable to authenticate with your credentials.\n' +
+               'What do you have $GITHUB_TOKEN set to?',
+      level: 'error',
+    }));
+  });
+  it('handles other errors', () => {
+    const store = dummyStore();
+    const notification = store.getState().app.notificationSystem.addNotification;
+    handleGistError('{ message: this }', store);
+    expect(notification.calledWith({
+      title: 'Publication Error',
+      message: 'this',
+      level: 'error',
+    }));
+  })
+  it('handles bad errors', () => {
+    const store = dummyStore();
+    const notification = store.getState().app.notificationSystem.addNotification;
+    handleGistError('hi', store);
+    expect(notification.calledWith({
+      title: 'Publication Error',
+      message: 'hi',
+      level: 'error',
+    }));
   });
 });
