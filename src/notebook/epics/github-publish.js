@@ -20,12 +20,11 @@ export const PUBLISH_ANONYMOUS_GIST = 'PUBLISH_ANONYMOUS_GIST';
 /**
  * Notify the notebook user that it has been published as a gist.
  * @param {string} filename - Filename of the notebook.
- * @param {string} gistURL - URL for the published gist.
  * @param {string} gistID - ID of the published gist, given after URL
  * @param {object} notificationSystem - To be passed information for
  * notification of the user that the gist has been published.
  */
-function notifyUser(filename, gistURL, gistID, notificationSystem) {
+export function notifyUser(filename, gistID, notificationSystem) {
   notificationSystem.addNotification({
     title: 'Gist uploaded',
     message: `${filename} is ready`,
@@ -62,7 +61,7 @@ export function createGistCallback(firstTimePublish, observer, filename, notific
     const gistID = response.id;
     const gistURL = response.html_url;
 
-    notifyUser(filename, gistURL, gistID, notificationSystem);
+    notifyUser(filename, gistID, notificationSystem);
     if (firstTimePublish) {
       // TODO: Move this up and out to be handled as a return on the observable
       observer.next(overwriteMetadata('gist_id', gistID));
@@ -135,6 +134,41 @@ export function publishNotebookObservable(github, notebook, filepath,
 }
 
 /**
+ * Handle gist errors for the publish epic.
+ * @param  {String} error - Error response to be parsed and handled.
+ * @param  {Immutable.Record} store - Redux store containing current state.
+ *
+ */
+export function handleGistError(store, error) {
+  const state = store.getState();
+  const notificationSystem = state.app.get('notificationSystem');
+  // TODO: Let this go into the general error flow
+  if (error.message) {
+    const githubError = JSON.parse(error.message);
+    if (githubError.message === 'Bad credentials') {
+      notificationSystem.addNotification({
+        title: 'Bad credentials',
+        message: 'Unable to authenticate with your credentials.\n' +
+                 'Please try again.',
+        level: 'error',
+      });
+      return;
+    }
+    notificationSystem.addNotification({
+      title: 'Publication Error',
+      message: githubError.message,
+      level: 'error',
+    });
+    return;
+  }
+  notificationSystem.addNotification({
+    title: 'Unknown Publication Error',
+    message: error.toString(),
+    level: 'error',
+  });
+}
+
+/**
  * Handle user vs. anonymous gist actions in publishEpic
  * @param {action} action - The action being processed by the epic.
  * @param {store} reduxStore - The store containing state data.
@@ -160,34 +194,9 @@ export function handleGistAction(action, store) {
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.
  */
-export const publishEpic = (action$, store) =>
-  action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
+export const publishEpic = (action$, store) => {
+  const boundHandleGistError = handleGistError.bind(null, store);
+  return action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
     .mergeMap((action) => handleGistAction(action, store))
-    .catch((err) => {
-      const state = store.getState();
-      const notificationSystem = state.app.get('notificationSystem');
-      // TODO: Let this go into the general error flow
-      if (err.message) {
-        const githubError = JSON.parse(err.message);
-        if (githubError.message === 'Bad credentials') {
-          notificationSystem.addNotification({
-            title: 'Bad credentials',
-            message: 'Unable to authenticate with your credentials.\n' +
-                     'What do you have $GITHUB_TOKEN set to?',
-            level: 'error',
-          });
-          return;
-        }
-        notificationSystem.addNotification({
-          title: 'Publication Error',
-          message: githubError.message,
-          level: 'error',
-        });
-        return;
-      }
-      notificationSystem.addNotification({
-        title: 'Unknown Publication Error',
-        message: err.toString(),
-        level: 'error',
-      });
-    });
+    .catch(boundHandleGistError);
+};
