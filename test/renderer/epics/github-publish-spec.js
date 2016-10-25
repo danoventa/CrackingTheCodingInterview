@@ -17,6 +17,7 @@ import {
   createGistCallback,
   handleGistAction,
   handleGistError,
+  notifyUser,
 } from '../../../src/notebook/epics/github-publish';
 
 describe('handleGistAction', () => {
@@ -87,6 +88,28 @@ describe('createGistCallback', () => {
   });
 });
 
+describe('notifyUser', () => {
+  it('notifies a user that gist has been uploaded', () => {
+    const store = dummyStore();
+    const notification = store.getState().app.notificationSystem.addNotification;
+    const notificationSystem = store.getState().app.notificationSystem;
+    const notifyUserCall = notifyUser('filename', 'gistID', notificationSystem)
+    expect(notification.calledWith({
+      title: 'Gist uploaded',
+      message: `filename is ready`,
+      dismissible: true,
+      position: 'tr',
+      level: 'success',
+      action: {
+        label: 'Open Gist',
+        callback: function openGist() {
+          shell.openExternal(`https://nbviewer.jupyter.org/gistID`);
+        },
+      },
+    }))
+  })
+})
+
 describe('handleGistError', () => {
   it('handles bad credentials', () => {
     const store = dummyStore();
@@ -95,7 +118,7 @@ describe('handleGistError', () => {
     expect(notification.calledWith({
       title: 'Bad credentials',
       message: 'Unable to authenticate with your credentials.\n' +
-               'What do you have $GITHUB_TOKEN set to?',
+               'Please try again.',
       level: 'error',
     }));
   });

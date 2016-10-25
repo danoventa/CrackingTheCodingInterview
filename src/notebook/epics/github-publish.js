@@ -25,7 +25,7 @@ export const PUBLISH_ANONYMOUS_GIST = 'PUBLISH_ANONYMOUS_GIST';
  * @param {object} notificationSystem - To be passed information for
  * notification of the user that the gist has been published.
  */
-function notifyUser(filename, gistURL, gistID, notificationSystem) {
+export function notifyUser(filename, gistID, notificationSystem) {
   notificationSystem.addNotification({
     title: 'Gist uploaded',
     message: `${filename} is ready`,
