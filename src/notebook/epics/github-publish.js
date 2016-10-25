@@ -134,10 +134,15 @@ export function publishNotebookObservable(github, notebook, filepath,
   });
 }
 
+/**
+ * Handle gist errors for the publish epic.
+ * @param  {String} error - Error response to be parsed and handled.
+ * @param  {Immutable.Record} store - Redux store containing current state.
+ *
+ */
 export function handleGistError(error, store) {
   const state = store.getState();
   const notificationSystem = state.app.get('notificationSystem');
-  console.log(error);
   // TODO: Let this go into the general error flow
   if (error.message) {
     const githubError = JSON.parse(error.message);
@@ -145,7 +150,7 @@ export function handleGistError(error, store) {
       notificationSystem.addNotification({
         title: 'Bad credentials',
         message: 'Unable to authenticate with your credentials.\n' +
-                 'What do you have $GITHUB_TOKEN set to?',
+                 'Please try again.',
         level: 'error',
       });
       return;
