@@ -109,11 +109,14 @@ export function createSplashSubscriber() {
       height: 400,
       title: 'loading',
       frame: false,
+      show: false
     });
 
     const index = join(__dirname, '..', '..', 'static', 'splash.html');
     win.loadURL(`file://${index}`);
-    win.show();
+    win.once('ready-to-show', () => {
+      win.show();
+    });
   }, null,
   () => {
     // Close the splash page when completed
