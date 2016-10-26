@@ -52,10 +52,8 @@ export function createKernelSpecsFromEnvs(envs) {
     const name = `conda-env-${envName}-${languageKey}`;
     langEnvs[name] = {
       display_name: `${displayPrefix} [conda env:${envName}]`,
-      // TODO: Support default R kernel
       argv: [exePath, '-m', 'ipykernel', '-f', '{connection_file}'],
       language: 'python',
-      // TODO: Provide resource_dir
     };
   }
   return langEnvs;
