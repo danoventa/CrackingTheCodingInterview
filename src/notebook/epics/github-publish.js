@@ -168,7 +168,7 @@ export function handleGistError(store, err) {
       message: 'Failure to parse error message',
       level: 'error',
     });
-    return
+    return;
   }
 }
 
