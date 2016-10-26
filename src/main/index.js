@@ -80,15 +80,12 @@ const prepJupyterObservable = prepareEnv
       .catch((err) => {
         if (err.code === 'ENOENT') {
           return writeFileObservable(nteractConfigFilename, JSON.stringify({
-            // TODO: Pull the default config from somewhere
             theme: 'light',
           }));
         }
         throw err;
       })
   );
-  // TODO: Should we re-map any errors to something more informative for the
-  //       dialog we create on error
 
 
 const kernelSpecsPromise = prepJupyterObservable
