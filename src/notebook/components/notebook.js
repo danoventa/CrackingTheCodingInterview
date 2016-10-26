@@ -87,10 +87,9 @@ export function scrollToElement(el) {
   if (belowFold) {
     if (cellHeight > viewportHeight) {
       return cellTop;
-    } else {
-      const offset = viewportHeight - cellHeight;
-      return cellTop - offset;
     }
+    const offset = viewportHeight - cellHeight;
+    return cellTop - offset;
   }
   return undefined;
 }
