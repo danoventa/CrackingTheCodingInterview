@@ -135,10 +135,10 @@ describe('handleGistError', () => {
   it('handles bad errors', () => {
     const store = dummyStore();
     const notification = store.getState().app.notificationSystem.addNotification;
-    handleGistError(store, JSON.stringify({}));
+    handleGistError(store, '');
     expect(notification).to.be.calledWith({
       title: 'Unknown Publication Error',
-      message: '{}',
+      message: 'Failure to parse error message',
       level: 'error',
     });
   });

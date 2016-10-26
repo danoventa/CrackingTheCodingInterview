@@ -142,30 +142,34 @@ export function publishNotebookObservable(github, notebook, filepath,
 export function handleGistError(store, err) {
   const state = store.getState();
   const notificationSystem = state.app.get('notificationSystem');
-  const error = JSON.parse(err);
-  // TODO: Let this go into the general error flow
-  if (error.message) {
-    if (error.message === 'Bad credentials') {
+  try {
+    const error = JSON.parse(err);
+    // TODO: Let this go into the general error flow
+    if (error.message) {
+      if (error.message === 'Bad credentials') {
+        notificationSystem.addNotification({
+          title: 'Bad credentials',
+          message: 'Unable to authenticate with your credentials.\n' +
+          'Please try again.',
+          level: 'error',
+        });
+        return;
+      }
       notificationSystem.addNotification({
-        title: 'Bad credentials',
-        message: 'Unable to authenticate with your credentials.\n' +
-                 'Please try again.',
+        title: 'Publication Error',
+        message: error.message,
         level: 'error',
       });
       return;
     }
+  } catch (e) {
     notificationSystem.addNotification({
-      title: 'Publication Error',
-      message: error.message,
+      title: 'Unknown Publication Error',
+      message: 'Failure to parse error message',
       level: 'error',
     });
-    return;
+    return
   }
-  notificationSystem.addNotification({
-    title: 'Unknown Publication Error',
-    message: err.toString(),
-    level: 'error',
-  });
 }
 
 /**
