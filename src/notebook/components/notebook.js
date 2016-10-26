@@ -74,9 +74,9 @@ export function getLanguageMode(notebook: any): string {
  * information.
  * @param  {HTMLElement} el - Element to be compared against window and body for
  * scrollTop value.
- * @return {Integer} - An integer for the new document scrollTop value. 
+ * @return {Integer} - An integer for the new document scrollTop value.
  */
-export function scrollToElement(el: HTMLElement): int {
+export function scrollToElement(el: HTMLElement): number {
   const viewportHeight = window.innerHeight;
   const viewportOffset = document.body.scrollTop;
 
