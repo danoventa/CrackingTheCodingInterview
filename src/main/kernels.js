@@ -6,7 +6,6 @@ import {
 
 const path = require('path');
 
-// TODO: Check for sys.prefix/share/jupyter/kernels/*/kernel.json
 /**
  * ipyKernelTryObservable check for existence of ipykernel in an env
  * @param  {Object} env [description]
@@ -41,7 +40,6 @@ export function createKernelSpecsFromEnvs(envs) {
   const displayPrefix = 'Python'; // Or R
   const languageKey = 'py'; // or r
 
-  // TODO: Handle Windows & Conda
   const languageExe = 'bin/python';
   const jupyterBin = 'bin/jupyter';
 
@@ -54,10 +52,8 @@ export function createKernelSpecsFromEnvs(envs) {
     const name = `conda-env-${envName}-${languageKey}`;
     langEnvs[name] = {
       display_name: `${displayPrefix} [conda env:${envName}]`,
-      // TODO: Support default R kernel
       argv: [exePath, '-m', 'ipykernel', '-f', '{connection_file}'],
       language: 'python',
-      // TODO: Provide resource_dir
     };
   }
   return langEnvs;
