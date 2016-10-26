@@ -40,7 +40,6 @@ export function createKernelSpecsFromEnvs(envs) {
   const displayPrefix = 'Python'; // Or R
   const languageKey = 'py'; // or r
 
-  // TODO: Handle Windows & Conda
   const languageExe = 'bin/python';
   const jupyterBin = 'bin/jupyter';
 
