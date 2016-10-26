@@ -6,7 +6,6 @@ import {
 
 const path = require('path');
 
-// TODO: Check for sys.prefix/share/jupyter/kernels/*/kernel.json
 /**
  * ipyKernelTryObservable check for existence of ipykernel in an env
  * @param  {Object} env [description]
