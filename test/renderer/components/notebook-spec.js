@@ -29,7 +29,7 @@ const dummyCellStatuses = dummyCommutable.get('cellOrder')
         statuses.set(cellID, Immutable.fromJS({ outputHidden: false, inputHidden: false })),
       new Immutable.Map());
 
-import { Notebook, ConnectedNotebook, getLanguageMode } from '../../../src/notebook/components/notebook';
+import { Notebook, ConnectedNotebook, getLanguageMode, scrollToElement } from '../../../src/notebook/components/notebook';
 
 // Boilerplate test to make sure the testing setup is configured
 describe('Notebook', () => {
@@ -170,5 +170,37 @@ describe('Notebook DnD', () => {
     const backend = manager.getBackend();
 
     // TODO: Write tests for cell drag and drop
+  })
+})
+
+describe('scrollToElement', () => {
+  it('works for case aboveFold', () => {
+    let el = document.createElement('div');
+    el.offsetTop = 1111;
+    el.offsetHeight = 0;
+    window.innerHeight = 0;
+    document.body.scrollTop = 2000;
+    const scrollTop = scrollToElement(el);
+    expect(scrollTop).to.equal(1111);
+  });
+
+  it('works for belowFold and cellHeight greater than viewport', () => {
+    let el = document.createElement('div')
+    el.offsetTop = 100 //cellTop
+    el.offsetHeight = 100; //cellHeight
+    window.innerHeight = 99; //viewportHeight
+    document.body.scrollTop = 99; //viewportOffset
+    const scrollTop = scrollToElement(el);
+    expect(scrollTop).to.equal(100);
+  });
+
+  it('works for belowFold and cellHeight less than viewport', () => {
+    let el = document.createElement('div')
+    el.offsetTop = 100; //cellTop
+    el.offsetHeight = 100; //cellHeight
+    window.innerHeight = 100; //viewportHeight
+    document.body.scrollTop = 99; //viewportOffset
+    const scrollTop = scrollToElement(el);
+    expect(scrollTop).to.equal(100);  
   })
 })
