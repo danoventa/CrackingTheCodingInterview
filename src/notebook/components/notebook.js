@@ -70,7 +70,7 @@ export function getLanguageMode(notebook: any): string {
   return language;
 }
 
-export function scrollToElement(el) {
+export function scrollToElement(el: HTMLElement): int {
   const viewportHeight = window.innerHeight;
   const viewportOffset = document.body.scrollTop;
 
@@ -91,7 +91,7 @@ export function scrollToElement(el) {
     const offset = viewportHeight - cellHeight;
     return cellTop - offset;
   }
-  return undefined;
+  return document.body.scrollTop;
 }
 
 const mapStateToProps = (state: Object) => ({
