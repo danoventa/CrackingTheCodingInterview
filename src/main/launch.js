@@ -41,8 +41,6 @@ export function launch(filename) {
       win.webContents.send('main:load', filename);
     }
     win.webContents.send('main:load-config');
-    // TODO: else, we assume it's an empty notebook
-    //       assumption right now is that launchNewNotebook will handle the follow on
   });
 
   win.webContents.on('will-navigate', deferURL);
