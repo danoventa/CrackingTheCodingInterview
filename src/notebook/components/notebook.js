@@ -70,6 +70,31 @@ export function getLanguageMode(notebook: any): string {
   return language;
 }
 
+export function scrollToElement(el) {
+  const viewportHeight = window.innerHeight;
+  const viewportOffset = document.body.scrollTop;
+
+  const cellTop = el.offsetTop;
+  const cellHeight = el.offsetHeight;
+
+  const belowFold = (cellTop + cellHeight) > (viewportOffset + viewportHeight);
+  const aboveFold = cellTop < viewportOffset;
+
+  if (aboveFold) {
+    return cellTop;
+  }
+
+  if (belowFold) {
+    if (cellHeight > viewportHeight) {
+      return cellTop;
+    } else {
+      const offset = viewportHeight - cellHeight;
+      return cellTop - offset;
+    }
+  }
+  return undefined;
+}
+
 const mapStateToProps = (state: Object) => ({
   theme: state.config.get('theme'),
   lastSaved: state.app.get('lastSaved'),
@@ -174,30 +199,9 @@ export class Notebook extends React.Component {
   }
 
   resolveScrollPosition(id: string): void {
-    const viewportHeight = window.innerHeight;
-    const viewportOffset = document.body.scrollTop;
-
     const focusedCell = this.cellElements.get(id);
-
     if (focusedCell) {
-      const cellTop = focusedCell.offsetTop;
-      const cellHeight = focusedCell.offsetHeight;
-
-      const belowFold = (cellTop + cellHeight) > (viewportOffset + viewportHeight);
-      const aboveFold = cellTop < viewportOffset;
-
-      if (aboveFold) {
-        document.body.scrollTop = cellTop;
-      }
-
-      if (belowFold) {
-        if (cellHeight > viewportHeight) {
-          document.body.scrollTop = cellTop;
-        } else {
-          const offset = viewportHeight - cellHeight;
-          document.body.scrollTop = cellTop - offset;
-        }
-      }
+      document.body.scrollTop = scrollToElement(focusedCell);
     }
   }
 
