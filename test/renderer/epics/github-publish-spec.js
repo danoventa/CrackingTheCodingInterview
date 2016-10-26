@@ -114,7 +114,7 @@ describe('handleGistError', () => {
   it('handles bad credentials', () => {
     const store = dummyStore();
     const notification = store.getState().app.notificationSystem.addNotification;
-    handleGistError(store, '{"message": "Bad credentials"}');
+    handleGistError(store, JSON.stringify({message: 'Bad credentials'}));
     expect(notification).to.be.calledWith({
       title: 'Bad credentials',
       message: 'Unable to authenticate with your credentials.\n' +
@@ -125,7 +125,7 @@ describe('handleGistError', () => {
   it('handles other errors', () => {
     const store = dummyStore();
     const notification = store.getState().app.notificationSystem.addNotification;
-    handleGistError(store, '{"message": "this"}');
+    handleGistError(store, JSON.stringify({message: 'this'}));
     expect(notification).calledWith({
       title: 'Publication Error',
       message: 'this',
@@ -135,10 +135,10 @@ describe('handleGistError', () => {
   it('handles bad errors', () => {
     const store = dummyStore();
     const notification = store.getState().app.notificationSystem.addNotification;
-    handleGistError(store, '{hi}');
+    handleGistError(store, JSON.stringify({}));
     expect(notification).to.be.calledWith({
       title: 'Unknown Publication Error',
-      message: 'hi',
+      message: '{}',
       level: 'error',
     });
   });

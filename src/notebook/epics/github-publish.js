@@ -139,13 +139,13 @@ export function publishNotebookObservable(github, notebook, filepath,
  * @param  {Immutable.Record} store - Redux store containing current state.
  *
  */
-export function handleGistError(store, error) {
+export function handleGistError(store, err) {
   const state = store.getState();
   const notificationSystem = state.app.get('notificationSystem');
+  const error = JSON.parse(err);
   // TODO: Let this go into the general error flow
   if (error.message) {
-    const githubError = JSON.parse(error.message);
-    if (githubError.message === 'Bad credentials') {
+    if (error.message === 'Bad credentials') {
       notificationSystem.addNotification({
         title: 'Bad credentials',
         message: 'Unable to authenticate with your credentials.\n' +
@@ -156,14 +156,14 @@ export function handleGistError(store, error) {
     }
     notificationSystem.addNotification({
       title: 'Publication Error',
-      message: githubError.message,
+      message: error.message,
       level: 'error',
     });
     return;
   }
   notificationSystem.addNotification({
     title: 'Unknown Publication Error',
-    message: error.toString(),
+    message: err.toString(),
     level: 'error',
   });
 }
