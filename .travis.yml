@@ -26,7 +26,6 @@ before_install:
 
 before_script:
 - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
-- 'if [[ $GROUP == flow* ]]; then npm install flow-typed && flow-typed install; fi'
 script: travis_retry npm run test:$GROUP
 after_success:
   - 'if [[ $GROUP == coverage* ]]; then bash <(curl -s https://codecov.io/bash); fi'
