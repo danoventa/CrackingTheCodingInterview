@@ -25,6 +25,7 @@ import {
   createSourceUpdateAction,
   createCellAfterAction,
   createCellStatusAction,
+  createExecuteCellObservable,
   updateCellNumberingAction,
   handleFormattableMessages,
 } from '../../../src/notebook/epics/execute';
@@ -248,3 +249,17 @@ describe('createSourceUpdateAction', () => {
     });
   });
 });
+
+describe('createExecuteCellObservable', () => {
+  it('notifies the user if kernel is not connected', () => {
+    const store = dummyStore();
+    const testFunction = createExecuteCellObservable(store, 'source', 'id');
+    const notification = store.getState().app.notificationSystem.addNotification;
+    expect(notification).to.be.calledWith({
+      title: 'Could not execute cell',
+      message: 'The cell could not be executed because the kernel is not connected.',
+      level: 'error',
+    });
+    expect(testFunction.subscribe).to.not.be.null;
+  })
+})

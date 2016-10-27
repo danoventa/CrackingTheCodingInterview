@@ -46,6 +46,7 @@ export function dummyStore(config) {
         addNotification: sinon.spy(),
       },
       token: 'TOKEN',
+      channels: 'channelInfo',
     }),
     metadata: MetadataRecord({
       filename: (config && config.noFilename) ? null : 'dummy-store-nb.ipynb',

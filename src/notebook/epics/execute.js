@@ -265,11 +265,35 @@ export function executeCell(id, source) {
   };
 }
 
+export function createExecuteCellObservable(action$, store, source, id) {
+  const state = store.getState();
+  const channels = state.app.channels;
+
+  const kernelConnected = channels &&
+    !(state.app.executionState === 'starting' ||
+      state.app.executionState === 'not connected');
+
+  if (!kernelConnected) {
+    // TODO: Switch this to dispatching an error
+    state.app.notificationSystem.addNotification({
+      title: 'Could not execute cell',
+      message: 'The cell could not be executed because the kernel is not connected.',
+      level: 'error',
+    });
+    return Rx.Observable.of(updateCellExecutionCount(id, undefined));
+  }
+
+  return executeCellObservable(channels, id, source)
+    .takeUntil(action$.filter(laterAction => laterAction.id === id)
+                      .ofType(ABORT_EXECUTION, REMOVE_CELL));
+};
+
 /**
  * the execute cell epic processes execute requests for all cells, creating
  * inner observable streams of the running execution responses
  */
 export function executeCellEpic(action$, store) {
+  const boundCreateExecuteCellObservable = createExecuteCellObservable.bind(null, action$, store);
   return action$.ofType('EXECUTE_CELL')
     .do(action => {
       if (!action.id) {
@@ -285,28 +309,7 @@ export function executeCellEpic(action$, store) {
     .map(cellActionObservable =>
       cellActionObservable
         // When a new EXECUTE_CELL comes in with the current ID, we create a
-        // a new observable and unsubscribe from the old one.
-        .switchMap(({ source, id }) => {
-          const state = store.getState();
-          const channels = state.app.channels;
-
-          const kernelConnected = channels &&
-            !(state.app.executionState === 'starting' ||
-              state.app.executionState === 'not connected');
-
-          if (!kernelConnected) {
-            state.app.notificationSystem.addNotification({
-              title: 'Could not execute cell',
-              message: 'The cell could not be executed because the kernel is not connected.',
-              level: 'error',
-            });
-            return Rx.Observable.of(updateCellExecutionCount(id, undefined));
-          }
-
-          return executeCellObservable(channels, id, source)
-            .takeUntil(action$.filter(laterAction => laterAction.id === id)
-                              .ofType(ABORT_EXECUTION, REMOVE_CELL));
-        })
+        .switchMap(({source, id}) => boundCreateExecuteCellObservable(source, id))
     )
     // Bring back all the inner Observables into one stream
     .mergeAll()
