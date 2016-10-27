@@ -5,6 +5,8 @@ chai.use(chaiImmutable);
 
 const expect = chai.expect;
 
+const sinon = require('sinon');
+
 import { dummyStore } from '../../utils';
 
 const Immutable = require('immutable');
@@ -25,6 +27,7 @@ import {
   createSourceUpdateAction,
   createCellAfterAction,
   createCellStatusAction,
+  createExecuteCellObservable,
   updateCellNumberingAction,
   handleFormattableMessages,
 } from '../../../src/notebook/epics/execute';
@@ -248,3 +251,33 @@ describe('createSourceUpdateAction', () => {
     });
   });
 });
+
+describe('createExecuteCellObservable', () => {
+  let store = { getState: function() { return this.state; },
+            state: {
+              app: {
+                executionState: 'starting',
+                channels: 'channelInfo',
+                notificationSystem: {
+                  addNotification: sinon.spy(),
+                },
+              }
+            },
+          };
+  let action$ = { filter: function() { return this; }, ofType: function() { return this; }}
+  it('notifies the user if kernel is not connected', () => {
+    const testFunction = createExecuteCellObservable(action$, store, 'source', 'id');
+    const notification = store.getState().app.notificationSystem.addNotification;
+    expect(notification).to.be.calledWith({
+      title: 'Could not execute cell',
+      message: 'The cell could not be executed because the kernel is not connected.',
+      level: 'error',
+    });
+    expect(testFunction.subscribe).to.not.be.null;
+  });
+  it('emits returns an observable when kernel connected', () => {
+    store.state.app.executionState = 'started'
+    const executeCellObservable = createExecuteCellObservable(action$, store, 'source', 'id');
+    expect(executeCellObservable.subscribe).to.not.be.null;
+  });
+})
