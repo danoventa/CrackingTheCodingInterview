@@ -126,7 +126,7 @@ describe('handleGistError', () => {
     const store = dummyStore();
     const notification = store.getState().app.notificationSystem.addNotification;
     handleGistError(store, JSON.stringify({message: 'this'}));
-    expect(notification).calledWith({
+    expect(notification).to.be.calledWith({
       title: 'Publication Error',
       message: 'this',
       level: 'error',
