@@ -216,7 +216,6 @@ export class Notebook extends React.Component {
       cell,
       language: getLanguageMode(this.props.notebook),
       key: id,
-      // TODO: This map _has_ to be cleaned up when cells are deleted
       ref: (el) => { this.cellElements = this.cellElements.set(id, el); },
       displayOrder: this.props.displayOrder,
       transforms: this.props.transforms,
