@@ -286,7 +286,7 @@ export function createExecuteCellObservable(action$, store, source, id) {
   return executeCellObservable(channels, id, source)
     .takeUntil(action$.filter(laterAction => laterAction.id === id)
                       .ofType(ABORT_EXECUTION, REMOVE_CELL));
-};
+}
 
 /**
  * the execute cell epic processes execute requests for all cells, creating
@@ -309,7 +309,8 @@ export function executeCellEpic(action$, store) {
     .map(cellActionObservable =>
       cellActionObservable
         // When a new EXECUTE_CELL comes in with the current ID, we create a
-        .switchMap(({source, id}) => boundCreateExecuteCellObservable(source, id))
+        // a new observable and unsubscribe from the old one.
+        .switchMap(({ source, id }) => boundCreateExecuteCellObservable(source, id))
     )
     // Bring back all the inner Observables into one stream
     .mergeAll()
