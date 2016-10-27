@@ -47,9 +47,6 @@ export function acquireKernelInfo(channels) {
     .first()
     .pluck('content', 'language_info')
     .map(setLanguageInfo);
-    // TODO: After a timeout, send kernel_info_request again
-    //       the retry may be better architecturally out of this function
-    //       though, by retrying this function entirely.
 
   return Rx.Observable.create(observer => {
     const subscription = obs.subscribe(observer);

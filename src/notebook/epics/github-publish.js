@@ -63,7 +63,6 @@ export function createGistCallback(firstTimePublish, observer, filename, notific
 
     notifyUser(filename, gistID, notificationSystem);
     if (firstTimePublish) {
-      // TODO: Move this up and out to be handled as a return on the observable
       observer.next(overwriteMetadata('gist_id', gistID));
     }
   };
@@ -144,7 +143,6 @@ export function handleGistError(store, err) {
   const notificationSystem = state.app.get('notificationSystem');
   try {
     const error = JSON.parse(err);
-    // TODO: Let this go into the general error flow
     if (error.message) {
       if (error.message === 'Bad credentials') {
         notificationSystem.addNotification({

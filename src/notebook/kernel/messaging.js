@@ -6,7 +6,6 @@ import Rx from 'rxjs/Rx';
 
 const Observable = Rx.Observable;
 
-// TODO: the session ID should likely be in the state tree, not a singleton
 export const session = uuid.v4();
 
 export function getUsername() {

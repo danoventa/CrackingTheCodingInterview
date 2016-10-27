@@ -55,7 +55,6 @@ export default handleActions({
   },
   [constants.TOGGLE_STICKY_CELL]: function toggleStickyCell(state, action) {
     const { id } = action;
-    // TODO: Switch this structure to an Immutable.Set
     const stickyCells = state.get('stickyCells');
     if (stickyCells.get(id)) {
       return state.set('stickyCells', stickyCells.delete(id));

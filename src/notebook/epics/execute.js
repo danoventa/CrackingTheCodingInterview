@@ -295,7 +295,6 @@ export function executeCellEpic(action$, store) {
               state.app.executionState === 'not connected');
 
           if (!kernelConnected) {
-            // TODO: Switch this to dispatching an error
             state.app.notificationSystem.addNotification({
               title: 'Could not execute cell',
               message: 'The cell could not be executed because the kernel is not connected.',

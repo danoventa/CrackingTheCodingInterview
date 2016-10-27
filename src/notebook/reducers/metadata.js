@@ -11,5 +11,5 @@ function changeFilename(state, action) {
 
 export default handleActions({
   [constants.CHANGE_FILENAME]: changeFilename,
-  [constants.SET_NOTEBOOK]: changeFilename, // TODO: Group these or tear this metadata tree out
+  [constants.SET_NOTEBOOK]: changeFilename,
 }, {});

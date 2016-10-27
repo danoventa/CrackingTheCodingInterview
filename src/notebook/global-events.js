@@ -18,7 +18,5 @@ export function unload(store) {
 }
 
 export function initGlobalHandlers(store) {
-  // TODO: use beforeunload to ask user to save
-  // global.window.onbeforeunload = beforeUnload.bind(null, store, dispatch);
   global.window.onunload = unload.bind(null, store);
 }

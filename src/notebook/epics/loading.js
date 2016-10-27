@@ -33,7 +33,7 @@ export const extractNewKernel = (filename, notebook) => {
   const kernelName = notebook.getIn(
     ['metadata', 'kernelspec', 'name'], notebook.getIn(
       ['metadata', 'language_info', 'name'],
-        'python3')); // TODO: keep default kernel consistent
+        'python3'));
   return newKernel(kernelName, cwd);
 };
 
@@ -41,8 +41,6 @@ export const convertRawNotebook = (filename, data) => ({
   filename,
   notebook: commutable.fromJS(JSON.parse(data)),
 });
-
-// TODO: ERROR_LOADING response
 
 export const loadEpic = actions =>
   actions.ofType(LOAD)
