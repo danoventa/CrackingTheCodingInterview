@@ -7,11 +7,12 @@ dinner, but most importantly: read it thoroughly!
 
 ### JavaScript side
 
-You'll need knowledge of JavaScript (ES6), React, RxJS, and Redux to help out
+You'll need knowledge of JavaScript (ES6), React, RxJS, Redux, and Flow to help out
 with this project. That's a whole lot of cool stuff! But don't worry, we've
 got some resources to help you out.
 * [Building a voting app with Redux and React](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html)
 * [The RxJS Tutorial](https://xgrommx.github.io/rx-book/index.html)
+* [Adding Flow to React Components](https://flowtype.org/docs/react.html#defining-components-as-reactcomponent-subclasses)
 
 ### Jupyter and ZeroMQ (Optional)
 

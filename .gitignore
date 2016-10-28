@@ -36,7 +36,4 @@ dist/
 
 test/*.ipynb
 
-# Ignore flow type definitions
-flow-typed/
-
 bin/nteract-env
