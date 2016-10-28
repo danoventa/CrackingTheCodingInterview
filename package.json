@@ -36,7 +36,7 @@
     "coverage": "cross-env NODE_PATH=app/node_modules/ nyc report --reporter=text-lcov > coverage/lcov.info",
     "pack": "npm install && npm run clean && npm run build && build --dir",
     "dist": "npm install && npm run clean && npm run build && build",
-    "flow": "flow; test $? -eq 0 -o $? -eq 2",
+    "flow": "flow",
     "diagnostics": "app/diagnostics/kernelspecs.js"
   },
   "build": {
