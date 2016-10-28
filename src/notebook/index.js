@@ -49,7 +49,7 @@ class App extends React.Component {
   props: Object
   state: Object
   notificationSystem: NotificationSystem;
-  // shouldComponentUpdate: (p: Object, s: Object) => boolean
+  shouldComponentUpdate: (p: Object, s: Object) => boolean
 
   constructor(props): void {
     super(props);
