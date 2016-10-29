@@ -28,6 +28,7 @@
     "test:functional": "npm run test:functional:launch && npm run test:functional:launchNewNotebook",
     "test:coverage": "npm run coverage",
     "test:unit": "cross-env NODE_PATH=app/node_modules/ mocha -r test/setup.js --compilers js:babel-core/register \"test/renderer/**/*.js\"",
+    "test:debug":"cross-env NODE_PATH=app/node_modules/ mocha --debug-brk --inspect -r test/setup.js --compilers js:babel-core/register \"test/renderer/**/*.js\"",
     "test:unit:individual": "cross-env NODE_PATH=app/node_modules/ mocha -r test/setup.js --compilers js:babel-core/register ",
     "test:watch": "watch 'npm run test' test/",
     "test:lint": "npm run lint",
