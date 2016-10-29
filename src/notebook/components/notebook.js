@@ -23,9 +23,8 @@ import StatusBar from './status-bar';
 import {
   focusNextCell,
   moveCell,
+  executeCell,
 } from '../actions';
-import { executeCell } from '../epics/execute';
-
 import type { CellProps } from './cell/cell';
 
 // Always set up the markdown modes

@@ -18,9 +18,10 @@ const sinon = require('sinon');
 
 const Rx = require('rxjs/Rx');
 
+const Observable = Rx.Observable;
+import { EXECUTE_CELL } from '../../../src/notebook/constants';
+import { executeCell } from '../../../src/notebook/actions';
 import {
-  executeCell,
-  EXECUTE_CELL,
   reduceOutputs,
   executeCellObservable,
   executeCellEpic,
