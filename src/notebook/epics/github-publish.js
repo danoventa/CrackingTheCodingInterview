@@ -1,6 +1,7 @@
 import { shell } from 'electron';
+
 import {
-  PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST,
+  PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST
 } from './../constants';
 
 import {
@@ -15,7 +16,6 @@ const Rx = require('rxjs/Rx');
 const Observable = Rx.Observable;
 
 const Github = require('github');
-
 
 /**
  * Notify the notebook user that it has been published as a gist.
