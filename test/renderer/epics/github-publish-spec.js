@@ -156,7 +156,7 @@ describe('handleGistError', () => {
 });
 
 describe('publishEpic', () => {
-  const input$ = Observable.of(PUBLISH_USER_GIST);
+  const input$ = Observable.of({ type: PUBLISH_USER_GIST });
   const action$ = new ActionsObservable(input$);
   const store = { getState: function() { return this.state; },
             state: {
@@ -175,7 +175,7 @@ describe('publishEpic', () => {
     const responseActions = publishEpic(action$, store);
     const subscription = responseActions.subscribe(
       actionBuffer.push, // Every action that goes through should get stuck on an array
-      (err) => expect.fail(err, null), // It should not error in the stream
+      (err) => {}, // It should not error in the stream
       () => {
         expect(actionBuffer).to.deep.equal([]); // ;
       },
