@@ -1,6 +1,10 @@
 import { shell } from 'electron';
 
 import {
+  PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST
+} from './../constants';
+
+import {
   overwriteMetadata,
 } from '../actions';
 
@@ -12,10 +16,6 @@ const Rx = require('rxjs/Rx');
 const Observable = Rx.Observable;
 
 const Github = require('github');
-
-export const PUBLISH_USER_GIST = 'PUBLISH_USER_GIST';
-export const PUBLISH_ANONYMOUS_GIST = 'PUBLISH_ANONYMOUS_GIST';
-
 
 /**
  * Notify the notebook user that it has been published as a gist.

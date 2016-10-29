@@ -13,7 +13,7 @@ import { executeCell } from './epics/execute';
 import {
   PUBLISH_USER_GIST,
   PUBLISH_ANONYMOUS_GIST,
-} from './epics/github-publish';
+} from './constants';
 
 import {
   load,
