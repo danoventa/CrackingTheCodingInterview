@@ -35,6 +35,7 @@ import {
   updateCellNumberingAction,
   handleFormattableMessages,
 } from '../../../src/notebook/epics/execute';
+
 describe('executeCell', () => {
   it('returns an executeCell action', () => {
     expect(executeCell('0-0-0-0', 'import random; random.random()'))
@@ -282,5 +283,46 @@ describe('createExecuteCellObservable', () => {
     store.state.app.executionState = 'started'
     const executeCellObservable = createExecuteCellObservable(action$, store, 'source', 'id');
     expect(executeCellObservable.subscribe).to.not.be.null;
+  });
+})
+
+describe('executeCellEpic', () => {
+  const store = { getState: function() { return this.state; },
+            state: {
+              app: {
+                executionState: 'starting',
+                channels: 'channelInfo',
+                notificationSystem: {
+                  addNotification: sinon.spy(),
+                },
+                token: 'blah'
+              }
+            },
+          };
+  it('Errors on a bad action', () => {
+    const badInput$ = Observable.of({ type: EXECUTE_CELL });
+    const badAction$ = new ActionsObservable(badInput$);
+    const actionBuffer = [];
+    const responseActions = executeCellEpic(badAction$, store);
+    const subscription = responseActions.subscribe(
+      actionBuffer.push, // Every action that goes through should get stuck on an array
+      (err) => expect.fail(err, null), // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([]); // ;
+      },
+    );
+  });
+  it('Runs an epic with the approriate flow with good action', () => {
+    const input$ = Observable.of(executeCell('id', 'source'));
+    const action$ = new ActionsObservable(input$);
+    const actionBuffer = [];
+    const responseActions = executeCellEpic(action$, store);
+    const subscription = responseActions.subscribe(
+      actionBuffer.push, // Every action that goes through should get stuck on an array
+      (err) => expect.fail(err, null), // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([]); // ;
+      },
+    );
   });
 })
