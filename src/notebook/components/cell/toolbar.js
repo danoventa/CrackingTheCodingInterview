@@ -4,9 +4,8 @@ import React from 'react';
 import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 
-import { executeCell } from '../../epics/execute';
-
 import {
+  executeCell,
   removeCell,
   toggleStickyCell,
   clearCellOutput,

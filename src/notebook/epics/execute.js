@@ -9,12 +9,14 @@ import {
   updateCellOutputs,
   updateCellPagers,
   updateCellStatus,
+  executeCell,
 } from '../actions';
 
 import {
   REMOVE_CELL,
   ABORT_EXECUTION,
   ERROR_EXECUTING,
+  EXECUTE_CELL,
 } from '../constants';
 
 const Rx = require('rxjs/Rx');
@@ -246,23 +248,6 @@ export function executeCellObservable(channels, id, code) {
     channels.shell.next(executeRequest);
     return subscription;
   });
-}
-
-export const EXECUTE_CELL = 'EXECUTE_CELL';
-
-/**
- * Execute Cell action.
- *
- * @param {String} id - Universally Unique Identifier of cell to be executed.
- * @param {Object} source - Source code to executed.
- * @return {Object} executeCellAction - Action to be dispatched to reducer.
- */
-export function executeCell(id, source) {
-  return {
-    type: EXECUTE_CELL,
-    id,
-    source,
-  };
 }
 
 export function createExecuteCellObservable(action$, store, source, id) {

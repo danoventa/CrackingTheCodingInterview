@@ -258,3 +258,18 @@ export function toggleOutputExpansion(id) {
     id,
   };
 }
+
+/**
+ * Execute Cell action.
+ *
+ * @param {String} id - Universally Unique Identifier of cell to be executed.
+ * @param {Object} source - Source code to executed.
+ * @return {Object} executeCellAction - Action to be dispatched to reducer.
+ */
+export function executeCell(id, source) {
+  return {
+    type: constants.EXECUTE_CELL,
+    id,
+    source,
+  };
+}

@@ -8,8 +8,6 @@ import * as path from 'path';
 
 import { tildify } from './native-window';
 
-import { executeCell } from './epics/execute';
-
 import {
   PUBLISH_USER_GIST,
   PUBLISH_ANONYMOUS_GIST,
@@ -25,6 +23,7 @@ import {
 } from './epics/config';
 
 import {
+  executeCell,
   clearCellOutput,
   newKernel,
   killKernel,
