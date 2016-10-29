@@ -7,17 +7,28 @@ const GitHub = require('github');
 const fromJS = Immutable.fromJS;
 import { dummyCommutable } from '../dummy-nb';
 import { dummyStore } from '../../utils';
+
 import NotificationSystem from 'react-notification-system';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
+
+const Rx = require('rxjs/Rx');
+const Observable = Rx.Observable;
+import { ActionsObservable } from 'redux-observable';
+
+import {
+  PUBLISH_USER_GIST
+} from '../../../src/notebook/constants';
+
 import {
   publishNotebookObservable,
   createGistCallback,
   handleGistAction,
   handleGistError,
   notifyUser,
+  publishEpic
 } from '../../../src/notebook/epics/github-publish';
 
 describe('handleGistAction', () => {
@@ -143,3 +154,31 @@ describe('handleGistError', () => {
     });
   });
 });
+
+describe('publishEpic', () => {
+  const input$ = Observable.of(PUBLISH_USER_GIST);
+  const action$ = new ActionsObservable(input$);
+  const store = { getState: function() { return this.state; },
+            state: {
+              app: {
+                executionState: 'starting',
+                channels: 'channelInfo',
+                notificationSystem: {
+                  addNotification: sinon.spy(),
+                },
+                token: 'blah'
+              }
+            },
+          };
+  it('Epics in the right way', () => {
+    const actionBuffer = [];
+    const responseActions = publishEpic(action$, store);
+    const subscription = responseActions.subscribe(
+      actionBuffer.push, // Every action that goes through should get stuck on an array
+      (err) => expect.fail(err, null), // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([]); // ;
+      },
+    );
+  });
+})

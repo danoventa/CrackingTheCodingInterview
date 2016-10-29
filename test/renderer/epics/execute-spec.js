@@ -3,15 +3,18 @@ const chaiImmutable = require('chai-immutable');
 
 chai.use(chaiImmutable);
 
-const expect = chai.expect;
-
-const sinon = require('sinon');
 
 import { dummyStore } from '../../utils';
+
+import { ActionsObservable } from 'redux-observable';
 
 const Immutable = require('immutable');
 
 const fromJS = Immutable.fromJS;
+
+const expect = chai.expect;
+
+const sinon = require('sinon');
 
 const Rx = require('rxjs/Rx');
 
@@ -251,7 +254,6 @@ describe('createSourceUpdateAction', () => {
     });
   });
 });
-
 describe('createExecuteCellObservable', () => {
   let store = { getState: function() { return this.state; },
             state: {
@@ -264,7 +266,7 @@ describe('createExecuteCellObservable', () => {
               }
             },
           };
-  let action$ = { filter: function() { return this; }, ofType: function() { return this; }}
+  const action$ = new ActionsObservable();
   it('notifies the user if kernel is not connected', () => {
     const testFunction = createExecuteCellObservable(action$, store, 'source', 'id');
     const notification = store.getState().app.notificationSystem.addNotification;
