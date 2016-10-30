@@ -54,17 +54,18 @@ describe('publishNotebookObservable', () => {
         expect(publishNotebookObs.subscribe).to.not.be.null;
     });
 
-    it('renders a notification popup', () => {
+    it('renders a notification popup', (done) => {
       const notificationSystem = NotificationSystem();
       const publishNotebookObs = publishNotebookObservable(new GitHub(),
         dummyCommutable, './test.ipynb', notificationSystem);
       const addNotification = sinon.spy(notificationSystem, 'addNotification');
       publishNotebookObs.subscribe( () => {
         expect(addNotification).to.be.called;
+        done();
       });
     });
 
-    it('calls create gist', () => {
+    it('calls create gist', (done) => {
       const github = new GitHub();
       const notificationSystem = NotificationSystem();
       const publishNotebookObs = publishNotebookObservable(github,
@@ -72,9 +73,10 @@ describe('publishNotebookObservable', () => {
       const create = sinon.spy(github.gists, 'create');
       publishNotebookObs.subscribe( () => {
         expect(create).to.be.called;
+        done();
       });
     });
-    it('edits gist that is already made', () => {
+    it('edits gist that is already made', (done) => {
       const github = new GitHub();
       const notebook = dummyCommutable.setIn(['metadata', 'gist_id'], 'ID123')
       const notificationSystem = NotificationSystem();
@@ -83,6 +85,7 @@ describe('publishNotebookObservable', () => {
       const edit = sinon.spy(github.gists, 'edit');
       publishNotebookObs.subscribe( () => {
         expect(edit).to.be.called;
+        done();
       });
     });
 });
@@ -170,15 +173,16 @@ describe('publishEpic', () => {
               }
             },
           };
-  it('Epics in the right way', () => {
+  it('Epics in the right way', (done) => {
     const actionBuffer = [];
     const responseActions = publishEpic(action$, store);
     const subscription = responseActions.subscribe(
       actionBuffer.push, // Every action that goes through should get stuck on an array
       (err) => {}, // It should not error in the stream
       () => {
-        expect(actionBuffer).to.deep.equal([]); // ;
-      },
+        expect(actionBuffer).to.deep.equal([]);
+        done();
+      }
     );
   });
 })
