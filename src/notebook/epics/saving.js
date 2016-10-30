@@ -37,7 +37,7 @@ export function saveEpic(action$) {
         // since SAVE effectively acts as the same as START_SAVING
         // you could just look for that in your reducers instead of START_SAVING
     );
-};
+}
 
 export function saveAsEpic(actions) {
   return actions.ofType(SAVE_AS)
