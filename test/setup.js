@@ -1,6 +1,7 @@
 // From https://github.com/airbnb/enzyme/blob/master/docs/guides/jsdom.md
 
 var jsdom = require('jsdom').jsdom;
+var sinon = require('sinon');
 
 var exposedProperties = ['window', 'navigator', 'document'];
 
@@ -139,4 +140,8 @@ mock('react-notification-system', function () {
 
 mock('spawnteract', {
   'launch': function(kernelSpec, config) { return new Promise() },
+});
+
+mock('fs', {
+  unlinkSync: sinon.spy(),
 });
