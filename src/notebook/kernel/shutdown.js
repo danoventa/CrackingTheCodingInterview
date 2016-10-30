@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { shutdownRequest } from 'enchannel';
 import { getUsername, session } from './messaging';
 
-export function cleanupKernel(kernel, closeChannels, _fs = fs) {
+export function cleanupKernel(kernel, closeChannels) {
   if (kernel.channels && closeChannels) {
     try {
       kernel.channels.shell.complete();
@@ -28,16 +28,16 @@ export function cleanupKernel(kernel, closeChannels, _fs = fs) {
     }
   }
   if (kernel.connectionFile) {
-    _fs.unlinkSync(kernel.connectionFile);
+    fs.unlinkSync(kernel.connectionFile);
   }
 }
 
-export function forceShutdownKernel(kernel, _fs = fs) {
+export function forceShutdownKernel(kernel) {
   if (kernel && kernel.spawn && kernel.spawn.kill) {
     kernel.spawn.kill('SIGKILL');
   }
 
-  cleanupKernel(kernel, true, _fs);
+  cleanupKernel(kernel, true);
 }
 
 export function shutdownKernel(kernel) {
