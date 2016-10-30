@@ -4,12 +4,19 @@ import {
   dummyCommutable
 } from '../dummy-nb';
 
+import { ActionsObservable } from 'redux-observable';
+
+const Rx = require('rxjs/Rx');
+
+const Observable = Rx.Observable;
 
 import {
   save,
   saveAs,
   SAVE,
   SAVE_AS,
+  saveEpic,
+  saveAsEpic,
 } from '../../../src/notebook/epics/saving';
 
 
@@ -36,3 +43,21 @@ describe('saveAs', () => {
     expect.fail();
   });
 });
+
+describe('saveEpic', () => {
+  it('throws an error when no filename provided', () => {
+    const input$ = Observable.of({type: SAVE });
+    const action$ = new ActionsObservable(input$);
+    const actionBuffer = [];
+    const responseActions = saveEpic(action$).catch(error => {
+      expect(error.message).to.equal('save needs a filename');
+      done();
+    })
+    responseActions.subscribe(
+      actionBuffer.push, // Every action that goes through should get stuck on an array
+      (err) => expect.fail(err, null), // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([]); // ;
+      });
+  });
+})
