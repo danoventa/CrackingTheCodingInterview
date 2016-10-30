@@ -15,6 +15,8 @@ import {
   saveAs,
   SAVE,
   SAVE_AS,
+  CHANGE_FILENAME,
+  DONE_SAVING,
   saveEpic,
   saveAsEpic,
 } from '../../../src/notebook/epics/saving';
@@ -51,8 +53,9 @@ describe('saveEpic', () => {
     const actionBuffer = [];
     const responseActions = saveEpic(action$).catch(error => {
       expect(error.message).to.equal('save needs a filename');
+      return new Observable.of([]);
       done();
-    })
+    });
     responseActions.subscribe(
       actionBuffer.push, // Every action that goes through should get stuck on an array
       (err) => expect.fail(err, null), // It should not error in the stream
@@ -60,4 +63,32 @@ describe('saveEpic', () => {
         expect(actionBuffer).to.deep.equal([]); // ;
       });
   });
-})
+  it('Works when passed filename and notebook', () => {
+    const input$ = Observable.of(save('filename', dummyCommutable));
+    const action$ = new ActionsObservable(input$);
+    let actionBuffer = [];
+    const responseActions = saveEpic(action$)
+    responseActions.subscribe(
+      actionBuffer.push, // Every action that goes through should get stuck on an array
+      (err) => expect.fail(err, null), // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([DONE_SAVING]); // ;
+      });
+  });
+});
+
+describe('saveAsEpic', () => {
+  it('Works when passed actions of type SAVE_AS', () => {
+    const input$ = Observable.of(saveAs('filename', dummyCommutable));
+    const action$ = new ActionsObservable(input$);
+    let actionBuffer = [];
+    const responseActions = saveAsEpic(action$)
+    responseActions.subscribe(
+      actionBuffer.push, // Every action that goes through should get stuck on an array
+      (err) => expect.fail(err, null), // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([CHANGE_FILENAME, SAVE]); // ;
+      },
+    );
+  });
+});

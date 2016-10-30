@@ -15,8 +15,8 @@ export const save = (filename, notebook) => ({ type: SAVE, filename, notebook })
 export const saveAs = (filename, notebook) => ({ type: SAVE_AS, filename, notebook });
 export const doneSaving = () => ({ type: DONE_SAVING });
 
-export const saveEpic = actions =>
-  actions.ofType(SAVE)
+export function saveEpic(action$) {
+  return action$.ofType(SAVE)
     .do(action => {
       // If there isn't a filename, save-as it instead
       if (!action.filename) {
@@ -37,10 +37,12 @@ export const saveEpic = actions =>
         // since SAVE effectively acts as the same as START_SAVING
         // you could just look for that in your reducers instead of START_SAVING
     );
+};
 
-export const saveAsEpic = actions =>
-  actions.ofType(SAVE_AS)
+export function saveAsEpic(actions) {
+  return actions.ofType(SAVE_AS)
     .mergeMap(action => [
       changeFilename(action.filename),
       save(action.filename, action.notebook),
     ]);
+}
