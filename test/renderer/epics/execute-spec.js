@@ -19,7 +19,12 @@ const sinon = require('sinon');
 const Rx = require('rxjs/Rx');
 
 const Observable = Rx.Observable;
-import { EXECUTE_CELL } from '../../../src/notebook/constants';
+import {
+  EXECUTE_CELL,
+  UPDATE_CELL_EXECUTION_COUNT,
+  ERROR_EXECUTING,
+ } from '../../../src/notebook/constants';
+
 import { executeCell } from '../../../src/notebook/actions';
 import {
   reduceOutputs,
@@ -307,10 +312,10 @@ describe('executeCellEpic', () => {
       expect(error.message).to.equal('execute cell needs an id');
     });
     const subscription = responseActions.subscribe(
-      actionBuffer.push, // Every action that goes through should get stuck on an array
+      (x) => actionBuffer.push(x.type), // Every action that goes through should get stuck on an array
       (err) => expect.fail(err, null), // It should not error in the stream
       () => {
-        expect(actionBuffer).to.deep.equal([]);
+        expect(actionBuffer).to.deep.equal([ERROR_EXECUTING]);
         done();
       },
     );
@@ -323,12 +328,12 @@ describe('executeCellEpic', () => {
       expect(error.message).to.equal('execute cell needs source string');
     });
     const subscription = responseActions.subscribe(
-      actionBuffer.push, // Every action that goes through should get stuck on an array
+      (x) => actionBuffer.push(x.type), // Every action that goes through should get stuck on an array
       (err) => expect.fail(err, null), // It should not error in the stream
       () => {
-        expect(actionBuffer).to.deep.equal([]);
+        expect(actionBuffer).to.deep.equal([ERROR_EXECUTING]);
         done();
-      }
+      },
     );
   });
   it('Runs an epic with the approriate flow with good action', (done) => {
@@ -337,10 +342,10 @@ describe('executeCellEpic', () => {
     const actionBuffer = [];
     const responseActions = executeCellEpic(action$, store);
     const subscription = responseActions.subscribe(
-      actionBuffer.push, // Every action that goes through should get stuck on an array
+      (x) => actionBuffer.push(x.type), // Every action that goes through should get stuck on an array
       (err) => expect.fail(err, null), // It should not error in the stream
       () => {
-        expect(actionBuffer).to.deep.equal([]);
+        expect(actionBuffer).to.deep.equal([UPDATE_CELL_EXECUTION_COUNT]); // ;
         done();
       },
     );
