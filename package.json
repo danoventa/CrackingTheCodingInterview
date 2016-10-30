@@ -9,7 +9,6 @@
     "reinstall": "npm run clean && rimraf node_modules app/node_modules/ && npm install",
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=development ./node_modules/electron/cli.js ./app/",
-    "prepublish": "npm run build",
     "clean": "rimraf ./app/build dist",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
