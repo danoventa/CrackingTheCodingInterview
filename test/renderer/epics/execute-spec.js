@@ -303,13 +303,32 @@ describe('executeCellEpic', () => {
     const badInput$ = Observable.of({ type: EXECUTE_CELL });
     const badAction$ = new ActionsObservable(badInput$);
     const actionBuffer = [];
-    const responseActions = executeCellEpic(badAction$, store);
+    const responseActions = executeCellEpic(badAction$, store).catch(error => {
+      expect(error.message).to.equal('execute cell needs an id');
+      done();
+    });
     const subscription = responseActions.subscribe(
       actionBuffer.push, // Every action that goes through should get stuck on an array
       (err) => expect.fail(err, null), // It should not error in the stream
       () => {
         expect(actionBuffer).to.deep.equal([]); // ;
       },
+    );
+  });
+  it('Errors on an action where source not a string', () => {
+    const badInput$ = Observable.of(executeCell('id', 2));
+    const badAction$ = new ActionsObservable(badInput$);
+    const actionBuffer = [];
+    const responseActions = executeCellEpic(badAction$, store).catch(error=> {
+      expect(error.message).to.equal('execute cell needs source string');
+      done();
+    });
+    const subscription = responseActions.subscribe(
+      actionBuffer.push, // Every action that goes through should get stuck on an array
+      (err) => expect.fail(err, null), // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([]); // ;
+      }
     );
   });
   it('Runs an epic with the approriate flow with good action', () => {
