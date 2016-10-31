@@ -21,6 +21,11 @@ import {
 import PlotlyTransform from './plotly';
 import GeoJSONTransform from './geojson';
 
+import {
+  VegaLite,
+  Vega,
+} from './vega';
+
 type StandardTransforms = ImmutableMap<string, any>
 type StandardDisplayOrder = ImmutableList<string>
 
@@ -54,11 +59,15 @@ export const standardDisplayOrder: StandardDisplayOrder = new ImmutableList([
 // Register custom transforms
 const transforms = standardTransforms
   .set(PlotlyTransform.MIMETYPE, PlotlyTransform)
-  .set(GeoJSONTransform.MIMETYPE, GeoJSONTransform);
+  .set(GeoJSONTransform.MIMETYPE, GeoJSONTransform)
+  .set(VegaLite.MIMETYPE, VegaLite)
+  .set(Vega.MIMETYPE, Vega);
 
 // Register our custom transforms as the most rich (front of List)
 const displayOrder = standardDisplayOrder
   .insert(0, PlotlyTransform.MIMETYPE)
+  .insert(0, VegaLite.MIMETYPE)
+  .insert(0, Vega.MIMETYPE)
   .insert(0, GeoJSONTransform.MIMETYPE);
 
 /**
