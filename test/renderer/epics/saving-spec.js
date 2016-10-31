@@ -4,12 +4,21 @@ import {
   dummyCommutable
 } from '../dummy-nb';
 
+import { ActionsObservable } from 'redux-observable';
+
+const Rx = require('rxjs/Rx');
+
+const Observable = Rx.Observable;
 
 import {
   save,
   saveAs,
   SAVE,
   SAVE_AS,
+  CHANGE_FILENAME,
+  DONE_SAVING,
+  saveEpic,
+  saveAsEpic,
 } from '../../../src/notebook/epics/saving';
 
 
@@ -34,5 +43,54 @@ describe('saveAs', () => {
   it.skip('creates a CHANGE_FILENAME action', () => {
     // We need to test that the epic triggers a CHANGE_FILENAME
     expect.fail();
+  });
+});
+
+describe('saveEpic', () => {
+  it('throws an error when no filename provided', (done) => {
+    const input$ = Observable.of({type: SAVE });
+    const action$ = new ActionsObservable(input$);
+    const actionBuffer = [];
+    const responseActions = saveEpic(action$).catch(error => {
+      expect(error.message).to.equal('save needs a filename');
+      return new Observable.of({type: SAVE});
+    });
+    responseActions.subscribe(
+      (x) => actionBuffer.push(x.type), // Every action that goes through should get stuck on an array
+      (err) => expect.fail(err, null), // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([SAVE]);
+        done(); // ;
+      });
+  });
+  it('works when passed filename and notebook', (done) => {
+    const input$ = Observable.of(save('filename', dummyCommutable));
+    const action$ = new ActionsObservable(input$);
+    let actionBuffer = [];
+    const responseActions = saveEpic(action$);
+    responseActions.subscribe(
+      (x) => actionBuffer.push(x.type), // Every action that goes through should get stuck on an array
+      (err) => expect.fail() , // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([DONE_SAVING]);
+        done(); // ;
+      });
+  });
+});
+
+describe('saveAsEpic', () => {
+  it('works when passed actions of type SAVE_AS', (done) => {
+    const input$ = Observable.of(saveAs('filename', dummyCommutable));
+    const action$ = new ActionsObservable(input$);
+    let actionBuffer = [];
+    const responseActions = saveAsEpic(action$)
+    responseActions.subscribe(
+      (x) => actionBuffer.push(x.type), // Every action that goes through should get stuck on an array
+      (err) => { expect.fail() }, // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([CHANGE_FILENAME, SAVE]);
+        done();  // ;
+      },
+    );
   });
 });
