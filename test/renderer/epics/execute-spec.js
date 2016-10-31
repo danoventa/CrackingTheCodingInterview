@@ -299,39 +299,39 @@ describe('executeCellEpic', () => {
               }
             },
           };
-  it('Errors on a bad action', () => {
+  it('Errors on a bad action', (done) => {
     const badInput$ = Observable.of({ type: EXECUTE_CELL });
     const badAction$ = new ActionsObservable(badInput$);
     const actionBuffer = [];
     const responseActions = executeCellEpic(badAction$, store).catch(error => {
       expect(error.message).to.equal('execute cell needs an id');
-      done();
     });
     const subscription = responseActions.subscribe(
       actionBuffer.push, // Every action that goes through should get stuck on an array
       (err) => expect.fail(err, null), // It should not error in the stream
       () => {
-        expect(actionBuffer).to.deep.equal([]); // ;
+        expect(actionBuffer).to.deep.equal([]);
+        done();
       },
     );
   });
-  it('Errors on an action where source not a string', () => {
+  it('Errors on an action where source not a string', (done) => {
     const badInput$ = Observable.of(executeCell('id', 2));
     const badAction$ = new ActionsObservable(badInput$);
     const actionBuffer = [];
     const responseActions = executeCellEpic(badAction$, store).catch(error=> {
       expect(error.message).to.equal('execute cell needs source string');
-      done();
     });
     const subscription = responseActions.subscribe(
       actionBuffer.push, // Every action that goes through should get stuck on an array
       (err) => expect.fail(err, null), // It should not error in the stream
       () => {
-        expect(actionBuffer).to.deep.equal([]); // ;
+        expect(actionBuffer).to.deep.equal([]);
+        done();
       }
     );
   });
-  it('Runs an epic with the approriate flow with good action', () => {
+  it('Runs an epic with the approriate flow with good action', (done) => {
     const input$ = Observable.of(executeCell('id', 'source'));
     const action$ = new ActionsObservable(input$);
     const actionBuffer = [];
@@ -340,7 +340,8 @@ describe('executeCellEpic', () => {
       actionBuffer.push, // Every action that goes through should get stuck on an array
       (err) => expect.fail(err, null), // It should not error in the stream
       () => {
-        expect(actionBuffer).to.deep.equal([]); // ;
+        expect(actionBuffer).to.deep.equal([]);
+        done();
       },
     );
   });
