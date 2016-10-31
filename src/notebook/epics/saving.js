@@ -1,5 +1,5 @@
-import { writeFileObservable } from '../../utils/fs';
 import { ActionsObservable } from 'redux-observable';
+import { writeFileObservable } from '../../utils/fs';
 
 const Rx = require('rxjs/Rx');
 const commutable = require('commutable');
@@ -34,15 +34,14 @@ export function saveEpic(action$) {
           null,
           1))
         .catch(error => {
-          const input$ = new Observable.of({type: 'SAVING_ERROR'});
+          const input$ = Observable.of({ type: 'SAVING_ERROR' });
           return new ActionsObservable(input$);
         })
         .map(doneSaving)
         // .startWith({ type: START_SAVING })
         // since SAVE effectively acts as the same as START_SAVING
         // you could just look for that in your reducers instead of START_SAVING
-    )
-
+    );
 }
 
 export function saveAsEpic(actions) {
