@@ -123,10 +123,10 @@ mock('electron', {
 
 mock('github', function () {
   return {
-    'authenticate': function(config) { },
-    'gists': {
-        'edit': function(request, callback) { },
-        'create': function(request, callback) { },
+    authenticate: function(config) { },
+    gists: {
+        edit: function(request, callback) { callback(null, { id: 123, html_url: 'foo' }) },
+        create: function(request, callback) { callback(null, { id: 123, html_url: 'foo' }) },
     },
   };
 });
