@@ -71,7 +71,7 @@
               break;
             default:
               if(/Module version mismatch/.test(err.message)) {
-                msgContainer.innerHTML = '<pre>nteract <a href="https://github.com/nteract/nteract#dependencies">requires node 6 for dev install</a></pre>';
+                msgContainer.innerHTML = `<p>nteract's native modules mismatch, try running <a href="https://github.com/nteract/nteract#troubleshooting"><pre>npm run reinstall</pre></a> from the root of the git clone</p>`;
               }
           }
           el.appendChild(headerEl);
