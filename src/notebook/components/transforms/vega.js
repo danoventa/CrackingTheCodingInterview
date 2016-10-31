@@ -4,8 +4,13 @@ import ReactDOM from 'react-dom';
 
 const vegaEmbed = require('vega-embed');
 
+const _ = require('lodash');
+
 const MIMETYPE_VEGA = 'application/vnd.vega+json';
 const MIMETYPE_VEGALITE = 'application/vnd.vegalite+json';
+
+const DEFAULT_WIDTH = 500;
+const DEFAULT_HEIGHT = DEFAULT_WIDTH / 1.5;
 
 type EmbedProps = {
   data: Object,
@@ -24,6 +29,15 @@ export class VegaEmbed extends React.Component {
       spec,
     };
 
+    if (this.props.embedMode === 'vega-lite') {
+      spec.config = _.merge({
+        cell: {
+          width: DEFAULT_WIDTH,
+          height: DEFAULT_HEIGHT,
+        }
+      }, spec.config);
+    }
+
     vegaEmbed(this.el, embedSpec, (error: any, result: any): any => {
     });
   }
@@ -33,8 +47,12 @@ export class VegaEmbed extends React.Component {
   }
 
   render(): ?React.Element<any> {
+    // Note: We hide vega-actions since they won't work in our environment
     return (
-      <div ref={(el) => { this.el = el; }} />
+      <div>
+        <style>{'.vega-actions{ display: none; }'}</style>
+        <div ref={(el) => { this.el = el; }} />
+      </div>
     );
   }
 }
