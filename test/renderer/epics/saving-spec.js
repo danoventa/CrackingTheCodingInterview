@@ -70,7 +70,7 @@ describe('saveEpic', () => {
     const responseActions = saveEpic(action$);
     responseActions.subscribe(
       (x) => actionBuffer.push(x.type), // Every action that goes through should get stuck on an array
-      (err) => { actionBuffer.push(err) } , // It should not error in the stream
+      (err) => expect.fail() , // It should not error in the stream
       () => {
         expect(actionBuffer).to.deep.equal([DONE_SAVING]);
         done(); // ;
