@@ -64,6 +64,8 @@ export function createGistCallback(firstTimePublish, observer, filename, notific
     notifyUser(filename, gistID, notificationSystem);
     if (firstTimePublish) {
       observer.next(overwriteMetadata('gist_id', gistID));
+    } else {
+      observer.next();
     }
   };
 }
