@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 import Immutable from 'immutable';
 
@@ -34,3 +34,20 @@ describe('VegaLite', () => {
     expect(wrapper.props().embedMode).to.equal('vega-lite');
   });
 });
+
+describe('VegaEmbed', () => {
+  it('embeds vega', () => {
+    const wrapper = mount(
+      <VegaEmbed
+        data={spec}
+        embedMode="vega-lite"
+      />
+    );
+
+    const element = wrapper.instance();
+
+    expect(element.shouldComponentUpdate()).to.equal(false);
+
+
+  })
+})
