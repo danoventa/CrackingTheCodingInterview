@@ -13,10 +13,16 @@ const Observable = Rx.Observable;
 import {
   save,
   saveAs,
+} from '../../../src/notebook/actions';
+
+import {
   SAVE,
   SAVE_AS,
-  CHANGE_FILENAME,
   DONE_SAVING,
+  CHANGE_FILENAME,
+} from '../../../src/notebook/constants';
+
+import {
   saveEpic,
   saveAsEpic,
 } from '../../../src/notebook/epics/saving';

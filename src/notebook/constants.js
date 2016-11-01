@@ -88,3 +88,6 @@ export const MERGE_CONFIG = 'MERGE_CONFIG';
 export const DONE_SAVING_CONFIG = 'DONE_SAVING_CONFIG';
 
 export const TOGGLE_OUTPUT_EXPANSION = 'TOGGLE_OUTPUT_EXPANSION';
+
+export const SAVE = 'SAVE';
+export const SAVE_AS = 'SAVE_AS';

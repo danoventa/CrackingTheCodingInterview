@@ -37,12 +37,9 @@ import {
   setGithubToken,
   changeInputVisibility,
   setTheme,
-} from './actions';
-
-import {
   save,
   saveAs,
-} from './epics/saving';
+} from './actions';
 
 import {
   defaultPathFallback,
