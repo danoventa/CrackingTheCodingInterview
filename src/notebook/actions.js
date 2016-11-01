@@ -273,3 +273,31 @@ export function executeCell(id, source) {
     source,
   };
 }
+
+
+export function changeFilename(filename) {
+  return {
+    type: constants.CHANGE_FILENAME,
+    filename
+  };
+}
+
+export function save(filename, notebook) {
+  return {
+    type: constants.SAVE,
+    filename,
+    notebook
+  };
+}
+export function saveAs(filename, notebook) {
+  return {
+    type: constants.SAVE_AS,
+    filename,
+    notebook };
+}
+
+export function doneSaving() {
+  return {
+    type: constants.DONE_SAVING
+  };
+}

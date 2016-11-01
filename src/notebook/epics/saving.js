@@ -1,20 +1,23 @@
 import { ActionsObservable } from 'redux-observable';
 import { writeFileObservable } from '../../utils/fs';
+import {
+  SAVE,
+  SAVE_AS,
+  CHANGE_FILENAME,
+  DONE_SAVING,
+} from '../constants';
+
+import {
+  changeFilename,
+  save,
+  saveAs,
+  doneSaving,
+} from '../actions';
 
 const Rx = require('rxjs/Rx');
 const commutable = require('commutable');
 
 const Observable = Rx.Observable;
-
-export const SAVE = 'SAVE';
-export const SAVE_AS = 'SAVE_AS';
-export const CHANGE_FILENAME = 'CHANGE_FILENAME';
-export const DONE_SAVING = 'DONE_SAVING';
-
-export const changeFilename = filename => ({ type: CHANGE_FILENAME, filename });
-export const save = (filename, notebook) => ({ type: SAVE, filename, notebook });
-export const saveAs = (filename, notebook) => ({ type: SAVE_AS, filename, notebook });
-export const doneSaving = () => ({ type: DONE_SAVING });
 
 export function saveEpic(action$) {
   return action$.ofType(SAVE)
@@ -34,7 +37,11 @@ export function saveEpic(action$) {
           null,
           1))
         .catch(error => {
-          const input$ = Observable.of(error);
+          const input$ = Observable.of({
+            type: 'ERROR',
+            payload: error,
+            error: true,
+          });
           return new ActionsObservable(input$);
         })
         .map(doneSaving)
