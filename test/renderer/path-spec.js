@@ -1,0 +1,19 @@
+import { expect } from 'chai';
+import { remote } from 'electron';
+import {
+  defaultPathFallback,
+  cwdKernelFallback
+} from '../../src/notebook/path';
+
+describe('defaultPathFallback', () => {
+  it('returns a object with the defaultPath', () => {
+    const path = defaultPathFallback('dummy-path');
+    expect(path).to.deep.equal({ defaultPath: 'dummy-path' });
+  });
+  it('returns a object with the correct path', () => {
+    process.chdir('/')
+    const path = defaultPathFallback();
+    expect(path).to.deep.equal({ defaultPath: '/home/home/on/the/range' });
+
+  });
+});
