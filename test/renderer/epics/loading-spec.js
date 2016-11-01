@@ -13,6 +13,8 @@ import {
   convertRawNotebook,
   LOAD,
   loadEpic,
+  NEW_NOTEBOOK,
+  newNotebookEpic,
 } from '../../../src/notebook/epics/loading';
 import { ActionsObservable } from 'redux-observable';
 import Immutable from 'immutable';
@@ -102,4 +104,21 @@ describe('loadingEpic', () => {
       },
     )
   });
+});
+
+describe('newNotebookEpic', () => {
+  it('calls new Kernel after creating a new notebook', (done) => {
+    const input$ = Observable.of({ type: NEW_NOTEBOOK });
+    const action$ = new ActionsObservable(input$);
+    const actionBuffer = [];
+    const responseActions = newNotebookEpic(action$);
+    responseActions.subscribe(
+      (x) => actionBuffer.push(x.type),
+      (err) => expect.fail(),
+      () => {
+        expect(actionBuffer).to.deep.equal(['SET_NOTEBOOK', 'LAUNCH_KERNEL']);
+        done();
+      },
+    )
+  })
 })
