@@ -13,6 +13,7 @@ import {
   acquireKernelInfo,
   watchExecutionStateEpic,
   newKernelObservable,
+  newKernelEpic,
 } from '../../../src/notebook/epics/kernel-launch';
 
 import {
@@ -116,3 +117,40 @@ describe('newKernelObservable', () => {
     expect(obs.subscribe).to.not.be.null;
   });
 });
+
+describe('newKernelEpic', () => {
+  it('throws an error if given a bad action', (done) => {
+    const input$ = Rx.Observable.of({
+      type: constants.LAUNCH_KERNEL,
+    });
+    let actionBuffer = [];
+    const action$ = new ActionsObservable(input$);
+    const obs = newKernelEpic(action$);
+    obs.subscribe(
+      (x) => actionBuffer.push(x.type),
+      (err) => expect.fail(err, null),
+      () => {
+        expect(actionBuffer).to.deep.equal([constants.ERROR_KERNEL_LAUNCH_FAILED]); // ;
+        done();
+      },
+    )
+  })
+  it('calls newKernelObservable if given the correct action', (done) => {
+    const input$ = Rx.Observable.of({
+      type: constants.LAUNCH_KERNEL,
+      kernelSpecName: 'kernelSpecName',
+      cwd: '~',
+    });
+    let actionBuffer = [];
+    const action$ = new ActionsObservable(input$);
+    const obs = newKernelEpic(action$);
+    obs.subscribe(
+      (x) => actionBuffer.push(x.type),
+      (err) => expect.fail(err, null),
+      () => {
+        expect(actionBuffer).to.deep.equal([constants.ERROR_KERNEL_LAUNCH_FAILED]); // ;
+        done();
+      },
+    )
+  })
+})
