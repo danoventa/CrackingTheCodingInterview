@@ -11,11 +11,15 @@ import {
   notebookLoaded,
   extractNewKernel,
   convertRawNotebook,
+  LOAD,
+  loadEpic,
 } from '../../../src/notebook/epics/loading';
-
+import { ActionsObservable } from 'redux-observable';
 import Immutable from 'immutable';
 
 const path = require('path');
+const Rx = require('rxjs/Rx');
+const Observable = Rx.Observable;
 
 describe('load', () => {
   it('loads a notebook', () => {
@@ -65,4 +69,37 @@ describe('convertRawNotebook', () => {
     expect(dummyCommutable.get('metadata').equals(notebook.get('metadata')))
       .to.be.true;
   })
+});
+
+describe('loadingEpic', () => {
+  it('errors without a filename', (done) => {
+    const input$ = Observable.of({ type: LOAD });
+    const action$ = new ActionsObservable(input$);
+    const actionBuffer = [];
+    const responseActions = loadEpic(action$);
+    responseActions.subscribe(
+      (x) => actionBuffer.push(x.type),
+      (err) => {
+        expect(err.message).to.equal('load needs a filename')
+        done();
+      },
+      () => {
+        expect.fail();
+      },
+    )
+  });
+  it('errors when file cant be read', (done) => {
+    const input$ = Observable.of({ type: LOAD , filename: 'file'});
+    const action$ = new ActionsObservable(input$);
+    const actionBuffer = [];
+    const responseActions = loadEpic(action$);
+    responseActions.subscribe(
+      (x) => actionBuffer.push(x.type),
+      (err) => expect.fail(),
+      () => {
+        expect(actionBuffer).to.deep.equal(['ERROR']);
+        done();
+      },
+    )
+  });
 })
