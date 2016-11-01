@@ -1,11 +1,5 @@
 import { ActionsObservable } from 'redux-observable';
 import { writeFileObservable } from '../../utils/fs';
-
-const Rx = require('rxjs/Rx');
-const commutable = require('commutable');
-
-const Observable = Rx.Observable;
-
 import {
   SAVE,
   SAVE_AS,
@@ -18,7 +12,12 @@ import {
   save,
   saveAs,
   doneSaving,
-} from '../actions'; 
+} from '../actions';
+
+const Rx = require('rxjs/Rx');
+const commutable = require('commutable');
+
+const Observable = Rx.Observable;
 
 export function saveEpic(action$) {
   return action$.ofType(SAVE)

@@ -279,7 +279,7 @@ export function changeFilename(filename) {
   return {
     type: constants.CHANGE_FILENAME,
     filename
-  }
+  };
 }
 
 export function save(filename, notebook) {
@@ -287,7 +287,7 @@ export function save(filename, notebook) {
     type: constants.SAVE,
     filename,
     notebook
-  }
+  };
 }
 export function saveAs(filename, notebook) {
   return {
@@ -295,8 +295,9 @@ export function saveAs(filename, notebook) {
     filename,
     notebook };
 }
+
 export function doneSaving() {
   return {
     type: constants.DONE_SAVING
-  }
+  };
 }
