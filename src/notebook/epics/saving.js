@@ -37,7 +37,11 @@ export function saveEpic(action$) {
           null,
           1))
         .catch(error => {
-          const input$ = Observable.of(error);
+          const input$ = Observable.of({
+            type: 'ERROR',
+            payload: error,
+            error: true,
+          });
           return new ActionsObservable(input$);
         })
         .map(doneSaving)
