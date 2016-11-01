@@ -85,10 +85,28 @@ describe('acquireKernelInfo', () => {
 });
 
 describe('watchExecutionStateEpic', () => {
-  it('returns an Observable with an initial state of idle', () => {
-    const action$ = new ActionsObservable();
+
+  it('returns an Observable with an initial state of idle', (done) => {
+    const input$ = Rx.Observable.of({
+      type: constants.NEW_KERNEL,
+      channels: {
+        iopub: Rx.Observable.of({
+          header: { msg_type: 'status' },
+          content: { execution_state: 'idle' },
+        }),
+      },
+    });
+    let actionBuffer = [];
+    const action$ = new ActionsObservable(input$);
     const obs = watchExecutionStateEpic(action$);
-    expect(obs.subscribe).to.not.be.null;
+    obs.subscribe(
+      (x) => actionBuffer.push(x.type), // Every action that goes through should get stuck on an array
+      (err) => expect.fail(), // It should not error in the stream
+      () => {
+        expect(actionBuffer).to.deep.equal([constants.SET_EXECUTION_STATE, constants.SET_EXECUTION_STATE]); // ;
+        done();
+      },
+    );
   });
 });
 
