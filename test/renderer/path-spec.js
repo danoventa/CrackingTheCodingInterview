@@ -11,9 +11,10 @@ describe('defaultPathFallback', () => {
     expect(path).to.deep.equal({ defaultPath: 'dummy-path' });
   });
   it('returns a object with the correct path', () => {
-    process.chdir('/')
-    const path = defaultPathFallback();
-    expect(path).to.deep.equal({ defaultPath: '/home/home/on/the/range' });
-
+    if (process.platform !== 'win32') {
+      process.chdir('/')
+      const path = defaultPathFallback();
+      expect(path).to.deep.equal({ defaultPath: '/home/home/on/the/range' });
+    }
   });
 });
