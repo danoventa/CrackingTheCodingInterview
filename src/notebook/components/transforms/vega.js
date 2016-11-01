@@ -15,11 +15,19 @@ const DEFAULT_HEIGHT = DEFAULT_WIDTH / 1.5;
 type EmbedProps = {
   data: Object,
   embedMode: string,
+  renderedCallback: (err: any, result: any) => any,
 };
+
+const defaultCallback = (err: any, result: any): any => {};
 
 export class VegaEmbed extends React.Component {
   props: EmbedProps;
   el: HTMLElement;
+
+  static defaultProps = {
+    renderedCallback: defaultCallback,
+    embedMode: 'vega-lite',
+  }
 
   componentDidMount(): void {
     const spec = this.props.data.toJS();
@@ -38,8 +46,7 @@ export class VegaEmbed extends React.Component {
       }, spec.config);
     }
 
-    vegaEmbed(this.el, embedSpec, (error: any, result: any): any => {
-    });
+    vegaEmbed(this.el, embedSpec, this.props.renderedCallback);
   }
 
   shouldComponentUpdate(): boolean {
