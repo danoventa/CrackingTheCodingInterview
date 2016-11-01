@@ -148,6 +148,8 @@ Work on the nteract notebook is currently sponsored by
 
 [![Domino Data Lab](https://cloud.githubusercontent.com/assets/836375/13661281/052c8506-e657-11e5-8e93-1497c6097519.png)](https://www.dominodatalab.com/)
 
+[![NumFocus](https://www.flipcause.com/uploads/thumb_NumFocus_2C_RGB.png)](http://www.numfocus.org/)
+
 We're on a common mission to build a great notebook experience. Feel free to
 [get in touch](mailto:rgbkrk@gmail.com) if you'd like to help. Resources go towards
 paying for additional work by seasoned designers and engineers.
