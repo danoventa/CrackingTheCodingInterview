@@ -20,7 +20,7 @@ export const DocumentRecord = new Immutable.Record({
   notebook: null,
   cellPagers: new Immutable.Map(),
   outputStatuses: new Immutable.Map(),
-  stickyCells: new Immutable.Map(),
+  stickyCells: new Immutable.Set(),
   focusedCell: null,
   copied: new Immutable.Map(),
 });
