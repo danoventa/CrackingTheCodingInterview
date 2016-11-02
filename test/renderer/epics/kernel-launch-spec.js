@@ -148,7 +148,7 @@ describe('newKernelEpic', () => {
       (x) => actionBuffer.push(x.type),
       (err) => expect.fail(err, null),
       () => {
-        expect(actionBuffer).to.deep.equal([constants.ERROR_KERNEL_LAUNCH_FAILED]); // ;
+        expect(actionBuffer).to.deep.equal([constants.SET_KERNEL_INFO, constants.NEW_KERNEL]); // ;
         done();
       },
     )

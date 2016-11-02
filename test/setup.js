@@ -73,7 +73,20 @@ mock('plotly.js/dist/plotly', {
   'newPlot': function(data, layout, config) {},
 })
 
-mock('enchannel-zmq-backend', {})
+mock('enchannel-zmq-backend', {
+  'createControlSubject': function(config, identity) {
+    return;
+  },
+  'createStdinSubject': function(config, identity) {
+    return;
+  },
+  createIOPubSubject: function(config, identity) {
+    return;
+  },
+  createShellSubject: function(config, identity) {
+    return;
+  },
+})
 
 mock('electron', {
   'shell': {
@@ -118,6 +131,7 @@ mock('electron', {
   },
   'ipcRenderer': {
     'on': function() {},
+    'send': function(message, action) {}
   },
 });
 
@@ -139,7 +153,25 @@ mock('react-notification-system', function () {
 });
 
 mock('spawnteract', {
-  'launch': function(kernelSpec, config) { return new Promise() },
+  'launch': function(kernelSpec, config) {
+    function writeConnectionFile(config) { return new Promise((resolve, reject) => {
+        try {
+         resolve({config, connectionFile: 'connectionFile'});
+        }
+        catch (err) {
+          reject(err);
+        }
+      })
+    }
+    return writeConnectionFile('config').then((c) => {
+      return {
+        spawn: 'runningKernel',
+        connectionFile: c.connectionFile,
+        config: c.config,
+        kernelSpec,
+      };
+    });
+  },
 });
 
 mock('fs', {

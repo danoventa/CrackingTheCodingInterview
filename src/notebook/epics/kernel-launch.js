@@ -71,7 +71,6 @@ export function newKernelObservable(kernelSpecName, cwd) {
           control: createControlSubject(identity, config),
           stdin: createStdinSubject(identity, config),
         };
-
         observer.next(setNotebookKernelInfo({
           name: kernelSpecName,
           spec: kernelSpec,
@@ -85,6 +84,7 @@ export function newKernelObservable(kernelSpecName, cwd) {
           kernelSpecName,
           kernelSpec,
         });
+        observer.complete();
       });
   });
 }
