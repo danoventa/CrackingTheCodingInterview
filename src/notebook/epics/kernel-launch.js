@@ -85,7 +85,9 @@ export function newKernelObservable(kernelSpecName, cwd) {
           kernelSpecName,
           kernelSpec,
         });
+        observer.complete();
       });
+
   });
 }
 
