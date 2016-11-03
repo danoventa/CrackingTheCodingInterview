@@ -139,7 +139,7 @@ describe('menu', () => {
       const setZoomLevel = sinon.spy(webFrame, 'setZoomLevel');
       menu.dispatchZoomReset();
       setZoomLevel.restore();
-      expect(setZoomLevel).to.be.calledWith(1);
+      expect(setZoomLevel).to.be.calledWith(0);
     });
   });
 
