@@ -56,10 +56,10 @@ export default handleActions({
   [constants.TOGGLE_STICKY_CELL]: function toggleStickyCell(state, action) {
     const { id } = action;
     const stickyCells = state.get('stickyCells');
-    if (stickyCells.get(id)) {
+    if (stickyCells.has(id)) {
       return state.set('stickyCells', stickyCells.delete(id));
     }
-    return state.setIn(['stickyCells', id], true);
+    return state.set('stickyCells', stickyCells.add(id));
   },
   [constants.UPDATE_CELL_EXECUTION_COUNT]: function updateExecutionCount(state, action) {
     const { id, count } = action;

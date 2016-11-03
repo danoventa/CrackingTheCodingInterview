@@ -19,6 +19,7 @@ import {
 import {
   List,
   Map,
+  Set,
 } from 'immutable';
 
 const initialDocument = new Map();
@@ -150,7 +151,7 @@ describe('focusPreviousCell', () => {
 describe('toggleStickyCell', () => {
   it('should stick the cell given its ID', () => {
     const doc = initialDocument.set('notebook', dummyCommutable)
-                              .set('stickyCells', new Map());
+                              .set('stickyCells', new Set());
     const originalState = {
       document: doc,
     };
@@ -163,12 +164,12 @@ describe('toggleStickyCell', () => {
     }
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn(['stickyCells', id])).to.be.true;
+    expect(state.document.hasIn(['stickyCells', id])).to.be.true;
   });
   it('should unstick a stuck cell given its ID', () => {
     const id = dummyCommutable.get('cellOrder').first();
     const doc = initialDocument.set('notebook', dummyCommutable)
-                              .setIn(['stickyCells', id], true);
+                              .set('stickyCells', new Set([id]));
 
     const originalState = {
       document: doc,
@@ -180,7 +181,7 @@ describe('toggleStickyCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn(['stickyCells', id])).to.be.undefined;
+    expect(state.document.hasIn(['stickyCells', id])).to.be.false;
   });
 });
 
