@@ -164,7 +164,7 @@ describe('toggleStickyCell', () => {
     }
 
     const state = reducers(originalState, action);
-    expect(state.document.get('stickyCells').has(id)).to.be.true;
+    expect(state.document.hasIn(['stickyCells', id])).to.be.true;
   });
   it('should unstick a stuck cell given its ID', () => {
     const id = dummyCommutable.get('cellOrder').first();
@@ -181,7 +181,7 @@ describe('toggleStickyCell', () => {
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.get('stickyCells').has(id)).to.be.false;
+    expect(state.document.hasIn(['stickyCells', id])).to.be.false;
   });
 });
 
