@@ -244,13 +244,13 @@ export function dispatchSetTheme(store, evt, theme) {
 
 export function dispatchCopyCell(store) {
   const state = store.getState();
-  const focused = state.document.get('focusedCell');
+  const focused = state.document.get('cellFocused');
   store.dispatch(copyCell(focused));
 }
 
 export function dispatchCutCell(store) {
   const state = store.getState();
-  const focused = state.document.get('focusedCell');
+  const focused = state.document.get('cellFocused');
   store.dispatch(cutCell(focused));
 }
 
@@ -260,13 +260,13 @@ export function dispatchPasteCell(store) {
 
 export function dispatchCreateCellAfter(store) {
   const state = store.getState();
-  const focused = state.document.get('focusedCell');
+  const focused = state.document.get('cellFocused');
   store.dispatch(createCellAfter('code', focused));
 }
 
 export function dispatchCreateTextCellAfter(store) {
   const state = store.getState();
-  const focused = state.document.get('focusedCell');
+  const focused = state.document.get('cellFocused');
   store.dispatch(createCellAfter('markdown', focused));
 }
 
