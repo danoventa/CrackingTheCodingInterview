@@ -235,7 +235,7 @@ export function dispatchZoomOut() {
 }
 
 export function dispatchZoomReset() {
-  webFrame.setZoomLevel(1);
+  webFrame.setZoomLevel(0);
 }
 
 export function dispatchSetTheme(store, evt, theme) {
