@@ -84,7 +84,7 @@ export const fileSubMenus = {
     label: '&Open Example Notebooks',
     submenu: [
       {
-        label: '&Geojson',
+        label: '&Intro',
         click: () => {
           const opts = {
             title: 'Open a notebook',
@@ -95,7 +95,7 @@ export const fileSubMenus = {
               'openFile',
             ],
           };
-          launch(path.join(exampleNotebooksDirectory, 'geojson.ipynb'));
+          launch(path.join(exampleNotebooksDirectory, 'intro.ipynb'));
         },
       },
       {
@@ -114,36 +114,6 @@ export const fileSubMenus = {
         },
       },
       {
-        label: '&Pandas to GeoJSON',
-        click: () => {
-          const opts = {
-            title: 'Open a notebook',
-            filters: [
-              { name: 'Notebooks', extensions: ['ipynb'] },
-            ],
-            properties: [
-              'openFile',
-            ],
-          };
-          launch(path.join(exampleNotebooksDirectory, 'pandas-to-geojson.ipynb'));
-        },
-      },
-      {
-        label: '&Download nteract Stats',
-        click: () => {
-          const opts = {
-            title: 'Open a notebook',
-            filters: [
-              { name: 'Notebooks', extensions: ['ipynb'] },
-            ],
-            properties: [
-              'openFile',
-            ],
-          };
-          launch(path.join(exampleNotebooksDirectory, 'download-stats.ipynb'));
-        },
-      },
-      {
         label: '&Plotlyr',
         click: () => {
           const opts = {
@@ -159,7 +129,7 @@ export const fileSubMenus = {
         },
       },
       {
-        label: '&Intro',
+        label: '&Altair',
         click: () => {
           const opts = {
             title: 'Open a notebook',
@@ -170,7 +140,52 @@ export const fileSubMenus = {
               'openFile',
             ],
           };
-          launch(path.join(exampleNotebooksDirectory, 'intro.ipynb'));
+          launch(path.join(exampleNotebooksDirectory, 'altair.ipynb'));
+        },
+      },
+      {
+        label: '&Geojson',
+        click: () => {
+          const opts = {
+            title: 'Open a notebook',
+            filters: [
+              { name: 'Notebooks', extensions: ['ipynb'] },
+            ],
+            properties: [
+              'openFile',
+            ],
+          };
+          launch(path.join(exampleNotebooksDirectory, 'geojson.ipynb'));
+        },
+      },
+      {
+        label: '&Pandas to GeoJSON',
+        click: () => {
+          const opts = {
+            title: 'Open a notebook',
+            filters: [
+              { name: 'Notebooks', extensions: ['ipynb'] },
+            ],
+            properties: [
+              'openFile',
+            ],
+          };
+          launch(path.join(exampleNotebooksDirectory, 'pandas-to-geojson.ipynb'));
+        },
+      },
+      {
+        label: '&Analyze nteract download metrics',
+        click: () => {
+          const opts = {
+            title: 'Open a notebook',
+            filters: [
+              { name: 'Notebooks', extensions: ['ipynb'] },
+            ],
+            properties: [
+              'openFile',
+            ],
+          };
+          launch(path.join(exampleNotebooksDirectory, 'download-stats.ipynb'));
         },
       }
     ]
