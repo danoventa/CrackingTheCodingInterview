@@ -18,7 +18,7 @@ type Props = {
   isHidden: boolean,
 }
 
-const DEFAULT_SCROLL_HEIGHT = 300;
+const DEFAULT_SCROLL_HEIGHT = 600;
 
 export default class Display extends React.Component {
   props: Props;
