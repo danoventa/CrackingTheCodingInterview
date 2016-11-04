@@ -174,7 +174,7 @@ export const fileSubMenus = {
         },
       },
       {
-        label: '&Download nteract Stats',
+        label: '&Analyze nteract download metrics',
         click: () => {
           const opts = {
             title: 'Open a notebook',
