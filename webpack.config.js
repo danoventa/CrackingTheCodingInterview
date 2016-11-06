@@ -6,6 +6,7 @@ const nodeModules = {
   zmq: 'commonjs zmq',
   jmp: 'commonjs jmp',
   github: 'commonjs github',
+  canvas: 'commonjs canvas',
 };
 
 module.exports = {

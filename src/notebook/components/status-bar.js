@@ -21,6 +21,8 @@ export default class StatusBar extends React.Component {
   }
 
   render(): ?React.Element<any> {
+    const name = this.props.kernelSpecName || 'Loading...';
+
     return (
       <div className="status-bar">
         <span className="pull-right">
@@ -31,7 +33,7 @@ export default class StatusBar extends React.Component {
           }
         </span>
         <span className="pull-left">
-          <p>{this.props.kernelSpecName} | {this.props.executionState}</p>
+          <p>{name} | {this.props.executionState}</p>
         </span>
       </div>
     );
