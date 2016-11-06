@@ -241,7 +241,7 @@ export class Notebook extends React.Component {
           <div className="cell-placeholder">
             <span className="octicon octicon-link-external" />
           </div> :
-            <CellComponent {...this.createCellProps(id, cell)} />}
+          <CellComponent {...this.createCellProps(id, cell)} />}
         <CellCreator key={`creator-${id}`} id={id} above={false} />
       </div>);
   }
