@@ -7,7 +7,7 @@ import { DocumentRecord, MetadataRecord } from '../../../src/notebook/records';
 
 import reducers from '../../../src/notebook/reducers';
 
-import { reduceOutputs } from '../../../src/notebook/reducers/document';
+import { reduceOutputs, cleanCellTransient } from '../../../src/notebook/reducers/document';
 
 import {
   dummyJSON,
@@ -28,15 +28,10 @@ const Immutable = require('immutable');
 
 const initialDocument = new Map();
 const monocellDocument = initialDocument
-  .set('notebook', commutable.appendCell(dummyCommutable, commutable.emptyCodeCell));
+  .set('notebook', commutable.appendCell(dummyCommutable, commutable.emptyCodeCell))
+  .set('transient', new Immutable.Map({ keyPathsForDisplays: new Immutable.Map() }));
 
 describe('reduceOutputs', () => {
-  it('empties outputs when clear_output passed', () => {
-    const outputs = Immutable.List([1,2,3]);
-    const newOutputs = reduceOutputs(outputs, {output_type: 'clear_output'});
-    expect(newOutputs.size).to.equal(0);
-  })
-
   it('puts new outputs at the end by default', () => {
     const outputs = Immutable.List([1,2]);
     const newOutputs = reduceOutputs(outputs, 3)
@@ -291,19 +286,20 @@ describe('removeCell', () => {
   });
 });
 
-describe('clearCellOutput', () => {
+describe('clearOutputs', () => {
   it('should clear outputs list', () => {
     const originalState = {
       document: initialDocument.set('notebook',
         commutable.appendCell(dummyCommutable,
           commutable.emptyCodeCell.set('outputs', ['dummy outputs']))
-        ),
+        )
+        .set('transient', new Immutable.Map({ keyPathsForDisplays: new Immutable.Map() })),
     };
 
     const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
-      type: constants.CLEAR_CELL_OUTPUT,
+      type: constants.CLEAR_OUTPUTS,
       id,
     };
 
@@ -498,8 +494,8 @@ describe('changeInputVisibility', () => {
   });
 });
 
-describe('updateCellOutputs', () => {
-  it('updates cell output', () => {
+describe('clearOutputs', () => {
+  it('clears out cell outputs', () => {
     const originalState = {
       document: monocellDocument,
     };
@@ -507,13 +503,12 @@ describe('updateCellOutputs', () => {
     const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
 
     const action = {
-      type: constants.UPDATE_CELL_OUTPUTS,
+      type: constants.CLEAR_OUTPUTS,
       id: id,
-      outputs: [{data: "This is a test"}],
     };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn(['notebook', 'cellMap', id, 'outputs']).length).to.equal(1);
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'outputs']).count()).to.equal(0);
   });
 });
 
@@ -712,3 +707,146 @@ describe('toggleOutputExpansion', () => {
     expect(state.document.getIn(['notebook', 'cellMap', id, 'metadata',  'outputExpanded'])).to.be.true;
   });
 });
+
+describe('appendOutput', () => {
+  it('appends outputs', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder', 2]);
+
+    const action = {
+      type: constants.APPEND_OUTPUT,
+      id: id,
+      output: {
+        output_type: 'display_data',
+        data: { 'text/html': '<marquee>wee</marquee>' },
+      }
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'outputs']))
+      .to.deep.equal(Immutable.fromJS([{
+        output_type: 'display_data',
+        data: { 'text/html': '<marquee>wee</marquee>' },
+      }]));
+    expect(state.document.getIn(['transient', 'keyPathsForDisplays']))
+      .to.deep.equal(Immutable.Map())
+  });
+  it('appends output and tracks display IDs', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder', 2]);
+
+    const action = {
+      type: constants.APPEND_OUTPUT,
+      id: id,
+      output: {
+        output_type: 'display_data',
+        data: { 'text/html': '<marquee>wee</marquee>' },
+        transient: { display_id: '1234' },
+      }
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'outputs']))
+      .to.deep.equal(Immutable.fromJS([{
+        output_type: 'display_data',
+        data: { 'text/html': '<marquee>wee</marquee>' },
+        transient: { display_id: '1234' },
+      }]));
+    expect(state.document.getIn(['transient', 'keyPathsForDisplays', '1234']))
+      .to.deep.equal(Immutable.fromJS([
+        ['notebook', 'cellMap', id, 'outputs', 0]
+      ]))
+  });
+})
+
+describe('updateDisplay', () => {
+  it('updates all displays which use the keypath', () => {
+    const originalState = {
+      document: monocellDocument,
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder', 2]);
+
+    const actions = [
+      {
+        type: constants.APPEND_OUTPUT,
+        id: id,
+        output: {
+          output_type: 'display_data',
+          data: { 'text/html': '<marquee>wee</marquee>' },
+          transient: { display_id: '1234' },
+        }
+      },
+      {
+        type: constants.UPDATE_DISPLAY,
+        output: {
+          output_type: 'display_data',
+          data: { 'text/html': '<marquee>WOO</marquee>' },
+          transient: { display_id: '1234' },
+        }
+      },
+    ];
+
+    const state = actions.reduce((s, action) => reducers(s, action), originalState);
+    expect(state.document.getIn(['notebook', 'cellMap', id, 'outputs'])).to.deep.equal(Immutable.fromJS(
+      [
+        {
+          output_type: 'display_data',
+          data: { 'text/html': '<marquee>WOO</marquee>' },
+          transient: { display_id: '1234' },
+        },
+      ]
+    ))
+
+  })
+})
+
+describe('cleanCellTransient', () => {
+  it('cleans out keyPaths that reference a particular cell ID', () => {
+    const keyPathsForDisplays = Immutable.fromJS({
+      '1234': [
+        ['notebook', 'cellMap', '0000', 'outputs', 0],
+        ['notebook', 'cellMap', 'XYZA', 'outputs', 0],
+        ['notebook', 'cellMap', '0000', 'outputs', 1],
+      ],
+      '5678': [
+        ['notebook', 'cellMap', 'XYZA', 'outputs', 1],
+      ]
+    });
+    const state = new Immutable.Map({
+      transient: new Immutable.Map({
+        keyPathsForDisplays,
+      })
+    })
+
+    expect(
+      cleanCellTransient(state, '0000')
+        .getIn(['transient', 'keyPathsForDisplays'])
+    ).to.deep.equal(Immutable.fromJS({
+      '1234': [
+        ['notebook', 'cellMap', 'XYZA', 'outputs', 0],
+      ],
+      '5678': [
+        ['notebook', 'cellMap', 'XYZA', 'outputs', 1],
+      ]
+    }));
+
+    expect(
+      cleanCellTransient(state, 'XYZA')
+        .getIn(['transient', 'keyPathsForDisplays'])
+    ).to.deep.equal(Immutable.fromJS({
+      '1234': [
+        ['notebook', 'cellMap', '0000', 'outputs', 0],
+        ['notebook', 'cellMap', '0000', 'outputs', 1],
+      ],
+      '5678': [
+      ]
+    }));
+  })
+})

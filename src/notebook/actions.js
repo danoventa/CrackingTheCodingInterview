@@ -30,11 +30,10 @@ export function updateCellSource(id, source) {
   };
 }
 
-export function updateCellOutputs(id, outputs) {
+export function clearOutputs(id) {
   return {
-    type: constants.UPDATE_CELL_OUTPUTS,
+    type: constants.CLEAR_OUTPUTS,
     id,
-    outputs,
   };
 }
 
@@ -90,13 +89,6 @@ export function updateCellExecutionCount(id, count) {
     type: constants.UPDATE_CELL_EXECUTION_COUNT,
     id,
     count,
-  };
-}
-
-export function clearCellOutput(id) {
-  return {
-    type: constants.CLEAR_CELL_OUTPUT,
-    id,
   };
 }
 
