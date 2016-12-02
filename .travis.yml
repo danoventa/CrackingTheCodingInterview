@@ -1,0 +1,32 @@
+sudo: false
+language: node_js
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.9
+    - g++-4.9
+node_js:
+- '6'
+env:
+  global:
+  - CXX=g++-4.9
+  - CC=gcc-4.9
+  matrix:
+  - GROUP=coverage
+  - GROUP=lint
+  - GROUP=flow
+  - GROUP=conformance
+
+cache:
+  apt: true
+
+before_install:
+  - source scripts/travis_before_install
+
+before_script:
+- export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
+script: travis_retry npm run test:$GROUP
+after_success:
+  - 'if [[ $GROUP == coverage* ]]; then bash <(curl -s https://codecov.io/bash); fi'

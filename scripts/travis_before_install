@@ -1,0 +1,6 @@
+if [ "${GROUP}" == "lint" ] || [ "${GROUP}" == "flow" ] ; then
+  echo "skipping mega-install"
+  return
+fi
+
+npm install -g inodejs

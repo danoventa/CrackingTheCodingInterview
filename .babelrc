@@ -1,0 +1,10 @@
+  {
+    "presets": [
+      "es2015-node6",
+      "react"
+    ],
+    "plugins": [
+      "transform-class-properties",
+      "transform-flow-strip-types"
+    ]
+  }
