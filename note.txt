@@ -1,3 +1,0 @@
-These are solutions to problems within the Cracking the Interview Code - 6th edition book. 
-
-All answers are my own. ;)
